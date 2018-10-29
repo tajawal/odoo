@@ -5,6 +5,7 @@ release
 .settings
 .pydevproject
 dist
+odoo.cfg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

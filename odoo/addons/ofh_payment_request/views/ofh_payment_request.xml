@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_form_view">
+        <field name="name">ofh.payment.request.form (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    <group col="4">
+                        <field name="order_reference"/>
+                        <field name="pnr"/>
+                        <field name="total_amount" widget="monetary"/>
+                        <field name="name"/>
+                    </group>
+                    <notebook>
+                        <page name="details" string="Details">
+                            <group col="4">
+                                <field name=""/>
+                                <field name=""/>
+                                <field name=""/>
+                                <field name=""/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter"></div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_search_view">
+        <field name="name">ofh.payment.request.search (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- TODO -->
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_tree_view">
+        <field name="name">ofh.payment.request.tree (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <!-- TODO -->
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_act_window">
+        <field name="name">Ofh Payment Request</field> <!-- TODO -->
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_request_menu">
+        <field name="name">Ofh Payment Request</field>
+        <field name="parent_id" ref="xmlid of parent menu"/> <!-- TODO -->
+        <field name="action" ref="ofh_payment_request_act_window"/>
+        <field name="sequence" eval="16"/> <!-- TODO -->
+    </record>
+
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="hub_backend_form_view">
+        <field name="name">hub.backend.form (in ofh_hub_connector)</field>
+        <field name="model">hub.backend</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="import_payment_requests"
+                            type="object"
+                            string="Import Payment request"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="hub_api_location"/>
+                        <field name="token"/>
+                        <field name="username"/>
+                        <field name="password"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter"></div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hub_backend_tree_view">
+        <field name="name">hub.backend.tree (in ofh_hub_connector)</field>
+        <field name="model">hub.backend</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="hub_api_location"/>
+                <field name="token"/>
+                <field name="username"/>
+                <field name="password"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hub_backend_act_window">
+        <field name="name">Backends</field>
+        <field name="res_model">hub.backend</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="hub_connector_main_menu">
+        <field name="name">Hub</field>
+        <field name="parent_id" ref="connector.menu_connector_root"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="hub_backend_menu">
+        <field name="name">Backends</field>
+        <field name="parent_id" ref="hub_connector_main_menu"/>
+        <field name="action" ref="hub_backend_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+</odoo>
