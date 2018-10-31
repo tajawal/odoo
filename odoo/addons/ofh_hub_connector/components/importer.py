@@ -38,7 +38,6 @@ class HubImporter(AbstractComponent):
         # special check on data before import
         self._validate_data(data)
         model = self.model.with_context(connector_no_export=True)
-        import pdb; pdb.set_trace()
         binding = model.create(data)
         _logger.debug('%d created from hub %s', binding, self.external_id)
         return binding
@@ -173,6 +172,7 @@ class HubBatchImporter(AbstractComponent):
         for record in records:
             self._import_record(record)
 
-    def _import_record(self, external_id):
-        """ Import the record directly without any dely."""
-        self.model.import_record(self.backend_record, external_id)
+    def _import_record(self, external_id, job_options=None, **kwargs):
+        """ Delay the import of the records"""
+        delayable = self.model.with_delay(**job_options or {})
+        delayable.import_record(self.backend_record, external_id)

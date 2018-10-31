@@ -5,6 +5,7 @@
 from datetime import datetime
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+import json
 
 PROCESSED_HUB_STATUS = 'Processed'
 
@@ -32,7 +33,7 @@ class HubPaymentRequestImportMapper(Component):
     def updated_at(self, record) -> dict:
         dt = datetime.fromtimestamp(
             int(record['updatedAt']['$date'].get('$numberLong')) / 1000)
-        return {'update_at': dt.strftime("%Y-%m-%d %H:%M:%S")}
+        return {'updated_at': dt.strftime("%Y-%m-%d %H:%M:%S")}
 
     @mapping
     def request_reason(self, record) -> dict:
@@ -80,7 +81,10 @@ class HubPaymentRequestImportMapper(Component):
             return {'total_amount': record['fees'].get('total')}
         return {'total_amount': 0.0}
 
-    # TODO: def entity(self, record)
+    @mapping
+    def fees(self, record) -> dict:
+        if 'fees' in record:
+            return {'fees': json.dumps(record.get('fees'))}
 
     @mapping
     def order_reference(self, record) -> dict:
@@ -88,6 +92,10 @@ class HubPaymentRequestImportMapper(Component):
             return {
                 'order_reference': record['additionalData'].get('orderNumber')}
         return {}
+
+    @mapping
+    def backend_id(self, record):
+        return {'backend_id': self.backend_record.id}
 
 
 class HubPaymentRequestBatchImporter(Component):
@@ -117,13 +125,14 @@ class HubPaymentRequestImporter(Component):
         """
         return self.hub_record.get('status') != PROCESSED_HUB_STATUS
 
-    def _import_dependencies(self):
-        """ Get the sale orders details related to the PR."""
-        # TODO: When we have the sales order will do it through synchronisation
-        order_id = self.hub_record.get('OrderId')
+    def _get_hub_data(self):
+        """ Return the raw hub data for ``self.external_id `` """
+        record = self.backend_adapter.read(self.external_id)
+        # This should be done in the dependency method when we have the
+        # sale order integration, for now we will have it here.
+        order_id = record.get('orderId')
         if not order_id:
-            return
-        # request the order details from the hub
+            return record
         try:
             hub_api = getattr(self.work, 'hub_api')
         except AttributeError:
@@ -133,16 +142,16 @@ class HubPaymentRequestImporter(Component):
                 'Backend Adapter.'
             )
         order = hub_api.get_raw_order(order_id)
-        self.hub_record['airline_pnr'] = self._get_airline_pnr(
+        record['airline_pnr'] = self._get_airline_pnr(order.get('products'))
+        record['record_locator'] = self._get_record_locator(
             order.get('products'))
-        self.hub_record['record_locator'] = self._get_record_locator(
-            order.get('products'))
+        return record
 
     def _get_airline_pnr(self, products: list) -> str:
         if not products:
             return ''
         order_pnrs = [
-            product['supplierConfirmationNumber'] for product in products
+            product.get('supplierConfirmationNumber', '') for product in products
             if product['type'] in ('flight', 'hotel', 'insurance', 'package')]
         return ", ".join(set(order_pnrs))
 
@@ -150,6 +159,6 @@ class HubPaymentRequestImporter(Component):
         if not products:
             return ''
         order_record_locators = [
-            product['vendorConfirmation'] for product in products
+            product.get('vendorConfirmationNumber', '') for product in products
             if product['type'] in ('flight', 'hotel', 'insurance', 'package')]
         return ", ".join(set(order_record_locators))

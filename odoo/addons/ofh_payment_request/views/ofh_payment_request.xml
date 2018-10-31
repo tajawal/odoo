@@ -12,20 +12,54 @@
                 <header>
                 </header>
                 <sheet>
-                    <group col="4">
+                    <field name="currency_id" invisible="1"/>
+                    <group col="4" name="general_details" string="General Information">
                         <field name="order_reference"/>
-                        <field name="pnr"/>
+                        <field name="request_type"/>
+                        <field name="request_reason"/>
+                        <field name="request_status"/>
+                        <field name="entity"/>
+                        <field name="office_id"/>
+                        <field name="auth_code"/>
+                        <newline/>
                         <field name="total_amount" widget="monetary"/>
-                        <field name="name"/>
+                    </group>
+                    <group col="4" name="vendor_details" string="Vendor Details">
+                        <field name="vendor_id"/>
+                        <field name="record_locator"/>
+                        <field name="pnr"/>
                     </group>
                     <notebook>
-                        <page name="details" string="Details">
+                        <page name="financial_detaisl" string="Financial Details">
                             <group col="4">
-                                <field name=""/>
-                                <field name=""/>
-                                <field name=""/>
-                                <field name=""/>
+                                <field name="fare_difference" widget="monetary"/>
+                                <field name="change_fee" widget="monetary"/>
+                                <field name="booking_fee" widget="monetary"/>
+                                <field name="insurance" widget="monetary"/>
+                                <field name="discount" widget="monetary"/>
+                                <field name="penality" widget="monetary"/>
+                                <field name="loss_amount" widget="monetary"/>
+                                <field name="input_vat_amount" widget="monetary"/>
+                                <field name="output_vat_amount" widget="monetary"/>
+                                <field name="tax_code"/>
                             </group>
+                        </page>
+                        <page name="technical_details" string="Technical Details">
+                            <group col="4">
+                                <field name="order_id"/>
+                                <field name="charge_id"/>
+                                <field name="track_id"/>
+                            </group>
+                        </page>
+                        <page name="binding_details" string="Bidings">
+                            <field name="hub_bind_ids" nolabel="1">
+                                <tree>
+                                    <field name="backend_id"/>
+                                    <field name="external_id"/>
+                                    <field name="created_at"/>
+                                    <field name="updated_at"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
@@ -49,25 +83,40 @@
         <field name="model">ofh.payment.request</field>
         <field name="arch" type="xml">
             <tree>
-                <!-- TODO -->
-                <field name="name"/>
+                <field name="order_reference"/>
+                <field name="request_type"/>
+                <field name="request_reason"/>
+                <field name="office_id"/>
+                <field name="vendor_id"/>
+                <field name="total_amount" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="entity"/>
+                <field name="pnr"/>
+                <field name="record_locator"/>
+                <field name="sap_status"/>
+                <field name="flag"/>
             </tree>
         </field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_request_act_window">
-        <field name="name">Ofh Payment Request</field> <!-- TODO -->
+        <field name="name">Payment Requests</field> <!-- TODO -->
         <field name="res_model">ofh.payment.request</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
 
+    <record model="ir.ui.menu" id="ofh_payment_request_main_menu">
+        <field name="name">Payment Requests</field>
+        <field name="sequence" eval="30"/>
+    </record>
+
     <record model="ir.ui.menu" id="ofh_payment_request_menu">
-        <field name="name">Ofh Payment Request</field>
-        <field name="parent_id" ref="xmlid of parent menu"/> <!-- TODO -->
+        <field name="name">Payment Requests</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
         <field name="action" ref="ofh_payment_request_act_window"/>
-        <field name="sequence" eval="16"/> <!-- TODO -->
+        <field name="sequence" eval="10"/>
     </record>
 
 </odoo>

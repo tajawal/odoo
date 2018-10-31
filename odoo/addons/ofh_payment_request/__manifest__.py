@@ -15,7 +15,7 @@
     ],
     'data': [
         # 'security/ofh_payment_request.xml',
-        # 'views/ofh_payment_request.xml',
+        'views/ofh_payment_request.xml',
     ],
     'demo': [
     ],
