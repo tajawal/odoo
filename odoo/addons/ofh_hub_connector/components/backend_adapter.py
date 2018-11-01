@@ -10,33 +10,60 @@ from odoo.addons.component.core import AbstractComponent
 class HubAPI:
 
     def __init__(
-            self, url: str, username: str, password: str, token: str) -> None:
-        self.url = url
-        self.username = username
-        self.password = password
-        self.token = token
+            self, hub_url: str, hub_username: str, hub_password: str,
+            config_url: str, config_username: str, config_password: str):
+        self.hub_url = hub_url
+        self.hub_username = hub_username
+        self.hub_password = hub_password
+        self.config_url = config_url
+        self.config_username = config_username
+        self.config_password = config_password
+        self._hub_token = ''
+        self._config_token = ''
         self.headers = {
             'Content-type': 'application/json;charset=UTF-8',
             'user-agent': 'finance_hub_api/0.1',
             'Accept': 'application/json',
         }
 
-    def getAuthToken(self) -> str:
+    @property
+    def _get_hub_token(self) -> str:
+        if self._hub_token:
+            return self._hub_token
         payload = {
-            'email': self.email,
-            'password': self.password,
+            'email': self.hub_username,
+            'password': self.hub_password,
         }
-        url = '{}api/auth/token'.format(self.url)
+        url = '{}api/auth/token'.format(self.hub_url)
         try:
             response = requests.post(
                 url, params=payload, headers=self.headers, timeout=3)
             response.raise_for_status()
             data = response.json()
             if 'data' in data:
-                return data['data'].get('token')
-            return ""
+                self._hub_token = data['data'].get('token')
         except requests.exceptions.BaseHTTPError as err:
             raise MissingError("Could not generate token")
+        return self._hub_token
+
+    @property
+    def _get_config_token(self) -> str:
+        if self._config_token:
+            return self._hub_token
+        payload = {
+            "username": self.config_username,
+            "password": self.config_password,
+        }
+        url = '{}token'.format(self.config_url)
+        try:
+            response = requests.post(
+                url, params=payload, headers=self.headers, timeout=3)
+            response.raise_for_status()
+            data = response.json()
+            self._config_token = data.get('token')
+        except requests.exceptions.BaseHTTPError as err:
+            raise MissingError("Could not generate token")
+        return self._config_token
 
     def getOrderChargeHistory(self, track_id: str) -> dict:
         """
@@ -49,7 +76,7 @@ class HubAPI:
         """
         url = '{}api/sap/charge-list-raw/{}'.format(self.url, track_id)
         headers = self.headers
-        headers['Authorization'] = "Bearer {}".format(self.token)
+        headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
         try:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
@@ -67,9 +94,9 @@ class HubAPI:
             list -- list of payment request dictionary details.
         """
 
-        url = '{}api/sap/orders-list-raw'.format(self.url)
+        url = '{}api/sap/orders-list-raw'.format(self.hub_url)
         headers = self.headers
-        headers['Authorization'] = "Bearer {}".format(self.token)
+        headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
         if not from_date:
             raise MissingError('You have to provide from_date')
         if not to_date:
@@ -87,9 +114,9 @@ class HubAPI:
 
     def get_payment_request_by_track_id(self, track_id) -> dict:
         url = '{}api/sap/payment-request-raw/{}'.format(
-            self.url, track_id)
+            self.hub_url, track_id)
         headers = self.headers
-        headers['Authorization'] = "Bearer {}".format(self.token)
+        headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
         try:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
@@ -98,15 +125,26 @@ class HubAPI:
             raise MissingError("Could not get payment request details")
 
     def get_raw_order(self, order_id: str) -> dict:
-        url = '{}api/sap/order-raw/{}'.format(self.url, order_id)
+        url = '{}api/sap/order-raw/{}'.format(self.hub_url, order_id)
         headers = self.headers
-        headers['Authorization'] = "Bearer {}".format(self.token)
+        headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
         try:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.BaseHTTPError as err:
             raise MissingError("Could not get payment request details")
+
+    def get_raw_store(self, store_id: int) -> dict:
+        url = '{}store/{}'.format(self.config_url, store_id)
+        headers = self.headers
+        headers['Authorization'] = "Bearer {}".format(self._get_config_token)
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.BaseHTTPError as err:
+            raise MissingError("Could not get sotre details")
 
 
 class HubAdapter(AbstractComponent):

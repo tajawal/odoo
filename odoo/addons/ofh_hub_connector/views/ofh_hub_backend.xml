@@ -15,11 +15,21 @@
                             string="Import Payment request"/>
                 </header>
                 <sheet>
-                    <group>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="HUB BACKEND NAME" nolabel="1"/></h1>
+                    </div>
+                    <group name="hub" string="HUB DETAILS">
                         <field name="hub_api_location"/>
-                        <field name="token"/>
-                        <field name="username"/>
-                        <field name="password"/>
+                        <field name="hub_api_username"/>
+                        <field name="hub_api_password"/>
+                    </group>
+                    <group name="config_api" string="CONFIG API">
+                        <field name="config_api_url"/>
+                        <field name="config_api_username"/>
+                        <field name="config_api_password"/>
+                    </group>
+                    <group name="sync_dates" string="Synchronisation dates">
+                        <field name="import_payment_request_from_date"/>
                     </group>
                 </sheet>
                 <div class="oe_chatter"></div>
@@ -32,10 +42,9 @@
         <field name="model">hub.backend</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="name"/>
                 <field name="hub_api_location"/>
-                <field name="token"/>
-                <field name="username"/>
-                <field name="password"/>
+                <field name="config_api_url"/>
             </tree>
         </field>
     </record>

@@ -8,6 +8,13 @@ from datetime import datetime, timedelta
 from odoo import _, api, fields, models
 from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
 
+try:
+    from odoo.addons.server_environment import serv_config
+except ImportError:
+    logging.getLogger('odoo.module').warning(
+        'server_environment not available in addons path. '
+        'server_env_connector_magento will not be usable')
+
 _logger = logging.getLogger(__name__)
 
 IMPORT_DELTA_BUFFER = 600   # seconds
@@ -19,30 +26,90 @@ class HubBackend(models.Model):
     _description = 'Hub Backend'
     _inherit = 'connector.backend'
 
+    name = fields.Char(
+        string="Backend name",
+        required=True,
+        default='dev-hub',
+    )
     hub_api_location = fields.Char(
         string='HUB API URL',
         required=True,
+        compute='_compute_server_env',
+        store=False,
+        readonly=True,
     )
-    token = fields.Text(
+    hub_api_username = fields.Char(
+        string="HUB username",
         required=True,
+        compute='_compute_server_env',
+        store=False,
+        readonly=True,
     )
-    username = fields.Char(
+    hub_api_password = fields.Char(
+        string="Hub password",
         required=True,
+        compute='_compute_server_env',
+        store=False,
+        readonly=True,
     )
-    password = fields.Char(
+    config_api_url = fields.Char(
+        string="Config API URL",
         required=True,
+        compute='_compute_server_env',
+        store=False,
+        readonly=True,
+    )
+    config_api_username = fields.Char(
+        string="Config API Username",
+        required=True,
+        compute='_compute_server_env',
+        store=False,
+        readonly=True,
+    )
+    config_api_password = fields.Char(
+        string="Config API Password",
+        required=True,
+        compute='_compute_server_env',
+        store=False,
+        readonly=True,
     )
     import_payment_request_from_date = fields.Datetime(
         string="Import payment request from date",
+        readonly=True,
     )
     import_sale_order_from_date = fields.Datetime(
         string="Import Sale order from date",
     )
 
     _sql_constraints = [
-        ('unique_hub_api_locaiton', 'unique(hub_api_location)',
+        ('unique_hub_backend', 'unique(name)',
          _("A backend-end should always be unique."))
     ]
+
+    @property
+    def _server_env_fields(self):
+        return (
+            'hub_api_location',
+            'hub_api_username',
+            'hub_api_password',
+            'config_api_url',
+            'config_api_username',
+            'config_api_password')
+
+    @api.multi
+    def _compute_server_env(self):
+        for backend in self:
+            for field_name in self._server_env_fields:
+                section_name = '{model}.{name}'.format(
+                    model=self._name.replace('.', '_'),
+                    name=backend.name)
+                try:
+                    value = serv_config.get(section_name, field_name)
+                    backend[field_name] = value
+                except:
+                    _logger.exception(
+                        'error trying to read field %s in section %s',
+                        field_name, section_name)
 
     @contextmanager
     @api.multi
@@ -53,10 +120,12 @@ class HubBackend(models.Model):
         # in each backend adapter usage.
         #
         hub_api = HubAPI(
-            url=self.hub_api_location,
-            token=self.token,
-            username=self.username,
-            password=self.password)
+            hub_url=self.hub_api_location,
+            hub_username=self.hub_api_username,
+            hub_password=self.hub_api_password,
+            config_url=self.config_api_url,
+            config_username=self.config_api_username,
+            config_password=self.config_api_password)
         _super = super(HubBackend, self)
         # from the components we'll be able to do: self.work.hub_api
         with _super.work_on(model_name, hub_api=hub_api, **kwargs) as work:
