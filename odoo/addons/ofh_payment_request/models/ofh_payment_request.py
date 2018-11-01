@@ -13,12 +13,21 @@ class OfhPaymentRequest(models.Model):
     _description = "Ofh Payment Request"
     _rec_name = 'order_reference'
 
+    created_at = fields.Datetime(
+        required=True,
+    )
+    updated_at = fields.Datetime(
+        required=True,
+    )
     order_reference = fields.Char(
         string="Order #",
     )
     request_type = fields.Selection(
         required=True,
-        selection=[('charge', 'Charge'), ('refund', 'Refund')],
+        selection=[
+            ('charge', 'Charge'),
+            ('refund', 'Refund'),
+            ('void', 'Void')],
     )
     # TODO: maybe should be selection field
     request_reason = fields.Char(
@@ -30,9 +39,9 @@ class OfhPaymentRequest(models.Model):
     )
     auth_code = fields.Char()
     office_id = fields.Char()
-    vendor_id = fields.Many2one(
+    vendor_id = fields.Char(
         string="Airline",
-        comodel_name='ofh.vendor.contract',
+        # TODO: should be reference to comodel_name='ofh.vendor.contract',
     )
     # Amounts field
     currency_id = fields.Many2one(
@@ -96,6 +105,11 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
+    loss_type = fields.Char(
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
     input_vat_amount = fields.Monetary(
         string="Input VAT",
         currency_field='currency_id',
@@ -136,7 +150,7 @@ class OfhPaymentRequest(models.Model):
         required=True,
     )
     # End of technical fields.
-    
+
     pnr = fields.Char(
         # TODO: required=True,
         string="PNR",
@@ -146,6 +160,7 @@ class OfhPaymentRequest(models.Model):
     )
     insurance_ref = fields.Char()
     plan_code = fields.Char()
+    notes = fields.Text()
     # SAP related statuses
     sap_status = fields.Selection(
         string='SAP status',
@@ -188,3 +203,4 @@ class OfhPaymentRequest(models.Model):
             rec.input_vat_amount = fees_dict.get('inputVat')
             rec.output_vat_amount = fees_dict.get('outputVat')
             rec.adm_amount = fees_dict.get('adm')
+            rec.loss_type = fees_dict.get('lossType')

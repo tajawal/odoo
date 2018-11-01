@@ -21,6 +21,7 @@ class HubPaymentRequestImportMapper(Component):
         ('orderId', 'order_id'),
         ('airline_pnr', 'pnr'),
         ('record_locator', 'record_locator'),
+        ('airline_code', 'vendor_id'),
     ]
 
     @mapping
@@ -63,9 +64,6 @@ class HubPaymentRequestImportMapper(Component):
             return {'auth_code': record['response'].get('authCode')}
         return {}
 
-    # TODO: office ID
-    # TODO: Vendor ID
-
     @mapping
     def currency_id(self, record) -> dict:
         if 'currency' in record:
@@ -96,6 +94,12 @@ class HubPaymentRequestImportMapper(Component):
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
+
+    @mapping
+    def notes(self, record):
+        if 'additionalData' in record:
+            return {'notes': record['additionalData'].get('remarks')}
+        return {}
 
 
 class HubPaymentRequestBatchImporter(Component):
@@ -145,13 +149,15 @@ class HubPaymentRequestImporter(Component):
         record['airline_pnr'] = self._get_airline_pnr(order.get('products'))
         record['record_locator'] = self._get_record_locator(
             order.get('products'))
+        record['airline_code'] = self._get_airline_code(order.get('products'))
         return record
 
     def _get_airline_pnr(self, products: list) -> str:
         if not products:
             return ''
         order_pnrs = [
-            product.get('supplierConfirmationNumber', '') for product in products
+            product.get('supplierConfirmationNumber', '')
+            for product in products
             if product['type'] in ('flight', 'hotel', 'insurance', 'package')]
         return ", ".join(set(order_pnrs))
 
@@ -162,3 +168,11 @@ class HubPaymentRequestImporter(Component):
             product.get('vendorConfirmationNumber', '') for product in products
             if product['type'] in ('flight', 'hotel', 'insurance', 'package')]
         return ", ".join(set(order_record_locators))
+
+    def _get_airline_code(self, products: list) -> str:
+        if not products:
+            return ''
+        airline_codes = [
+            product.get('supplierName', '') for product in products
+            if product['type'] == 'flight']
+        return ", ".join(set(airline_codes))

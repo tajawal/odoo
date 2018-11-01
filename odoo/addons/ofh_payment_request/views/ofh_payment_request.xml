@@ -41,7 +41,9 @@
                                 <field name="loss_amount" widget="monetary"/>
                                 <field name="input_vat_amount" widget="monetary"/>
                                 <field name="output_vat_amount" widget="monetary"/>
+                                <newline/>
                                 <field name="tax_code"/>
+                                <field name="loss_type"/>
                             </group>
                         </page>
                         <page name="technical_details" string="Technical Details">
@@ -60,6 +62,11 @@
                                     <field name="updated_at"/>
                                 </tree>
                             </field>
+                        </page>
+                        <page name="addtional_details" string="Notes">
+                            <group>
+                                <field name="notes" nolabel="1"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -84,6 +91,8 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="order_reference"/>
+                <field name="created_at"/>
+                <field name="updated_at"/>
                 <field name="request_type"/>
                 <field name="request_reason"/>
                 <field name="office_id"/>

@@ -19,12 +19,6 @@ class HubPaymentRequest(models.Model):
         required=True,
         ondelete='cascade'
     )
-    created_at = fields.Datetime(
-        required=True,
-    )
-    updated_at = fields.Datetime(
-        required=True,
-    )
 
 
 class PaymentRequestAdapter(Component):
