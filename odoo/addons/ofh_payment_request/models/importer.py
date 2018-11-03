@@ -101,6 +101,11 @@ class HubPaymentRequestImportMapper(Component):
             return {'notes': record['additionalData'].get('remarks')}
         return {}
 
+    @mapping
+    def entity(self, record):
+        if 'app_details' in record:
+            return {'entity': record['app_details'].get('site')}
+
 
 class HubPaymentRequestBatchImporter(Component):
     _name = 'hub.batch.payment.request.importer'
@@ -132,11 +137,6 @@ class HubPaymentRequestImporter(Component):
     def _get_hub_data(self):
         """ Return the raw hub data for ``self.external_id `` """
         record = self.backend_adapter.read(self.external_id)
-        # This should be done in the dependency method when we have the
-        # sale order integration, for now we will have it here.
-        order_id = record.get('orderId')
-        if not order_id:
-            return record
         try:
             hub_api = getattr(self.work, 'hub_api')
         except AttributeError:
@@ -145,6 +145,19 @@ class HubPaymentRequestImporter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
+
+        # Get the entity using the config API to get all the store details
+        if 'additionalData' in record:
+            store_id = record['additionalData'].get('storeId')
+            if store_id:
+                record['app_details'] = hub_api.get_raw_store(int(store_id))
+
+        # This should be done in the dependency method when we have the
+        # sale order integration, for now we will have it here.
+        order_id = record.get('orderId')
+        if not order_id:
+            return record
+
         order = hub_api.get_raw_order(order_id)
         record['airline_pnr'] = self._get_airline_pnr(order.get('products'))
         record['record_locator'] = self._get_record_locator(

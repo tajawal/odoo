@@ -2,10 +2,12 @@
 # Copyright 2018 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
+from datetime import datetime
 
 from odoo import _, fields
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.connector.exception import IDMissingInBackend
+
 # from odoo.addons.queue_job.exception import NothingToDoJob
 
 _logger = logging.getLogger(__name__)
@@ -64,8 +66,9 @@ class HubImporter(AbstractComponent):
         assert self.hub_record
 
         sync_date = fields.Datetime.from_string(binding.sync_date)
-        hub_date = fields.Datetime.from_string(
-            self.hub_record.get('updatedAt'))
+        hub_date = datetime.fromtimestamp(
+            int(self.hub_record['updatedAt']['$date'].get(
+                '$numberLong')) / 1000)
 
         return hub_date < sync_date
 

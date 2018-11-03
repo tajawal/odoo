@@ -140,7 +140,7 @@ class HubAPI:
         headers = self.headers
         headers['Authorization'] = "Bearer {}".format(self._get_config_token)
         try:
-            response = requests.get(url, headers=headers)
+            response = requests.post(url, headers=headers)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.BaseHTTPError as err:

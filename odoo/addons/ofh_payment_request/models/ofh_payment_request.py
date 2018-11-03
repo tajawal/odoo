@@ -15,9 +15,11 @@ class OfhPaymentRequest(models.Model):
 
     created_at = fields.Datetime(
         required=True,
+        index=True,
     )
     updated_at = fields.Datetime(
         required=True,
+        index=True,
     )
     order_reference = fields.Char(
         string="Order #",
@@ -28,10 +30,12 @@ class OfhPaymentRequest(models.Model):
             ('charge', 'Charge'),
             ('refund', 'Refund'),
             ('void', 'Void')],
+        index=True,
     )
     # TODO: maybe should be selection field
     request_reason = fields.Char(
         required=True,
+        index=True,
     )
     # TODO: maybe should be selection field.
     request_status = fields.Char(
@@ -135,8 +139,13 @@ class OfhPaymentRequest(models.Model):
         default='sz',
     )
     # End of amount fields
-    entity = fields.Char(
-        # TODO: required=True,
+    entity = fields.Selection(
+        selection=[
+            ('almosafer', 'Almosafer'),
+            ('tajawal', 'Tajawal')],
+        required=True,
+        readonly=True,
+        index=True,
     )
 
     # Technical fields
@@ -171,6 +180,7 @@ class OfhPaymentRequest(models.Model):
                    ('need_loader', 'Need Loader')],
         default='pending',
         required=True,
+        index=True,
     )
     flag = fields.Selection(
         string='Payment request flag',
@@ -181,6 +191,7 @@ class OfhPaymentRequest(models.Model):
                    ('partial_refund', 'Partial Refund')],
         default='not_matched',
         required=True,
+        index=True,
     )
     hub_bind_ids = fields.One2many(
         comodel_name='hub.payment.request',
