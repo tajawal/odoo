@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_form_view">
+        <field name="name">ofh.supplier.invoice.line.form (in ofh_payment_request_invoice)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
+        <field name="arch" type="xml">
+            <group name="main_group" position="inside">
+                <field name="payment_request_id"/>
+            </group>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_search_view">
+        <field name="name">ofh.supplier.invoice.line.search (in ofh_payment_request_invoice)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
+        <field name="arch" type="xml">
+            <field name="ticket_number" position="after">
+                <field name="payment_request_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

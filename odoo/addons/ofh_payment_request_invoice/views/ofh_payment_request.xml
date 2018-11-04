@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_form_view">
+        <field name="name">ofh.payment.request.form (in ofh_supplier_invoice)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
+        <field name="arch" type="xml">
+            <page name="financial_detaisl" position="inside">
+                <group name="supplier_costs" string="Supplier Costs">
+                    <field name="supplier_invoice_ids" nolabel="1"/>
+                </group>
+            </page>
+        </field>
+    </record>
+
+</odoo>
