@@ -40,6 +40,7 @@ class OfhPaymentRequest(models.Model):
     # TODO: maybe should be selection field.
     request_status = fields.Char(
         required=True,
+        index=True,
     )
     auth_code = fields.Char()
     office_id = fields.Char()

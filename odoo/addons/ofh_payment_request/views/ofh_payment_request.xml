@@ -80,7 +80,27 @@
         <field name="model">ofh.payment.request</field>
         <field name="arch" type="xml">
             <search>
-                <!-- TODO -->
+                <field name="order_reference"/>
+                <field name="track_id"/>
+                <field name="pnr"/>
+                <field name="record_locator"/>
+                <field name="vendor_id"/>
+                <separator/>
+                <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('entity', '=', 'almosafer')]"/>
+                <!-- SAP Status -->
+                <separator/>
+                <filter name="pending_status" string="Pending" domain="[('sap_status', '=', 'pending')]"/>
+                <filter name="done_status" string="Loaded" domain="[('sap_status', '=', 'done')]"/>
+                <filter name="need_loader_status" string="Need Loader" domain="[('sap_status', '=', 'need_loader')]"/>
+                <filter name="ready_status" string="Ready to Load" domain="['|', ('sap_status', '=', 'sl_loader_ready'), ('sap_status', '=', 'ar_loader_ready')]"/>
+                <filter name="pending_status" string="Loaded" domain="[('sap_status', '=', 'done')]"/>
+                <separator/>
+                <!-- SAP Flags -->
+                <filter name="not_matched_flag" string="Not Matched" domain="[('flag', '=', 'not_matched')]"/>
+                <filter name="void_flag" string="Void" domain="[('flag', '=', 'void')]"/>
+                <filter name="amemdment_flag" string="Amemdments" domain="[('flag', '=', 'amemdment')]"/>
+                <filter name="partial_refund" string="Partial refunds" domain="[('flag', '=', 'partial_refund')]"/>
             </search>
         </field>
     </record>
@@ -90,18 +110,18 @@
         <field name="model">ofh.payment.request</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="entity"/>
+                <field name="track_id"/>
                 <field name="order_reference"/>
                 <field name="created_at"/>
                 <field name="updated_at"/>
                 <field name="request_type"/>
-                <field name="request_reason"/>
                 <field name="office_id"/>
                 <field name="vendor_id"/>
-                <field name="total_amount" widget="monetary"/>
-                <field name="currency_id" invisible="1"/>
-                <field name="entity"/>
                 <field name="pnr"/>
                 <field name="record_locator"/>
+                <field name="total_amount" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
                 <field name="sap_status"/>
                 <field name="flag"/>
             </tree>
