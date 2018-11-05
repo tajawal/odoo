@@ -6,10 +6,14 @@ from odoo import api, fields, models, _
 import json
 
 
-class OfhSupplierInvoice(models.Model):
+class OfhSupplierInvoiceLine(models.Model):
 
     _name = 'ofh.supplier.invoice.line'
     _description = 'Supplier Invoice lines'
+
+    @api.model
+    def _get_invoice_type_selection(self):
+        return []
 
     name = fields.Char(
         string="Unique ID",
@@ -19,10 +23,7 @@ class OfhSupplierInvoice(models.Model):
     )
     invoice_type = fields.Selection(
         string="Invoice from",
-        selection=[('gds', 'GDS'),
-                   ('tf', 'Travel Fusion'),
-                   ('tv', 'Travolutionary'),
-                   ('agoda', 'Agoda')],
+        selection=_get_invoice_type_selection,
         required=True,
         index=True,
     )
@@ -36,18 +37,23 @@ class OfhSupplierInvoice(models.Model):
     )
     invoice_status = fields.Selection(
         string="Supplier Status",
-        selection=[('tktt', 'Ticket'),
-                   ('amnd', 'Amendment'), 
-                   ('rfnd', 'Refund')],
+        selection=[
+            ('tktt', 'Ticket'),
+            ('amnd', 'Amendment'),
+            ('amnd', 'Amendment'),
+            ('rfnd', 'Refund')],
         required=True,
     )
     locator = fields.Char(
         required=True,
     )
-    owner_oid = fields.Char(
-        string="Owner OID",
+    office_id = fields.Char(
+        string="Office ID",
         required=True,
         index=True,
+    )
+    passenger = fields.Char(
+        string="Passenger's name",
     )
     vendor_id = fields.Char(
         string="Vendor Name",
@@ -56,6 +62,7 @@ class OfhSupplierInvoice(models.Model):
     )
     fees = fields.Char(
         required=True,
+        default='{}',
     )
     total = fields.Monetary(
         currency_field='currency_id',
@@ -64,36 +71,6 @@ class OfhSupplierInvoice(models.Model):
         string="Currency",
         required=True,
         comodel_name='res.currency',
-    )
-    base_fare_amount = fields.Monetary(
-        string="Base Fare",
-        compute='_compute_fees',
-        currency_field='currency_id',
-    )
-    tax_amount = fields.Monetary(
-        string="Tax",
-        compute='_compute_fees',
-        currency_field='currency_id',
-    )
-    net_amount = fields.Monetary(
-        string="Net",
-        compute='_compute_fees',
-        currency_field='currency_id',
-    )
-    fee_amount = fields.Monetary(
-        string="Fee",
-        compute='_compute_fees',
-        currency_field='currency_id',
-    )
-    iata_commission_amount = fields.Monetary(
-        string="IATA Commission",
-        compute='_compute_fees',
-        currency_field='currency_id',
-    )
-    gds_amount = fields.Monetary(
-        string="GDS Commission",
-        compute='_compute_fees',
-        currency_field='currency_id',
     )
     state = fields.Selection(
         string="Flag",
@@ -116,22 +93,20 @@ class OfhSupplierInvoice(models.Model):
     @api.depends('ticket_number', 'invoice_status', 'invoice_type')
     def _compute_name(self):
         for rec in self:
-            rec.name = '{}_{}{}'.format(
-                rec.invoice_type, rec.ticket_number, rec.invoice_status)
+            compute_function = '_{}_compute_name'.format(rec.invoice_type)
+            if hasattr(self, compute_function):
+                getattr(self, compute_function)()
+            else:
+                rec.name = '{}{}'.format(rec.invoice_type, rec.ticket_number)
 
     @api.multi
-    @api.depends('fees')
+    @api.depends('fees', 'invoice_type')
     def _compute_fees(self):
         for rec in self:
-            if not rec.fees:
-                rec.base_fare_amount = rec.tax_amount = rec.net_amount = \
-                    rec.fee_amount = rec.iata_commission_amount = \
-                    rec.gds_amount = 0.0
+            compute_function = '_{}_compute_fees'.format(rec.invoice_type)
+            if rec.fees:
+                fees = json.loads(rec.fees)
             else:
-                fees_dict = json.loads(rec.fees)
-                rec.base_fare_amount = fees_dict.get('BaseFare', 0.0)
-                rec.tax_amount = fees_dict.get('Tax')
-                rec.net_amount = fees_dict.get('Net')
-                rec.fee_amount = fees_dict.get('FEE')
-                rec.iata_commission_amount = fees_dict.get('IATA COMM')
-                rec.gds_amount = fees_dict.get('GDS $')
+                fees = {}
+            if hasattr(self, compute_function):
+                getattr(self, compute_function)(fees)

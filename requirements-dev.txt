@@ -8,7 +8,7 @@
 # ...
 
 # patched OCA addons
-# -e git+https://github.com/acsone/{oca-project}.git@11.0-ofh_master#egg=odoo{short_version}-addon-{addon}&subdirectory=setup/{addon}
+-e git+https://github.com/zakiuu/connector-interfaces.git@11.0-connector_importer#egg=odoo11-addon-connector_importer&subdirectory=setup/connector_importer
 
 # local project
 -e .

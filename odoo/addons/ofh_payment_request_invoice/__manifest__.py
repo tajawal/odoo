@@ -12,7 +12,7 @@
     'website': 'https://tajawal.com',
     'depends': [
         'ofh_payment_request',
-        'ofh_supplier_invoice',
+        'ofh_supplier_invoice_gds',
     ],
     'data': [
         'views/ofh_supplier_invoice_line.xml',

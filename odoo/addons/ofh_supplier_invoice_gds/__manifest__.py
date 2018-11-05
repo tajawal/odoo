@@ -3,19 +3,18 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Ofh Supplier Invoice',
+    'name': 'Ofh Supplier Invoice Gds',
     'description': """
-        Allow users to upload Vendor incoices""",
+        GDS Supplier Invoice""",
     'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
+        'ofh_supplier_invoice',
     ],
     'data': [
-        'wizards/ofh_supplier_invoice_import.xml',
-        'security/ofh_supplier_invoice.xml',
-        'views/ofh_supplier_invoice.xml',
+        'views/ofh_supplier_invoice_line.xml',
     ],
     'demo': [
     ],
