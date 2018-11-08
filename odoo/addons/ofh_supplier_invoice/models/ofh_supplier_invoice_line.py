@@ -12,18 +12,18 @@ class OfhSupplierInvoiceLine(models.Model):
     _description = 'Supplier Invoice lines'
 
     @api.model
-    def _get_invoice_type_selection(self):
-        return []
+    def _get_default_currency_id(self):
+        return self.env.ref('base.AED')
 
     name = fields.Char(
         string="Unique ID",
-        required=True,
-        compute='',
+        compute='_compute_name',
+        readonly=True,
         store=True,
     )
     invoice_type = fields.Selection(
         string="Invoice from",
-        selection=_get_invoice_type_selection,
+        selection=[],
         required=True,
         index=True,
     )
@@ -37,19 +37,15 @@ class OfhSupplierInvoiceLine(models.Model):
     )
     invoice_status = fields.Selection(
         string="Supplier Status",
-        selection=[
-            ('tktt', 'Ticket'),
-            ('amnd', 'Amendment'),
-            ('amnd', 'Amendment'),
-            ('rfnd', 'Refund')],
+        selection=[('none', 'Not applicable')],
         required=True,
+        default='none',
     )
     locator = fields.Char(
         required=True,
     )
     office_id = fields.Char(
         string="Office ID",
-        required=True,
         index=True,
     )
     passenger = fields.Char(
@@ -71,6 +67,7 @@ class OfhSupplierInvoiceLine(models.Model):
         string="Currency",
         required=True,
         comodel_name='res.currency',
+        default=_get_default_currency_id,
     )
     state = fields.Selection(
         string="Flag",
@@ -78,10 +75,6 @@ class OfhSupplierInvoiceLine(models.Model):
                    ('matched', 'Matched')],
         required=True,
         default='not_matched'
-    )
-    file_name = fields.Char(
-        string="File",
-        required=True,
     )
 
     _sql_constraints = [

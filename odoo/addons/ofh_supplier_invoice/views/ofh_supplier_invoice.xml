@@ -25,7 +25,6 @@
                         <field name="invoice_date"/>
                         <field name="office_id"/>
                         <field name="passenger"/>
-                        <field name="invoice_status"/>
                         <field name="vendor_id"/>
                         <field name="total"  widget="monetary"/>
                     </group>
@@ -57,7 +56,6 @@
                 <field name="invoice_type"/>
                 <field name="invoice_date"/>
                 <field name="ticket_number"/>
-                <field name="invoice_status"/>
                 <field name="locator"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="total" widget="monetary"/>

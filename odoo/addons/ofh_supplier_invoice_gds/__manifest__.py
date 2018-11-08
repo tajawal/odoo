@@ -12,10 +12,13 @@
     'website': 'https://tajawal.com',
     'depends': [
         'ofh_supplier_invoice',
+        'connector_importer',
     ],
     'data': [
+        'data/backend.xml',
         'views/ofh_supplier_invoice_line.xml',
     ],
     'demo': [
     ],
+    'external_dependencies': {'python': ['pandas']},
 }

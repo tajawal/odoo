@@ -2,10 +2,12 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, _
+import base64
+import io
+
+import pandas as pd
+from odoo import _, api, fields, models
 from odoo.exceptions import MissingError
-# from odoo.addons.ofh_supplier_invoice_line.OfhSupplierInvoiceLine import \
-#     _get_invoice_type_selection
 
 
 class OfhSupplierInvoiceImport(models.TransientModel):

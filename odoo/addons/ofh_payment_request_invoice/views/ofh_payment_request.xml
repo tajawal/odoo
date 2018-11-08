@@ -17,4 +17,17 @@
         </field>
     </record>
 
+    <record model="ir.ui.menu" id="ofh_supplier_invoice_main_menu">
+        <field name="name">Import Supplier reports</field>
+        <field name="parent_id" ref="ofh_payment_request.ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_gds_supplier_invoice_menu">
+        <field name="name">GDS Supplier Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
 </odoo>
