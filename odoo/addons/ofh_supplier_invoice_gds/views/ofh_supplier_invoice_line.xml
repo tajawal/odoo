@@ -10,7 +10,7 @@
         <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
         <field name="arch" type="xml">
             <notebook position="inside">
-                <page name="gds_fees_details" string="gds fees details">
+                <page name="gds_fees_details" string="GDS FEES DETAILS" attrs="{'invisible': [('invoice_type', '!=', 'gds')]}">
                     <group name="fees_details" col="4">
                         <field name="gds_base_fare_amount"  widget="monetary"/>
                         <field name="gds_tax_amount"  widget="monetary"/>

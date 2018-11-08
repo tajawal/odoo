@@ -70,11 +70,15 @@ class OfhSupplierInvoiceLine(models.Model):
         default=_get_default_currency_id,
     )
     state = fields.Selection(
-        string="Flag",
-        selection=[('not_matched', 'Not Matched'),
-                   ('matched', 'Matched')],
+        string="Matching Status",
+        selection=[
+            ('ready', 'Ready to be Matched'),
+            ('suggested', 'Suggested Matched'),
+            ('not_matched', 'Not Matched'),
+            ('not_in_pr', 'Refund not in PR'),
+            ('matched', 'Matched')],
         required=True,
-        default='not_matched'
+        default='ready',
     )
 
     _sql_constraints = [

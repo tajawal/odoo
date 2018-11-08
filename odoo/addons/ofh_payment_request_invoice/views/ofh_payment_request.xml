@@ -5,15 +5,29 @@
 <odoo>
 
     <record model="ir.ui.view" id="ofh_payment_request_form_view">
-        <field name="name">ofh.payment.request.form (in ofh_supplier_invoice)</field>
+        <field name="name">ofh.payment.request.form (in ofh_payment_request_invoice)</field>
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
+            <group name="status_details" position="inside">
+                <field name="reconciliation_status"/>
+            </group>
             <page name="financial_detaisl" position="inside">
                 <group name="supplier_costs" string="Supplier Costs">
                     <field name="supplier_invoice_ids" nolabel="1"/>
                 </group>
             </page>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_tree_view">
+        <field name="name">ofh.payment.request.tree (in ofh_payment_request_invoice)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="total_amount" position="after">
+                <field name="reconciliation_status"/>
+            </field>
         </field>
     </record>
 

@@ -14,3 +14,15 @@ class OfhPaymentRequest(models.Model):
         comodel_name='ofh.supplier.invoice.line',
         inverse_name='payment_request_id',
     )
+
+    # SAP related statuses
+    reconciliation_status = fields.Selection(
+        string="Reconciliation Status",
+        selection=[
+            ('pending', 'pending'),
+            ('matched', 'Matched'),
+            ('investigate', 'Investigate')],
+        default='pending',
+        required=True,
+        index=True,
+    )

@@ -160,7 +160,6 @@ class OfhPaymentRequest(models.Model):
         required=True,
     )
     # End of technical fields.
-
     pnr = fields.Char(
         # TODO: required=True,
         string="PNR",
@@ -172,27 +171,39 @@ class OfhPaymentRequest(models.Model):
     plan_code = fields.Char()
     notes = fields.Text()
     # SAP related statuses
+    payment_request_status = fields.Selection(
+        string="Payment Request Status",
+        selection=[
+            ('incomplete', 'Incomplete Data'),
+            ('ready', 'Ready for matching')],
+        compute='_compute_payment_request_status',
+        store=True,
+        index=True,
+    )
     sap_status = fields.Selection(
         string='SAP status',
-        selection=[('pending', 'Pending'),
-                   ('done', 'Loaded in SAP'),
-                   ('sl_loader_ready', 'Sale loader ready'),
-                   ('ar_loader_ready', 'A/R loader ready'),
-                   ('need_loader', 'Need Loader')],
+        selection=[
+            ('pending', 'Pending'),
+            ('not_in_sap', "Not In SAP"),
+            ('in_sap', "Sale & Payment In SAP"),
+            ('payment_not_in_sap', "Payment not in SAP"),
+            ('sale_not_in_sap', 'Sale not in SAP')],
         default='pending',
         required=True,
         index=True,
     )
-    flag = fields.Selection(
-        string='Payment request flag',
-        selection=[('not_matched', 'Not Matched'),
-                   ('void', 'Voided'),
-                   ('amemdment', 'Amendment'),
-                   ('full_refund', 'Full Refund'),
-                   ('partial_refund', 'Partial Refund')],
-        default='not_matched',
+    state = fields.Selection(
+        string='Next Action',
+        selection=[
+            ('pending', 'Pending'),
+            ('sale_loader', 'Need Sale Loader'),
+            ('payment_loader', 'Need Payment Loader'),
+            ('sl_py_loader', 'Need Sale & Payment Loader'),
+            ('no_action', 'No Action')],
+        default='pending',
         required=True,
         index=True,
+        readonly=True,
     )
     hub_bind_ids = fields.One2many(
         comodel_name='hub.payment.request',
@@ -216,3 +227,10 @@ class OfhPaymentRequest(models.Model):
             rec.output_vat_amount = fees_dict.get('outputVat')
             rec.adm_amount = fees_dict.get('adm')
             rec.loss_type = fees_dict.get('lossType')
+
+    @api.multi
+    @api.depends('order_reference')
+    def _compute_payment_request_status(self):
+        for rec in self:
+            rec.payment_request_status = \
+                'ready' if rec.order_reference else 'incomplete'

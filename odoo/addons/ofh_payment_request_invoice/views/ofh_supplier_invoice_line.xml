@@ -18,7 +18,7 @@
     <record model="ir.ui.view" id="ofh_supplier_invoice_line_search_view">
         <field name="name">ofh.supplier.invoice.line.search (in ofh_payment_request_invoice)</field>
         <field name="model">ofh.supplier.invoice.line</field>
-        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
+        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_search_view"/>
         <field name="arch" type="xml">
             <field name="ticket_number" position="after">
                 <field name="payment_request_id"/>
