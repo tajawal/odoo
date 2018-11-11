@@ -91,8 +91,8 @@ class OfhSupplierInvoiceLine(models.Model):
     def _compute_name(self):
         for rec in self:
             compute_function = '_{}_compute_name'.format(rec.invoice_type)
-            if hasattr(self, compute_function):
-                getattr(self, compute_function)()
+            if hasattr(rec, compute_function):
+                getattr(rec, compute_function)()
             else:
                 rec.name = '{}{}'.format(rec.invoice_type, rec.ticket_number)
 
@@ -105,5 +105,5 @@ class OfhSupplierInvoiceLine(models.Model):
                 fees = json.loads(rec.fees)
             else:
                 fees = {}
-            if hasattr(self, compute_function):
-                getattr(self, compute_function)(fees)
+            if hasattr(rec, compute_function):
+                getattr(rec, compute_function)(fees)

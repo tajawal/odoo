@@ -161,7 +161,7 @@ class OfhPaymentRequest(models.Model):
     # End of technical fields.
     pnr = fields.Char(
         # TODO: required=True,
-        string="PNR",
+        string="Airline PNR",
     )
     record_locator = fields.Char(
         # TODO: required=True,

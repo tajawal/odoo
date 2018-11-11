@@ -1,9 +1,6 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import json
-from datetime import datetime
-
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
 
@@ -75,48 +72,3 @@ class OfhSupplierInvoiceLine(models.Model):
             return False
         for row in records:
             self.with_delay().create_invoice_line(row)
-
-    @job(default_channel='root')
-    @api.model
-    def create_invoice_line(self, row: dict):
-        """Create an invoice line from a GDS report row."""
-        vals = {
-            'fees': json.dumps(self._get_gds_fees(row)),
-            'invoice_date': self._get_gds_date(row),
-            'invoice_type': 'gds',
-            'ticket_number': row.get('Ticket number'),
-            'locator': row.get('Record locator'),
-            'office_id': row.get('Office ID'),
-            'passenger': row.get("Passenger's name"),
-            'vendor_id': row.get('Airline Code')
-        }
-        return self.env['ofh.supplier.invoice.line'].create(vals)
-
-    @api.model
-    def _get_gds_fees(self, row: dict) -> dict:
-        """Put GDS fees in a dictionary to be saved in the invoice model
-        Arguments:
-            row {dict} -- dict contain GDS report row data
-        Returns:
-            dict -- dict contain invoice line fees break down.
-        """
-        fees = {
-            'Base fare': row.get('Base fare', 0.0),
-            'Tax': row.get('Tax', 0.0),
-            'Net': row.get('Net', 0.0),
-            'Fee': row.get('Fee', 0.0),
-            'IATA commission': row.get('IATA commission', 0.0),
-        }
-        return fees
-
-    @api.model
-    def _get_gds_date(self, row: dict) -> str:
-        """Helper method to convert date to Odoo format
-        Arguments:
-           row {dict} -- dict contain GDS report row data.
-        Returns:
-            str -- string represent the date on the odoo format.
-        """
-
-        dt = datetime.strptime(row.get('Date'), '%d/%m/%y')
-        return fields.Date.to_string(dt)

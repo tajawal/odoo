@@ -16,7 +16,7 @@ class OfhPaymentRequest(models.Model):
 
     # SAP related statuses
     reconciliation_status = fields.Selection(
-        string="Reconciliation Status",
+        string="Supplier Status",
         selection=[
             ('pending', 'pending'),
             ('matched', 'Matched'),
