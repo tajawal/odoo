@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta
 
 from odoo import _, api, fields, models
-from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
+from ..components.backend_adapter import HubAPI
 
 try:
     from odoo.addons.server_environment import serv_config
@@ -106,7 +106,7 @@ class HubBackend(models.Model):
                 try:
                     value = serv_config.get(section_name, field_name)
                     backend[field_name] = value
-                except:
+                except Exception:
                     _logger.exception(
                         'error trying to read field %s in section %s',
                         field_name, section_name)

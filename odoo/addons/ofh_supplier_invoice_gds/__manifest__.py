@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -21,5 +20,4 @@
     'demo': [
         'demo/ofh_supplier_invoice_gds.xml',
     ],
-    'external_dependencies': {'python': ['pandas']},
 }
