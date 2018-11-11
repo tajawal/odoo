@@ -214,9 +214,16 @@ class OfhPaymentRequest(models.Model):
     @api.depends('fees')
     def _compute_fees(self):
         for rec in self:
-            if not rec.fees:
-                continue
-            fees_dict = json.loads(rec.fees)
+            fees = rec.fees
+            if not fees:
+                fees = '{}'
+
+            fees_dict = json.loads(fees)
+            if not fees_dict:
+                rec.fare_difference = rec.change_fee = rec.penalty = \
+                    rec.booking_fee = rec.discount = rec.input_vat_amount = \
+                    rec.output_vat_amount = rec.adm_amount = 0.0
+                rec.loss_type = ''
             rec.fare_difference = fees_dict.get('fareDifference')
             rec.change_fee = fees_dict.get('changeFee')
             rec.penalty = fees_dict.get('penalty')

@@ -38,6 +38,18 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertAlmostEquals(self.payment_request_2.adm_amount, 0)
         self.assertFalse(self.payment_request_2.loss_type)
 
+        # Case where the fees field is not set:
+        self.payment_request_1.fees = False
+        self.assertAlmostEquals(self.payment_request_1.fare_difference, 0)
+        self.assertAlmostEquals(self.payment_request_1.penalty, 0)
+        self.assertAlmostEquals(self.payment_request_1.change_fee, 0)
+        self.assertAlmostEquals(self.payment_request_1.booking_fee, 0)
+        self.assertAlmostEquals(self.payment_request_1.discount, 0)
+        self.assertAlmostEquals(self.payment_request_1.input_vat_amount, 0)
+        self.assertAlmostEquals(self.payment_request_1.output_vat_amount, 0)
+        self.assertAlmostEquals(self.payment_request_1.adm_amount, 0)
+        self.assertFalse(self.payment_request_1.loss_type)
+
     def test_compute_payment_request_status(self):
         # Payment Request 1
         self.assertEquals(
