@@ -58,11 +58,11 @@ class OfhSupplierInvoiceLine(models.Model):
                 self.gds_net_amount = \
                 self.gds_fee_amount = self.gds_iata_commission_amount = 0.0
         else:
-            self.gds_base_fare_amount = fees.get('Base fare', 0.0)
+            self.gds_base_fare_amount = fees.get('BaseFare', 0.0)
             self.gds_tax_amount = fees.get('Tax', 0.0)
             self.gds_net_amount = fees.get('Net', 0.0)
             self.gds_fee_amount = fees.get('FEE', 0.0)
-            self.gds_iata_commission_amount = fees.get('IATA commission', 0.0)
+            self.gds_iata_commission_amount = fees.get('IATA COMM', 0.0)
 
     @job(default_channel='root')
     @api.model

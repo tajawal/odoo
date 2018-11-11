@@ -24,13 +24,12 @@ class SupplierInvoiceLineGDSMapper(Component):
     ]
 
     direct = [
-        ("Passenger's name", 'passenger'),
+        ("PAX Name", 'passenger'),
         ('Total', 'total'),
-        ('Airline Code', 'vendor_id'),
-        ('Record locator', 'locator'),
-        ('Office ID', 'office_id'),
-        ('Ticket number', 'ticket_number'),
-        ('GDS ticket status', 'invoice_status')
+        ('Air Line', 'vendor_id'),
+        ('Locater', 'locator'),
+        ('OwnerOID', 'office_id'),
+        ('DocNumber', 'ticket_number'),
     ]
 
     @mapping
@@ -41,17 +40,17 @@ class SupplierInvoiceLineGDSMapper(Component):
     @mapping
     def fees(self, record):
         fees = {
-            'Base fare': record.get('Base fare', 0.0),
+            'BaseFare': record.get('BaseFare', 0.0),
             'Tax': record.get('Tax', 0.0),
             'Net': record.get('Net', 0.0),
-            'Fee': record.get('Fee', 0.0),
-            'IATA commission': record.get('IATA commission', 0.0),
+            'FEE': record.get('FEE', 0.0),
+            'IATA COMM': record.get('IATA COMM', 0.0),
         }
         return {'fees': json.dumps(fees)}
 
     @mapping
     def invoice_status(self, record):
-        status = record.get('GDS ticket status')
+        status = record.get('Tkt Status')
         if not status:
             return {}
         if status in ('EMDA', 'EMDS'):
