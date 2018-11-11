@@ -11,7 +11,7 @@
     'license': 'AGPL-3',
     'depends': [
         # odoo_finance_hub open source addons
-        'ofh_payment_request_invoice'
+        'ofh_payment_request_invoice',
         'ofh_vendor',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools

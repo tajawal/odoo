@@ -9,6 +9,6 @@
 
 # patched OCA addons
 -e git+https://github.com/zakiuu/connector-interfaces.git@11.0-connector_importer#egg=odoo11-addon-connector_importer&subdirectory=setup/connector_importer
-
+odoo11-addon-connector
 # local project
 -e .
