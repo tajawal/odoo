@@ -19,6 +19,7 @@
         'views/ofh_supplier_invoice_line.xml',
     ],
     'demo': [
+        'demo/ofh_supplier_invoice_gds.xml',
     ],
     'external_dependencies': {'python': ['pandas']},
 }

@@ -90,7 +90,7 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-    penality = fields.Monetary(
+    penalty = fields.Monetary(
         currency_field='currency_id',
         compute='_compute_fees',
         readonly=True,
@@ -220,7 +220,7 @@ class OfhPaymentRequest(models.Model):
             fees_dict = json.loads(rec.fees)
             rec.fare_difference = fees_dict.get('fareDifference')
             rec.change_fee = fees_dict.get('changeFee')
-            rec.penality = fees_dict.get('penalty')
+            rec.penalty = fees_dict.get('penalty')
             rec.booking_fee = fees_dict.get('bookingFee')
             rec.discount = fees_dict.get('discount')
             rec.input_vat_amount = fees_dict.get('inputVat')

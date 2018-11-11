@@ -42,7 +42,7 @@
                                 <field name="booking_fee" widget="monetary"/>
                                 <field name="insurance" widget="monetary"/>
                                 <field name="discount" widget="monetary"/>
-                                <field name="penality" widget="monetary"/>
+                                <field name="penalty" widget="monetary"/>
                                 <field name="loss_amount" widget="monetary"/>
                                 <field name="input_vat_amount" widget="monetary"/>
                                 <field name="output_vat_amount" widget="monetary"/>

@@ -18,5 +18,6 @@
         'views/ofh_payment_request.xml',
     ],
     'demo': [
+        'demo/ofh_payment_request.xml',
     ],
 }

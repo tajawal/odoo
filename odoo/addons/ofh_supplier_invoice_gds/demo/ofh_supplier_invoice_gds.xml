@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_supplier_invoice_line_gds_1" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">gds</field>
+        <field name="invoice_date">2018-10-09</field>
+        <field name="locator">KZQNEE</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="passenger">THAKUR/R</field>
+        <field name="office_id">DXBAD31DO</field>
+        <field name="total">300</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            {"Base fare": 100, "Tax": 200, "Net": 300}
+        </field>
+        <field name="vendor_id">098</field>
+        <field name="ticket_number">2770018289</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_gds_2" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">gds</field>
+        <field name="invoice_date">2018-10-09</field>
+        <field name="locator">KZQNEE</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="passenger">KUMAR/NI</field>
+        <field name="office_id">DXBAD31DO</field>
+        <field name="total">300</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            {"Base fare": 100, "Tax": 200, "Net": 300}
+        </field>
+        <field name="vendor_id">098</field>
+        <field name="ticket_number">2770018290</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_gds_3" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">gds</field>
+        <field name="invoice_date">2018-10-31</field>
+        <field name="locator">LDZRAW</field>
+        <field name="invoice_status">RFND</field>
+        <field name="passenger">KUMAR/NI</field>
+        <field name="office_id">DXBAD31DO</field>
+        <field name="total">-465</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            {"Net": -465, "Base fare": -465}
+        </field>
+        <field name="vendor_id">098</field>
+        <field name="ticket_number">2678745993</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_gds_4" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">gds</field>
+        <field name="invoice_date">2018-10-04</field>
+        <field name="locator">WQXUF7</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="passenger">KUMAR/MU </field>
+        <field name="office_id">DXBAD31DO</field>
+        <field name="total">250</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            {"Base fare": 150, "Tax": 100, "Net": 250}
+        </field>
+        <field name="vendor_id">098</field>
+        <field name="ticket_number">2769968389</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_gds_5" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">gds</field>
+        <field name="invoice_date">2018-10-30</field>
+        <field name="locator">FAB6YR</field>
+        <field name="invoice_status">RFND</field>
+        <field name="passenger">KAYAL/SA</field>
+        <field name="office_id">DXBAD31DO</field>
+        <field name="total">-445</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            {"Net": -445, "Base fare": -340, "Tax": -105}
+        </field>
+        <field name="vendor_id">098</field>
+        <field name="ticket_number">5955039247</field>
+    </record>
+
+</odoo>
