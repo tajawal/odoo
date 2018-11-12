@@ -1,7 +1,7 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class OfhPaymentRequest(models.Model):
@@ -25,3 +25,11 @@ class OfhPaymentRequest(models.Model):
         required=True,
         index=True,
     )
+
+    @api.model
+    def _get_unreconciled_payment_requests(self):
+        """
+        Return Unreconcilided payment request
+        """
+        return self.search(
+            [('reconciliation_status', 'in', ['pending', 'investigate'])])

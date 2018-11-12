@@ -48,8 +48,76 @@
             {"fareDifference": 900, "bookingFee": 15, "penalty": 420}
         </field>
         <field name="office_id">DXBAD38TJ</field>
-        <field name="order_id">5ba61f8b67e5a565907d3712</field>
         <field name="charge_id">charge_CB6B9D761U1D5CF79AC8</field>
+    </record>
+
+    <record id="ofh_payment_request_gds_3" model="ofh.payment.request">
+        <field name="track_id">pr-A8083008164-1539532387380</field>
+        <field name="order_reference">A8083008164</field>
+        <field name="created_at">2018-10-14</field>
+        <field name="updated_at">2018-10-14</field>
+        <field name="request_type">charge</field>
+        <field name="request_reason">Fare Difference</field>
+        <field name="request_status">Customer Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5b87af96dbf81a834b030d04</field>
+        <field name="pnr">HKN2R</field>
+        <field name="record_locator">WQXUF7</field>
+        <field name="vendor_id">AI</field>
+        <field name="total_amount">390</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="tax_code">sz</field>
+        <field name="fees">
+            {"fareDifference": 250, "ChangeFee": 40, "penalty": 100}
+        </field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="charge_id">charge_1DBA9D261W1D53561093</field>
+    </record>
+
+    <record id="ofh_payment_request_gds_4" model="ofh.payment.request">
+        <field name="track_id">pr-A8092211814-1539070315235</field>
+        <field name="order_reference">A8092211814</field>
+        <field name="created_at">2018-10-30</field>
+        <field name="updated_at">2018-10-30</field>
+        <field name="request_type">charge</field>
+        <field name="request_reason">Amendment</field>
+        <field name="request_status">Customer Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5ba61f8b67e5a565907d3712</field>
+        <field name="pnr">YRNJ1</field>
+        <field name="record_locator">FAB6YR</field>
+        <field name="vendor_id">AI</field>
+        <field name="total_amount">390</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="tax_code">sz</field>
+        <field name="fees">
+            {"fareDifference": 280, "ChangeFee": 40, "penalty": 300}
+        </field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="charge_id">charge_1DBA9D261W1D53561093</field>
+    </record>
+
+    <record id="ofh_payment_request_gds_5" model="ofh.payment.request">
+        <field name="track_id">pr-A8092211814-1539070315236</field>
+        <field name="order_reference">A8092211814</field>
+        <field name="created_at">2018-10-30</field>
+        <field name="updated_at">2018-10-30</field>
+        <field name="request_type">charge</field>
+        <field name="request_reason">Amendment</field>
+        <field name="request_status">Customer Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5ba61f8b67e5a565907d3712</field>
+        <field name="pnr">YRNJ1</field>
+        <field name="record_locator">FAB6YR</field>
+        <field name="vendor_id">AI</field>
+        <field name="total_amount">390</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="tax_code">sz</field>
+        <field name="fees">
+            {"fareDifference": 280, "ChangeFee": 40, "penalty": 300}
+        </field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="charge_id">charge_1DBA9D261W1D53561093</field>
     </record>
 
 </odoo>

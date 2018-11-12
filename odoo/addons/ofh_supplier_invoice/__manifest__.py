@@ -11,6 +11,7 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
+        'mail',
     ],
     'data': [
         'wizards/ofh_supplier_invoice_import.xml',

@@ -10,6 +10,7 @@ class OfhSupplierInvoiceLine(models.Model):
 
     _name = 'ofh.supplier.invoice.line'
     _description = 'Supplier Invoice lines'
+    _inherit = ['mail.thread']
 
     @api.model
     def _get_default_currency_id(self):
@@ -72,10 +73,9 @@ class OfhSupplierInvoiceLine(models.Model):
     state = fields.Selection(
         string="Matching Status",
         selection=[
-            ('ready', 'Ready to be Matched'),
-            ('suggested', 'Suggested Matched'),
+            ('ready', 'Pending'),
+            ('suggested', 'Suggested Matching'),
             ('not_matched', 'Not Matched'),
-            ('not_in_pr', 'Refund not in PR'),
             ('matched', 'Matched')],
         required=True,
         default='ready',
