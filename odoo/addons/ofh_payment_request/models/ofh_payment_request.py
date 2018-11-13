@@ -11,6 +11,7 @@ class OfhPaymentRequest(models.Model):
     _name = 'ofh.payment.request'
     _description = "Ofh Payment Request"
     _rec_name = 'order_reference'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     created_at = fields.Datetime(
         required=True,

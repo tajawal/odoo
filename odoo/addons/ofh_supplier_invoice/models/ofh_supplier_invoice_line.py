@@ -10,7 +10,7 @@ class OfhSupplierInvoiceLine(models.Model):
 
     _name = 'ofh.supplier.invoice.line'
     _description = 'Supplier Invoice lines'
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     @api.model
     def _get_default_currency_id(self):
