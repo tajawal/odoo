@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_form_view">
+        <field name="name">ofh.payment.request.form (in ofh_payment_request_sap)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="update_sap_xml_details"
+                        type="object"
+                        string="Update Integration Details"
+                        class="button-primary"/>
+            </header>
+            <group name="status_details" position="inside">
+                <field name="sap_status"/>
+                <field name="integration_status"/>
+            </group>
+            <notebook position="inside">
+                <page name="integration_details" string="Integration Details">
+                    <group name="integration_details">
+                        <field name="sap_xml_sale_ref"/>
+                        <field name="sap_xml_file_ref"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_search_view">
+        <field name="name">ofh.payment.request.search (in ofh_payment_request_sap)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_search_view"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <!-- SAP Status -->
+                <separator/>
+                <filter name="pending_sap" string="Pending" domain="[('sap_status', '=', 'pending')]"/>
+                <filter name="in_sap" string="Sale and Payment in SAP" domain="[('sap_status', '=', 'in_sap')]"/>
+                <filter name="payment_not_in_sap" string="Payment not in SAP" domain="[('sap_status', '=', 'payment_not_in_sap')]"/>
+                <filter name="sale_not_in_sap" string="Sale not in SAP" domain="[('sap_status', '=', 'sale_not_in_sap')]"/>
+                <filter name="not_in_sap" string="Not In SAP" domain="[('sap_status', '=', 'not_in_sap')]"/>
+                <separator/>
+                <filter name="not_sent_through_integration" string="No Sent through integration" domain="[('integration_status', '=', 'not_sent')]"/>
+                <filter name="sale_sent_through_integration" string="Sale Sent through integration" domain="[('integration_status', '=', 'sale_sent')]"/>
+                <filter name="payment_sent_through_integration" string="Sale Sent through integration" domain="[('integration_status', '=', 'payment_sent')]"/>
+                <filter name="sent_through_integration" string="Sale and payment Sent through integration" domain="[('integration_status', '=', 'sale_payment_sent')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_tree_view">
+        <field name="name">ofh.payment.request.tree (in ofh_payment_request_sap)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="integration_status"/>
+                <field name="sap_status"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

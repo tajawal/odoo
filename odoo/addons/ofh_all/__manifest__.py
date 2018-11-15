@@ -13,6 +13,7 @@
         # odoo_finance_hub open source addons
         'ofh_payment_request_invoice',
         'ofh_vendor',
+        'ofh_payment_request_sap',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
         'base_optional_quick_create',

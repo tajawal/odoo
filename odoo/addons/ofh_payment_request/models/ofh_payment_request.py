@@ -180,18 +180,6 @@ class OfhPaymentRequest(models.Model):
         store=True,
         index=True,
     )
-    sap_status = fields.Selection(
-        string='SAP status',
-        selection=[
-            ('pending', 'Pending'),
-            ('not_in_sap', "Not In SAP"),
-            ('in_sap', "Sale & Payment In SAP"),
-            ('payment_not_in_sap', "Payment not in SAP"),
-            ('sale_not_in_sap', 'Sale not in SAP')],
-        default='pending',
-        required=True,
-        index=True,
-    )
     state = fields.Selection(
         string='Next Action',
         selection=[

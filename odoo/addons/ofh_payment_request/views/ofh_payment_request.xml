@@ -31,7 +31,6 @@
                         <field name="pnr"/>
                     </group>
                     <group col="4" name="status_details" string="Statuses">
-                        <field name="sap_status"/>
                         <field name="payment_request_status"/>
                     </group>
                     <notebook>
@@ -46,7 +45,6 @@
                                 <field name="loss_amount" widget="monetary"/>
                                 <field name="input_vat_amount" widget="monetary"/>
                                 <field name="output_vat_amount" widget="monetary"/>
-                                <newline/>
                                 <field name="tax_code"/>
                                 <field name="loss_type"/>
                             </group>
@@ -103,14 +101,6 @@
                         domain="[('payment_request_status', '=', 'incomplete')]"/>
                 <filter name="ready_pr" string="Ready for matching"
                         domain="[('payment_request_status', '=', 'ready')]"/>
-                <!-- SAP Status -->
-                <separator/>
-                <filter name="pending_sap" string="Pending" domain="[('sap_status', '=', 'pending')]"/>
-                <filter name="in_sap" string="Sale and Payment in SAP" domain="[('sap_status', '=', 'in_sap')]"/>
-                <filter name="payment_not_in_sap" string="Payment not in SAP" domain="[('sap_status', '=', 'payment_not_in_sap')]"/>
-                <filter name="sale_not_in_sap" string="Sale not in SAP" domain="[('sap_status', '=', 'sale_not_in_sap')]"/>
-                <filter name="not_in_sap" string="Not In SAP" domain="[('sap_status', '=', 'not_in_sap')]"/>
-                <separator/>
                 <!-- Next action status -->
                 <filter name="pending_status" string="No Action" domain="[('state', '=', 'pending')]"/>
                 <filter name="sale_loader_status" string="Need Sale Loader" domain="[('state', '=', 'sale_loader')]"/>
@@ -138,14 +128,13 @@
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>
-                <field name="sap_status"/>
                 <field name="state"/>
             </tree>
         </field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_request_act_window">
-        <field name="name">Payment Requests</field> <!-- TODO -->
+        <field name="name">Payment Requests</field>
         <field name="res_model">ofh.payment.request</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
