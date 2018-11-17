@@ -13,7 +13,7 @@
         <field name="name">SAP Sale Report</field>
         <field name="key">va05</field>
         <field name="settings">
-            ofh.payment.request::payment.request.sap.record.importer
+            ofh.payment.request::payment.request.sap.sale.record.importer
         </field>
     </record>
 
@@ -26,7 +26,7 @@
         <field name="name">SAP Payment Report</field>
         <field name="key">fbl5n</field>
         <field name="settings">
-            ofh.payment.request::payment.request.sap.record.importer
+            ofh.payment.request::payment.request.sap.payment.record.importer
         </field>
     </record>
 

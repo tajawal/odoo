@@ -22,7 +22,7 @@ class PaymentRequestSAPSaleMapper(Component):
 
 
 class PaymentRequestSAPSaleRecordImporter(Component):
-    _name = 'payment.request.sap.record.importer'
+    _name = 'payment.request.sap.sale.record.importer'
     _inherit = 'importer.record'
     _apply_on = ['ofh.payment.request']
 
@@ -37,7 +37,6 @@ class PaymentRequestSAPSaleRecordImporter(Component):
         self.record = record
         if not self.record:
             return
-
         self._init_importer(self.record.recordset_id)
         for line in self._record_lines():
             line = self.prepare_line(line)
@@ -65,13 +64,11 @@ class PaymentRequestSAPSaleRecordImporter(Component):
                     else:
                         self.tracker.log_skipped(
                             values, line,
-                            "Record not found in Payment requests.")
+                            {'message':
+                             "Record not found in Payment requests."})
                         continue
             except Exception as err:
-                self.tracker.log_error(values, line, odoo_record, message=err)
-                if self._break_on_error:
-                    raise
-                continue
+                raise err
 
 
 class PaymentRequestSAPSaleHandler(Component):
@@ -82,8 +79,8 @@ class PaymentRequestSAPSaleHandler(Component):
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the record in odoo."""
         return [
-            ('integration_status', 'in', ['sale_sent', 'sale_payment_sent']),
-            (self.unique_key, '=', values.get('Purchase Order Number'))]
+            ('integration_status', '!=', 'not_sent'),
+            (self.unique_key, '=', orig_values.get('Purchase Order Number'))]
 
 
 ######################
@@ -141,7 +138,8 @@ class PaymentRequestSAPPaymentRecordImporter(Component):
                     else:
                         self.tracker.log_skipped(
                             values, line,
-                            "Record not found in Payment requests.")
+                            {'message':
+                             "Record not found in Payment requests."})
                         continue
             except Exception as err:
                 self.tracker.log_error(values, line, odoo_record, message=err)
@@ -158,6 +156,5 @@ class PaymentRequestSAPPaymentHandler(Component):
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the record in odoo."""
         return [
-            ('integration_status', 'in',
-             ['payment_sent', 'sale_payment_sent']),
-            (self.unique_key, '=', values.get('Purchase Order Number'))]
+            ('integration_status', '!=', 'not_sent'),
+            (self.unique_key, '=', orig_values.get('Purchase Order Number'))]

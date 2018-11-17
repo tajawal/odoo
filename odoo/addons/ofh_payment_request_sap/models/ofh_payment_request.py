@@ -138,6 +138,8 @@ class OfhPaymentRequest(models.Model):
             # If the last update will make both payment and sale sent to SAP
             # the SAP status should be then 'IN SAP'.
             new_vals = vals
+            if rec.sap_status == 'in_sap':
+                continue
             if (rec.sap_status == 'payment_in_sap' and
                     new_status == 'sale_in_sap') or \
                (rec.sap_status == 'sale_in_sap' and
