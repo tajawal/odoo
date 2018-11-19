@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
-from odoo.addons.queue_job.job import job
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -63,12 +62,3 @@ class OfhSupplierInvoiceLine(models.Model):
             self.gds_net_amount = fees.get('Net', 0.0)
             self.gds_fee_amount = fees.get('FEE', 0.0)
             self.gds_iata_commission_amount = fees.get('IATA COMM', 0.0)
-
-    @job(default_channel='root')
-    @api.model
-    def import_gds_batch(self, records):
-        """Import GDS batch report."""
-        if not records:
-            return False
-        for row in records:
-            self.with_delay().create_invoice_line(row)
