@@ -34,11 +34,12 @@ class OfhSupplierInvoiceLine(models.Model):
     )
     ticket_number = fields.Char(
         string="Ticket",
-        required=True,
     )
     invoice_status = fields.Selection(
         string="Supplier Status",
-        selection=[('none', 'Not applicable')],
+        selection=[('none', 'Not applicable'),
+                   ('TKTT', 'Ticket'),
+                   ('RFND', 'Refund')],
         required=True,
         default='none',
     )
@@ -87,7 +88,8 @@ class OfhSupplierInvoiceLine(models.Model):
     ]
 
     @api.multi
-    @api.depends('ticket_number', 'invoice_status', 'invoice_type')
+    @api.depends('ticket_number', 'invoice_status', 'passenger',
+                 'locator', 'invoice_date', 'vendor_id')
     def _compute_name(self):
         for rec in self:
             compute_function = '_{}_compute_name'.format(rec.invoice_type)

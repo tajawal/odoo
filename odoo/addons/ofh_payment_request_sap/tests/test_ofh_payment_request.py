@@ -2,13 +2,13 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.modules.module import get_resource_path
-from odoo.addons.component.tests import common
-from ..models.common import (
-    PaymentRequestSAPRecordImporter,
-    PaymentRequestSAPMapper,
-    PaymentRequestSAPHandler)
 import base64
+
+from odoo.addons.component.tests import common
+from odoo.modules.module import get_resource_path
+
+from ..models.common import (PaymentRequestSAPHandler, PaymentRequestSAPMapper,
+                             PaymentRequestSAPRecordImporter)
 
 
 class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):

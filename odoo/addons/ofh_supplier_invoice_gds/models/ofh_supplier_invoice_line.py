@@ -37,10 +37,7 @@ class OfhSupplierInvoiceLine(models.Model):
         currency_field='currency_id',
     )
     invoice_status = fields.Selection(
-        selection_add=[
-            ('TKTT', 'Ticket'),
-            ('AMND', 'Amendment'),
-            ('RFND', 'Refund')],
+        selection_add=[('AMND', 'Amendment')],
     )
 
     @api.multi

@@ -4,14 +4,14 @@
 
 <odoo>
 
-    <record id="gds_import_backend" model="import.backend">
-        <field name="name">GDS Report Importer</field>
+    <record id="tf_import_backend" model="import.backend">
+        <field name="name">TravelFusion Report Importer</field>
         <field name="version">1.0</field>
     </record>
 
-    <record id="gds_import_type" model="import.type">
-        <field name="name">GDS Report</field>
-        <field name="key">gds</field>
+    <record id="tf_import_type" model="import.type">
+        <field name="name">TravelFusion Report</field>
+        <field name="key">tf</field>
         <field name="settings">
             ofh.supplier.invoice.line::supplier.invoice.line.record.importer
         </field>

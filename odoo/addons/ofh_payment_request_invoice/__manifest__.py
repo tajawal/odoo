@@ -12,6 +12,7 @@
     'depends': [
         'ofh_payment_request',
         'ofh_supplier_invoice_gds',
+        'ofh_supplier_invoice_tf',
     ],
     'data': [
         'views/ofh_supplier_invoice_line.xml',
