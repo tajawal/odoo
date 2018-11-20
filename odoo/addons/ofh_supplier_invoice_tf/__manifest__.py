@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
 {
     'name': 'Ofh Supplier Invoice Tf',
     'description': """
@@ -19,5 +18,6 @@
         'data/backend.xml',
     ],
     'demo': [
+        'demo/ofh_supplier_invoice_tf.xml',
     ],
 }

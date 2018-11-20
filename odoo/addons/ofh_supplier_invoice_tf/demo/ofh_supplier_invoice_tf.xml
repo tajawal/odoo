@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_supplier_invoice_line_tf_1" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">tf</field>
+        <field name="invoice_date">2018-10-10</field>
+        <field name="locator">96005040</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="passenger">HOURIAH ALSALEH</field>
+        <field name="total">180</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="vendor_id">Air Arabia UAE</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_tf_2" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">tf</field>
+        <field name="invoice_date">2018-10-10</field>
+        <field name="locator">96005040</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="passenger">HOURIAH ALSALEH 2.0</field>
+        <field name="total">300</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="vendor_id">Air Arabia UAE</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_tf_3" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">tf</field>
+        <field name="invoice_date">2018-10-09</field>
+        <field name="locator">ZQZWNI</field>
+        <field name="invoice_status">RFND</field>
+        <field name="passenger">PRABAKARAN/VEERASAMY</field>
+        <field name="total">803.27</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="vendor_id">Air India Express</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_tf_4" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">tf</field>
+        <field name="invoice_date">2018-10-26</field>
+        <field name="locator">YMEBYV</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="total">666.25</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="vendor_id">Air Asia</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_tf_5" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">tf</field>
+        <field name="invoice_date">2018-10-21</field>
+        <field name="locator">FREYAF</field>
+        <field name="invoice_status">RFND</field>
+        <field name="total">-253</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="vendor_id">Flydubai UAE</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_tf_6" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">tf</field>
+        <field name="invoice_date">2018-10-15</field>
+        <field name="locator">ABCDE</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="passenger">FARHIA</field>
+        <field name="total">500</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="vendor_id">Indigo</field>
+    </record>
+
+</odoo>

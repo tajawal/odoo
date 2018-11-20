@@ -23,6 +23,17 @@ class TestSupplierInvoiceLine(TransactionCase):
         self.payment_request_5 = self.env.ref(
             'ofh_payment_request.ofh_payment_request_gds_5')
 
+        self.payment_request_6 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_tf_1')
+        self.payment_request_7 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_tf_2')
+        self.payment_request_8 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_tf_3')
+        self.payment_request_9 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_tf_4')
+        self.payment_request_10 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_tf_5')
+
         # Supplier Invoices
         self.supplier_invoice_1 = self.env.ref(
             'ofh_supplier_invoice_gds.ofh_supplier_invoice_line_gds_1')
@@ -35,7 +46,20 @@ class TestSupplierInvoiceLine(TransactionCase):
         self.supplier_invoice_5 = self.env.ref(
             'ofh_supplier_invoice_gds.ofh_supplier_invoice_line_gds_5')
 
-    def test_1(self):
+        self.supplier_invoice_6 = self.env.ref(
+            'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_1')
+        self.supplier_invoice_7 = self.env.ref(
+            'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_2')
+        self.supplier_invoice_8 = self.env.ref(
+            'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_3')
+        self.supplier_invoice_9 = self.env.ref(
+            'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_4')
+        self.supplier_invoice_10 = self.env.ref(
+            'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_5')
+        self.supplier_invoice_11 = self.env.ref(
+            'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_6')
+
+    def test_gds_match_supplier_invoice_lines(self):
         # Case where one PR matches one or multiple supplier invoice
         self.invoice_line_model.match_supplier_invoice_lines()
         self.assertEquals(self.supplier_invoice_1.state, 'matched')
@@ -72,4 +96,39 @@ class TestSupplierInvoiceLine(TransactionCase):
             self.payment_request_5.reconciliation_status, 'investigate')
         self.assertEquals(
             self.supplier_invoice_5.state, 'not_matched')
-        import pdb; pdb.set_trace()
+
+    def test_tf_match_supplier_invoice_lines(self):
+        # Case where one PR matches one or multiple supplier invoices
+        self.invoice_line_model.match_supplier_invoice_lines()
+        self.assertEquals(self.supplier_invoice_6.state, 'matched')
+        self.assertEquals(self.supplier_invoice_7.state, 'matched')
+        self.assertEquals(
+            self.supplier_invoice_6.payment_request_id, self.payment_request_6)
+        self.assertEquals(
+            self.supplier_invoice_7.payment_request_id, self.payment_request_6)
+        self.assertEquals(
+            self.payment_request_6.reconciliation_status, 'matched')
+        self.assertEquals(
+            len(self.payment_request_6.supplier_invoice_ids), 2)
+
+        # Case where the PR doesn't match any supplier invoice
+        self.assertEquals(self.supplier_invoice_8.state, 'not_matched')
+        self.assertEquals(
+            self.payment_request_7.reconciliation_status, 'investigate')
+        self.assertEquals(
+            len(self.payment_request_7.supplier_invoice_ids), 0)
+
+        # Case Suggest matching
+        self.assertEquals(self.supplier_invoice_9.state, 'suggested')
+        self.assertEquals(
+            self.payment_request_8.reconciliation_status, 'matched')
+        self.assertEquals(
+            len(self.payment_request_8.supplier_invoice_ids), 1)
+
+        # Case Multiple payment requests against one supplier invoice
+        self.assertEquals(
+            self.payment_request_9.reconciliation_status, 'investigate')
+        self.assertEquals(
+            self.payment_request_10.reconciliation_status, 'investigate')
+        self.assertEquals(self.supplier_invoice_10.state, 'not_matched')
+        self.assertEquals(self.supplier_invoice_11.state, 'not_matched')

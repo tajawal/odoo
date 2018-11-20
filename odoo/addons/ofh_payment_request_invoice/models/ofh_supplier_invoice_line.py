@@ -22,8 +22,8 @@ class OfhSupplierInvoiceLine(models.Model):
                 rec.state = 'not_matched'
                 continue
             day_diff = \
-                (from_string(rec.payment_request_id.created_at) -
-                 from_string(rec.invoice_date)).days
+                abs((from_string(rec.payment_request_id.created_at) -
+                    from_string(rec.invoice_date))).days
             if day_diff == 0:
                 rec.state = 'matched'
             elif day_diff <= 2:
@@ -53,24 +53,34 @@ class OfhSupplierInvoiceLine(models.Model):
         from_string = fields.Date.from_string
         # Pivot the supplier lines by date and locator
         lines_by_pnr = pending_lines._get_invoice_lines_by_pnr()
-        for dt, locator_dict in lines_by_pnr.items():
-            for locator, lines in locator_dict.items():
-                payment_requests = unreconciled_prs.filtered(
-                    lambda rec, inv_date=dt, inv_locator=locator:
-                    abs((from_string(inv_date) -
-                        from_string(rec.created_at)).days) <= 2 and
-                    inv_locator in rec.record_locator)
-                if len(payment_requests) == 1:
-                    payment_requests.write({
-                        'supplier_invoice_ids': [(4, l.id) for l in lines],
-                        'reconciliation_status': 'matched'})
-                elif len(payment_requests) > 1:
-                    lines.message_post(
-                        self._get_multiple_payment_request_message(
-                            payment_requests))
-                    lines.write({'state': 'not_matched'})
+        for dt, invoice_status_dict in lines_by_pnr.items():
+            for invoice_status, locator_dict in invoice_status_dict.items():
+                # Add filter based on invoice_status
+                if invoice_status == 'TKTT':
+                    pr_type = 'charge'
                 else:
-                    lines.write({'state': 'not_matched'})
+                    pr_type = 'refund'
+
+                for locator, lines in locator_dict.items():
+                    payment_requests = unreconciled_prs.filtered(
+                        lambda rec, inv_date=dt, inv_locator=locator,
+                        pr_type=pr_type:
+                        abs((from_string(inv_date) -
+                            from_string(rec.created_at)).days) <= 2 and
+                        (inv_locator in rec.record_locator or
+                         inv_locator in rec.pnr) and
+                        rec.request_type == pr_type)
+                    if len(payment_requests) == 1:
+                        payment_requests.write({
+                            'supplier_invoice_ids': [(4, l.id) for l in lines],
+                            'reconciliation_status': 'matched'})
+                    elif len(payment_requests) > 1:
+                        lines.message_post(
+                            self._get_multiple_payment_request_message(
+                                payment_requests))
+                        lines.write({'state': 'not_matched'})
+                    else:
+                        lines.write({'state': 'not_matched'})
 
         # Once the matching logic is done we update all the payment request
         # that have not being matched with any invoice to investigate
@@ -82,15 +92,19 @@ class OfhSupplierInvoiceLine(models.Model):
     def _get_invoice_lines_by_pnr(self) -> dict:
         """Group the invoice line by date and locator.
         Returns:
-            dict -- {'yyyy-mm-dd': {
-                'Locator123': ofh.supplier.invoice.line(id1, id2)}}
+            dict -- {'{invoice_date}': {
+                '{invoice_status}': {
+                    '{locator}': ofh.supplier.invoice.line(id1, id2)}}}
         """
         invoice_line_by_pnr = {}
         for line in self:
             invoice_line_by_pnr.setdefault(line.invoice_date, {})
             invoice_line_by_pnr[line.invoice_date].setdefault(
-                line.locator, line.browse())
-            invoice_line_by_pnr[line.invoice_date][line.locator] |= line
+                line.invoice_status, {})
+            invoice_line_by_pnr[line.invoice_date][line.invoice_status].\
+                setdefault(line.locator, line.browse())
+            invoice_line_by_pnr[
+                line.invoice_date][line.invoice_status][line.locator] |= line
         return invoice_line_by_pnr
 
     @api.model
