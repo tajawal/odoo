@@ -16,13 +16,16 @@ class OfhPaymentRequest(models.Model):
     created_at = fields.Datetime(
         required=True,
         index=True,
+        readonly=True,
     )
     updated_at = fields.Datetime(
         required=True,
         index=True,
+        readonly=True,
     )
     order_reference = fields.Char(
         string="Order #",
+        readonly=True,
     )
     request_type = fields.Selection(
         required=True,
@@ -31,21 +34,29 @@ class OfhPaymentRequest(models.Model):
             ('refund', 'Refund'),
             ('void', 'Void')],
         index=True,
+        readonly=True,
     )
     # TODO: maybe should be selection field
     request_reason = fields.Char(
         required=True,
         index=True,
+        readonly=True,
     )
     # TODO: maybe should be selection field.
     request_status = fields.Char(
         required=True,
         index=True,
+        readonly=True,
     )
-    auth_code = fields.Char()
-    office_id = fields.Char()
+    auth_code = fields.Char(
+        readonly=True,
+    )
+    office_id = fields.Char(
+        readonly=True,
+    )
     vendor_id = fields.Char(
         string="Airline",
+        readonly=True,
         # TODO: should be reference to comodel_name='ofh.vendor.contract',
     )
     # Amounts field
@@ -53,9 +64,10 @@ class OfhPaymentRequest(models.Model):
         string='Currency',
         comodel_name='res.currency',
         required=True,
+        readonly=True,
     )
     fees = fields.Char(
-        # TODO: required=True,
+        readonly=True,
     )
     fare_difference = fields.Monetary(
         string="Fare Difference",
@@ -132,12 +144,14 @@ class OfhPaymentRequest(models.Model):
     total_amount = fields.Monetary(
         string="Total",
         currency_field='currency_id',
+        readonly=True,
     )
     tax_code = fields.Selection(
         string='Tax code',
         selection=[('ss', 'SS'), ('sz', 'SZ')],
         required=True,
         default='sz',
+        readonly=True,
     )
     # End of amount fields
     entity = fields.Selection(
@@ -152,12 +166,15 @@ class OfhPaymentRequest(models.Model):
     # Technical fields
     order_id = fields.Char(
         string="Order ID",
+        readonly=True,
     )
     charge_id = fields.Char(
         required=True,
+        readonly=True,
     )
     track_id = fields.Char(
         required=True,
+        readonly=True,
     )
     # End of technical fields.
     pnr = fields.Char(
@@ -167,9 +184,15 @@ class OfhPaymentRequest(models.Model):
     record_locator = fields.Char(
         # TODO: required=True,
     )
-    insurance_ref = fields.Char()
-    plan_code = fields.Char()
-    notes = fields.Text()
+    insurance_ref = fields.Char(
+        readonly=True,
+    )
+    plan_code = fields.Char(
+        readonly=True,
+    )
+    notes = fields.Text(
+        readonly=True,
+    )
     # SAP related statuses
     payment_request_status = fields.Selection(
         string="Payment Request Status",
@@ -179,6 +202,7 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_payment_request_status',
         store=True,
         index=True,
+        readonly=True,
     )
     state = fields.Selection(
         string='Next Action',
@@ -197,20 +221,25 @@ class OfhPaymentRequest(models.Model):
         comodel_name='hub.payment.request',
         inverse_name='odoo_id',
         string="Hub Bindings",
+        readonly=True,
     )
 
     # order details
     order_type = fields.Selection(
         selection=[('hotel', 'Hotel'), ('flight', 'Flight')],
+        readonly=True,
     )
     order_amount = fields.Monetary(
         currency_field='currency_id',
+        readonly=True,
     )
     order_supplier_cost = fields.Monetary(
         currency_field='order_supplier_currency',
+        readonly=True,
     )
     order_supplier_currency = fields.Many2one(
         comodel_name='res.currency',
+        readonly=True,
     )
 
     @api.multi

@@ -17,11 +17,13 @@ class OfhPaymentRequest(models.Model):
         string="Supplier Total Amount",
         currency_field='supplier_currency_id',
         compute='_compute_supplier_total_amount',
+        readonly=True,
     )
     supplier_currency_id = fields.Many2one(
         string="Supplier Currency",
         comodel_name='res.currency',
         compute='_compute_supplier_total_amount',
+        readonly=True,
     )
 
     # SAP related statuses
@@ -34,6 +36,7 @@ class OfhPaymentRequest(models.Model):
         default='pending',
         required=True,
         index=True,
+        readonly=True,
     )
 
     @api.model

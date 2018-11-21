@@ -25,6 +25,7 @@ class OfhPaymentRequest(models.Model):
         default='pending',
         required=True,
         index=True,
+        readonly=True,
     )
     integration_status = fields.Selection(
         string="Integration Status",
@@ -40,7 +41,7 @@ class OfhPaymentRequest(models.Model):
     )
     sap_xml_sale_ref = fields.Char(
         string="SAP XML Order #",
-        readyonly=True,
+        readonly=True,
     )
     sap_xml_file_ref = fields.Char(
         string="SAP XML File ID",
