@@ -17,9 +17,9 @@ class SupplierInvoiceLineMapper(Component):
         gds_backend = self.env.ref(
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
-            return super(
-                SupplierInvoiceLineMapper, self).invoice_status(record)
-        dt = datetime.strptime(record.get('Date'), '%d/%m/%y')
+            return super(SupplierInvoiceLineMapper, self).invoice_date(record)
+        dt = datetime.strptime(record.get('Date'), '%m/%d/%y')
+        import pdb; pdb.set_trace()
         return {'invoice_date': fields.Date.to_string(dt)}
 
     @mapping
@@ -115,7 +115,7 @@ class SupplierInvoiceLineHandler(Component):
             return [
                 ('invoice_type', '=', 'gds'),
                 (self.unique_key, '=', 'gds_{}{}'.format(
-                    values.get('Ticket number'), 
+                    values.get('Ticket number'),
                     values.get('GDS ticket status')))]
         return super(SupplierInvoiceLineHandler, self).odoo_find_domain(
             values, orig_values)

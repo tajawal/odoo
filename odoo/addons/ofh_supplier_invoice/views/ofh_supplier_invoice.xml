@@ -21,6 +21,7 @@
                         <field name="name"/>
                         <field name="invoice_type"/>
                         <field name="ticket_number"/>
+                        <field name="invoice_status"/>
                         <field name="locator"/>
                         <field name="invoice_date"/>
                         <field name="office_id"/>
@@ -59,6 +60,7 @@
                 <field name="office_id"/>
                 <field name="invoice_type"/>
                 <field name="invoice_date"/>
+                <field name="invoice_status"/>
                 <field name="ticket_number"/>
                 <field name="locator"/>
                 <field name="currency_id" invisible="1"/>

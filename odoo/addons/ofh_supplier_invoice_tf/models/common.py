@@ -17,7 +17,7 @@ class SupplierInvoiceLineMapper(Component):
         tf_backend = self.env.ref(
            'ofh_supplier_invoice_tf.tf_import_backend')
         if self.backend_record != tf_backend:
-            return super(SupplierInvoiceLineMapper, self).invoice_type(record)
+            return super(SupplierInvoiceLineMapper, self).invoice_date(record)
         dt = datetime.strptime(record.get('Date'), '%m/%d/%y')
         return {'invoice_date': fields.Date.to_string(dt)}
 
@@ -53,6 +53,11 @@ class SupplierInvoiceLineMapper(Component):
 
     @mapping
     def total(self, record):
+        tf_backend = self.env.ref(
+           'ofh_supplier_invoice_tf.tf_import_backend')
+        if self.backend_record != tf_backend:
+            return super(SupplierInvoiceLineMapper, self).total(
+                record)
         return {
             'total': max(
                 record.get('Payment amount'), record.get('Refund amount'))
@@ -71,7 +76,7 @@ class SupplierInvoiceLineMapper(Component):
         tf_backend = self.env.ref(
            'ofh_supplier_invoice_tf.tf_import_backend')
         if self.backend_record != tf_backend:
-            return super(SupplierInvoiceLineMapper, self).passenger(record)
+            return super(SupplierInvoiceLineMapper, self).vendor_id(record)
         return {'vendor_id': record.get('Airline')}
 
     @mapping

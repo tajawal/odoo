@@ -39,7 +39,7 @@ class OfhSupplierInvoiceLine(models.Model):
         readonly=True,
     )
     invoice_status = fields.Selection(
-        string="Supplier Status",
+        string="Ticket Status",
         selection=[('none', 'Not applicable'),
                    ('TKTT', 'Ticket'),
                    ('RFND', 'Refund')],

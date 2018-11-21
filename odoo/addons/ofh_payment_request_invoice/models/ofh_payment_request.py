@@ -45,7 +45,8 @@ class OfhPaymentRequest(models.Model):
         Return Unreconcilided payment request
         """
         return self.search(
-            [('reconciliation_status', 'in', ['pending', 'investigate'])])
+            [('reconciliation_status', 'in', ['pending', 'investigate']),
+             ('payment_request_status', '=', 'ready')])
 
     @api.multi
     @api.depends('supplier_invoice_ids', 'total_amount',
