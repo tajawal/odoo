@@ -15,26 +15,31 @@ class OfhSupplierInvoiceLine(models.Model):
         string="Base Fare",
         compute='_compute_fees',
         currency_field='currency_id',
+        readonly=True,
     )
     gds_tax_amount = fields.Monetary(
         string="Tax",
         compute='_compute_fees',
         currency_field='currency_id',
+        readonly=True,
     )
     gds_net_amount = fields.Monetary(
         string="Net",
         compute='_compute_fees',
         currency_field='currency_id',
+        readonly=True,
     )
     gds_fee_amount = fields.Monetary(
         string="Fee",
         compute='_compute_fees',
         currency_field='currency_id',
+        readonly=True,
     )
     gds_iata_commission_amount = fields.Monetary(
         string="IATA Commission",
         compute='_compute_fees',
         currency_field='currency_id',
+        readonly=True,
     )
     invoice_status = fields.Selection(
         selection_add=[('AMND', 'Amendment')],

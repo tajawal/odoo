@@ -27,13 +27,16 @@ class OfhSupplierInvoiceLine(models.Model):
         selection=[],
         required=True,
         index=True,
+        readonly=True,
     )
     invoice_date = fields.Date(
         string="Invoice Date",
         required=True,
+        readonly=True,
     )
     ticket_number = fields.Char(
         string="Ticket",
+        readonly=True,
     )
     invoice_status = fields.Selection(
         string="Supplier Status",
@@ -42,34 +45,42 @@ class OfhSupplierInvoiceLine(models.Model):
                    ('RFND', 'Refund')],
         required=True,
         default='none',
+        readonly=True,
     )
     locator = fields.Char(
         required=True,
+        readonly=True,
     )
     office_id = fields.Char(
         string="Office ID",
         index=True,
+        readonly=True,
     )
     passenger = fields.Char(
         string="Passenger's name",
+        readonly=True,
     )
     vendor_id = fields.Char(
         string="Vendor Name",
         # TODO: comodel_name='ofh.vendor',
         required=True,
+        readonly=True,
     )
     fees = fields.Char(
         required=True,
         default='{}',
+        readonly=True,
     )
     total = fields.Monetary(
         currency_field='currency_id',
+        readonly=True,
     )
     currency_id = fields.Many2one(
         string="Currency",
         required=True,
         comodel_name='res.currency',
         default=_get_default_currency_id,
+        readonly=True,
     )
     state = fields.Selection(
         string="Matching Status",
@@ -80,6 +91,7 @@ class OfhSupplierInvoiceLine(models.Model):
             ('matched', 'Matched')],
         required=True,
         default='ready',
+        readonly=True,
     )
 
     _sql_constraints = [
