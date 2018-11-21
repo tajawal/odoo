@@ -34,8 +34,8 @@
                         <field name="payment_request_status"/>
                     </group>
                     <notebook>
-                        <page name="financial_detaisl" string="Financial Details">
-                            <group col="4">
+                        <page name="financial_details" string="Financial Details">
+                            <group col="4" name="pr_financial_details">
                                 <field name="fare_difference" widget="monetary"/>
                                 <field name="change_fee" widget="monetary"/>
                                 <field name="booking_fee" widget="monetary"/>
@@ -47,6 +47,12 @@
                                 <field name="output_vat_amount" widget="monetary"/>
                                 <field name="tax_code"/>
                                 <field name="loss_type"/>
+                            </group>
+                            <group col="4" name="order_financial_details" string="Order Details">
+                                <field name="order_type"/>
+                                <field name="order_amount"/>
+                                <field name="order_supplier_cost" widget="monetary"/>
+                                <field name="order_supplier_currency" invisible="1"/>
                             </group>
                         </page>
                         <page name="technical_details" string="Technical Details">

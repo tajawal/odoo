@@ -6,7 +6,12 @@ from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 import json
 
-PROCESSED_HUB_STATUS = 'Processed'
+PROCESSED_HUB_STATUSES = \
+    ('Processed', 'Processed Manually', 'Customer Processed')
+ORDER_STATUS_MANUALLY_CONFIRMED = 53
+ORDER_STATUS_MANUALLY_ORDERED = 51
+ORDER_STATUS_AUTO_CONFIRMED = 58
+ORDER_STATUS_REFUNDED = 95
 
 
 class HubPaymentRequestImportMapper(Component):
@@ -21,6 +26,9 @@ class HubPaymentRequestImportMapper(Component):
         ('airline_pnr', 'pnr'),
         ('record_locator', 'record_locator'),
         ('airline_code', 'vendor_id'),
+        ('order_supplier_cost', 'order_supplier_cost'),
+        ('order_amount', 'order_amount'),
+        ('order_type', 'order_type'),
     ]
 
     @mapping
@@ -71,6 +79,15 @@ class HubPaymentRequestImportMapper(Component):
             if currency:
                 return {'currency_id': currency.id}
         return {'currency_id': self.env.ref('base.AED').id}
+
+    @mapping
+    def order_supplier_currency(self, record) -> dict:
+        if 'order_supplier_currency' in record:
+            currency = self.env['res.currency'].search(
+                [('name', '=', record.get('order_supplier_currency'))],
+                limit=1)
+            if currency:
+                return {'order_supplier_currency': currency.id}
 
     @mapping
     def total_amount(self, record) -> dict:
@@ -131,7 +148,7 @@ class HubPaymentRequestImporter(Component):
         Returns:
             bool -- True if the record should be skipped else False
         """
-        return self.hub_record.get('status') != PROCESSED_HUB_STATUS
+        return self.hub_record.get('status') not in PROCESSED_HUB_STATUSES
 
     def _get_hub_data(self):
         """ Return the raw hub data for ``self.external_id `` """
@@ -158,6 +175,10 @@ class HubPaymentRequestImporter(Component):
             return record
 
         order = hub_api.get_raw_order(order_id)
+        record['order_type'] = order.get('type')
+        record['order_amount'] = order['totals']['total']
+        record['order_supplier_cost'], record['order_supplier_currency'] = \
+            self._get_order_supplier_details(order.get('products'))
         record['airline_pnr'] = self._get_airline_pnr(order.get('products'))
         record['record_locator'] = self._get_record_locator(
             order.get('products'))
@@ -188,3 +209,50 @@ class HubPaymentRequestImporter(Component):
             product.get('supplierName', '') for product in products
             if product['type'] == 'flight']
         return ", ".join(set(airline_codes))
+
+    def _get_order_supplier_details(self, products: list) -> tuple:
+        """[summary]
+
+        Arguments:
+            products {list} -- Product list from the order dictionary
+
+        Returns:
+            tuple -- (supplier amount, supplier currency)
+        """
+        # TODO for now i'm keeping the calculation very simple, when we will
+        # have the sale orders in the platform the calculation will be diffrent
+        # and easier.
+        supplier_amount = net_price = 0
+        supplier_currency = net_price_currency = ''
+        for product in products:
+            # We skip fail orders
+            if product['status'] not in (
+               ORDER_STATUS_MANUALLY_CONFIRMED, ORDER_STATUS_AUTO_CONFIRMED,
+               ORDER_STATUS_MANUALLY_ORDERED, ORDER_STATUS_MANUALLY_ORDERED):
+                continue
+            # This calculation is only needed for hotels for now, to be used
+            # in reverse calculation
+            if product['type'] != 'hotel':
+                continue
+            supplier_name = product.get('supplierName')
+
+            # Expedia Hotels will use net price
+            if product['additionalData'].get('netPrice'):
+                net_price += product['additionalData']['netPrice'].get('price')
+                net_price_currency = \
+                    product['additionalData']['netPrice'].get('currency')
+
+            if product['additionalData'].get('financeReport'):
+                for freport in product['additionalData']['financeReport']:
+                    segments = freport.get('Segments')
+                    segments_count = len(segments)
+                    for segment in segments:
+                        supplier_currency = segment.get('SupplierCurrency')
+                        supplier_amount += segment.get(
+                            'PriceInSupplierCurrency', 0)
+                        if supplier_name == 'Expedia':
+                            supplier_amount += (net_price / segments_count)
+                            if net_price_currency:
+                                supplier_currency = net_price_currency
+
+        return (supplier_amount, supplier_currency)

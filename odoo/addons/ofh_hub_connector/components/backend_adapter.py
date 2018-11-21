@@ -93,7 +93,7 @@ class HubAPI:
             list -- list of payment request dictionary details.
         """
 
-        url = '{}api/sap/orders-list-raw'.format(self.hub_url)
+        url = '{}api/sap/processed-payment-requests'.format(self.hub_url)
         headers = self.headers
         headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
         if not from_date:
@@ -107,7 +107,7 @@ class HubAPI:
         try:
             response = requests.get(url, headers=headers, params=query)
             response.raise_for_status()
-            return response.json().get('payment_requests')
+            return response.json()
         except requests.exceptions.BaseHTTPError as err:
             raise MissingError("Could find payment requests")
 

@@ -7,7 +7,6 @@
     <record model="ir.model.access" id="ofh_payment_request_access_name"> <!-- TODO acl id -->
         <field name="name">ofh.payment.request access name</field> <!-- TODO acl name -->
         <field name="model_id" ref="model_ofh_payment_request"/>
-        <!-- TODO review and adapt -->
         <field name="group_id" ref="base.group_user"/>
         <field name="perm_read" eval="1"/>
         <field name="perm_create" eval="0"/>

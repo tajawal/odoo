@@ -7,14 +7,14 @@
         Synchronisation of payment request from HUB""",
     'version': '11.0.1.0.0',
     'license': 'AGPL-3',
-    'author': 'Tajawal LCC',
+    'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
         'ofh_hub_connector',
         'mail',
     ],
     'data': [
-        # 'security/ofh_payment_request.xml',
+        'security/ofh_payment_request.xml',
         'views/ofh_payment_request.xml',
     ],
     'demo': [

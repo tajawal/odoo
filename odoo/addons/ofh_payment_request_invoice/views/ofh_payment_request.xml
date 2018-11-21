@@ -12,10 +12,13 @@
             <group name="status_details" position="inside">
                 <field name="reconciliation_status"/>
             </group>
-            <page name="financial_detaisl" position="inside">
+            <page name="financial_details" position="inside">
                 <group name="supplier_costs" string="Supplier Costs">
-                    <field name="supplier_invoice_ids" nolabel="1"/>
+                    <field name="supplier_total_amount" widget="monetary"/>
+                    <field name="supplier_currency_id" invisible="1"/>
                 </group>
+                <field name="supplier_invoice_ids" col="2" nolabel="1"
+                       attrs="{'invisible': [('order_type', '=', 'hotel')]}"/>
             </page>
         </field>
     </record>

@@ -199,6 +199,20 @@ class OfhPaymentRequest(models.Model):
         string="Hub Bindings",
     )
 
+    # order details
+    order_type = fields.Selection(
+        selection=[('hotel', 'Hotel'), ('flight', 'Flight')],
+    )
+    order_amount = fields.Monetary(
+        currency_field='currency_id',
+    )
+    order_supplier_cost = fields.Monetary(
+        currency_field='order_supplier_currency',
+    )
+    order_supplier_currency = fields.Many2one(
+        comodel_name='res.currency',
+    )
+
     @api.multi
     @api.depends('fees')
     def _compute_fees(self):
