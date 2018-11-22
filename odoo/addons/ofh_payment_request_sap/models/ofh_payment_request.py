@@ -58,7 +58,7 @@ class OfhPaymentRequest(models.Model):
     def _check_sap_xml_details(self):
         for rec in self:
             if rec.integration_status == 'not_sent' and \
-               rec.sap_xml_sale_ref or rec.sap_xml_file_ref:
+               (rec.sap_xml_sale_ref or rec.sap_xml_file_ref):
                 raise ValidationError(
                     _("SAP XML details can't be filled if the payment request "
                       "has not been sent through integration."))
@@ -66,14 +66,14 @@ class OfhPaymentRequest(models.Model):
                not rec.sap_xml_sale_ref:
                 raise ValidationError(
                     _("If the payment request is sent through integration the "
-                      "'SAP XML Order' # is mandatory."))
+                      "'SAP XML Order #' is mandatory."))
 
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
         return self.search([('sap_xml_sale_ref', '=', False)])
 
     @api.model
-    def _get_sap_xml_details(self):
+    def get_sap_xml_details(self):
         """
         Update the payment requests with the integration in this occurance
         SAP-XML-API details:
@@ -86,7 +86,7 @@ class OfhPaymentRequest(models.Model):
         if not pr_not_in_integration:
             return
         for payment_request in pr_not_in_integration:
-            payment_request._get_integration_details()
+            payment_request.update_sap_xml_details()
 
     @job(default_channel='root')
     @api.multi
@@ -97,28 +97,34 @@ class OfhPaymentRequest(models.Model):
         self.ensure_one()
         # TODO Use config file for the db name and host
         sap_xml = SapXmlApi(
-            db_name='sap_web_api_13_11',
-            host='192.168.99.100',
-            port=37017)
+            db_name='sap_web_api_demo_21_11',
+            host='localhost',
+            port=27017)
         sync_history = sap_xml.get_sync_history_by_track_id(
-            self.order_reference)
+            self.track_id)
         if not sync_history:
             return
         if sync_history.get('refund_order') and sync_history.get('refund_doc'):
-            self.integration_status = 'sale_payment_sent'
             refund_order = sync_history.get('refund_order')
-            self.sap_xml_sale_ref = refund_order.get('BookingNumber')
-            self.sap_xml_file_ref = refund_order.get('FileID')
+            if refund_order:
+                self.write({
+                    'integration_status': 'sale_payment_sent',
+                    'sap_xml_sale_ref': refund_order.get('BookingNumber'),
+                    'sap_xml_file_ref': refund_order.get('FileID')})
         elif sync_history.get('refund_order'):
-            self.integration_status = 'sale_sent'
             refund_order = sync_history.get('refund_order')
-            self.sap_xml_sale_ref = refund_order.get('BookingNumber')
-            self.sap_xml_file_ref = refund_order.get('FileID')
+            if refund_order:
+                self.write({
+                    'integration_status': 'sale_sent',
+                    'sap_xml_sale_ref': refund_order.get('BookingNumber'),
+                    'sap_xml_file_ref': refund_order.get('FileID')})
         elif sync_history.get('refund_doc'):
-            self.integration_status = 'payment_sent'
             refund_order = sync_history.get('refund_doc')
-            self.sap_xml_sale_ref = refund_order.get('HeaderText')
-            self.sap_xml_file_ref = refund_order.get('Assignment')
+            if refund_order:
+                self.write({
+                    'integration_status': 'payment_sent',
+                    'sap_xml_sale_ref': refund_order.get('HeaderText'),
+                    'sap_xml_file_ref': refund_order.get('Assignment')})
 
     @api.multi
     def write(self, vals):

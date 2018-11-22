@@ -35,7 +35,7 @@ class SapXmlApi:
             dict -- {'concition1': 'value', ....}
         """
         return {
-            'trackId': track_id,
+            'orderTrackId': track_id,
             'requestType': {'$in': ['refund_order', 'refund_doc']},
             'response': '200',
         }
@@ -46,8 +46,7 @@ class SapXmlApi:
             # TODO use _get_sync_history_query to get the right query
             # For now I'm suing the orderId not trackID
             sync_history = sync_collection.find(
-                {'orderId': track_id,
-                 'requestType': {'$in': ['refund_order', 'refund_doc']}})
+                self._get_sync_history_query(track_id))
             if not sync_history:
                     return {}
             details = {}
