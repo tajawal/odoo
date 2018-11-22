@@ -92,6 +92,7 @@ class OfhSupplierInvoiceLine(models.Model):
         required=True,
         default='ready',
         readonly=True,
+        track_visibility='always',
     )
 
     _sql_constraints = [

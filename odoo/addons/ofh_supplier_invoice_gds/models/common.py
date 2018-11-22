@@ -19,7 +19,6 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
         dt = datetime.strptime(record.get('Date'), '%m/%d/%y')
-        import pdb; pdb.set_trace()
         return {'invoice_date': fields.Date.to_string(dt)}
 
     @mapping

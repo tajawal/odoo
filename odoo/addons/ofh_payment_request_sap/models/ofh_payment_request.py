@@ -26,6 +26,7 @@ class OfhPaymentRequest(models.Model):
         required=True,
         index=True,
         readonly=True,
+        track_visibility='always',
     )
     integration_status = fields.Selection(
         string="Integration Status",
@@ -38,14 +39,17 @@ class OfhPaymentRequest(models.Model):
         required=True,
         default='not_sent',
         index=True,
+        track_visibility='always',
     )
     sap_xml_sale_ref = fields.Char(
         string="SAP XML Order #",
         readonly=True,
+        track_visibility='always',
     )
     sap_xml_file_ref = fields.Char(
         string="SAP XML File ID",
         readonly=True,
+        track_visibility='always',
     )
 
     @api.multi

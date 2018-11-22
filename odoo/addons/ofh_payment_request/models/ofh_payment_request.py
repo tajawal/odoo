@@ -180,9 +180,11 @@ class OfhPaymentRequest(models.Model):
     pnr = fields.Char(
         # TODO: required=True,
         string="Airline PNR",
+        track_visibility='always',
     )
     record_locator = fields.Char(
         # TODO: required=True,
+        track_visibility='always',
     )
     insurance_ref = fields.Char(
         readonly=True,
@@ -203,6 +205,7 @@ class OfhPaymentRequest(models.Model):
         store=True,
         index=True,
         readonly=True,
+        track_visibility='always',
     )
     state = fields.Selection(
         string='Next Action',
@@ -216,6 +219,7 @@ class OfhPaymentRequest(models.Model):
         required=True,
         index=True,
         readonly=True,
+        track_visibility='always',
     )
     hub_bind_ids = fields.One2many(
         comodel_name='hub.payment.request',

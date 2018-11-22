@@ -13,6 +13,7 @@ class OfhSupplierInvoiceLine(models.Model):
         comodel_name='ofh.payment.request',
         inverse='_inverse_payment_request_id',
         readonly=True,
+        track_visibility='always',
     )
 
     @api.multi
