@@ -16,6 +16,7 @@
     'data': [
         'wizards/ofh_supplier_invoice_import.xml',
         'data/backend.xml',
+        'views/ofh_supplier_invoice_line.xml',
     ],
     'demo': [
         'demo/ofh_supplier_invoice_tf.xml',

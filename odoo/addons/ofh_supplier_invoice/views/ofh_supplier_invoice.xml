@@ -90,4 +90,10 @@
         <field name="sequence" eval="10"/> 
     </record>
 
+    <record model="ir.ui.menu" id="ofh_supplier_invoice_import_main_menu">
+        <field name="name">Import Supplier reports</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
 </odoo>
