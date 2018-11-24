@@ -154,8 +154,10 @@ class SapXmlApi:
                 'Assignment': 'abc106ec6730946R0',
             }
         """
+
         root = ET.fromstring(payload)
         details = {}
         # <soapenv:Envelope><soapenv:Body><doc:DocumentPosting><Record>
         for child in root[1][0][0]:
             details[child.tag] = child.text
+        return details
