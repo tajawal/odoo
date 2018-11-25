@@ -46,9 +46,9 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != tf_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_status(
                 record)
-        if record.get('Payment amount'):
+        if float(record.get('Payment amount')):
             return {'invoice_status': 'TKTT'}
-        elif record.get('Refund amount'):
+        elif float(record.get('Refund amount')):
             return {'invoice_status': 'RFND'}
 
     @mapping
