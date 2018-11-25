@@ -224,7 +224,13 @@
     <record model="ir.ui.menu" id="import_backend_main_menu">
         <field name="name">Importers</field>
         <field name="parent_id" ref="ofh_payment_request_main_menu"/>
-        <field name="sequence" eval="40"/>
+        <field name="sequence" eval="60"/>
+    </record>
+
+    <record model="ir.ui.menu" id="payment_request_actions_main_menu">
+        <field name="name">Actions</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="50"/>
     </record>
 
 </odoo>

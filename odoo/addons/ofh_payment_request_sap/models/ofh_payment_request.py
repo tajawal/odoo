@@ -83,10 +83,8 @@ class OfhPaymentRequest(models.Model):
         """
         pr_not_in_integration = \
             self._get_payment_request_not_sent_by_integration()
-        if not pr_not_in_integration:
-            return
         for payment_request in pr_not_in_integration:
-            payment_request.update_sap_xml_details()
+            payment_request.with_delay().update_sap_xml_details()
 
     @job(default_channel='root')
     @api.multi
