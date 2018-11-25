@@ -13,8 +13,10 @@
         'ofh_payment_request',
         'ofh_supplier_invoice_gds',
         'ofh_supplier_invoice_tf',
+        'web_notify',
     ],
     'data': [
+        'wizards/ofh_supplier_invoice_run_matching.xml',
         'views/ofh_payment_request.xml',
         'views/ofh_supplier_invoice_line.xml',
     ],

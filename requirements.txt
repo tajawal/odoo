@@ -38,6 +38,7 @@ odoo11-addon-server-environment-ir-config-parameter==11.0.1.0.0
 odoo11-addon-web-dialog-size==11.0.1.0.3.99.dev6
 odoo11-addon-web-environment-ribbon==11.0.1.0.2.99.dev2
 odoo11-addon-web-sheet-full-width==11.0.1.0.1.99.dev3
+odoo11-addon-web-notify==11.0.1.0.0
 ofxparse==0.16
 olefile==0.46
 passlib==1.6.5

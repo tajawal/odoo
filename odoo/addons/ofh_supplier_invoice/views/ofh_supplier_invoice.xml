@@ -117,7 +117,13 @@
     <record model="ir.ui.menu" id="import_backend_main_menu">
         <field name="name">Importers</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
-        <field name="sequence" eval="40"/>
+        <field name="sequence" eval="60"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_supplier_invoice_actions_main_menu">
+        <field name="name">Actions</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="sequence" eval="50"/>
     </record>
 
 </odoo>

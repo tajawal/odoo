@@ -89,7 +89,7 @@ class OfhPaymentRequest(models.Model):
     @job(default_channel='root')
     @api.multi
     def update_sap_xml_details(self):
-        """
+        """Update payment request with integration details.
         Use the SAP-XML-API API to get the integration details.
         """
         self.ensure_one()

@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.addons.queue_job.job import job
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -36,8 +37,9 @@ class OfhSupplierInvoiceLine(models.Model):
         return self.search([('state', 'in', ('ready', 'not_in_pr'))])
 
     @api.model
+    @job(default_channel='root')
     def match_supplier_invoice_lines(self):
-        """[summary]
+        """Match supplier invoice lines with payment request.
         """
         pr_model = self.env['ofh.payment.request']
         # Get all the invoice lines that haven't been matched yet.
@@ -45,13 +47,16 @@ class OfhSupplierInvoiceLine(models.Model):
 
         # This is an ultimate case goal but can happen.
         if not pending_lines:
-            return
+            return self.env.user.notify_info(
+                "No Supplier Invoice Line available for matching.")
 
         unreconciled_prs = pr_model._get_unreconciled_payment_requests()
         # If all PRS are reconciled. Means the payment request related to
         # selected invoices are not synchronised yet.
         if not unreconciled_prs:
-            return pending_lines.write({'state': 'not_in_pr'})
+            pending_lines.write({'state': 'not_in_pr'})
+            return self.env.user.notify_info(
+                "No Payment Request available for matching.")
         from_string = fields.Date.from_string
         # Pivot the supplier lines by date and locator
         lines_by_pnr = pending_lines._get_invoice_lines_by_pnr()
@@ -89,6 +94,7 @@ class OfhSupplierInvoiceLine(models.Model):
         payment_requests = unreconciled_prs.filtered(
             lambda rec: not rec.supplier_invoice_ids)
         payment_requests.write({'reconciliation_status': 'investigate'})
+        self.env.user.notify_info("Matching Supplier Invoices is done.")
 
     @api.multi
     def _get_invoice_lines_by_pnr(self) -> dict:
