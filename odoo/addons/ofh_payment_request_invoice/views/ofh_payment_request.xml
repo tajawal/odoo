@@ -41,14 +41,14 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_gds_supplier_invoice_menu">
-        <field name="name">GDS Supplier Report</field>
+        <field name="name">GDS Report</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
         <field name="action" ref="ofh_supplier_invoice_gds.ofh_supplier_invoice_import_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_tf_supplier_invoice_import_menu">
-        <field name="name">TravelFusion Supplier Report</field>
+        <field name="name">TravelFusion Report</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
         <field name="action" ref="ofh_supplier_invoice_tf.ofh_supplier_invoice_import_act_window"/>
         <field name="sequence" eval="20"/>
