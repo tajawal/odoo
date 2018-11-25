@@ -139,10 +139,21 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_request_pivot_view">
+        <field name="name">ofh.payment.reques.pivot (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="payment_request_status" type="row"/>
+                <field name="request_type" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="ofh_payment_request_all_act_window">
         <field name="name">Payment Requests</field>
         <field name="res_model">ofh.payment.request</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
@@ -150,7 +161,7 @@
     <record model="ir.actions.act_window" id="ofh_payment_request_almosafer_act_window">
         <field name="name">Payment Requests</field>
         <field name="res_model">ofh.payment.request</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[('entity', '=', 'almosafer')]</field>
         <field name="context">{}</field>
     </record>
@@ -158,7 +169,7 @@
     <record model="ir.actions.act_window" id="ofh_payment_request_tajawal_act_window">
         <field name="name">Payment Requests</field>
         <field name="res_model">ofh.payment.request</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[('entity', '=', 'tajawal')]</field>
         <field name="context">{}</field>
     </record>

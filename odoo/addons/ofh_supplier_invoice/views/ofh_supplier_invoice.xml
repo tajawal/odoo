@@ -70,10 +70,22 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_pivot_view">
+        <field name="name">ofh.supplier.invoice.line.pivot (in ofh_supplier_invoice_line)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="invoice_status" type="row"/>
+                <field name="locator" type="row"/>
+                <field name="total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="ofh_supplier_all_invoice_line_act_window">
         <field name="name">Vendor Invoices lines</field>
         <field name="res_model">ofh.supplier.invoice.line</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
