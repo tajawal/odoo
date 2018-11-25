@@ -34,7 +34,7 @@ class OfhSupplierInvoiceLine(models.Model):
 
     @api.model
     def _get_pending_invoice_lines(self):
-        return self.search([('state', 'in', ('ready', 'not_in_pr'))])
+        return self.search([('state', 'in', ('ready', 'not_matched'))])
 
     @api.model
     @job(default_channel='root')
@@ -54,7 +54,7 @@ class OfhSupplierInvoiceLine(models.Model):
         # If all PRS are reconciled. Means the payment request related to
         # selected invoices are not synchronised yet.
         if not unreconciled_prs:
-            pending_lines.write({'state': 'not_in_pr'})
+            pending_lines.write({'state': 'not_matched'})
             return self.env.user.notify_info(
                 "No Payment Request available for matching.")
         from_string = fields.Date.from_string
@@ -94,7 +94,7 @@ class OfhSupplierInvoiceLine(models.Model):
         payment_requests = unreconciled_prs.filtered(
             lambda rec: not rec.supplier_invoice_ids)
         payment_requests.write({'reconciliation_status': 'investigate'})
-        self.env.user.notify_info("Matching Supplier Invoices is done.")
+        return self.env.user.notify_info("Matching Supplier Invoices is done.")
 
     @api.multi
     def _get_invoice_lines_by_pnr(self) -> dict:
