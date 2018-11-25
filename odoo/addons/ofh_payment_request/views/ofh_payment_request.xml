@@ -221,4 +221,10 @@
         <field name="sequence" eval="40"/>
     </record>
 
+    <record model="ir.ui.menu" id="import_backend_main_menu">
+        <field name="name">Importers</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
 </odoo>

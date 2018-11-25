@@ -15,8 +15,8 @@
         'ofh_supplier_invoice_tf',
     ],
     'data': [
-        'views/ofh_supplier_invoice_line.xml',
         'views/ofh_payment_request.xml',
+        'views/ofh_supplier_invoice_line.xml',
     ],
     'demo': [
     ],

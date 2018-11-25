@@ -96,13 +96,13 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_supplier_invoice_line_main_menu">
-        <field name="name">All invoices lines</field>
+        <field name="name">Invoices lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
         <field name="sequence" eval="10"/> 
     </record>
 
     <record model="ir.ui.menu" id="all_supplier_invoice_line_menu">
-        <field name="name">All invoices lines</field>
+        <field name="name">All lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice_line_main_menu"/>
         <field name="action" ref="ofh_supplier_all_invoice_line_act_window"/>
         <field name="sequence" eval="10"/> 
@@ -112,6 +112,12 @@
         <field name="name">Import Supplier reports</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
         <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="import_backend_main_menu">
+        <field name="name">Importers</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="sequence" eval="40"/>
     </record>
 
 </odoo>

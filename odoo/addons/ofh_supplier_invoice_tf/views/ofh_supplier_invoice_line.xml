@@ -12,7 +12,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="tf_supplier_invoice_line_act_window">
-        <field name="name">TravelFusion Invoices lines</field>
+        <field name="name">TravelFusion lines</field>
         <field name="res_model">ofh.supplier.invoice.line</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('invoice_type', '=', 'tf')]</field>
@@ -20,7 +20,7 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_supplier_invoice_line_line_menu">
-        <field name="name">TravelFusion invoices lines</field>
+        <field name="name">TravelFusion lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_main_menu"/>
         <field name="action" ref="tf_supplier_invoice_line_act_window"/>
         <field name="sequence" eval="30"/> 

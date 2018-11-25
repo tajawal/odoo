@@ -54,4 +54,22 @@
         <field name="sequence" eval="20"/>
     </record>
 
+    <!-- Importer Menu -->
+    <record id="supplier_import_backend_act_window" model="ir.actions.act_window">
+        <field name="name">Supplier Importers</field>
+        <field name="res_model">import.backend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <!-- TODO: Not strong enough we should find a better way -->
+        <field name="domain">[('name', 'in', ['TravelFusion Report Importer', 'GDS Report Importer'])]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="import_backend_menu">
+        <field name="name">Supplier Importers</field>
+        <field name="parent_id" ref="ofh_payment_request.import_backend_main_menu"/>
+        <field name="action" ref="supplier_import_backend_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
 </odoo>
