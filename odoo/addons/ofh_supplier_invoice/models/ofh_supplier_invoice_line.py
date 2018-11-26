@@ -87,8 +87,9 @@ class OfhSupplierInvoiceLine(models.Model):
         selection=[
             ('ready', 'Pending'),
             ('suggested', 'Suggested Matching'),
-            ('not_matched', 'Not Matched'),
-            ('matched', 'Matched')],
+            ('forced', 'Forced Matching'),
+            ('matched', 'Matched'),
+            ('not_matched', 'Not Matched')],
         required=True,
         default='ready',
         readonly=True,

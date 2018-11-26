@@ -9,6 +9,12 @@
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+                <button name="%(ofh_supplier_invoice_force_match_act_window)d"
+                        type="action"
+                        string="Force match"
+                        class="btn-primary"/>
+            </header>
             <group name="main_group" position="inside">
                 <field name="payment_request_id"/>
             </group>

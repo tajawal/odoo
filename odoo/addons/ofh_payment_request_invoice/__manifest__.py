@@ -16,6 +16,7 @@
         'web_notify',
     ],
     'data': [
+        'wizards/ofh_supplier_invoice_force_match.xml',
         'wizards/ofh_supplier_invoice_run_matching.xml',
         'views/ofh_payment_request.xml',
         'views/ofh_supplier_invoice_line.xml',

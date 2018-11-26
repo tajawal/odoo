@@ -36,6 +36,18 @@ class OfhSupplierInvoiceLine(models.Model):
     def _get_pending_invoice_lines(self):
         return self.search([('state', 'in', ('ready', 'not_matched'))])
 
+    @api.multi
+    def _update_payment_request(self, payment_request):
+        """Force match a supplier invoice with the given payment request
+        Arguments:
+            payment_request {ohf.payment.request} -- payment request record
+        """
+        if not payment_request:
+            return False
+        return self.write({
+            'payment_request_id': payment_request.id,
+            'state': 'forced'})
+
     @api.model
     @job(default_channel='root')
     def match_supplier_invoice_lines(self):
