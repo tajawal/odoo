@@ -20,6 +20,8 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.multi
     def _inverse_payment_request_id(self):
         from_string = fields.Date.from_string
+        if self.env.context.get('forced'):
+            return self.write({'state': 'forced'})
         for rec in self:
             if not rec.payment_request_id:
                 rec.state = 'not_matched'
@@ -35,6 +37,19 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.model
     def _get_pending_invoice_lines(self):
         return self.search([('state', 'in', ('ready', 'not_matched'))])
+
+    @api.multi
+    def _update_payment_request(self, payment_request):
+        """Force match a supplier invoice with the given payment request
+        Arguments:
+            payment_request {ohf.payment.request} -- payment request record
+        """
+        if not payment_request:
+            return False
+        self.with_context(forced=True).write({
+            'payment_request_id': payment_request.id})
+        payment_request.write({'reconciliation_status': 'matched'})
+        return True
 
     @api.model
     @job(default_channel='root')
@@ -81,13 +96,12 @@ class OfhSupplierInvoiceLine(models.Model):
                         payment_requests.write({
                             'supplier_invoice_ids': [(4, l.id) for l in lines],
                             'reconciliation_status': 'matched'})
-                    elif len(payment_requests) > 1:
+                        continue
+                    if len(payment_requests) > 1:
                         lines.message_post(
                             self._get_multiple_payment_request_message(
                                 payment_requests))
-                        lines.write({'state': 'not_matched'})
-                    else:
-                        lines.write({'state': 'not_matched'})
+                    lines.write({'state': 'not_matched'})
 
         # Once the matching logic is done we update all the payment request
         # that have not being matched with any invoice to investigate

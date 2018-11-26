@@ -10,10 +10,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="match record"
-                            string="Match Record"
-                            states="not_matched"/>
-                    <field name="state" widget="statusbar" nolabel="1"/>
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="ready,suggested,forced,matched,not_matched"/>
                 </header>
                 <sheet>
                     <field name="currency_id" invisible="1"/>
