@@ -39,7 +39,27 @@ run:
 Run
 ---
 
-   odoo
+   odoo -c odoo.cfg -d {db_name}
+
+Update Module
+-------------
+
+   odoo -c odoo.cfg -d {db_name} -u {module_name}
+
+Update All DB
+-------------
+
+   odoo -c odoo.cfg -d {db_name} -u all
+
+Install New Module
+------------------
+
+   odoo -c odoo.cfg -d {db_name} -i {module_name}
+
+Run Tests
+---------
+
+   odoo -c odoo.cfg -d {db_name} [-i {module_name}] --test-enable [--stop-after-init]
 
 Release
 -------
