@@ -276,3 +276,24 @@ class OfhPaymentRequest(models.Model):
         for rec in self:
             rec.payment_request_status = \
                 'ready' if rec.order_reference else 'incomplete'
+
+    @api.multi
+    def open_order_in_hub(self):
+        """Open the order link to the payment request in hub using URL
+        Returns:
+            [dict] -- URL action dictionary
+        """
+
+        self.ensure_one()
+        if not self.order_reference:
+            return {}
+        hub_backend = self.env['hub.backend'].search([], limit=1)
+        if not hub_backend:
+            return
+        hub_url = "{}admin/order/air/detail/{}".format(
+            hub_backend.hub_api_location, self.order_reference)
+        return {
+            "type": "ir.actions.act_url",
+            "url": hub_url,
+            "target": "new",
+        }
