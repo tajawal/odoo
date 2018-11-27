@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
+from odoo.exceptions import ValidationError
 
 
 class TestSupplierInvoiceLine(TransactionCase):
@@ -132,3 +133,30 @@ class TestSupplierInvoiceLine(TransactionCase):
             self.payment_request_10.reconciliation_status, 'investigate')
         self.assertEquals(self.supplier_invoice_10.state, 'not_matched')
         self.assertEquals(self.supplier_invoice_11.state, 'not_matched')
+
+    def test_force_match(self):
+        self.payment_request_1.order_type = 'flight'
+        self.payment_request_7.order_type = 'flight'
+
+        wizard = self.env['ofh.supplier.invoice.force.match'].with_context(
+            active_model='ofh.supplier.invoice.line',
+            active_id=self.supplier_invoice_1.id).create(
+                {'new_payment_request_id': self.payment_request_1.id})
+        wizard.force_match()
+
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'matched')
+        self.assertEquals(
+            self.supplier_invoice_1.state, 'forced')
+
+        # Raise error if payment request type is refund and ticket is charge
+        with self.assertRaises(ValidationError):
+            wizard.new_payment_request_id = self.payment_request_7
+            wizard.force_match()
+
+        # Raise error if invoice is refund and payment request ticket
+        with self.assertRaises(ValidationError):
+            wizard.write(
+                {'line_id': self.supplier_invoice_3.id,
+                 'new_payment_request_id': self.payment_request_1.id})
+            wizard.force_match()
