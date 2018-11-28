@@ -65,7 +65,6 @@ class PaymentRequestSAPRecordImporter(Component):
             '[skipped: {skipped}]',
             '[errored: {errored}]',
         ]).format(**self.tracker.get_counters())
-        print(self.tracker.get_counters())
         self.tracker._log(msg)
         return self.env.user.notify_info(msg)
 

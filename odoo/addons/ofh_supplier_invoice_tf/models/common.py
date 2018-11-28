@@ -18,7 +18,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_tf.tf_import_backend')
         if self.backend_record != tf_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
-        dt = datetime.strptime(record.get('Date'), '%m/%d/%y')
+        dt = datetime.strptime(record.get('Date'), '%m/%d/%Y')
         return {'invoice_date': fields.Date.to_string(dt)}
 
     @mapping
@@ -46,10 +46,20 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != tf_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_status(
                 record)
-        if float(record.get('Payment amount')):
-            return {'invoice_status': 'TKTT'}
-        elif float(record.get('Refund amount')):
-            return {'invoice_status': 'RFND'}
+        invoice_status = ''
+        try:
+            if float(record.get('Payment amount')):
+                invoice_status = 'TKTT'
+        except ValueError as vr:
+            pass
+        try:
+            if float(record.get('Refund amount')):
+                invoice_status = 'RFND'
+        except ValueError as vr:
+            invoice_status = invoice_status
+        if invoice_status:
+            return {'invoice_status': invoice_status}
+        return {}
 
     @mapping
     def total(self, record):

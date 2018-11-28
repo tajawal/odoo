@@ -62,6 +62,20 @@ class SupplierInvoiceLineRecordImporter(Component):
         """Keys that are mandatory to import a line."""
         return {}
 
+    def run(self, record, **kw):
+        result = super(SupplierInvoiceLineRecordImporter, self).run(
+            record, **kw)
+        msg = ' '.join([
+            '{} import chunk completed'.format(
+                self.tracker.log_prefix.upper()),
+            '[created: {created}]',
+            '[updated: {updated}]',
+            '[skipped: {skipped}]',
+            '[errored: {errored}]',
+        ]).format(**self.tracker.get_counters())
+        self.env.user.notify_info(msg)
+        return result
+
 
 class SupplierInvoiceLineHandler(Component):
     _inherit = 'importer.odoorecord.handler'

@@ -13,6 +13,7 @@
     'depends': [
         'mail',
         'connector_importer',
+        'web_notify',
     ],
     'data': [
         'wizards/ofh_supplier_invoice_import.xml',
