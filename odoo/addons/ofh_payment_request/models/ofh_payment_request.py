@@ -10,7 +10,7 @@ class OfhPaymentRequest(models.Model):
 
     _name = 'ofh.payment.request'
     _description = "Ofh Payment Request"
-    _rec_name = 'order_reference'
+    _rec_name = 'track_id'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     created_at = fields.Datetime(
@@ -169,6 +169,7 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
     )
     charge_id = fields.Char(
+        string="Payment reference",
         required=True,
         readonly=True,
     )
@@ -177,16 +178,8 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
     )
     # End of technical fields.
-    pnr = fields.Char(
-        # TODO: required=True,
-        string="Airline PNR",
-        track_visibility='always',
-    )
-    record_locator = fields.Char(
-        # TODO: required=True,
-        track_visibility='always',
-    )
-    insurance_ref = fields.Char(
+    supplier_reference = fields.Char(
+        string="Supplier Reference",
         readonly=True,
     )
     plan_code = fields.Char(
@@ -227,7 +220,6 @@ class OfhPaymentRequest(models.Model):
         string="Hub Bindings",
         readonly=True,
     )
-
     # order details
     order_type = fields.Selection(
         selection=[('hotel', 'Hotel'), ('flight', 'Flight')],

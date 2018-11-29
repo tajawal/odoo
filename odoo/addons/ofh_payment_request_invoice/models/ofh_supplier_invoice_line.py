@@ -89,8 +89,7 @@ class OfhSupplierInvoiceLine(models.Model):
                         pr_type=pr_type:
                         abs((from_string(inv_date) -
                             from_string(rec.created_at)).days) <= 2 and
-                        (inv_locator in rec.record_locator or
-                         inv_locator in rec.pnr) and
+                        inv_locator in rec.supplier_reference and
                         rec.request_type == pr_type)
                     if len(payment_requests) == 1:
                         payment_requests.write({

@@ -23,12 +23,12 @@ class HubPaymentRequestImportMapper(Component):
         ('type', 'request_type'),
         ('status', 'request_status'),
         ('orderId', 'order_id'),
-        ('airline_pnr', 'pnr'),
-        ('record_locator', 'record_locator'),
         ('airline_code', 'vendor_id'),
         ('order_supplier_cost', 'order_supplier_cost'),
         ('order_amount', 'order_amount'),
         ('order_type', 'order_type'),
+        ('supplier_reference', 'supplier_reference'),
+        ('plan_code', 'plan_code'),
     ]
 
     @mapping
@@ -179,28 +179,32 @@ class HubPaymentRequestImporter(Component):
         record['order_amount'] = order['totals']['total']
         record['order_supplier_cost'], record['order_supplier_currency'] = \
             self._get_order_supplier_details(order.get('products'))
-        record['airline_pnr'] = self._get_airline_pnr(order.get('products'))
-        record['record_locator'] = self._get_record_locator(
+        record['supplier_reference'] = self._get_supplier_reference(
             order.get('products'))
+        record['plan_code'] = self._get_plan_code(order.get('products'))
         record['airline_code'] = self._get_airline_code(order.get('products'))
         return record
 
-    def _get_airline_pnr(self, products: list) -> str:
+    def _get_supplier_reference(self, products: list) -> str:
         if not products:
             return ''
-        order_pnrs = [
+        supplier_references = [
+            product.get('vendorConfirmationNumber', '')
+            for product in products if product['type'] in 
+            ('flight', 'hotel', 'insurance', 'package')]
+        supplier_references.extend([
             product.get('supplierConfirmationNumber', '')
-            for product in products
-            if product['type'] in ('flight', 'hotel', 'insurance', 'package')]
-        return ", ".join(set(order_pnrs))
-
-    def _get_record_locator(self, products: list) -> str:
+            for product in products if product['type'] in 
+            ('flight', 'hotel', 'insurance', 'package')])
+        return ", ".join(set([r for r in supplier_references]))
+    
+    def _get_plan_code(self, products: list) -> str:
         if not products:
             return ''
-        order_record_locators = [
-            product.get('vendorConfirmationNumber', '') for product in products
-            if product['type'] in ('flight', 'hotel', 'insurance', 'package')]
-        return ", ".join(set(order_record_locators))
+        plan_codes = [
+            product['options'].get('plan_code') for product in products if
+            product.get('options') and product['type'] == 'insurance']
+        return ", ".join(set([p for p in plan_codes if p]))
 
     def _get_airline_code(self, products: list) -> str:
         if not products:
@@ -211,7 +215,7 @@ class HubPaymentRequestImporter(Component):
         return ", ".join(set(airline_codes))
 
     def _get_order_supplier_details(self, products: list) -> tuple:
-        """[summary]
+        """Get supplier cost details from order related to the payment request.
 
         Arguments:
             products {list} -- Product list from the order dictionary

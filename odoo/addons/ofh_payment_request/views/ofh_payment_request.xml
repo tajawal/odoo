@@ -32,8 +32,8 @@
                     </group>
                     <group col="4" name="vendor_details" string="Vendor Details">
                         <field name="vendor_id"/>
-                        <field name="record_locator"/>
-                        <field name="pnr"/>
+                        <field name="supplier_reference"/>
+                        <field name="plan_code"/>
                     </group>
                     <group col="4" name="status_details" string="Statuses">
                         <field name="payment_request_status"/>
@@ -100,8 +100,7 @@
             <search>
                 <field name="order_reference"/>
                 <field name="track_id"/>
-                <field name="pnr"/>
-                <field name="record_locator"/>
+                <field name="supplier_reference"/>
                 <field name="vendor_id"/>
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
@@ -134,8 +133,7 @@
                 <field name="updated_at"/>
                 <field name="request_type"/>
                 <field name="office_id"/>
-                <field name="pnr"/>
-                <field name="record_locator"/>
+                <field name="supplier_reference"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>
