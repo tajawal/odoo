@@ -178,7 +178,7 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
     )
     # End of technical fields.
-    supplier_reference = fields.Char(
+    hub_supplier_reference = fields.Char(
         string="Supplier Reference",
         readonly=True,
     )
@@ -237,6 +237,43 @@ class OfhPaymentRequest(models.Model):
         comodel_name='res.currency',
         readonly=True,
     )
+    # manual fields
+    manual_supplier_reference = fields.Char(
+        string="Manual Supplier Reference",
+    )
+    manual_payment_reference = fields.Char(
+        string="Manual Payment Reference",
+    )
+    supplier_reference = fields.Char(
+        string="Supplier Reference",
+        readonly=True,
+        track_visibility='always',
+        compute='_compute_supplier_reference',
+    )
+    payment_reference = fields.Char(
+        string="Payment Reference",
+        readonly=True,
+        track_visibility='always',
+        compute='_compute_payment_reference',
+    )
+
+    @api.multi
+    @api.depends('hub_supplier_reference', 'manual_supplier_reference')
+    def _compute_supplier_reference(self):
+        for rec in self:
+            if rec.manual_supplier_reference:
+                rec.supplier_reference = rec.manual_supplier_reference
+            else:
+                rec.supplier_reference = rec.hub_supplier_reference
+
+    @api.multi
+    @api.depends('manual_payment_reference', 'charge_id')
+    def _compute_payment_reference(self):
+        for rec in self:
+            if rec.manual_payment_reference:
+                rec.payment_reference = rec.manual_payment_reference
+            else:
+                rec.payment_reference = rec.charge_id
 
     @api.multi
     @api.depends('fees')

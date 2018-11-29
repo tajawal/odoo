@@ -27,7 +27,7 @@ class HubPaymentRequestImportMapper(Component):
         ('order_supplier_cost', 'order_supplier_cost'),
         ('order_amount', 'order_amount'),
         ('order_type', 'order_type'),
-        ('supplier_reference', 'supplier_reference'),
+        ('hub_supplier_reference', 'hub_supplier_reference'),
         ('plan_code', 'plan_code'),
     ]
 
@@ -179,7 +179,7 @@ class HubPaymentRequestImporter(Component):
         record['order_amount'] = order['totals']['total']
         record['order_supplier_cost'], record['order_supplier_currency'] = \
             self._get_order_supplier_details(order.get('products'))
-        record['supplier_reference'] = self._get_supplier_reference(
+        record['hub_supplier_reference'] = self._get_supplier_reference(
             order.get('products'))
         record['plan_code'] = self._get_plan_code(order.get('products'))
         record['airline_code'] = self._get_airline_code(order.get('products'))
@@ -190,14 +190,14 @@ class HubPaymentRequestImporter(Component):
             return ''
         supplier_references = [
             product.get('vendorConfirmationNumber', '')
-            for product in products if product['type'] in 
+            for product in products if product['type'] in
             ('flight', 'hotel', 'insurance', 'package')]
         supplier_references.extend([
             product.get('supplierConfirmationNumber', '')
-            for product in products if product['type'] in 
+            for product in products if product['type'] in
             ('flight', 'hotel', 'insurance', 'package')])
-        return ", ".join(set([r for r in supplier_references]))
-    
+        return ",".join(set([r for r in supplier_references]))
+
     def _get_plan_code(self, products: list) -> str:
         if not products:
             return ''
