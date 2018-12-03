@@ -102,6 +102,25 @@ class SupplierInvoiceLineMapper(Component):
             return super(SupplierInvoiceLineMapper, self).invoice_type(record)
         return {'invoice_type': 'gds'}
 
+    @mapping
+    def currency_id(self, record):
+        gds_backend = self.env.ref(
+           'ofh_supplier_invoice_gds.gds_import_backend')
+        if self.backend_record != gds_backend:
+            return super(SupplierInvoiceLineMapper, self).currency_id(record)
+        office = record.get('OwnerOID')
+        if not office:
+            return {}
+        office = office.upper()
+        if office.startswith('R'):
+            return {'currency_id': self.env.ref('base.SAR').id}
+        elif office.startswith('K'):
+            return {'currency_id': self.env.ref('base.KWD').id}
+        elif office.startswith('C'):
+            return {'currency_id': self.env.ref('base.EGP').id}
+        else:
+            return {}
+
 
 class SupplierInvoiceLineHandler(Component):
     _inherit = 'supplier.invoice.line.handler'

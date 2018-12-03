@@ -69,3 +69,21 @@ class TestSupplierInvoiceGDSImport(common.TransactionComponentRegistryCase):
             [('invoice_type', '=', 'gds')])
 
         self.assertEquals(len(lines), 12)
+
+        sar_lines = self.invoice_line_model.search(
+            [('ticket_number', '=', '2775833746')])
+        self.assertTrue(sar_lines)
+        self.assertEquals(len(sar_lines), 1)
+        self.assertEquals(sar_lines.currency_id, self.env.ref('base.SAR'))
+
+        kwd_lines = self.invoice_line_model.search(
+            [('ticket_number', '=', '2775833745')])
+        self.assertTrue(kwd_lines)
+        self.assertEquals(len(kwd_lines), 1)
+        self.assertEquals(kwd_lines.currency_id, self.env.ref('base.KWD'))
+
+        egp_lines = self.invoice_line_model.search(
+            [('ticket_number', '=', '2775833744')])
+        self.assertTrue(egp_lines)
+        self.assertEquals(len(egp_lines), 1)
+        self.assertEquals(egp_lines.currency_id, self.env.ref('base.EGP'))
