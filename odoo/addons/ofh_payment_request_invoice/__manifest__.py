@@ -13,6 +13,7 @@
         'ofh_payment_request',
         'ofh_supplier_invoice_gds',
         'ofh_supplier_invoice_tf',
+        'ofh_supplier_invoice_aig',
         'web_notify',
     ],
     'data': [

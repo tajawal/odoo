@@ -65,4 +65,4 @@ class TestOfhSupplierInvoiceAig(common.TransactionComponentRegistryCase):
                 importer.run(self.record)
 
         lines = self.invoice_line_model.search([('invoice_type', '=', 'aig')])
-        self.assertEquals(len(lines), 4)
+        self.assertEquals(len(lines), 8)

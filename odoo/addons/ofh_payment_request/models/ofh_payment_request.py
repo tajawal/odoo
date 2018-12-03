@@ -249,12 +249,14 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         track_visibility='always',
         compute='_compute_supplier_reference',
+        store=False,
     )
     payment_reference = fields.Char(
         string="Payment Reference",
         readonly=True,
         track_visibility='always',
         compute='_compute_payment_reference',
+        store=False,
     )
 
     @api.multi

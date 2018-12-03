@@ -35,6 +35,13 @@ class TestSupplierInvoiceLine(TransactionCase):
         self.payment_request_10 = self.env.ref(
             'ofh_payment_request.ofh_payment_request_tf_5')
 
+        self.payment_request_11 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_aig_1')
+        self.payment_request_12 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_aig_2')
+        self.payment_request_13 = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_aig_3')
+
         # Supplier Invoices
         self.supplier_invoice_1 = self.env.ref(
             'ofh_supplier_invoice_gds.ofh_supplier_invoice_line_gds_1')
@@ -59,6 +66,15 @@ class TestSupplierInvoiceLine(TransactionCase):
             'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_5')
         self.supplier_invoice_11 = self.env.ref(
             'ofh_supplier_invoice_tf.ofh_supplier_invoice_line_tf_6')
+
+        self.supplier_invoice_12 = self.env.ref(
+            'ofh_supplier_invoice_aig.ofh_supplier_invoice_line_aig_1')
+        self.supplier_invoice_13 = self.env.ref(
+            'ofh_supplier_invoice_aig.ofh_supplier_invoice_line_aig_2')
+        self.supplier_invoice_14 = self.env.ref(
+            'ofh_supplier_invoice_aig.ofh_supplier_invoice_line_aig_3')
+        self.supplier_invoice_15 = self.env.ref(
+            'ofh_supplier_invoice_aig.ofh_supplier_invoice_line_aig_4')
 
     def test_gds_match_supplier_invoice_lines(self):
         # Case where one PR matches one or multiple supplier invoice
@@ -133,6 +149,24 @@ class TestSupplierInvoiceLine(TransactionCase):
             self.payment_request_10.reconciliation_status, 'investigate')
         self.assertEquals(self.supplier_invoice_10.state, 'not_matched')
         self.assertEquals(self.supplier_invoice_11.state, 'not_matched')
+
+    def test_aig_match_supplier_invoice_lines(self):
+        # Case where one PR matches one or multiple supplier invoices
+        self.invoice_line_model.match_supplier_invoice_lines()
+        self.assertEquals(self.supplier_invoice_12.state, 'matched')
+        self.assertEquals(
+            self.supplier_invoice_12.payment_request_id,
+            self.payment_request_11)
+
+        self.assertEquals(self.supplier_invoice_13.state, 'suggested')
+        self.assertEquals(
+            self.supplier_invoice_13.payment_request_id,
+            self.payment_request_12)
+
+        self.assertEquals(
+            self.payment_request_13.reconciliation_status, 'investigate')
+        self.assertEquals(self.supplier_invoice_14.state, 'not_matched')
+        self.assertEquals(self.supplier_invoice_15.state, 'not_matched')
 
     def test_force_match(self):
         self.payment_request_1.order_type = 'flight'

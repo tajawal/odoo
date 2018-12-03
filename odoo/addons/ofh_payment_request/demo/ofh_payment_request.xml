@@ -15,12 +15,12 @@
         <field name="entity">tajawal</field>
         <field name="order_id">5ba61f8b67e5a565907d3712</field>
         <field name="charge_id">charge_8BBBBCF61X1D5F1D6CA2</field>
-        <field name="supplier_reference">YRNJ1, KZQNEE</field>
+        <field name="hub_supplier_reference">YRNJ1,KZQNEE</field>
         <field name="auth_code">588555</field>
         <field name="office_id">DXBAD38TJ</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="fees">
-            {"fareDifference": 280, "changeFee": 80, "penalty": 300}
+            {"fareDifference": 280,"changeFee": 80,"penalty": 300}
         </field>
         <field name="total_amount">660</field>
         <field name="tax_code">sz</field>
@@ -37,13 +37,13 @@
         <field name="request_status">Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5b89102bbba9af66d40def0b</field>
-        <field name="supplier_reference">RFIDSV, LDZRAW</field>
+        <field name="hub_supplier_reference">RFIDSV,LDZRAW</field>
         <field name="vendor_id">9W</field>
         <field name="total_amount">465</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="tax_code">sz</field>
         <field name="fees">
-            {"fareDifference": 900, "bookingFee": 15, "penalty": 420}
+            {"fareDifference": 900,"bookingFee": 15,"penalty": 420}
         </field>
         <field name="office_id">DXBAD38TJ</field>
         <field name="charge_id">charge_CB6B9D761U1D5CF79AC8</field>
@@ -59,13 +59,13 @@
         <field name="request_status">Customer Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5b87af96dbf81a834b030d04</field>
-        <field name="supplier_reference">HKN2R, WQXUF7</field>
+        <field name="hub_supplier_reference">HKN2R,WQXUF7</field>
         <field name="vendor_id">AI</field>
         <field name="total_amount">390</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="tax_code">sz</field>
         <field name="fees">
-            {"fareDifference": 250, "ChangeFee": 40, "penalty": 100}
+            {"fareDifference": 250,"ChangeFee": 40,"penalty": 100}
         </field>
         <field name="office_id">DXBAD38TJ</field>
         <field name="charge_id">charge_1DBA9D261W1D53561093</field>
@@ -81,13 +81,13 @@
         <field name="request_status">Customer Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5ba61f8b67e5a565907d3712</field>
-        <field name="supplier_reference">YRNJ1, FAB6YR</field>
+        <field name="hub_supplier_reference">YRNJ1,FAB6YR</field>
         <field name="vendor_id">AI</field>
         <field name="total_amount">390</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="tax_code">sz</field>
         <field name="fees">
-            {"fareDifference": 280, "ChangeFee": 40, "penalty": 300}
+            {"fareDifference": 280,"ChangeFee": 40,"penalty": 300}
         </field>
         <field name="office_id">DXBAD38TJ</field>
         <field name="charge_id">charge_1DBA9D261W1D53561093</field>
@@ -103,13 +103,13 @@
         <field name="request_status">Customer Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5ba61f8b67e5a565907d3712</field>
-        <field name="supplier_reference">YRNJ1, FAB6YR</field>
+        <field name="hub_supplier_reference">YRNJ1,FAB6YR</field>
         <field name="vendor_id">AI</field>
         <field name="total_amount">390</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="tax_code">sz</field>
         <field name="fees">
-            {"fareDifference": 280, "ChangeFee": 40, "penalty": 300}
+            {"fareDifference": 280,"ChangeFee": 40,"penalty": 300}
         </field>
         <field name="office_id">DXBAD38TJ</field>
         <field name="charge_id">charge_1DBA9D261W1D53561093</field>
@@ -125,7 +125,7 @@
         <field name="request_status">Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5bbc68db8440b0bd8b3152b8</field>
-        <field name="supplier_reference">96005040, B1T4123RO</field>
+        <field name="hub_supplier_reference">96005040,B1T4123RO</field>
         <field name="vendor_id">G9</field>
         <field name="total_amount">52</field>
         <field name="currency_id" ref="base.AED"/>
@@ -147,7 +147,7 @@
         <field name="request_status">Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5bbc5c71fde70bba985b0461</field>
-        <field name="supplier_reference">ZQZWNI, J1R6SEXT9</field>
+        <field name="hub_supplier_reference">ZQZWNI,J1R6SEXT9</field>
         <field name="vendor_id">IX</field>
         <field name="total_amount">763</field>
         <field name="currency_id" ref="base.AED"/>
@@ -169,7 +169,7 @@
         <field name="request_status">Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5b4bc485d6f217e9fb58c521</field>
-        <field name="supplier_reference">YMEBYV, J1R6SEXT9</field>
+        <field name="hub_supplier_reference">YMEBYV,J1R6SEXT9</field>
         <field name="vendor_id">D7</field>
         <field name="total_amount">632</field>
         <field name="currency_id" ref="base.AED"/>
@@ -191,7 +191,7 @@
         <field name="request_status">Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5b4bc485d6f217e9fb58c521</field>
-        <field name="supplier_reference">ABCDE</field>
+        <field name="hub_supplier_reference">ABCDE</field>
         <field name="vendor_id">IND</field>
         <field name="total_amount">632</field>
         <field name="currency_id" ref="base.AED"/>
@@ -213,7 +213,7 @@
         <field name="request_status">Processed</field>
         <field name="entity">tajawal</field>
         <field name="order_id">5b4bc485d6f217e9fb58c523</field>
-        <field name="supplier_reference">ABCDE</field>
+        <field name="hub_supplier_reference">ABCDE</field>
         <field name="vendor_id">IND</field>
         <field name="total_amount">630</field>
         <field name="currency_id" ref="base.AED"/>
@@ -223,6 +223,72 @@
         </field>
         <field name="office_id">TRAVELFUSION</field>
         <field name="charge_id">charge-fort-a88f67b7-66cb-448f-85f1-1e46fdd7f077</field>
+    </record>
+
+    <record id="ofh_payment_request_aig_1" model="ofh.payment.request">
+        <field name="track_id">pr-A80715365011-1540490197011</field>
+        <field name="order_reference">A80715365011</field>
+        <field name="created_at">2018-09-04</field>
+        <field name="updated_at">2018-09-04</field>
+        <field name="request_type">refund</field>
+        <field name="request_reason">Fraud</field>
+        <field name="request_status">Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5b4bc485d6f217e9fb58c523</field>
+        <field name="hub_supplier_reference">YMEBYV,KC282969</field>
+        <field name="vendor_id">GF</field>
+        <field name="total_amount">5083</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="tax_code">sz</field>
+        <field name="fees">
+            {"fareDifference": 5083}
+        </field>
+        <field name="office_id">TRAVELFUSION</field>
+        <field name="charge_id">charge-fort-a88f67b7-66cb-448f-85f1-1e46fdd7f077</field>
+    </record>
+
+    <record id="ofh_payment_request_aig_2" model="ofh.payment.request">
+        <field name="track_id">pr-A8055400000-1540490197011</field>
+        <field name="order_reference">A8055400000</field>
+        <field name="created_at">2018-09-04</field>
+        <field name="updated_at">2018-09-04</field>
+        <field name="request_type">refund</field>
+        <field name="request_reason">Fraud</field>
+        <field name="request_status">Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5b4bc485d6f217e9fb58c523</field>
+        <field name="hub_supplier_reference">KC111111</field>
+        <field name="vendor_id">GF</field>
+        <field name="total_amount">5083</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="tax_code">sz</field>
+        <field name="fees">
+            {"fareDifference": 5083}
+        </field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="charge_id">charge_A8EBFC278J1D7A1C689D</field>
+    </record>
+
+    <record id="ofh_payment_request_aig_3" model="ofh.payment.request">
+        <field name="track_id">pr-A8888888888-1540490197011</field>
+        <field name="order_reference">A8888888888</field>
+        <field name="created_at">2018-08-30</field>
+        <field name="updated_at">2018-08-30</field>
+        <field name="request_type">refund</field>
+        <field name="request_reason">Fraud</field>
+        <field name="request_status">Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5b4bc485d6f217e9fb58c523</field>
+        <field name="hub_supplier_reference">KC282969</field>
+        <field name="vendor_id">GF</field>
+        <field name="total_amount">5083</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="tax_code">sz</field>
+        <field name="fees">
+            {"fareDifference": 5083}
+        </field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="charge_id">charge_A8EBFC278J1D7A1C689D</field>
     </record>
 
 </odoo>
