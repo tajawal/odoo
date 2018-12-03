@@ -12,10 +12,10 @@ from ..models.common import (SupplierInvoiceLineHandler,
                              SupplierInvoiceLineMapper)
 
 
-class TestSupplierInvoiceTfImport(common.TransactionComponentRegistryCase):
+class TestOfhSupplierInvoiceAig(common.TransactionComponentRegistryCase):
 
     def setUp(self):
-        super(TestSupplierInvoiceTfImport, self).setUp()
+        super(TestOfhSupplierInvoiceAig, self).setUp()
         self._setup_records()
         self._load_module_components('connector_importer')
         self._build_components(
@@ -27,17 +27,17 @@ class TestSupplierInvoiceTfImport(common.TransactionComponentRegistryCase):
 
     def _setup_records(self):
         self.import_type = self.env.ref(
-            'ofh_supplier_invoice_tf.tf_import_type')
+            'ofh_supplier_invoice_aig.aig_import_type')
         self.backend = self.env.ref(
-            'ofh_supplier_invoice_tf.tf_import_backend')
+            'ofh_supplier_invoice_aig.aig_import_backend')
 
         path = get_resource_path(
-            'ofh_supplier_invoice_tf',
-            'tests/test_files/travel_fusion_test.csv')
+            'ofh_supplier_invoice_aig',
+            'tests/test_files/aig_test.csv')
         with open(path, 'rb') as fl:
             self.source = self.env['import.source.csv'].create({
                 'csv_file': base64.encodestring(fl.read()),
-                'csv_filename': 'travel_fusion_test.csv',
+                'csv_filename': 'aig_test.csv',
                 'csv_delimiter': ','})
 
         self.recordset = self.env['import.recordset'].create({
@@ -51,7 +51,7 @@ class TestSupplierInvoiceTfImport(common.TransactionComponentRegistryCase):
         })
         self.backend.debug_mode = True
 
-    def test_supplier_invoice_line_tf(self):
+    def test_supplier_invoice_line_aig(self):
         for chunk in self.source.get_lines():
             self.record.set_data(chunk)
             with self.backend.work_on(
@@ -64,7 +64,5 @@ class TestSupplierInvoiceTfImport(common.TransactionComponentRegistryCase):
                 self.assertTrue(importer)
                 importer.run(self.record)
 
-        lines = self.invoice_line_model.search(
-            [('invoice_type', '=', 'tf')])
-
-        self.assertEquals(len(lines), 13)
+        lines = self.invoice_line_model.search([('invoice_type', '=', 'aig')])
+        self.assertEquals(len(lines), 4)
