@@ -50,13 +50,13 @@ class SupplierInvoiceLineMapper(Component):
         try:
             if float(record.get('Payment amount')):
                 invoice_status = 'TKTT'
-        except ValueError as vr:
+        except ValueError:
             pass
         try:
             if float(record.get('Refund amount')):
                 invoice_status = 'RFND'
-        except ValueError as vr:
-            invoice_status = invoice_status
+        except ValueError:
+            pass
         if invoice_status:
             return {'invoice_status': invoice_status}
         return {}

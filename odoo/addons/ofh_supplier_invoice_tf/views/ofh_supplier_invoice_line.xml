@@ -19,7 +19,7 @@
         <field name="context">{}</field>
     </record>
 
-    <record model="ir.ui.menu" id="ofh_supplier_invoice_line_line_menu">
+    <record model="ir.ui.menu" id="ofh_tf_supplier_invoice_line_menu">
         <field name="name">TravelFusion lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_main_menu"/>
         <field name="action" ref="tf_supplier_invoice_line_act_window"/>
