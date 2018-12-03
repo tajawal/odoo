@@ -23,4 +23,7 @@
     ],
     'demo': [
     ],
+    'external_dependencies': {
+        'python': ['pymongo'],
+    },
 }
