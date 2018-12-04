@@ -14,7 +14,10 @@
         'mail',
     ],
     'data': [
+        'security/groups.xml',
+        'security/hub_payment_request.xml',
         'security/ofh_payment_request.xml',
+        'security/ofh_hub_backend.xml',
         'views/ofh_payment_request.xml',
     ],
     'demo': [
