@@ -54,6 +54,13 @@
         <field name="sequence" eval="20"/>
     </record>
 
+    <record model="ir.ui.menu" id="ofh_aig_supplier_invoice_import_menu">
+        <field name="name">AIG Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_aig.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
     <!-- Importer Menu -->
     <record id="supplier_import_backend_act_window" model="ir.actions.act_window">
         <field name="name">Supplier Importers</field>
@@ -61,7 +68,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <!-- TODO: Not strong enough we should find a better way -->
-        <field name="domain">[('name', 'in', ['TravelFusion Report Importer', 'GDS Report Importer'])]</field>
+        <field name="domain">[('name', 'in', ['TravelFusion Report Importer', 'GDS Report Importer', 'AIG Report Importer'])]</field>
         <field name="context">{}</field>
     </record>
 

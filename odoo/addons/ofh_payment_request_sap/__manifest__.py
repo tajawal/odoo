@@ -13,6 +13,7 @@
     'depends': [
         'ofh_payment_request',
         'connector_importer',
+        'web_notify',
     ],
     'data': [
         'wizards/ofh_payment_request_integration_update.xml',
@@ -22,4 +23,7 @@
     ],
     'demo': [
     ],
+    'external_dependencies': {
+        'python': ['pymongo'],
+    },
 }

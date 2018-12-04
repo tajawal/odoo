@@ -12,11 +12,16 @@ class PaymentRequestSAPMapper(Component):
     _apply_on = ['ofh.payment.request']
 
     @mapping
-    def sap_status(self, record):
-        if record.get('Purchase Order Number'):
+    def sap_status(self, record) -> dict:
+        payment_backend = self.env.ref(
+            'ofh_payment_request_sap.sap_payment_import_backend')
+        sale_backend = self.env.ref(
+            'ofh_payment_request_sap.sap_sale_import_backend')
+        if self.backend_record == sale_backend:
             return {'sap_status': 'sale_in_sap'}
-        elif record.get('Document Header Text'):
+        elif self.backend_record == payment_backend:
             return {'sap_status': 'payment_in_sap'}
+        return {}
 
 
 class PaymentRequestSAPRecordImporter(Component):
@@ -49,17 +54,21 @@ class PaymentRequestSAPRecordImporter(Component):
         if not self.record:
             return
         self._init_importer(self.record.recordset_id)
-        payment_backend = self.env.ref(
-            'ofh_payment_request_sap.sap_payment_import_backend')
-        sale_backend = self.env.ref(
-            'ofh_payment_request_sap.sap_sale_import_backend')
         for line in self._record_lines():
-            if self.record.backend_id == sale_backend:
-                self._import_sap_sale_line(line)
-            elif self.record.backend_id == payment_backend:
-                self._import_sap_payment_line(line)
+            self._import_line(line)
+        # log chunk finished
+        msg = ' '.join([
+            '{} import chunk completed'.format(
+                self.tracker.log_prefix.upper()),
+            '[created: {created}]',
+            '[updated: {updated}]',
+            '[skipped: {skipped}]',
+            '[errored: {errored}]',
+        ]).format(**self.tracker.get_counters())
+        self.tracker._log(msg)
+        return self.env.user.notify_info(msg)
 
-    def _import_sap_sale_line(self, line):
+    def _import_line(self, line):
         line = self.prepare_line(line)
         options = self._load_mapper_options()
 
@@ -73,63 +82,24 @@ class PaymentRequestSAPRecordImporter(Component):
             values = {}
             self.tracker.log_error(values, line, odoo_record, message=err)
             if self._break_on_error:
-                raise
-            return
+                raise err
+            return False
         try:
             with self.env.cr.savepoint():
                 if self.record_handler.odoo_exists(values, line):
-                    odoo_record = \
-                        self.record_handler.odoo_write(values, line)
+                    odoo_record = self.record_handler.odoo_write(values, line)
                     self.tracker.log_updated(values, line, odoo_record)
                 else:
                     self.tracker.log_skipped(
                         values, line,
                         {'message':
                             "Record not found in Payment requests."})
-                    return
+                return True
         except Exception as err:
             self.tracker.log_error(values, line, odoo_record, message=err)
             if self._break_on_error:
-                raise
-            return
-
-    def _import_sap_payment_line(self, line):
-        line = self.prepare_line(line)
-        options = self._load_mapper_options()
-
-        odoo_record = None
-
-        try:
-            with self.env.cr.savepoint():
-                values = self.mapper.map_record(line).values(**options)
-            logger.debug(values)
-        except Exception as err:
-            values = {}
-            self.tracker.log_error(values, line, odoo_record, message=err)
-
-        # Skip lines with wrong document type
-        skip_info = self.skip_it(values, line)
-        if skip_info:
-            self.tracker.log_skipped(values, line, skip_info)
-            return
-
-        try:
-            with self.env.cr.savepoint():
-                if self.record_handler.odoo_exists(values, line):
-                    odoo_record = \
-                        self.record_handler.odoo_write(values, line)
-                    self.tracker.log_updated(values, line, odoo_record)
-                else:
-                    self.tracker.log_skipped(
-                        values, line,
-                        {'message':
-                            "Record not found in Payment requests."})
-                    return
-        except Exception as err:
-            self.tracker.log_error(values, line, odoo_record, message=err)
-            if self._break_on_error:
-                raise
-            return
+                raise err
+            return False
 
 
 class PaymentRequestSAPHandler(Component):
@@ -140,11 +110,15 @@ class PaymentRequestSAPHandler(Component):
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the record in odoo."""
         domain = [('integration_status', '!=', 'not_sent')]
-        if orig_values.get('Document Header Text'):
+        payment_backend = self.env.ref(
+            'ofh_payment_request_sap.sap_payment_import_backend')
+        sale_backend = self.env.ref(
+            'ofh_payment_request_sap.sap_sale_import_backend')
+        if self.backend_record == payment_backend:
             domain.append(
                 (self.unique_key, '=',
                  orig_values.get('Document Header Text')))
-        elif orig_values.get('Purchase Order Number'):
+        elif self.backend_record == sale_backend:
             domain.append(
                 (self.unique_key, '=',
                  orig_values.get('Purchase Order Number')))

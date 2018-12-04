@@ -10,25 +10,34 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="open_order_in_hub"
+                            string="Open in HUB"
+                            class="btn-primary"
+                            attrs="{'invisible': [('order_reference', '=', False)]}"
+                            type="object"/>
                     <field name="state" widget="statusbar" nolabel="1"/>
                 </header>
                 <sheet>
                     <field name="currency_id" invisible="1"/>
                     <group col="4" name="general_details" string="General Information">
+                        <field name="track_id"/>
                         <field name="order_reference"/>
                         <field name="request_type"/>
-                        <field name="request_reason"/>
                         <field name="request_status"/>
+                        <field name="request_reason"/>
+                        <field name="total_amount" widget="monetary"/>
                         <field name="entity"/>
                         <field name="office_id"/>
-                        <field name="auth_code"/>
-                        <newline/>
-                        <field name="total_amount" widget="monetary"/>
                     </group>
-                    <group col="4" name="vendor_details" string="Vendor Details">
-                        <field name="vendor_id"/>
-                        <field name="record_locator"/>
-                        <field name="pnr"/>
+                    <group name="vendor_details" string="Vendor Details">
+                        <group>
+                            <field name="vendor_id"/>
+                            <field name="plan_code"/>
+                        </group>
+                        <group>
+                            <field name="supplier_reference"/>
+                            <field name="manual_supplier_reference"/>
+                        </group>
                     </group>
                     <group col="4" name="status_details" string="Statuses">
                         <field name="payment_request_status"/>
@@ -55,11 +64,15 @@
                                 <field name="order_supplier_currency" invisible="1"/>
                             </group>
                         </page>
-                        <page name="technical_details" string="Technical Details">
-                            <group col="4">
-                                <field name="order_id"/>
-                                <field name="charge_id"/>
-                                <field name="track_id"/>
+                        <page name="payment_details" string="Payment Details">
+                            <group>
+                                <group>
+                                    <field name="payment_reference"/>
+                                    <field name="manual_payment_reference"/>
+                                </group>
+                                <group>
+                                    <field name="auth_code"/>
+                                </group>
                             </group>
                         </page>
                         <page name="binding_details" string="Bidings">
@@ -95,8 +108,7 @@
             <search>
                 <field name="order_reference"/>
                 <field name="track_id"/>
-                <field name="pnr"/>
-                <field name="record_locator"/>
+                <field name="supplier_reference"/>
                 <field name="vendor_id"/>
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
@@ -129,8 +141,7 @@
                 <field name="updated_at"/>
                 <field name="request_type"/>
                 <field name="office_id"/>
-                <field name="pnr"/>
-                <field name="record_locator"/>
+                <field name="supplier_reference"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>

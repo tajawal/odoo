@@ -13,9 +13,12 @@
         'ofh_payment_request',
         'ofh_supplier_invoice_gds',
         'ofh_supplier_invoice_tf',
+        'ofh_supplier_invoice_aig',
         'web_notify',
     ],
     'data': [
+        'security/ofh_supplier_invoice.xml',
+        'security/connector_importer.xml',
         'wizards/ofh_supplier_invoice_force_match.xml',
         'wizards/ofh_supplier_invoice_run_matching.xml',
         'views/ofh_payment_request.xml',

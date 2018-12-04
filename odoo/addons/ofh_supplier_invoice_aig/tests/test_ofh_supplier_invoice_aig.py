@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -13,10 +12,10 @@ from ..models.common import (SupplierInvoiceLineHandler,
                              SupplierInvoiceLineMapper)
 
 
-class TestSupplierInvoiceGDSImport(common.TransactionComponentRegistryCase):
+class TestOfhSupplierInvoiceAig(common.TransactionComponentRegistryCase):
 
     def setUp(self):
-        super(TestSupplierInvoiceGDSImport, self).setUp()
+        super(TestOfhSupplierInvoiceAig, self).setUp()
         self._setup_records()
         self._load_module_components('connector_importer')
         self._build_components(
@@ -28,17 +27,17 @@ class TestSupplierInvoiceGDSImport(common.TransactionComponentRegistryCase):
 
     def _setup_records(self):
         self.import_type = self.env.ref(
-            'ofh_supplier_invoice_gds.gds_import_type')
+            'ofh_supplier_invoice_aig.aig_import_type')
         self.backend = self.env.ref(
-            'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_aig.aig_import_backend')
 
         path = get_resource_path(
-            'ofh_supplier_invoice_gds',
-            'tests/test_files/gds_test.csv')
+            'ofh_supplier_invoice_aig',
+            'tests/test_files/aig_test.csv')
         with open(path, 'rb') as fl:
             self.source = self.env['import.source.csv'].create({
                 'csv_file': base64.encodestring(fl.read()),
-                'csv_filename': 'gds_test.csv',
+                'csv_filename': 'aig_test.csv',
                 'csv_delimiter': ','})
 
         self.recordset = self.env['import.recordset'].create({
@@ -52,7 +51,7 @@ class TestSupplierInvoiceGDSImport(common.TransactionComponentRegistryCase):
         })
         self.backend.debug_mode = True
 
-    def test_supplier_invoice_line_gds(self):
+    def test_supplier_invoice_line_aig(self):
         for chunk in self.source.get_lines():
             self.record.set_data(chunk)
             with self.backend.work_on(
@@ -65,25 +64,5 @@ class TestSupplierInvoiceGDSImport(common.TransactionComponentRegistryCase):
                 self.assertTrue(importer)
                 importer.run(self.record)
 
-        lines = self.invoice_line_model.search(
-            [('invoice_type', '=', 'gds')])
-
-        self.assertEquals(len(lines), 12)
-
-        sar_lines = self.invoice_line_model.search(
-            [('ticket_number', '=', '2775833746')])
-        self.assertTrue(sar_lines)
-        self.assertEquals(len(sar_lines), 1)
-        self.assertEquals(sar_lines.currency_id, self.env.ref('base.SAR'))
-
-        kwd_lines = self.invoice_line_model.search(
-            [('ticket_number', '=', '2775833745')])
-        self.assertTrue(kwd_lines)
-        self.assertEquals(len(kwd_lines), 1)
-        self.assertEquals(kwd_lines.currency_id, self.env.ref('base.KWD'))
-
-        egp_lines = self.invoice_line_model.search(
-            [('ticket_number', '=', '2775833744')])
-        self.assertTrue(egp_lines)
-        self.assertEquals(len(egp_lines), 1)
-        self.assertEquals(egp_lines.currency_id, self.env.ref('base.EGP'))
+        lines = self.invoice_line_model.search([('invoice_type', '=', 'aig')])
+        self.assertEquals(len(lines), 8)
