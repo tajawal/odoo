@@ -18,7 +18,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
-        dt = datetime.strptime(record.get('Date'), '%m/%d/%y')
+        dt = datetime.strptime(record.get('Date'), '%m/%d/%Y')
         return {'invoice_date': fields.Date.to_string(dt)}
 
     @mapping

@@ -4,14 +4,24 @@
 
 <odoo>
 
-    <record model="ir.model.access" id="ofh_supplier_invoice_access_name"> <!-- TODO acl id -->
-        <field name="name">ofh.supplier.invoice.line access name</field> <!-- TODO acl name -->
+    <record model="ir.model.access" id="ofh_supplier_invoice_read_access">
+        <field name="name">ofh.supplier.invoice.line.read.access</field>
         <field name="model_id" ref="model_ofh_supplier_invoice_line"/>
         <field name="group_id" ref="base.group_user"/>
         <field name="perm_read" eval="1"/>
         <field name="perm_create" eval="0"/>
         <field name="perm_write" eval="0"/>
         <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record model="ir.model.access" id="ofh_supplier_invoice_manager_access">
+        <field name="name">ofh.supplier.invoice.line.manager.access</field>
+        <field name="model_id" ref="model_ofh_supplier_invoice_line"/>
+        <field name="group_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
     </record>
 
 </odoo>

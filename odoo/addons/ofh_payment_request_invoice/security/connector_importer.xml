@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.model.access" id="ofh_payment_request_manager_import_source_csv_access">
+        <field name="name">ofh.payment.request.line.manager.import.source.csv.access</field>
+        <field name="model_id" ref="connector_importer.model_import_source_csv"/>
+        <field name="group_id" ref="ofh_payment_request.ofh_payment_request_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record model="ir.model.access" id="ofh_payment_request_manager_import_recordset_access">
+        <field name="name">ofh.payment.request.line.manager.import.recordset.access</field>
+        <field name="model_id" ref="connector_importer.model_import_recordset"/>
+        <field name="group_id" ref="ofh_payment_request.ofh_payment_request_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record model="ir.model.access" id="ofh_payment_request_manager_import_record_access">
+        <field name="name">ofh.payment.request.line.manager.import.record.access</field>
+        <field name="model_id" ref="connector_importer.model_import_record"/>
+        <field name="group_id" ref="ofh_payment_request.ofh_payment_request_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record model="ir.model.access" id="ofh_payment_request_manager_import_backend_access">
+        <field name="name">ofh.payment.request.line.manager.import.backend.access</field>
+        <field name="model_id" ref="connector_importer.model_import_backend"/>
+        <field name="group_id" ref="ofh_payment_request.ofh_payment_request_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record model="ir.model.access" id="ofh_payment_request_manager_import_type_access">
+        <field name="name">ofh.payment.request.line.manager.import.type.access</field>
+        <field name="model_id" ref="connector_importer.model_import_type"/>
+        <field name="group_id" ref="ofh_payment_request.ofh_payment_request_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+</odoo>
