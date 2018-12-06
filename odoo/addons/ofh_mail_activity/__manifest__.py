@@ -14,6 +14,7 @@
     ],
     'data': [
         'templates/assets.xml',
+        'security/mail_activity.xml',
     ],
     'demo': [
     ],
