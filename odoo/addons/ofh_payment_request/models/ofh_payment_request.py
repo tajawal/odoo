@@ -22,6 +22,7 @@ class OfhPaymentRequest(models.Model):
         required=True,
         index=True,
         readonly=True,
+        track_visibility='always',
     )
     order_reference = fields.Char(
         string="Order #",

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+
+    <record id="ofh_payment_request_activity_match" model="mail.activity.type">
+        <field name="name">Match with supplier invoice</field>
+        <field name="icon">fa-map-signs</field>
+        <field name="days">2</field>
+        <field name="category">pr</field>
+    </record>
+
+    <record id="ofh_payment_request_activity_to_investigate" model="mail.activity.type">
+        <field name="name">Investigate Supplier Matching</field>
+        <field name="icon">fa-wpexplorer</field>
+        <field name="days">2</field>
+        <field name="category">pr</field>
+    </record>
+
+    <record id="ofh_payment_request_activity_integration" model="mail.activity.type">
+        <field name="name">Check sent with SAP-XML-API</field>
+        <field name="icon">fa-id-card-o</field>
+        <field name="days">2</field>
+        <field name="category">pr</field>
+    </record>
+
+    <record id="ofh_payment_request_activity_sap" model="mail.activity.type">
+        <field name="name">Check In SAP</field>
+        <field name="icon">fa-window-restore</field>
+        <field name="days">2</field>
+        <field name="category">pr</field>
+    </record>
+
+    <record id="ofh_payment_request_activity_loader" model="mail.activity.type">
+        <field name="name">Send to SAP</field>
+        <field name="icon">fa-envelope-open</field>
+        <field name="days">2</field>
+        <field name="category">pr</field>
+    </record>
+
+</odoo>
