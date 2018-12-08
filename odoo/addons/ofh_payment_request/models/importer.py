@@ -1,9 +1,11 @@
 # Copyright 2018 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
+import logging
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo import fields, _
 import json
 
 PROCESSED_HUB_STATUSES = \
@@ -12,6 +14,8 @@ ORDER_STATUS_MANUALLY_CONFIRMED = 53
 ORDER_STATUS_MANUALLY_ORDERED = 51
 ORDER_STATUS_AUTO_CONFIRMED = 58
 ORDER_STATUS_REFUNDED = 95
+
+_logger = logging.getLogger(__name__)
 
 
 class HubPaymentRequestImportMapper(Component):
@@ -260,3 +264,31 @@ class HubPaymentRequestImporter(Component):
                                 supplier_currency = net_price_currency
 
         return (supplier_amount, supplier_currency)
+
+    def _create(self, data):
+        """ Create the OpenERP record """
+        binding = super(HubPaymentRequestImporter, self)._create(data)
+        if binding.payment_request_status == 'ready':
+            self._add_next_activity(binding)
+        return binding
+
+    def _add_next_activity(self, payment_request):
+        try:
+            activity_type_id = self.env.ref(
+                'ofh_payment_request.ofh_payment_request_activity_match').id
+        except ValueError:
+            activity_type_id = False
+        deadline = fields.Date.from_string(
+            payment_request.create_date) + relativedelta(days=2)
+        users = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_manager').users
+        self.env['mail.activity'].create({
+            'activity_type_id': activity_type_id,
+            'note': _('A new payment request is fetched from hub. '
+                      'Next step is to match it with supplier invoices'),
+            'res_id': payment_request.id,
+            'date_deadline': fields.Date.to_string(deadline),
+            'res_model_id': self.env.ref(
+                'ofh_payment_request.model_ofh_payment_request').id,
+            'user_ids': [(6, 0, users.ids)]
+        })

@@ -2,21 +2,20 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Ofh Hub Connector',
+    'name': 'Ofh Mail Activity',
     'description': """
-        Hub Connector""",
+        Assign activity to list of users instead of only one user""",
     'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
-    'website': 'http://tajawal.com/',
+    'website': 'https://tajawal.com',
     'depends': [
-        'connector',
+        'mail',
     ],
     'data': [
-        # 'security/ofh_hub_backend.xml',
-        'views/ofh_hub_backend.xml',
+        'templates/assets.xml',
+        'security/mail_activity.xml',
     ],
     'demo': [
-        'demo/hub_backend.xml',
     ],
 }

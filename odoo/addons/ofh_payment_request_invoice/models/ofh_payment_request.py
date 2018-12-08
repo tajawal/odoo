@@ -1,7 +1,8 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from dateutil.relativedelta import relativedelta
 
 
 class OfhPaymentRequest(models.Model):
@@ -37,8 +38,50 @@ class OfhPaymentRequest(models.Model):
         required=True,
         index=True,
         readonly=True,
+        inverse='_inverse_reconciliation_status',
         track_visibility='always',
     )
+
+    @api.multi
+    def _inverse_reconciliation_status(self):
+        match_activity = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_activity_match')
+        investigate_activity = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_activity_to_investigate')
+        for rec in self:
+            if rec.reconciliation_status == 'matched':
+                activities = rec.activity_ids.filtered(
+                    lambda a: a.activity_type_id in
+                    (match_activity, investigate_activity))
+                activities.action_done()
+            elif rec.reconciliation_status == 'investigate':
+                activities = rec.activity_ids.filtered(
+                    lambda a: a.activity_type_id == match_activity)
+                activities.action_done()
+                rec._add_investigate_activity()
+
+    @api.multi
+    def _add_investigate_activity(self):
+        self.ensure_one()
+        if self.reconciliation_status != 'investigate':
+            return False
+        activity_type_id = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_activity_match').id
+        deadline = fields.Date.from_string(
+            fields.Date.today()) + relativedelta(days=2)
+        users = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_manager').users
+        self.env['mail.activity'].create({
+            'activity_type_id': activity_type_id,
+            'note': _("The payment request didn't match with any Supplier "
+                      "Inovice. Please investigate it."),
+            'res_id': self.id,
+            'date_deadline': fields.Date.to_string(deadline),
+            'res_model_id': self.env.ref(
+                'ofh_payment_request.model_ofh_payment_request').id,
+            'user_ids': [(6, 0, users.ids)]
+        })
+        return True
 
     @api.model
     def _get_unreconciled_payment_requests(self):

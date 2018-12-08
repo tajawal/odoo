@@ -1,71 +1,46 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
-from pymongo import MongoClient
 from xml.etree import ElementTree as ET
 
-
-class MongoDBConnection:
-    """MongoDB Connection"""
-    def __init__(self, host='localhost', port=27017):
-        self.host = host
-        self.port = port
-        self.connection = None
-
-    def __enter__(self):
-        self.connection = MongoClient(self.host, self.port)
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.connection.close()
+import requests
+from odoo.exceptions import MissingError
 
 
 class SapXmlApi:
 
-    def __init__(self, db_name: str, host='localhost', port=27017):
-        # TODO use the config files for db name and host
-        self.db_name = db_name
-        self.mongo_db = MongoDBConnection(host=host, port=port)
+    def __init__(
+            self, sap_xml_url: str, sap_xml_username: str,
+            sap_xml_password: str):
 
-    def _get_sync_history_query(self, track_id: str) -> dict:
-        """Return only sync history of refund order or refund doc that has
-        been sent with sucess using the given `track_id`.
-
-        Returns:
-            dict -- {'concition1': 'value', ....}
-        """
-        return {
-            'orderTrackId': track_id,
-            'requestType': {'$in': ['refund_order', 'refund_doc']},
-            'response': '200',
+        self.sap_xml_url = sap_xml_url
+        self.sap_xml_username = sap_xml_username
+        self.sap_xml_password = sap_xml_password
+        self._sap_xml_token = ''
+        self.headers = {
+            'Content-type': 'application/json;charset=UTF-8',
+            'user-agent': 'finance_sap_xml_api/0.1',
+            'Accept': 'application/json',
         }
 
-    def get_sync_history_by_track_id(self, track_id: str) -> dict:
-        with self.mongo_db as mongo:
-            sync_collection = mongo.connection[self.db_name]['request_log']
-            # TODO use _get_sync_history_query to get the right query
-            # For now I'm suing the orderId not trackID
-            sync_history = sync_collection.find(
-                self._get_sync_history_query(track_id))
-            if not sync_history:
-                    return {}
-            details = {}
-            for record in sync_history:
-                request_type = record.get('requestType')
-                if not request_type:
-                    continue
-                payload = record.get('payload')
-                if not payload:
-                    continue
-                if request_type == 'refund_order':
-                    details[request_type] = self.get_refund_order_details(
-                        payload=payload)
-                else:
-                    details[request_type] = self.get_refund_doc_details(
-                        payload=payload)
-            return details
+    @property
+    def _get_sap_xml_token(self) -> str:
+        if self._sap_xml_token:
+            return self._sap_xml_token
+        payload = {
+            'email': self.sap_xml_username,
+            'password': self.sap_xml_password,
+        }
+        url = '{}api/sap/token'.format(self.sap_xml_url)
+        try:
+            response = requests.post(
+                url, params=payload, headers=self.headers, timeout=3)
+            response.raise_for_status()
+            data = response.json()
+            return data.get('token')
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not generate token")
 
-    def get_refund_order_details(self, payload: str) -> dict:
+    def get_refund_order_details(self, payload: dict) -> dict:
         """Process the refund sale payload xml and return details
         Arguments:
             payload {str} --
@@ -103,7 +78,21 @@ class SapXmlApi:
                 'Assignment': 'abc106ec6730946R0',
             }
         """
-
+        if not payload:
+            return {}
+        url = '{}api/sap/get-sent-request-status'.format(self.sap_xml_url)
+        headers = self.headers
+        headers['Authorization'] = self._get_sap_xml_token
+        try:
+            response = requests.post(
+                url, params=payload, headers=headers, timeout=3)
+            response.raise_for_status()
+            data = response.json()
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not generate token")
+        if not data.get('data'):
+            return {}
+        payload = data.get('data')[0].get('payload')
         if not payload:
             return {}
         root = ET.fromstring(payload)
@@ -113,7 +102,7 @@ class SapXmlApi:
             details[child.tag] = child.text
         return details
 
-    def get_refund_doc_details(self, payload: str) -> dict:
+    def get_refund_doc_details(self, payload: dict) -> dict:
         """ Process the refund payment payload xml and return details
         Arguments:
             payload {str} --
@@ -154,7 +143,24 @@ class SapXmlApi:
                 'Assignment': 'abc106ec6730946R0',
             }
         """
-
+        if not payload:
+            return {}
+        url = '{}api/sap/get-sent-request-status'.format(self.sap_xml_url)
+        headers = self.headers
+        headers['Authorization'] = "{}".format(
+            self._get_sap_xml_token)
+        try:
+            response = requests.post(
+                url, params=payload, headers=headers, timeout=3)
+            response.raise_for_status()
+            data = response.json()
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not generate token")
+        if not data.get('data'):
+            return {}
+        payload = data.get('data')[0].get('payload')
+        if not payload:
+            return {}
         root = ET.fromstring(payload)
         details = {}
         # <soapenv:Envelope><soapenv:Body><doc:DocumentPosting><Record>

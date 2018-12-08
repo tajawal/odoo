@@ -106,9 +106,11 @@ class OfhSupplierInvoiceLine(models.Model):
         # Once the matching logic is done we update all the payment request
         # that have not being matched with any invoice to investigate
         payment_requests = unreconciled_prs.filtered(
-            lambda rec: not rec.supplier_invoice_ids)
+            lambda rec: not rec.supplier_invoice_ids and
+            rec.reconciliation_status != 'investigate')
         payment_requests.write({'reconciliation_status': 'investigate'})
-        return self.env.user.notify_info("Matching Supplier Invoices is done.")
+        return self.env.user.notify_info(
+            "Matching with Supplier Invoices is done.")
 
     @api.multi
     def _get_invoice_lines_by_pnr(self) -> dict:

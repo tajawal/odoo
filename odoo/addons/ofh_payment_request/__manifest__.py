@@ -11,7 +11,7 @@
     'website': 'https://tajawal.com',
     'depends': [
         'ofh_hub_connector',
-        'mail',
+        'ofh_mail_activity',
     ],
     'data': [
         'security/groups.xml',
@@ -19,6 +19,7 @@
         'security/ofh_payment_request.xml',
         'security/ofh_hub_backend.xml',
         'views/ofh_payment_request.xml',
+        'data/mail_activity_type.xml',
     ],
     'demo': [
         'demo/ofh_payment_request.xml',

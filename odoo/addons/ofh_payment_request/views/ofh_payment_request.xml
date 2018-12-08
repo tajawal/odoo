@@ -40,6 +40,8 @@
                         </group>
                     </group>
                     <group col="4" name="status_details" string="Statuses">
+                        <field name="created_at"/>
+                        <field name="updated_at"/>
                         <field name="payment_request_status"/>
                     </group>
                     <notebook>
@@ -125,6 +127,14 @@
                 <filter name="payment_loader_status" string="Need Payment Loader" domain="[('state', '=', 'payment_loader')]"/>
                 <filter name="sl_py_loader_status" string="Need Sale and Payment Loader" domain="[('state', '=', 'sl_py_loader')]"/>
                 <filter name="no_action_status" string="No Action" domain="[('state', '=', 'no_action')]"/>
+                <!-- Acitivities -->
+                <filter string="Late Activities" name="activities_overdue"
+                        domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                        help="Show all records which has next action date is before today"/>
+                <filter string="Today Activities" name="activities_today"
+                        domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="Future Activities" name="activities_upcoming_all"
+                        domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
             </search>
         </field>
     </record>
