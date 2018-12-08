@@ -2,12 +2,26 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
-from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+
+from odoo import _, api, fields, models
 from odoo.addons.queue_job.job import job
+from odoo.exceptions import ValidationError
+
 from .sap_xml_api import SapXmlApi
 
+try:
+    from odoo.addons.server_environment import serv_config
+except ImportError:
+    logging.getLogger('odoo.module').warning(
+        'server_environment not available in addons path. '
+        'server_env_connector_magento will not be usable')
+
 _logger = logging.getLogger(__name__)
+
+SAP_XML_URL = 'sap_xml_api_url'
+SAP_XML_USERNAME = 'sap_xml_api_username'
+SAP_XML_PASSWORD = 'sap_xml_api_password'
+SOURCE = 'hub_source'
 
 
 class OfhPaymentRequest(models.Model):
@@ -70,16 +84,28 @@ class OfhPaymentRequest(models.Model):
 
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
-        return self.search([('sap_xml_sale_ref', '=', False)])
+        return self.search([
+            ('sap_xml_sale_ref', '=', False),
+            ('payment_request_status', '=', 'ready')])
+
+    @api.model
+    def _get_server_env(self) -> dict:
+        values = {}
+        section_name = 'sap_xml_api'
+        for field_name in (
+                SAP_XML_URL, SAP_XML_USERNAME, SAP_XML_PASSWORD, SOURCE):
+            try:
+                values[field_name] = serv_config.get(section_name, field_name)
+            except Exception:
+                _logger.exception(
+                    'error trying to read field %s in section %s',
+                    field_name, section_name)
+        return values
 
     @api.model
     def get_sap_xml_details(self):
-        """
-        Update the payment requests with the integration in this occurance
-        SAP-XML-API details:
-            1- The order reference: ex. A80924181552_4432032R0
-            2- The Order file ID: ex. 29f64621906323R0
-            3- Update the reconciliation status.
+        """Update payment request with integration details.
+        Use the SAP-XML-API API to get the integration details.
         """
         pr_not_in_integration = \
             self._get_payment_request_not_sent_by_integration()
@@ -89,40 +115,48 @@ class OfhPaymentRequest(models.Model):
     @job(default_channel='root')
     @api.multi
     def update_sap_xml_details(self):
-        """Update payment request with integration details.
-        Use the SAP-XML-API API to get the integration details.
+        """Update the payment requests with the integration details.
+        SAP-XML-API details:
+            1- The order reference: ex. A80924181552_4432032R0
+            2- The Order file ID: ex. 29f64621906323R0
+            3- Update the reconciliation status.
         """
         self.ensure_one()
-        # TODO Use config file for the db name and host
+        integration_details = self._get_server_env()
         sap_xml = SapXmlApi(
-            db_name='sap_web_api_demo_21_11',
-            host='localhost',
-            port=27017)
-        sync_history = sap_xml.get_sync_history_by_track_id(
-            self.track_id)
-        if not sync_history:
-            return
-        if sync_history.get('refund_order') and sync_history.get('refund_doc'):
-            refund_order = sync_history.get('refund_order')
-            if refund_order:
-                self.write({
-                    'integration_status': 'sale_payment_sent',
-                    'sap_xml_sale_ref': refund_order.get('BookingNumber'),
-                    'sap_xml_file_ref': refund_order.get('FileID')})
-        elif sync_history.get('refund_order'):
-            refund_order = sync_history.get('refund_order')
-            if refund_order:
-                self.write({
-                    'integration_status': 'sale_sent',
-                    'sap_xml_sale_ref': refund_order.get('BookingNumber'),
-                    'sap_xml_file_ref': refund_order.get('FileID')})
-        elif sync_history.get('refund_doc'):
-            refund_order = sync_history.get('refund_doc')
-            if refund_order:
-                self.write({
-                    'integration_status': 'payment_sent',
-                    'sap_xml_sale_ref': refund_order.get('HeaderText'),
-                    'sap_xml_file_ref': refund_order.get('Assignment')})
+            sap_xml_url=integration_details.get(SAP_XML_URL),
+            sap_xml_username=integration_details.get(SAP_XML_USERNAME),
+            sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
+
+        source = integration_details.get(SOURCE)
+
+        refund_order = sap_xml.get_refund_order_details({
+            'orderNumber': self.order_reference,
+            'trackId': self.track_id,
+            'source': source,
+            'requestType': 'refund_order'})
+        refund_doc = sap_xml.get_refund_doc_details({
+            'orderNumber': self.order_reference,
+            'trackId': self.track_id,
+            'source': source,
+            'requestType': 'refund_doc'})
+
+        if refund_order and refund_doc:
+            return self.write({
+                'integration_status': 'sale_payment_sent',
+                'sap_xml_sale_ref': refund_order.get('BookingNumber'),
+                'sap_xml_file_ref': refund_order.get('FileID')})
+        elif refund_order:
+            return self.write({
+                'integration_status': 'sale_sent',
+                'sap_xml_sale_ref': refund_order.get('BookingNumber'),
+                'sap_xml_file_ref': refund_order.get('FileID')})
+        elif refund_doc:
+            self.write({
+                'integration_status': 'payment_sent',
+                'sap_xml_sale_ref': refund_order.get('HeaderText'),
+                'sap_xml_file_ref': refund_order.get('Assignment')})
+        return False
 
     @api.multi
     def write(self, vals):

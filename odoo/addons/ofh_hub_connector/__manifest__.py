@@ -15,9 +15,8 @@
     'data': [
         # 'security/ofh_hub_backend.xml',
         'views/ofh_hub_backend.xml',
-        'demo/hub_backend.xml',
     ],
     'demo': [
-        # 'demo/hub_backend.xml',
+        'demo/hub_backend.xml',
     ],
 }

@@ -83,8 +83,6 @@ class HubAPI:
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not generate token")
 
-    # TODO: do we need only processed payment request?
-    # TODO: a separated end point for the payment request?
     def getProcessedPaymentRequest(
             self, from_date: datetime, to_date: datetime) -> list:
         """
