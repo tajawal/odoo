@@ -13,6 +13,7 @@
         <field name="total">180</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="vendor_id">Air Arabia UAE</field>
+        <field name="index">1</field>
     </record>
 
     <record id="ofh_supplier_invoice_line_tf_2" model="ofh.supplier.invoice.line">
@@ -24,6 +25,7 @@
         <field name="total">300</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="vendor_id">Air Arabia UAE</field>
+        <field name="index">2</field>
     </record>
 
     <record id="ofh_supplier_invoice_line_tf_3" model="ofh.supplier.invoice.line">
@@ -35,6 +37,7 @@
         <field name="total">803.27</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="vendor_id">Air India Express</field>
+        <field name="index">3</field>
     </record>
 
     <record id="ofh_supplier_invoice_line_tf_4" model="ofh.supplier.invoice.line">
@@ -45,6 +48,7 @@
         <field name="total">666.25</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="vendor_id">Air Asia</field>
+        <field name="index">4</field>
     </record>
 
     <record id="ofh_supplier_invoice_line_tf_5" model="ofh.supplier.invoice.line">
@@ -55,6 +59,7 @@
         <field name="total">-253</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="vendor_id">Flydubai UAE</field>
+        <field name="index">5</field>
     </record>
 
     <record id="ofh_supplier_invoice_line_tf_6" model="ofh.supplier.invoice.line">
@@ -66,6 +71,7 @@
         <field name="total">500</field>
         <field name="currency_id" ref="base.AED"/>
         <field name="vendor_id">Indigo</field>
+        <field name="index">6</field>
     </record>
 
 </odoo>

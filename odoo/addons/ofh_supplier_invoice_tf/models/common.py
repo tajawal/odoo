@@ -97,6 +97,14 @@ class SupplierInvoiceLineMapper(Component):
             return super(SupplierInvoiceLineMapper, self).locator(record)
         return {'locator': record.get('Airline PNR')}
 
+    @mapping
+    def index(self, record):
+        tf_backend = self.env.ref(
+           'ofh_supplier_invoice_tf.tf_import_backend')
+        if self.backend_record != tf_backend:
+            return {}
+        return {'index': record.get('Index')}
+
 
 class SupplierInvoiceLineHandler(Component):
     _inherit = 'supplier.invoice.line.handler'
@@ -110,7 +118,8 @@ class SupplierInvoiceLineHandler(Component):
                 values, orig_values)
 
         uniq_ref = f"{values.get('locator')}{values.get('passenger')}" \
-                   f"{values.get('invoice_date')}{values.get('total')}"
+                   f"{values.get('invoice_date')}{values.get('total')}" \
+                   f"{values.get('index')}"
         uniq_ref = blake2b(key=str.encode(uniq_ref), digest_size=9).hexdigest()
 
         return [

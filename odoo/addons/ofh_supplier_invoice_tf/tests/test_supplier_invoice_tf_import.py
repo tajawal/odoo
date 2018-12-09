@@ -67,4 +67,4 @@ class TestSupplierInvoiceTfImport(common.TransactionComponentRegistryCase):
         lines = self.invoice_line_model.search(
             [('invoice_type', '=', 'tf')])
 
-        self.assertEquals(len(lines), 13)
+        self.assertEquals(len(lines), 20)
