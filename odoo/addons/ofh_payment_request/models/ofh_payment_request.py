@@ -223,7 +223,10 @@ class OfhPaymentRequest(models.Model):
     )
     # order details
     order_type = fields.Selection(
-        selection=[('hotel', 'Hotel'), ('flight', 'Flight')],
+        selection=[
+            ('hotel', 'Hotel'),
+            ('flight', 'Flight'),
+            ('package', 'Package')],
         readonly=True,
     )
     order_amount = fields.Monetary(

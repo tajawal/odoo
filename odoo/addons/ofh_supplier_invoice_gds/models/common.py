@@ -24,11 +24,11 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def fees(self, record):
         fees = {
-            'BaseFare': record.get('BaseFare', 0.0),
+            'BaseFare': record.get("Base fare", 0.0),
             'Tax': record.get('Tax', 0.0),
             'Net': record.get('Net', 0.0),
             'FEE': record.get('FEE', 0.0),
-            'IATA COMM': record.get('IATA COMM', 0.0),
+            'IATA COMM': record.get("IATA commission", 0.0),
         }
         return {'fees': json.dumps(fees)}
 
@@ -39,7 +39,7 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != gds_backend:
             return super(
                 SupplierInvoiceLineMapper, self).invoice_status(record)
-        status = record.get('Tkt Status')
+        status = record.get('GDS ticket status')
         if not status:
             return {}
         if status in ('EMDA', 'EMDS'):
@@ -52,7 +52,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).passenger(record)
-        return {'passenger': record.get("PAX Name")}
+        return {'passenger': record.get("Passenger's name")}
 
     @mapping
     def office_id(self, record):
@@ -60,7 +60,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).office_id(record)
-        return {'office_id': record.get('OwnerOID')}
+        return {'office_id': record.get('Office ID')}
 
     @mapping
     def ticket_number(self, record):
@@ -68,7 +68,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).ticket_number(record)
-        return {'ticket_number': record.get('DocNumber')}
+        return {'ticket_number': record.get("Ticket number")}
 
     @mapping
     def locator(self, record):
@@ -76,7 +76,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).locator(record)
-        return {'locator': record.get('Locater')}
+        return {'locator': record.get("Record locator")}
 
     @mapping
     def vendor_id(self, record):
@@ -84,7 +84,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).vendor_id(record)
-        return {'vendor_id': record.get('Air Line')}
+        return {'vendor_id': record.get("Airline Code")}
 
     @mapping
     def total(self, record):
@@ -108,7 +108,7 @@ class SupplierInvoiceLineMapper(Component):
            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).currency_id(record)
-        office = record.get('OwnerOID')
+        office = record.get("Office ID")
         if not office:
             return {}
         office = office.upper()
