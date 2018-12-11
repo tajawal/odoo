@@ -14,10 +14,31 @@
                         type="action"
                         string="Force match"
                         class="btn-primary"/>
+                <button name="unlink_payment_request"
+                        type="object"
+                        attrs="{'invisible': [('payment_request_id', '=', False)]}"
+                        string="Remove Payment Request Link"/>
             </header>
             <group name="main_group" position="inside">
                 <field name="payment_request_id"/>
             </group>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_tree_view">
+        <field name="name">ofh.supplier.invoice.line.tree (in ofh_payment_request_invoice)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <button name="unlink_payment_request"
+                        type="object"
+                        attrs="{'invisible': [('payment_request_id', '=', False)]}"
+                        string="Remove Payment Request Link"/>
+            </field>
+            <field name="state" position="before">
+                <field name="payment_request_id" invisible="1"/>
+            </field>
         </field>
     </record>
 

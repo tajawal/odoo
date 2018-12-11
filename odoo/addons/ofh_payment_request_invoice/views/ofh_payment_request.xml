@@ -18,6 +18,7 @@
                     <field name="supplier_currency_id" invisible="1"/>
                 </group>
                 <field name="supplier_invoice_ids" col="2" nolabel="1"
+                       options="{'reload_on_button': true}"
                        attrs="{'invisible': [('order_type', '=', 'hotel')]}"/>
             </page>
         </field>
