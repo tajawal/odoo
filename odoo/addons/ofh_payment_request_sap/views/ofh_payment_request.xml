@@ -57,7 +57,7 @@
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
         <field name="arch" type="xml">
-            <field name="state" position="before">
+            <field name="reconciliation_status" position="before">
                 <field name="integration_status"/>
                 <field name="sap_status"/>
             </field>

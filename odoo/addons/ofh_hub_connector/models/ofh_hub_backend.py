@@ -28,47 +28,40 @@ class HubBackend(models.Model):
 
     name = fields.Char(
         string="Backend name",
-        required=True,
         default='dev-hub',
     )
     hub_api_location = fields.Char(
         string='HUB API URL',
-        required=True,
         compute='_compute_server_env',
         store=False,
         readonly=True,
     )
     hub_api_username = fields.Char(
         string="HUB username",
-        required=True,
         compute='_compute_server_env',
         store=False,
         readonly=True,
     )
     hub_api_password = fields.Char(
         string="Hub password",
-        required=True,
         compute='_compute_server_env',
         store=False,
         readonly=True,
     )
     config_api_url = fields.Char(
         string="Config API URL",
-        required=True,
         compute='_compute_server_env',
         store=False,
         readonly=True,
     )
     config_api_username = fields.Char(
         string="Config API Username",
-        required=True,
         compute='_compute_server_env',
         store=False,
         readonly=True,
     )
     config_api_password = fields.Char(
         string="Config API Password",
-        required=True,
         compute='_compute_server_env',
         store=False,
         readonly=True,
@@ -79,6 +72,7 @@ class HubBackend(models.Model):
     )
     import_sale_order_from_date = fields.Datetime(
         string="Import Sale order from date",
+        readonly=True,
     )
 
     _sql_constraints = [

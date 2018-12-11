@@ -9,9 +9,6 @@
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
-            <group name="status_details" position="inside">
-                <field name="reconciliation_status"/>
-            </group>
             <page name="financial_details" position="inside">
                 <group name="supplier_costs" string="Supplier Costs">
                     <field name="supplier_total_amount" widget="monetary"/>
@@ -21,17 +18,6 @@
                        options="{'reload_on_button': true}"
                        attrs="{'invisible': [('order_type', '=', 'hotel')]}"/>
             </page>
-        </field>
-    </record>
-
-    <record model="ir.ui.view" id="ofh_payment_request_tree_view">
-        <field name="name">ofh.payment.request.tree (in ofh_payment_request_invoice)</field>
-        <field name="model">ofh.payment.request</field>
-        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
-        <field name="arch" type="xml">
-            <field name="total_amount" position="after">
-                <field name="reconciliation_status"/>
-            </field>
         </field>
     </record>
 

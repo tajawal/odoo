@@ -15,7 +15,7 @@
                             class="btn-primary"
                             attrs="{'invisible': [('order_reference', '=', False)]}"
                             type="object"/>
-                    <field name="state" widget="statusbar" nolabel="1"/>
+                    <!-- <field name="state" widget="statusbar" nolabel="1"/> -->
                 </header>
                 <sheet>
                     <field name="currency_id" invisible="1"/>
@@ -43,6 +43,7 @@
                         <field name="created_at"/>
                         <field name="updated_at"/>
                         <field name="payment_request_status"/>
+                        <field name="reconciliation_status"/>
                     </group>
                     <notebook>
                         <page name="financial_details" string="Financial Details">
@@ -155,7 +156,7 @@
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>
-                <field name="state"/>
+                <field name="reconciliation_status"/>
             </tree>
         </field>
     </record>

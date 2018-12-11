@@ -27,20 +27,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
     )
 
-    # SAP related statuses
-    reconciliation_status = fields.Selection(
-        string="Supplier Status",
-        selection=[
-            ('pending', 'pending'),
-            ('matched', 'Matched'),
-            ('investigate', 'Investigate')],
-        default='pending',
-        required=True,
-        index=True,
-        readonly=True,
-        track_visibility='always',
-    )
-
     @api.multi
     def _add_investigate_activity(self):
         activity_type_id = self.env.ref(

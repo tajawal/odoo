@@ -201,6 +201,19 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         track_visibility='always',
     )
+    reconciliation_status = fields.Selection(
+        string="Supplier Status",
+        selection=[
+            ('pending', 'pending'),
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable'),
+            ('investigate', 'Investigate')],
+        default='pending',
+        required=True,
+        index=True,
+        readonly=True,
+        track_visibility='always',
+    )
     state = fields.Selection(
         string='Next Action',
         selection=[
