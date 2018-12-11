@@ -75,7 +75,7 @@ class OfhPaymentRequest(models.Model):
                (rec.sap_xml_sale_ref or rec.sap_xml_file_ref):
                 raise ValidationError(
                     _("SAP XML details can't be filled if the payment request "
-                      "has not been sent through integration."))
+                      "has not been sent through integration."))    
             if rec.integration_status != 'not_sent' and \
                not rec.sap_xml_sale_ref:
                 raise ValidationError(
@@ -154,8 +154,8 @@ class OfhPaymentRequest(models.Model):
         elif refund_doc:
             self.write({
                 'integration_status': 'payment_sent',
-                'sap_xml_sale_ref': refund_order.get('HeaderText'),
-                'sap_xml_file_ref': refund_order.get('Assignment')})
+                'sap_xml_sale_ref': refund_doc.get('HeaderText'),
+                'sap_xml_file_ref': refund_doc.get('Assignment')})
         return False
 
     @api.multi
