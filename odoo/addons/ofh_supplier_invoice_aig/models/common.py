@@ -116,7 +116,7 @@ class SupplierInvoiceLineHandler(Component):
             return super(SupplierInvoiceLineHandler, self).odoo_find_domain(
                 values, orig_values)
         uniq_ref = \
-            f"{values.get('ticket_number')}{values.get('invoice_status')}"
+            f"{values.get('locator')}{values.get('invoice_status')}"
         return [
             ('invoice_type', '=', 'aig'),
             (self.unique_key, '=', 'aig_{}'.format(uniq_ref))]

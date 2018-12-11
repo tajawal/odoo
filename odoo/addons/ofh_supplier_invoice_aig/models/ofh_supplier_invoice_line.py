@@ -16,4 +16,4 @@ class OfhSupplierInvoiceLine(models.Model):
     def _aig_compute_name(self):
         self.ensure_one
         self.name = '{}_{}{}'.format(
-            self.invoice_type, self.ticket_number, self.invoice_status)
+            self.invoice_type, self.locator, self.invoice_status)
