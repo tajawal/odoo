@@ -8,7 +8,7 @@
         <field name="name">ofh.supplier.invoice.line.form (in ofh_supplier_invoice_line)</field>
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="0" edit="0" delete="0">
                 <header>
                     <field name="state"
                            widget="statusbar"
@@ -45,6 +45,8 @@
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="arch" type="xml">
             <search>
+                <field name="name"/>
+                <field name="locator"/>
                 <field name="ticket_number"/>
             </search>
         </field>
@@ -54,7 +56,7 @@
         <field name="name">ofh.supplier.invoice.line.tree (in ofh_supplier_invoice_line)</field>
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree create="0" edit="0" delete="0">
                 <field name="name"/>
                 <field name="office_id"/>
                 <field name="invoice_type"/>
