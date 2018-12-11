@@ -39,6 +39,12 @@ class OfhSupplierInvoiceLine(models.Model):
         return self.search([('state', 'in', ('ready', 'not_matched'))])
 
     @api.multi
+    def unlink_payment_request(self):
+        return self.write({
+            'payment_request_id': False,
+        })
+
+    @api.multi
     def _update_payment_request(self, payment_request):
         """Force match a supplier invoice with the given payment request
         Arguments:
@@ -73,35 +79,35 @@ class OfhSupplierInvoiceLine(models.Model):
             pending_lines.write({'state': 'not_matched'})
             return self.env.user.notify_info(
                 "No Payment Request available for matching.")
-        from_string = fields.Date.from_string
+        from_str = fields.Date.from_string
         # Pivot the supplier lines by date and locator
         lines_by_pnr = pending_lines._get_invoice_lines_by_pnr()
-        for dt, invoice_status_dict in lines_by_pnr.items():
-            for invoice_status, locator_dict in invoice_status_dict.items():
-                # Add filter based on invoice_status
-                if invoice_status == 'TKTT':
-                    pr_type = 'charge'
-                else:
-                    pr_type = 'refund'
-
-                for locator, lines in locator_dict.items():
-                    payment_requests = unreconciled_prs.filtered(
-                        lambda rec, inv_date=dt, inv_locator=locator,
-                        pr_type=pr_type:
-                        abs((from_string(inv_date) -
-                            from_string(rec.created_at)).days) <= 2 and
-                        inv_locator in rec.supplier_reference and
-                        rec.request_type == pr_type)
-                    if len(payment_requests) == 1:
-                        payment_requests.write({
-                            'supplier_invoice_ids': [(4, l.id) for l in lines],
-                            'reconciliation_status': 'matched'})
+        pr_by_invoices = {}
+        for pr in unreconciled_prs:
+            for dt in lines_by_pnr:
+                if abs((from_str(dt) - from_str(pr.created_at)).days) > 2:
+                    continue
+                for status in lines_by_pnr[dt]:
+                    pr_type = \
+                        'charge' if status in ('TKTT', 'AMND') else 'refund'
+                    if pr.request_type != pr_type:
                         continue
-                    if len(payment_requests) > 1:
-                        lines.message_post(
-                            self._get_multiple_payment_request_message(
-                                payment_requests))
-                    lines.write({'state': 'not_matched'})
+                    for locator in lines_by_pnr[dt][status]:
+                        if locator in pr.supplier_reference:
+                            pr_by_invoices.setdefault(pr, self.browse())
+                            pr_by_invoices[pr] |= \
+                                lines_by_pnr[dt][status][locator]
+        for pr in pr_by_invoices:
+            lines = pr_by_invoices[pr].filtered(
+                lambda i: not i.payment_request_id)
+            lines_with_multiple_match = pr_by_invoices[pr] - lines
+            for line in lines_with_multiple_match:
+                # TODO: Add activity to investigate those invoices.
+                line.message_post(
+                    self._get_multiple_payment_request_message(pr))
+            pr.write({
+                'supplier_invoice_ids': [(4, l.id) for l in lines],
+                'reconciliation_status': 'matched'})
 
         # Once the matching logic is done we update all the payment request
         # that have not being matched with any invoice to investigate
@@ -109,6 +115,7 @@ class OfhSupplierInvoiceLine(models.Model):
             lambda rec: not rec.supplier_invoice_ids and
             rec.reconciliation_status != 'investigate')
         payment_requests.write({'reconciliation_status': 'investigate'})
+
         return self.env.user.notify_info(
             "Matching with Supplier Invoices is done.")
 
@@ -132,15 +139,12 @@ class OfhSupplierInvoiceLine(models.Model):
         return invoice_line_by_pnr
 
     @api.model
-    def _get_multiple_payment_request_message(self, payment_requests) -> str:
+    def _get_multiple_payment_request_message(self, payment_request) -> str:
         """[summary]
         Arguments:
             payment_requests {[type]} -- [description]
         Returns:
             str -- message to be posted
         """
-        msg = "Multiple payment request matched:\n{}".format(
-            '\n- '.join(
-                ['[{}] {}'.format(p.order_reference, p.track_id) for
-                 p in payment_requests]))
-        return msg
+        return "This supplier line also matched with:{}".format(
+            payment_request.track_id)
