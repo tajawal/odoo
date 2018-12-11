@@ -116,8 +116,7 @@ class PaymentRequestSAPHandler(Component):
             'ofh_payment_request_sap.sap_sale_import_backend')
         if self.backend_record == payment_backend:
             domain.append(
-                (self.unique_key, '=',
-                 orig_values.get('Document Header Text')))
+                ('sap_xml_file_ref', '=', orig_values.get('Assignment')))
         elif self.backend_record == sale_backend:
             domain.append(
                 (self.unique_key, '=',
