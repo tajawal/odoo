@@ -32,6 +32,7 @@ class HubPaymentRequestImportMapper(Component):
         ('order_type', 'order_type'),
         ('hub_supplier_reference', 'hub_supplier_reference'),
         ('plan_code', 'plan_code'),
+        ('order_discount', 'order_discount'),
     ]
 
     @mapping
@@ -194,6 +195,8 @@ class HubPaymentRequestImporter(Component):
             order.get('products'))
         record['plan_code'] = self._get_plan_code(order.get('products'))
         record['airline_code'] = self._get_airline_code(order.get('products'))
+        record['order_discount'] = self._get_order_discount(
+            order.get('products'))
         return record
 
     def _get_supplier_reference(self, products: list) -> str:
@@ -271,3 +274,14 @@ class HubPaymentRequestImporter(Component):
                                 supplier_currency = net_price_currency
 
         return (supplier_amount, supplier_currency)
+
+    def _get_order_discount(self, products: list) -> float:
+        discount = 0.0
+        for product in products:
+            if product['type'] not in ('rule', 'coupon'):
+                continue
+            if product['type'] == 'coupon':
+                discount += product['price']['total']
+            elif product['price']['total'] < 0:
+                discount += product['price']['total']
+        return discount

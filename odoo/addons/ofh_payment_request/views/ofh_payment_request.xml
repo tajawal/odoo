@@ -62,9 +62,10 @@
                             </group>
                             <group col="4" name="order_financial_details" string="Order Details">
                                 <field name="order_type"/>
-                                <field name="order_amount"/>
-                                <field name="order_supplier_cost" widget="monetary"/>
                                 <field name="order_supplier_currency" invisible="1"/>
+                                <field name="order_amount"/>
+                                <field name="order_discount"/>
+                                <field name="order_supplier_cost" widget="monetary"/>
                             </group>
                         </page>
                         <page name="payment_details" string="Payment Details">

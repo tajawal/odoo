@@ -255,6 +255,10 @@ class OfhPaymentRequest(models.Model):
         comodel_name='res.currency',
         readonly=True,
     )
+    order_discount = fields.Monetary(
+        currency_field='currency_id',
+        readonly=True,
+    )
     # manual fields
     manual_supplier_reference = fields.Char(
         string="Manual Supplier Reference",
