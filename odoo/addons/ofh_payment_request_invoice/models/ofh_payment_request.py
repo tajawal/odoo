@@ -19,6 +19,14 @@ class OfhPaymentRequest(models.Model):
         currency_field='supplier_currency_id',
         compute='_compute_supplier_total_amount',
         readonly=True,
+        help="Supplier total amount without Shamel cost",
+    )
+    supplier_shamel_total_amount = fields.Monetary(
+        string="Supplier Shamel Total Amount",
+        currency_field='supplier_currency_id',
+        compute='_compute_supplier_total_amount',
+        readonly=True,
+        help="Supplier total amount including Shamel cost",
     )
     supplier_currency_id = fields.Many2one(
         string="Supplier Currency",
@@ -71,15 +79,32 @@ class OfhPaymentRequest(models.Model):
                  'order_supplier_cost', 'order_supplier_currency')
     def _compute_supplier_total_amount(self):
         for rec in self:
-            rec.supplier_total_amount = 0.0
+            rec.supplier_total_amount = rec.supplier_shamel_total_amount = 0.0
             rec.supplier_currency_id = False
             # TODO: What about packages for now they're assuming like flights
             if rec.order_type != 'hotel':
                 if rec.supplier_invoice_ids:
+                    kwd_invoices = rec.supplier_invoice_ids.filtered(
+                        lambda i: i.currency_id == self.env.ref('base.KWD'))
                     rec.supplier_total_amount = sum(
                         [inv.total for inv in rec.supplier_invoice_ids])
                     rec.supplier_currency_id = \
                         rec.supplier_invoice_ids.mapped('currency_id')[0]
+                    if not kwd_invoices:
+                        continue
+                    # Shamel cost mininum is 2 KWD. we take the absolute value
+                    # because the cost will be negative in case of refund.
+                    shamel_cost = max(abs(
+                        sum([inv.gds_alshamel_cost for inv in kwd_invoices])),
+                        2)
+                    # In refund we reduce the shamel cost.
+                    if rec.request_type == 'refund':
+                        rec.supplier_shamel_total_amount = \
+                            rec.supplier_total_amount - shamel_cost
+                    # In Charges(Ammendments) we add shamel cost.
+                    else:
+                        rec.supplier_shamel_total_amount = \
+                            rec.supplier_total_amount + shamel_cost
                 continue
             if rec.request_type == 'refund':
                 rec.supplier_total_amount = \

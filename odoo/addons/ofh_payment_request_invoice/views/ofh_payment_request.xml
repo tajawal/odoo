@@ -12,6 +12,7 @@
             <page name="financial_details" position="inside">
                 <group name="supplier_costs" string="Supplier Costs">
                     <field name="supplier_total_amount" widget="monetary"/>
+                    <field name="supplier_shamel_total_amount" widget="monetary"/>
                     <field name="supplier_currency_id" invisible="1"/>
                 </group>
                 <field name="supplier_invoice_ids" col="2" nolabel="1"

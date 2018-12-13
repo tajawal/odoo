@@ -41,6 +41,11 @@ class OfhSupplierInvoiceLine(models.Model):
         currency_field='currency_id',
         readonly=True,
     )
+    gds_alshamel_cost = fields.Monetary(
+        string='Alshamel Cost',
+        currency_field='currency_id',
+        compute='_compute_gds_alshamel_cost',
+    )
     invoice_status = fields.Selection(
         selection_add=[('AMND', 'Amendment')],
     )
@@ -50,6 +55,16 @@ class OfhSupplierInvoiceLine(models.Model):
         self.ensure_one
         self.name = '{}_{}{}'.format(
             self.invoice_type, self.ticket_number, self.invoice_status)
+
+    @api.multi
+    @api.depends('currency_id', 'total')
+    def _compute_gds_alshamel_cost(self):
+        """Shamel cost is 1% of the invoice line total price."""
+        currency = self.env.ref('base.KWD')
+        for rec in self:
+            if rec.currency_id != currency:
+                continue
+            rec.gds_alshamel_cost = rec.total * 0.01
 
     @api.multi
     def _gds_compute_fees(self, fees: dict) -> None:

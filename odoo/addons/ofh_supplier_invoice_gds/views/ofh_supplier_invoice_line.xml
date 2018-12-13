@@ -17,6 +17,7 @@
                         <field name="gds_net_amount"  widget="monetary"/>
                         <field name="gds_fee_amount"  widget="monetary"/>
                         <field name="gds_iata_commission_amount"  widget="monetary"/>
+                        <field name="gds_alshamel_cost"  widget="monetary"/>
                     </group>
                 </page>
             </notebook>
