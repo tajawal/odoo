@@ -182,6 +182,7 @@ class OfhPaymentRequest(models.Model):
     hub_supplier_reference = fields.Char(
         string="Supplier Reference",
         readonly=True,
+        index=True,
     )
     plan_code = fields.Char(
         readonly=True,
@@ -257,6 +258,7 @@ class OfhPaymentRequest(models.Model):
     # manual fields
     manual_supplier_reference = fields.Char(
         string="Manual Supplier Reference",
+        index=True,
     )
     manual_payment_reference = fields.Char(
         string="Manual Payment Reference",

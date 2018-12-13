@@ -32,9 +32,9 @@ class OfhPaymentRequest(models.Model):
         activity_type_id = self.env.ref(
             'ofh_payment_request.ofh_payment_request_activity_match').id
         users = self.env.ref(
-                'ofh_payment_request.ofh_payment_request_manager').users
+            'ofh_payment_request.ofh_payment_request_manager').users
         deadline = fields.Date.from_string(
-                fields.Date.today()) + relativedelta(days=2)
+            fields.Date.today()) + relativedelta(days=2)
         note = _("The payment request didn't match with any Supplier "
                  "Inovice. Please investigate it.")
         model_id = self.env.ref(
@@ -57,13 +57,12 @@ class OfhPaymentRequest(models.Model):
         """
         Return Unreconcilided payment request
         """
-        return self.search(
-            [
-                ('reconciliation_status', 'in', ['pending', 'investigate']),
-                ('payment_request_status', '=', 'ready'),
-                '|',
-                ('hub_supplier_reference', '!=', False),
-                ('manual_supplier_reference', '!=', False)],
+        return self.search([
+            ('reconciliation_status', 'in', ['pending', 'investigate']),
+            ('payment_request_status', '=', 'ready'),
+            '|',
+            ('hub_supplier_reference', '!=', False),
+            ('manual_supplier_reference', '!=', False)],
             order='created_at asc')
 
     @api.multi

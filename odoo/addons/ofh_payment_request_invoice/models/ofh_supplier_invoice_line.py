@@ -3,6 +3,9 @@
 
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -19,20 +22,27 @@ class OfhSupplierInvoiceLine(models.Model):
 
     @api.multi
     def _inverse_payment_request_id(self):
-        from_string = fields.Date.from_string
+        from_str = fields.Date.from_string
         if self.env.context.get('forced'):
             return self.write({'state': 'forced'})
+        not_matched = matched = suggested = self.browse()
         for rec in self:
             if not rec.payment_request_id:
-                rec.state = 'not_matched'
+                not_matched |= rec
                 continue
-            day_diff = \
-                abs((from_string(rec.payment_request_id.created_at) -
-                    from_string(rec.invoice_date))).days
+            day_diff = abs((from_str(
+                rec.payment_request_id.created_at) - from_str(
+                    rec.invoice_date)).days)
             if day_diff == 0:
-                rec.state = 'matched'
+                matched |= rec
             elif day_diff <= 2:
-                rec.state = 'suggested'
+                suggested |= rec
+        if not_matched:
+            not_matched.write({'state': 'not_matched'})
+        if matched:
+            matched.write({'state': 'matched'})
+        if suggested:
+            suggested.write({'state': 'suggested'})
 
     @api.model
     def _get_pending_invoice_lines(self):
@@ -61,17 +71,20 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.model
     @job(default_channel='root')
     def match_supplier_invoice_lines(self):
-        """Match supplier invoice lines with payment request.
-        """
+        """Match supplier invoice lines with payment request."""
+        _logger.info('Matching payment requests with invoice lines started')
         pr_model = self.env['ofh.payment.request']
         # Get all the invoice lines that haven't been matched yet.
+        _logger.info('Get invoice lines matching condidates')
         pending_lines = self._get_pending_invoice_lines()
 
         # This is an ultimate case goal but can happen.
         if not pending_lines:
             return self.env.user.notify_info(
                 "No Supplier Invoice Line available for matching.")
+        _logger.info('%s lines matching condidates found', len(pending_lines))
 
+        _logger.info('Get payment request matching condidates')
         unreconciled_prs = pr_model._get_unreconciled_payment_requests()
         # If all PRS are reconciled. Means the payment request related to
         # selected invoices are not synchronised yet.
@@ -79,6 +92,9 @@ class OfhSupplierInvoiceLine(models.Model):
             pending_lines.write({'state': 'not_matched'})
             return self.env.user.notify_info(
                 "No Payment Request available for matching.")
+        _logger.info(
+            '%s lines payment request matching condidates',
+            len(unreconciled_prs))
         from_str = fields.Date.from_string
         # Pivot the supplier lines by date and locator
         lines_by_pnr = pending_lines._get_invoice_lines_by_pnr()
@@ -97,25 +113,29 @@ class OfhSupplierInvoiceLine(models.Model):
                             pr_by_invoices.setdefault(pr, self.browse())
                             pr_by_invoices[pr] |= \
                                 lines_by_pnr[dt][status][locator]
+        _logger.info(
+            "Updating the matched invoice lines with the payment request.")
         for pr in pr_by_invoices:
-            lines = pr_by_invoices[pr].filtered(
-                lambda i: not i.payment_request_id)
-            lines_with_multiple_match = pr_by_invoices[pr] - lines
-            for line in lines_with_multiple_match:
-                # TODO: Add activity to investigate those invoices.
-                line.message_post(
-                    self._get_multiple_payment_request_message(pr))
+            supplier_invoice_ids = []
+            for line in pr_by_invoices[pr]:
+                if line.payment_request_id:
+                    line.message_post(
+                        self._get_multiple_payment_request_message(pr))
+                else:
+                    supplier_invoice_ids.append(((4, line.id)))
             pr.write({
-                'supplier_invoice_ids': [(4, l.id) for l in lines],
+                'supplier_invoice_ids': supplier_invoice_ids,
                 'reconciliation_status': 'matched'})
 
         # Once the matching logic is done we update all the payment request
         # that have not being matched with any invoice to investigate
+        _logger.info(
+            "Updating status of unmatched payment requets to investigate.")
         payment_requests = unreconciled_prs.filtered(
             lambda rec: not rec.supplier_invoice_ids and
             rec.reconciliation_status != 'investigate')
         payment_requests.write({'reconciliation_status': 'investigate'})
-
+        _logger.info('Matching payment requests with invoice lines is done.')
         return self.env.user.notify_info(
             "Matching with Supplier Invoices is done.")
 
