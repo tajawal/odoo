@@ -13,7 +13,7 @@
         <field name="name">GDS Report</field>
         <field name="key">gds</field>
         <field name="settings">
-            ofh.supplier.invoice.line::supplier.invoice.line.gds.record.importer
+            ofh.supplier.invoice.line::supplier.invoice.line.record.importer
         </field>
     </record>
 

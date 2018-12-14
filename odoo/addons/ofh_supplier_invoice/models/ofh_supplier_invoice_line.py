@@ -10,6 +10,8 @@ class OfhSupplierInvoiceLine(models.Model):
 
     _name = 'ofh.supplier.invoice.line'
     _description = 'Supplier Invoice lines'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'invoice_date ASC'
 
     @api.model
     def _get_default_currency_id(self):
@@ -26,59 +28,73 @@ class OfhSupplierInvoiceLine(models.Model):
         selection=[],
         required=True,
         index=True,
+        readonly=True,
     )
     invoice_date = fields.Date(
         string="Invoice Date",
         required=True,
+        readonly=True,
     )
     ticket_number = fields.Char(
         string="Ticket",
-        required=True,
+        readonly=True,
     )
     invoice_status = fields.Selection(
-        string="Supplier Status",
-        selection=[('none', 'Not applicable')],
+        string="Ticket Status",
+        selection=[('none', 'Not applicable'),
+                   ('TKTT', 'Ticket'),
+                   ('RFND', 'Refund')],
         required=True,
         default='none',
+        readonly=True,
     )
     locator = fields.Char(
         required=True,
+        readonly=True,
     )
     office_id = fields.Char(
         string="Office ID",
         index=True,
+        readonly=True,
     )
     passenger = fields.Char(
         string="Passenger's name",
+        readonly=True,
     )
     vendor_id = fields.Char(
         string="Vendor Name",
         # TODO: comodel_name='ofh.vendor',
         required=True,
+        readonly=True,
     )
     fees = fields.Char(
         required=True,
         default='{}',
+        readonly=True,
     )
     total = fields.Monetary(
         currency_field='currency_id',
+        readonly=True,
     )
     currency_id = fields.Many2one(
         string="Currency",
         required=True,
         comodel_name='res.currency',
         default=_get_default_currency_id,
+        readonly=True,
     )
     state = fields.Selection(
         string="Matching Status",
         selection=[
-            ('ready', 'Ready to be Matched'),
-            ('suggested', 'Suggested Matched'),
-            ('not_matched', 'Not Matched'),
-            ('not_in_pr', 'Refund not in PR'),
-            ('matched', 'Matched')],
+            ('ready', 'Pending'),
+            ('suggested', 'Suggested Matching'),
+            ('forced', 'Forced Matching'),
+            ('matched', 'Matched'),
+            ('not_matched', 'Not Matched')],
         required=True,
         default='ready',
+        readonly=True,
+        track_visibility='always',
     )
 
     _sql_constraints = [
@@ -87,7 +103,8 @@ class OfhSupplierInvoiceLine(models.Model):
     ]
 
     @api.multi
-    @api.depends('ticket_number', 'invoice_status', 'invoice_type')
+    @api.depends('ticket_number', 'invoice_status', 'passenger',
+                 'locator', 'invoice_date', 'vendor_id')
     def _compute_name(self):
         for rec in self:
             compute_function = '_{}_compute_name'.format(rec.invoice_type)

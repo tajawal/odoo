@@ -11,10 +11,15 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
+        'mail',
+        'connector_importer',
+        'web_notify',
     ],
     'data': [
-        'wizards/ofh_supplier_invoice_import.xml',
+        'security/groups.xml',
         'security/ofh_supplier_invoice.xml',
+        'security/connector_importer.xml',
+        'wizards/ofh_supplier_invoice_import.xml',
         'views/ofh_supplier_invoice.xml',
     ],
     'demo': [

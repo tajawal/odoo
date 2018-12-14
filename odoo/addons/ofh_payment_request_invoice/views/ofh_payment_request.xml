@@ -9,25 +9,16 @@
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
-            <group name="status_details" position="inside">
-                <field name="reconciliation_status"/>
-            </group>
-            <page name="financial_detaisl" position="inside">
+            <page name="financial_details" position="inside">
                 <group name="supplier_costs" string="Supplier Costs">
-                    <field name="supplier_invoice_ids" nolabel="1"/>
+                    <field name="supplier_total_amount" widget="monetary"/>
+                    <field name="supplier_shamel_total_amount" widget="monetary"/>
+                    <field name="supplier_currency_id" invisible="1"/>
                 </group>
+                <field name="supplier_invoice_ids" col="2" nolabel="1"
+                       options="{'reload_on_button': true}"
+                       attrs="{'invisible': [('order_type', '=', 'hotel')]}"/>
             </page>
-        </field>
-    </record>
-
-    <record model="ir.ui.view" id="ofh_payment_request_tree_view">
-        <field name="name">ofh.payment.request.tree (in ofh_payment_request_invoice)</field>
-        <field name="model">ofh.payment.request</field>
-        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
-        <field name="arch" type="xml">
-            <field name="total_amount" position="after">
-                <field name="reconciliation_status"/>
-            </field>
         </field>
     </record>
 
@@ -38,9 +29,41 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_gds_supplier_invoice_menu">
-        <field name="name">GDS Supplier Report</field>
+        <field name="name">GDS Report</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
-        <field name="action" ref="ofh_supplier_invoice.ofh_supplier_invoice_import_act_window"/>
+        <field name="action" ref="ofh_supplier_invoice_gds.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_tf_supplier_invoice_import_menu">
+        <field name="name">TravelFusion Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_tf.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_aig_supplier_invoice_import_menu">
+        <field name="name">AIG Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_aig.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <!-- Importer Menu -->
+    <record id="supplier_import_backend_act_window" model="ir.actions.act_window">
+        <field name="name">Supplier Importers</field>
+        <field name="res_model">import.backend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <!-- TODO: Not strong enough we should find a better way -->
+        <field name="domain">[('name', 'in', ['TravelFusion Report Importer', 'GDS Report Importer', 'AIG Report Importer'])]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="import_backend_menu">
+        <field name="name">Supplier Importers</field>
+        <field name="parent_id" ref="ofh_payment_request.import_backend_main_menu"/>
+        <field name="action" ref="supplier_import_backend_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
 

@@ -10,33 +10,44 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" widget="statusbar" nolabel="1"/>
+                    <button name="open_order_in_hub"
+                            string="Open in HUB"
+                            class="btn-primary"
+                            attrs="{'invisible': [('order_reference', '=', False)]}"
+                            type="object"/>
+                    <!-- <field name="state" widget="statusbar" nolabel="1"/> -->
                 </header>
                 <sheet>
                     <field name="currency_id" invisible="1"/>
                     <group col="4" name="general_details" string="General Information">
+                        <field name="track_id"/>
                         <field name="order_reference"/>
                         <field name="request_type"/>
-                        <field name="request_reason"/>
                         <field name="request_status"/>
+                        <field name="request_reason"/>
+                        <field name="total_amount" widget="monetary"/>
                         <field name="entity"/>
                         <field name="office_id"/>
-                        <field name="auth_code"/>
-                        <newline/>
-                        <field name="total_amount" widget="monetary"/>
                     </group>
-                    <group col="4" name="vendor_details" string="Vendor Details">
-                        <field name="vendor_id"/>
-                        <field name="record_locator"/>
-                        <field name="pnr"/>
+                    <group name="vendor_details" string="Vendor Details">
+                        <group>
+                            <field name="vendor_id"/>
+                            <field name="plan_code"/>
+                        </group>
+                        <group>
+                            <field name="supplier_reference"/>
+                            <field name="manual_supplier_reference"/>
+                        </group>
                     </group>
                     <group col="4" name="status_details" string="Statuses">
-                        <field name="sap_status"/>
+                        <field name="created_at"/>
+                        <field name="updated_at"/>
                         <field name="payment_request_status"/>
+                        <field name="reconciliation_status"/>
                     </group>
                     <notebook>
-                        <page name="financial_detaisl" string="Financial Details">
-                            <group col="4">
+                        <page name="financial_details" string="Financial Details">
+                            <group col="4" name="pr_financial_details">
                                 <field name="fare_difference" widget="monetary"/>
                                 <field name="change_fee" widget="monetary"/>
                                 <field name="booking_fee" widget="monetary"/>
@@ -46,16 +57,26 @@
                                 <field name="loss_amount" widget="monetary"/>
                                 <field name="input_vat_amount" widget="monetary"/>
                                 <field name="output_vat_amount" widget="monetary"/>
-                                <newline/>
                                 <field name="tax_code"/>
                                 <field name="loss_type"/>
                             </group>
+                            <group col="4" name="order_financial_details" string="Order Details">
+                                <field name="order_type"/>
+                                <field name="order_supplier_currency" invisible="1"/>
+                                <field name="order_amount"/>
+                                <field name="order_discount"/>
+                                <field name="order_supplier_cost" widget="monetary"/>
+                            </group>
                         </page>
-                        <page name="technical_details" string="Technical Details">
-                            <group col="4">
-                                <field name="order_id"/>
-                                <field name="charge_id"/>
-                                <field name="track_id"/>
+                        <page name="payment_details" string="Payment Details">
+                            <group>
+                                <group>
+                                    <field name="payment_reference"/>
+                                    <field name="manual_payment_reference"/>
+                                </group>
+                                <group>
+                                    <field name="auth_code"/>
+                                </group>
                             </group>
                         </page>
                         <page name="binding_details" string="Bidings">
@@ -75,7 +96,11 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter"></div>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
@@ -87,8 +112,7 @@
             <search>
                 <field name="order_reference"/>
                 <field name="track_id"/>
-                <field name="pnr"/>
-                <field name="record_locator"/>
+                <field name="supplier_reference"/>
                 <field name="vendor_id"/>
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
@@ -99,20 +123,20 @@
                         domain="[('payment_request_status', '=', 'incomplete')]"/>
                 <filter name="ready_pr" string="Ready for matching"
                         domain="[('payment_request_status', '=', 'ready')]"/>
-                <!-- SAP Status -->
-                <separator/>
-                <filter name="pending_sap" string="Pending" domain="[('sap_status', '=', 'pending')]"/>
-                <filter name="in_sap" string="Sale and Payment in SAP" domain="[('sap_status', '=', 'in_sap')]"/>
-                <filter name="payment_not_in_sap" string="Payment not in SAP" domain="[('sap_status', '=', 'payment_not_in_sap')]"/>
-                <filter name="sale_not_in_sap" string="Sale not in SAP" domain="[('sap_status', '=', 'sale_not_in_sap')]"/>
-                <filter name="not_in_sap" string="Not In SAP" domain="[('sap_status', '=', 'not_in_sap')]"/>
-                <separator/>
                 <!-- Next action status -->
                 <filter name="pending_status" string="No Action" domain="[('state', '=', 'pending')]"/>
                 <filter name="sale_loader_status" string="Need Sale Loader" domain="[('state', '=', 'sale_loader')]"/>
                 <filter name="payment_loader_status" string="Need Payment Loader" domain="[('state', '=', 'payment_loader')]"/>
                 <filter name="sl_py_loader_status" string="Need Sale and Payment Loader" domain="[('state', '=', 'sl_py_loader')]"/>
                 <filter name="no_action_status" string="No Action" domain="[('state', '=', 'no_action')]"/>
+                <!-- Acitivities -->
+                <filter string="Late Activities" name="activities_overdue"
+                        domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                        help="Show all records which has next action date is before today"/>
+                <filter string="Today Activities" name="activities_today"
+                        domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="Future Activities" name="activities_upcoming_all"
+                        domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
             </search>
         </field>
     </record>
@@ -129,22 +153,55 @@
                 <field name="updated_at"/>
                 <field name="request_type"/>
                 <field name="office_id"/>
-                <field name="pnr"/>
-                <field name="record_locator"/>
+                <field name="supplier_reference"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>
-                <field name="sap_status"/>
-                <field name="state"/>
+                <field name="reconciliation_status"/>
             </tree>
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="ofh_payment_request_act_window">
-        <field name="name">Payment Requests</field> <!-- TODO -->
+    <record model="ir.ui.view" id="ofh_payment_request_pivot_view">
+        <field name="name">ofh.payment.reques.pivot (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="payment_request_status" type="row"/>
+                <field name="request_type" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_all_act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_almosafer_act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('entity', '=', 'almosafer')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_tajawal_act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('entity', '=', 'tajawal')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_incomplete_act_window">
+        <field name="name">Payment Requests</field>
         <field name="res_model">ofh.payment.request</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
+        <field name="domain">[('payment_request_status', '=', 'incomplete')]</field>
         <field name="context">{}</field>
     </record>
 
@@ -156,8 +213,47 @@
     <record model="ir.ui.menu" id="ofh_payment_request_menu">
         <field name="name">Payment Requests</field>
         <field name="parent_id" ref="ofh_payment_request_main_menu"/>
-        <field name="action" ref="ofh_payment_request_act_window"/>
         <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="all_payment_request_menu">
+        <field name="name">All PRs</field>
+        <field name="parent_id" ref="ofh_payment_request_menu"/>
+        <field name="action" ref="ofh_payment_request_all_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="almosafer_payment_request_menu">
+        <field name="name">Almosafer PRs</field>
+        <field name="parent_id" ref="ofh_payment_request_menu"/>
+        <field name="action" ref="ofh_payment_request_almosafer_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="tajawal_payment_request_menu">
+        <field name="name">Tajawal PRs</field>
+        <field name="parent_id" ref="ofh_payment_request_menu"/>
+        <field name="action" ref="ofh_payment_request_tajawal_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="incomplete_payment_request_menu">
+        <field name="name">Incomplete PRs</field>
+        <field name="parent_id" ref="ofh_payment_request_menu"/>
+        <field name="action" ref="ofh_payment_request_incomplete_act_window"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.ui.menu" id="import_backend_main_menu">
+        <field name="name">Importers</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="60"/>
+    </record>
+
+    <record model="ir.ui.menu" id="payment_request_actions_main_menu">
+        <field name="name">Actions</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="50"/>
     </record>
 
 </odoo>

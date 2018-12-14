@@ -10,18 +10,23 @@ class OfhPaymentRequest(models.Model):
 
     _name = 'ofh.payment.request'
     _description = "Ofh Payment Request"
-    _rec_name = 'order_reference'
+    _rec_name = 'track_id'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     created_at = fields.Datetime(
         required=True,
         index=True,
+        readonly=True,
     )
     updated_at = fields.Datetime(
         required=True,
         index=True,
+        readonly=True,
+        track_visibility='always',
     )
     order_reference = fields.Char(
         string="Order #",
+        readonly=True,
     )
     request_type = fields.Selection(
         required=True,
@@ -30,21 +35,29 @@ class OfhPaymentRequest(models.Model):
             ('refund', 'Refund'),
             ('void', 'Void')],
         index=True,
+        readonly=True,
     )
     # TODO: maybe should be selection field
     request_reason = fields.Char(
         required=True,
         index=True,
+        readonly=True,
     )
     # TODO: maybe should be selection field.
     request_status = fields.Char(
         required=True,
         index=True,
+        readonly=True,
     )
-    auth_code = fields.Char()
-    office_id = fields.Char()
+    auth_code = fields.Char(
+        readonly=True,
+    )
+    office_id = fields.Char(
+        readonly=True,
+    )
     vendor_id = fields.Char(
         string="Airline",
+        readonly=True,
         # TODO: should be reference to comodel_name='ofh.vendor.contract',
     )
     # Amounts field
@@ -52,9 +65,10 @@ class OfhPaymentRequest(models.Model):
         string='Currency',
         comodel_name='res.currency',
         required=True,
+        readonly=True,
     )
     fees = fields.Char(
-        # TODO: required=True,
+        readonly=True,
     )
     fare_difference = fields.Monetary(
         string="Fare Difference",
@@ -131,12 +145,14 @@ class OfhPaymentRequest(models.Model):
     total_amount = fields.Monetary(
         string="Total",
         currency_field='currency_id',
+        readonly=True,
     )
     tax_code = fields.Selection(
         string='Tax code',
         selection=[('ss', 'SS'), ('sz', 'SZ')],
         required=True,
         default='sz',
+        readonly=True,
     )
     # End of amount fields
     entity = fields.Selection(
@@ -151,24 +167,29 @@ class OfhPaymentRequest(models.Model):
     # Technical fields
     order_id = fields.Char(
         string="Order ID",
+        readonly=True,
     )
     charge_id = fields.Char(
+        string="Payment reference",
         required=True,
+        readonly=True,
     )
     track_id = fields.Char(
         required=True,
+        readonly=True,
     )
     # End of technical fields.
-    pnr = fields.Char(
-        # TODO: required=True,
-        string="Airline PNR",
+    hub_supplier_reference = fields.Char(
+        string="Supplier Reference",
+        readonly=True,
+        index=True,
     )
-    record_locator = fields.Char(
-        # TODO: required=True,
+    plan_code = fields.Char(
+        readonly=True,
     )
-    insurance_ref = fields.Char()
-    plan_code = fields.Char()
-    notes = fields.Text()
+    notes = fields.Text(
+        readonly=True,
+    )
     # SAP related statuses
     payment_request_status = fields.Selection(
         string="Payment Request Status",
@@ -178,18 +199,21 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_payment_request_status',
         store=True,
         index=True,
+        readonly=True,
+        track_visibility='always',
     )
-    sap_status = fields.Selection(
-        string='SAP status',
+    reconciliation_status = fields.Selection(
+        string="Supplier Status",
         selection=[
-            ('pending', 'Pending'),
-            ('not_in_sap', "Not In SAP"),
-            ('in_sap', "Sale & Payment In SAP"),
-            ('payment_not_in_sap', "Payment not in SAP"),
-            ('sale_not_in_sap', 'Sale not in SAP')],
+            ('pending', 'pending'),
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable'),
+            ('investigate', 'Investigate')],
         default='pending',
         required=True,
         index=True,
+        readonly=True,
+        track_visibility='always',
     )
     state = fields.Selection(
         string='Next Action',
@@ -203,12 +227,78 @@ class OfhPaymentRequest(models.Model):
         required=True,
         index=True,
         readonly=True,
+        track_visibility='always',
     )
     hub_bind_ids = fields.One2many(
         comodel_name='hub.payment.request',
         inverse_name='odoo_id',
         string="Hub Bindings",
+        readonly=True,
     )
+    # order details
+    order_type = fields.Selection(
+        selection=[
+            ('hotel', 'Hotel'),
+            ('flight', 'Flight'),
+            ('package', 'Package')],
+        readonly=True,
+    )
+    order_amount = fields.Monetary(
+        currency_field='currency_id',
+        readonly=True,
+    )
+    order_supplier_cost = fields.Monetary(
+        currency_field='order_supplier_currency',
+        readonly=True,
+    )
+    order_supplier_currency = fields.Many2one(
+        comodel_name='res.currency',
+        readonly=True,
+    )
+    order_discount = fields.Monetary(
+        currency_field='currency_id',
+        readonly=True,
+    )
+    # manual fields
+    manual_supplier_reference = fields.Char(
+        string="Manual Supplier Reference",
+        index=True,
+    )
+    manual_payment_reference = fields.Char(
+        string="Manual Payment Reference",
+    )
+    supplier_reference = fields.Char(
+        string="Supplier Reference",
+        readonly=True,
+        track_visibility='always',
+        compute='_compute_supplier_reference',
+        store=False,
+    )
+    payment_reference = fields.Char(
+        string="Payment Reference",
+        readonly=True,
+        track_visibility='always',
+        compute='_compute_payment_reference',
+        store=False,
+    )
+
+    @api.multi
+    @api.depends('hub_supplier_reference', 'manual_supplier_reference')
+    def _compute_supplier_reference(self):
+        for rec in self:
+            if rec.manual_supplier_reference:
+                rec.supplier_reference = rec.manual_supplier_reference
+            else:
+                rec.supplier_reference = rec.hub_supplier_reference
+
+    @api.multi
+    @api.depends('manual_payment_reference', 'charge_id')
+    def _compute_payment_reference(self):
+        for rec in self:
+            if rec.manual_payment_reference:
+                rec.payment_reference = rec.manual_payment_reference
+            else:
+                rec.payment_reference = rec.charge_id
 
     @api.multi
     @api.depends('fees')
@@ -240,3 +330,24 @@ class OfhPaymentRequest(models.Model):
         for rec in self:
             rec.payment_request_status = \
                 'ready' if rec.order_reference else 'incomplete'
+
+    @api.multi
+    def open_order_in_hub(self):
+        """Open the order link to the payment request in hub using URL
+        Returns:
+            [dict] -- URL action dictionary
+        """
+
+        self.ensure_one()
+        if not self.order_reference:
+            return {}
+        hub_backend = self.env['hub.backend'].search([], limit=1)
+        if not hub_backend:
+            return
+        hub_url = "{}admin/order/air/detail/{}".format(
+            hub_backend.hub_api_location, self.order_reference)
+        return {
+            "type": "ir.actions.act_url",
+            "url": hub_url,
+            "target": "new",
+        }

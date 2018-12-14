@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo noupdate="1">
+
+    <record model="ofh.supplier.invoice.line" id="ofh_supplier_invoice_line_aig_1">
+       <field name="invoice_type">aig</field>
+       <field name="currency_id" ref="base.AED"/>
+       <field name="vendor_id">AIG</field> 
+       <field name="invoice_date">2018-09-04</field>
+       <field name="locator">KC282969</field>
+       <field name="ticket_number">KC282969</field>
+       <field name="invoice_status">RFND</field>
+       <field name="total">180</field>
+    </record>
+
+    <record model="ofh.supplier.invoice.line" id="ofh_supplier_invoice_line_aig_2">
+       <field name="invoice_type">aig</field>
+       <field name="currency_id" ref="base.AED"/>
+       <field name="vendor_id">AIG</field> 
+       <field name="invoice_date">2018-09-05</field>
+       <field name="locator">KC111111</field>
+       <field name="ticket_number">KC111111</field>
+       <field name="invoice_status">RFND</field>
+       <field name="total">180</field>
+    </record>
+
+    <record model="ofh.supplier.invoice.line" id="ofh_supplier_invoice_line_aig_3">
+       <field name="invoice_type">aig</field>
+       <field name="currency_id" ref="base.AED"/>
+       <field name="vendor_id">AIG</field> 
+       <field name="invoice_date">2018-09-03</field>
+       <field name="locator">KC282968</field>
+       <field name="ticket_number">KC282968</field>
+       <field name="invoice_status">RFND</field>
+       <field name="total">180</field>
+    </record>
+
+    <record model="ofh.supplier.invoice.line" id="ofh_supplier_invoice_line_aig_4">
+       <field name="invoice_type">aig</field>
+       <field name="currency_id" ref="base.AED"/>
+       <field name="vendor_id">AIG</field> 
+       <field name="invoice_date">2018-09-10</field>
+       <field name="locator">KC2888888</field>
+       <field name="ticket_number">KC2888888</field>
+       <field name="invoice_status">TKTT</field>
+       <field name="total">180</field>
+    </record>
+
+</odoo>

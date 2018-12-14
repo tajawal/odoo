@@ -9,9 +9,36 @@
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+                <button name="%(ofh_supplier_invoice_force_match_act_window)d"
+                        type="action"
+                        string="Force match"
+                        class="btn-primary"/>
+                <button name="unlink_payment_request"
+                        type="object"
+                        attrs="{'invisible': [('payment_request_id', '=', False)]}"
+                        string="Remove Payment Request Link"/>
+            </header>
             <group name="main_group" position="inside">
                 <field name="payment_request_id"/>
             </group>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_tree_view">
+        <field name="name">ofh.supplier.invoice.line.tree (in ofh_payment_request_invoice)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <button name="unlink_payment_request"
+                        type="object"
+                        attrs="{'invisible': [('payment_request_id', '=', False)]}"
+                        string="Remove Payment Request Link"/>
+            </field>
+            <field name="state" position="before">
+                <field name="payment_request_id" invisible="1"/>
+            </field>
         </field>
     </record>
 
@@ -24,6 +51,13 @@
                 <field name="payment_request_id"/>
             </field>
         </field>
+    </record>
+
+    <record model="ir.ui.menu" id="supplier_import_backend_menu">
+        <field name="name">Supplier Importers</field>
+        <field name="parent_id" ref="ofh_supplier_invoice.import_backend_main_menu"/>
+        <field name="action" ref="supplier_import_backend_act_window"/>
+        <field name="sequence" eval="10"/>
     </record>
 
 </odoo>

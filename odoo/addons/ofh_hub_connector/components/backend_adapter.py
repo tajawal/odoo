@@ -41,7 +41,7 @@ class HubAPI:
             data = response.json()
             if 'data' in data:
                 self._hub_token = data['data'].get('token')
-        except requests.exceptions.BaseHTTPError as err:
+        except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not generate token")
         return self._hub_token
 
@@ -60,7 +60,7 @@ class HubAPI:
             response.raise_for_status()
             data = response.json()
             self._config_token = data.get('token')
-        except requests.exceptions.BaseHTTPError as err:
+        except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not generate token")
         return self._config_token
 
@@ -80,11 +80,9 @@ class HubAPI:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             return response.json()
-        except requests.exceptions.BaseHTTPError as err:
+        except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not generate token")
 
-    # TODO: do we need only processed payment request?
-    # TODO: a separated end point for the payment request?
     def getProcessedPaymentRequest(
             self, from_date: datetime, to_date: datetime) -> list:
         """
@@ -93,7 +91,7 @@ class HubAPI:
             list -- list of payment request dictionary details.
         """
 
-        url = '{}api/sap/orders-list-raw'.format(self.hub_url)
+        url = '{}api/sap/processed-payment-requests'.format(self.hub_url)
         headers = self.headers
         headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
         if not from_date:
@@ -107,8 +105,8 @@ class HubAPI:
         try:
             response = requests.get(url, headers=headers, params=query)
             response.raise_for_status()
-            return response.json().get('payment_requests')
-        except requests.exceptions.BaseHTTPError as err:
+            return response.json()
+        except requests.exceptions.BaseHTTPError:
             raise MissingError("Could find payment requests")
 
     def get_payment_request_by_track_id(self, track_id) -> dict:
@@ -120,7 +118,7 @@ class HubAPI:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             return response.json()
-        except requests.exceptions.BaseHTTPError as err:
+        except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get payment request details")
 
     def get_raw_order(self, order_id: str) -> dict:
@@ -131,7 +129,7 @@ class HubAPI:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             return response.json()
-        except requests.exceptions.BaseHTTPError as err:
+        except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get payment request details")
 
     def get_raw_store(self, store_id: int) -> dict:
@@ -142,7 +140,7 @@ class HubAPI:
             response = requests.post(url, headers=headers)
             response.raise_for_status()
             return response.json()
-        except requests.exceptions.BaseHTTPError as err:
+        except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get sotre details")
 
 
@@ -153,7 +151,7 @@ class HubAdapter(AbstractComponent):
     _inherit = ['base.backend.adapter', 'base.hub.connector']
     _usage = 'backend.adapter'
 
-    def search(self, filters: dict=None) -> list:
+    def search(self, filters: dict = None) -> list:
         """ Search records according to some criterias. """
         raise NotImplementedError
 

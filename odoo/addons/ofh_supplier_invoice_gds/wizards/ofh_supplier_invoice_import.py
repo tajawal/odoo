@@ -11,7 +11,6 @@ class OfhSupplierInvoiceImport(models.TransientModel):
 
     file_type = fields.Selection(
         selection_add=[('gds', 'GDS')],
-        default='gds',
     )
 
     @api.multi

@@ -54,7 +54,7 @@
 
     <record id="ofh_supplier_invoice_line_gds_4" model="ofh.supplier.invoice.line">
         <field name="invoice_type">gds</field>
-        <field name="invoice_date">2018-10-04</field>
+        <field name="invoice_date">2018-10-15</field>
         <field name="locator">WQXUF7</field>
         <field name="invoice_status">TKTT</field>
         <field name="passenger">KUMAR/MU </field>

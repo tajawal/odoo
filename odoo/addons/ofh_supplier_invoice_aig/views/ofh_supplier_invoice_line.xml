@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.menu" id="ofh_aig_supplier_invoice_import_menu">
+        <field name="name">AIG Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_import_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_aig.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="aig_supplier_invoice_line_act_window">
+        <field name="name">AIG lines</field>
+        <field name="res_model">ofh.supplier.invoice.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('invoice_type', '=', 'aig')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_aig_supplier_invoice_line_menu">
+        <field name="name">AIG lines</field>
+        <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_main_menu"/>
+        <field name="action" ref="aig_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="40"/> 
+    </record>
+
+</odoo>
