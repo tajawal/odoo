@@ -11,7 +11,7 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
-        'ofh_payment_request',
+        'ofh_payment_request_invoice',
         'connector_importer',
         'web_notify',
     ],

@@ -21,10 +21,22 @@
             </group>
             <notebook position="inside">
                 <page name="integration_details" string="Integration Details">
-                    <group name="integration_details">
+                    <group name="sap_conditions" string="SAP Sale Conditions" col="4">
+                        <field name="sap_zsel"/>
+                        <field name="sap_zdis"/>
+                        <field name="sap_zvt1"/>
+                        <field name="sap_zvd1"/>
+                    </group>
+                    <group name="integration_details" string="SAP Item General" col="4">
+                        <field name="sap_pnr"/>
                         <field name="sap_xml_sale_ref"/>
+                    </group>
+                    <group name="sap_conditions" string="SAP Payment details Conditions" col="4">
+                        <field name="sap_payment_amount1"/>
+                        <field name="sap_payment_amount2"/>
                         <field name="sap_xml_file_ref"/>
                     </group>
+                    
                 </page>
             </notebook>
         </field>

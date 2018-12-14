@@ -6,7 +6,7 @@ import logging
 from odoo import _, api, fields, models
 from odoo.addons.queue_job.job import job
 from odoo.exceptions import ValidationError
-
+from odoo.tools import float_is_zero
 from .sap_xml_api import SapXmlApi
 
 try:
@@ -65,6 +65,55 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         track_visibility='always',
     )
+    # SAP Conditions:
+    sap_zsel = fields.Monetary(
+        string="SAP ZSEL",
+        currency_field='currency_id',
+        compute='_compute_sap_zsel',
+        readonly=True,
+        store=False,
+    )
+    sap_payment_amount1 = fields.Monetary(
+        string="SAP Payment Amount1",
+        currency_field='currency_id',
+        compute='_compute_sap_zsel',
+        readonly=True,
+        store=False,
+    )
+    sap_payment_amount2 = fields.Monetary(
+        string="SAP Payment Amount2",
+        currency_field='currency_id',
+        compute='_compute_sap_zsel',
+        readonly=True,
+        store=False,
+    )
+    sap_zvd1 = fields.Monetary(
+        string="SAP ZVD1",
+        currency_field='supplier_currency_id',
+        compute='_compute_sap_zvd1',
+        readonly=True,
+        store=False,
+    )
+    sap_zdis = fields.Monetary(
+        string="SAP ZDIS",
+        currency_field='currency_id',
+        compute='_compute_sap_zsel',
+        readonly=True,
+        store=False,
+    )
+    sap_zvt1 = fields.Monetary(
+        string="SAP ZVT1",
+        currency_field='currency_id',
+        compute='_compute_sap_zvt1',
+        readonly=True,
+        store=False,
+    )
+    sap_pnr = fields.Char(
+        string="SAP PNR",
+        compute='_compute_sap_pnr',
+        readonly=True,
+        store=False,
+    )
 
     @api.multi
     @api.constrains(
@@ -81,6 +130,75 @@ class OfhPaymentRequest(models.Model):
                 raise ValidationError(
                     _("If the payment request is sent through integration the "
                       "'SAP XML Order #' is mandatory."))
+
+    @api.multi
+    @api.depends('order_discount', 'request_type', 'total_amount', 'discount',
+                 'order_amount')
+    def _compute_sap_zsel(self):
+        for rec in self:
+            rec.sap_zsel = rec.sap_zdis = rec.sap_payment_amount1 = \
+                rec.sap_payment_amount2 = 0.0
+            if rec.reconciliation_status not in ('matched', 'not_applicable'):
+                continue
+            if rec.payment_request_status == 'incomplete':
+                continue
+            if rec.request_type == 'void':
+                continue
+            # For the ammendment we take whatever amounts are in the PR
+            if rec.request_type == 'charge':
+                rec.sap_zsel = rec.total_amount
+                rec.sap_zdis = rec.discount
+                rec.sap_payment_amount1 = rec.total_amount * -1
+                rec.sap_payment_amount2 = rec.total_amount
+            # For refunds we prorate the discount using the initial order
+            # amount and initial order discount.
+            else:
+                discount = \
+                    (rec.total_amount / rec.order_amount) * rec.order_discount
+                rec.sap_zsel = rec.total_amount + discount
+                rec.sap_zdis = rec.discount
+                rec.sap_payment_amount1 = rec.total_amount
+                rec.sap_payment_amount2 = rec.total_amount * -1
+
+    @api.multi
+    @api.depends('supplier_total_amount', 'supplier_shamel_total_amount')
+    def _compute_sap_zvd1(self):
+        for rec in self:
+            rec.sap_zvd1 = 0.0
+            if rec.reconciliation_status not in ('matched', 'not_applicable'):
+                continue
+            if rec.payment_request_status == 'incomplete':
+                continue
+            if rec.request_type == 'void':
+                continue
+            if not float_is_zero(
+                    rec.supplier_shamel_total_amount,
+                    precision_rounding=rec.supplier_currency_id.rounding):
+                rec.sap_zvd1 = rec.supplier_shamel_total_amount
+            else:
+                rec.sap_zvd1 = rec.supplier_total_amount
+
+    @api.multi
+    @api.depends('output_vat_amount')
+    def _compute_sap_zvt1(self):
+        for rec in self:
+            rec.sap_zvt1 = 0.0
+            if rec.reconciliation_status not in ('matched', 'not_applicable'):
+                continue
+            if rec.payment_request_status == 'incomplete':
+                continue
+            if rec.request_type == 'void':
+                continue
+            rec.sap_zvt1 = rec.output_vat_amount
+
+    @api.multi
+    @api.depends('supplier_invoice_ids.locator')
+    def _compute_sap_pnr(self):
+        for rec in self:
+            if not rec.supplier_invoice_ids:
+                rec.sap_pnr = ''
+                continue
+            rec.sap_pnr = ','.join(rec.supplier_invoice_ids.mapped('locator'))
 
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
