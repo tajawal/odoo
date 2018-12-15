@@ -75,3 +75,6 @@ target/
 .vscode/
 
 .DS_Store
+
+# sql backup files
+*.sql
