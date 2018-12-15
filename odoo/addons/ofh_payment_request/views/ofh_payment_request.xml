@@ -42,8 +42,9 @@
                     <group col="4" name="status_details" string="Statuses">
                         <field name="created_at"/>
                         <field name="updated_at"/>
-                        <field name="payment_request_status"/>
+                        <field name="need_to_investigate"/>
                         <field name="reconciliation_status"/>
+                        <field name="payment_request_status"/>
                     </group>
                     <notebook>
                         <page name="financial_details" string="Financial Details">
@@ -147,7 +148,10 @@
         <field name="name">ofh.payment.request.tree (in ofh_payment_request)</field>
         <field name="model">ofh.payment.request</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-warning="reconciliation_status=='investigate'"
+                  decoration-bf="reconciliation_status=='matched' and need_to_investigate==False"
+                  decoration-danger="need_to_investigate==True"
+                  decoration-muted="payment_request_status=='incomplete'">
                 <field name="entity"/>
                 <field name="track_id"/>
                 <field name="order_reference"/>
@@ -160,6 +164,7 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>
                 <field name="reconciliation_status"/>
+                <field name="need_to_investigate" invisible="1"/>
             </tree>
         </field>
     </record>

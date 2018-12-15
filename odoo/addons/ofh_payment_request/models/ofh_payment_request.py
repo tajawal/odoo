@@ -267,6 +267,12 @@ class OfhPaymentRequest(models.Model):
         string="Order Updated At",
         readonly=True,
     )
+    need_to_investigate = fields.Boolean(
+        string="Matching needs investigation",
+        compute='_compute_need_to_investigate',
+        readonly=True,
+        store=False,
+    )
     # manual fields
     manual_supplier_reference = fields.Char(
         string="Manual Supplier Reference",
@@ -289,6 +295,23 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_payment_reference',
         store=False,
     )
+
+    @api.multi
+    @api.depends('reconciliation_status', 'order_created_at', 'created_at')
+    def _compute_need_to_investigate(self):
+        from_str = fields.Date.from_string
+        for rec in self:
+            rec.need_to_investigate = False
+            if rec.reconciliation_status != 'matched':
+                continue
+            if not rec.order_created_at:
+                continue
+            if rec.request_type != 'charge':
+                continue
+            diff = abs((
+                from_str(rec.order_created_at) -
+                from_str(rec.created_at)).days)
+            rec.need_to_investigate = diff <= 2
 
     @api.multi
     @api.depends('hub_supplier_reference', 'manual_supplier_reference')
