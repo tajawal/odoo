@@ -61,6 +61,8 @@
                                 <field name="loss_type"/>
                             </group>
                             <group col="4" name="order_financial_details" string="Order Details">
+                                <field name="order_created_at"/>
+                                <field name="order_updated_at"/>
                                 <field name="order_type"/>
                                 <field name="order_supplier_currency" invisible="1"/>
                                 <field name="order_amount"/>

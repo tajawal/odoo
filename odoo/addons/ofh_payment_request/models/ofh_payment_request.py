@@ -259,6 +259,14 @@ class OfhPaymentRequest(models.Model):
         currency_field='currency_id',
         readonly=True,
     )
+    order_created_at = fields.Datetime(
+        string="Order Created At",
+        readonly=True,
+    )
+    order_updated_at = fields.Datetime(
+        string="Order Updated At",
+        readonly=True,
+    )
     # manual fields
     manual_supplier_reference = fields.Char(
         string="Manual Supplier Reference",

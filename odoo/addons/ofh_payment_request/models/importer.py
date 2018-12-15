@@ -33,6 +33,8 @@ class HubPaymentRequestImportMapper(Component):
         ('hub_supplier_reference', 'hub_supplier_reference'),
         ('plan_code', 'plan_code'),
         ('order_discount', 'order_discount'),
+        ('order_created_at', 'order_created_at'),
+        ('order_updated_at', 'order_updated_at'),
     ]
 
     @mapping
@@ -188,6 +190,8 @@ class HubPaymentRequestImporter(Component):
 
         order = hub_api.get_raw_order(order_id)
         record['order_type'] = order.get('type')
+        record['order_created_at'] = order.get('createdAt')
+        record['order_updated_at'] = order.get('updatedAt')
         record['order_amount'] = order['totals']['total']
         record['order_supplier_cost'], record['order_supplier_currency'] = \
             self._get_order_supplier_details(order.get('products'))
