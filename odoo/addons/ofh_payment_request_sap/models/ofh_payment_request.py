@@ -156,8 +156,9 @@ class OfhPaymentRequest(models.Model):
             else:
                 discount = \
                     (rec.total_amount / rec.order_amount) * rec.order_discount
+                discount = abs(discount)
                 rec.sap_zsel = rec.total_amount + discount
-                rec.sap_zdis = rec.discount
+                rec.sap_zdis = discount
                 rec.sap_payment_amount1 = rec.total_amount
                 rec.sap_payment_amount2 = rec.total_amount * -1
 
@@ -178,6 +179,7 @@ class OfhPaymentRequest(models.Model):
                 rec.sap_zvd1 = rec.supplier_shamel_total_amount
             else:
                 rec.sap_zvd1 = rec.supplier_total_amount
+            rec.sap_zvd1 = abs(rec.sap_zvd1)
 
     @api.multi
     @api.depends('output_vat_amount')
