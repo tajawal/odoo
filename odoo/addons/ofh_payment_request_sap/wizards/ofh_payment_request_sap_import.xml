@@ -36,7 +36,7 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_payment_request_sap_import_main_menu">
-        <field name="name">Import Supplier reports</field>
+        <field name="name">Import SAP reports</field>
         <field name="parent_id" ref="ofh_payment_request.ofh_payment_request_main_menu"/>
         <field name="sequence" eval="30"/>
     </record>
