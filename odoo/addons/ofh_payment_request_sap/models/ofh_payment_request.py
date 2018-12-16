@@ -207,7 +207,7 @@ class OfhPaymentRequest(models.Model):
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
         return self.search([
-            ('sap_xml_sale_ref', '=', False),
+            ('integration_status', '!=', 'sale_payment_sent'),
             ('payment_request_status', '=', 'ready')])
 
     @api.model
