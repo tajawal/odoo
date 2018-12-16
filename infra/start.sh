@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cat > ../odoo.cfg << EOL
+cat > /opt/finance_hub/odoo.cfg << EOL
 [options]
 running_env=$myenv
 admin_passwd=$admin_passwd
