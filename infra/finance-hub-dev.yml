@@ -7,7 +7,7 @@ metadata:
 data:
   db_endpoint: "finance-hub-dev.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"	
   myenv: "dev"
-  worker: 2
+  worker: "2"
   hub_source : "hub-dev"
 
 ---
@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: finance-hub
-        image: 797036517683.dkr.ecr.eu-west-1.amazonaws.com/finance-hub:7a2fcf7
+        image: 797036517683.dkr.ecr.eu-west-1.amazonaws.com/finance-hub:IMAGETAG
         imagePullPolicy: Always
         resources:
           limits:
@@ -78,67 +78,67 @@ spec:
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-postgresqldb-name   
+              key: finance-hub-postgresqldb-name   
         - name: db_user
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-postgresqldb-user
+              key: finance-hub-postgresqldb-user
         - name: db_password
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-postgresqldb-password
+              key: finance-hub-postgresqldb-password
         - name: admin_passwd
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-admin-password
+              key: finance-hub-admin-password
         - name: hub_api_location
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-hub-api-location
+              key: finance-hub-hub-api-location
         - name: hub_api_username
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-hub-api-username
+              key: finance-hub-hub-api-username
         - name: hub_api_password
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-hub-api-password
+              key: finance-hub-hub-api-password
         - name: config_api_url
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-config-api-url
+              key: finance-hub-config-api-url
         - name: config_api_username
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-config-api-username
+              key: finance-hub-config-api-username
         - name: config_api_password
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-config-api-password
+              key: finance-hub-config-api-password
         - name: sap_xml_api_url
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-sap-xml-api-url
+              key: finance-hub-sap-xml-api-url
         - name: sap_xml_api_username
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-sap-xml-api-username
+              key: finance-hub-sap-xml-api-username
         - name: sap_xml_api_password
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-sap-xml-api-password
+              key: finance-hub-sap-xml-api-password
         
         - name: db_endpoint
           valueFrom:
