@@ -60,10 +60,16 @@ class SapXmlApi:
             response = requests.post(
                 url, params=payload, headers=headers, timeout=3)
             response.raise_for_status()
-            return response.json()
+            data = response.json()
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not generate token")
-        return {}
+        if not data.get('data'):
+            return {}
+        xml_data = data.get('data')
+        if payload.get('requestType') in ('sale_order', 'refund_order'):
+            return self._get_details_from_order_xml(xml_data)
+        elif payload.get('requestType') in ('sale_doc', 'refund_doc'):
+            return self._get_details_from_payment_xml(xml_data)
 
     def get_refund_order_details(self, payload: dict) -> dict:
         """Process the refund sale payload xml and return details
@@ -118,6 +124,9 @@ class SapXmlApi:
         if not data.get('data'):
             return {}
         payload = data.get('data')[0].get('payload')
+        return self._get_details_from_order_xml(payload)
+
+    def _get_details_from_order_xml(self, payload: dict) -> dict:
         if not payload:
             return {}
         root = ET.fromstring(payload)
@@ -184,11 +193,14 @@ class SapXmlApi:
         if not data.get('data'):
             return {}
         payload = data.get('data')[0].get('payload')
+        self._get_details_from_payment_xml(payload)
+
+    def _get_details_from_payment_xml(self, payload: dict) -> dict:
         if not payload:
             return {}
         root = ET.fromstring(payload)
         details = {}
-        # <soapenv:Envelope><soapenv:Body><doc:DocumentPosting><Record>
-        for child in root[1][0][0]:
+        # <soapenv:Envelope><soapenv:Body><doc:SalesOrder><Record><Header>
+        for child in root[1][0][0][0]:
             details[child.tag] = child.text
         return details

@@ -251,17 +251,19 @@ class OfhPaymentRequest(models.Model):
             sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
 
         source = integration_details.get(SOURCE)
-
-        refund_order = sap_xml.get_refund_order_details({
-            'orderNumber': self.order_reference,
-            'trackId': self.track_id,
-            'source': source,
-            'requestType': 'refund_order'})
-        refund_doc = sap_xml.get_refund_doc_details({
-            'orderNumber': self.order_reference,
-            'trackId': self.track_id,
-            'source': source,
-            'requestType': 'refund_doc'})
+        refund_order = refund_doc = {}
+        if self.integration_status in ('not_sent', 'payment_sent'):
+            refund_order = sap_xml.get_refund_order_details({
+                'orderNumber': self.order_reference,
+                'trackId': self.track_id,
+                'source': source,
+                'requestType': 'refund_order'})
+        if self.integration_status in ('not_sent', 'sale_sent'):
+            refund_doc = sap_xml.get_refund_doc_details({
+                'orderNumber': self.order_reference,
+                'trackId': self.track_id,
+                'source': source,
+                'requestType': 'refund_doc'})
 
         if refund_order and refund_doc:
             return self.write({
@@ -336,7 +338,7 @@ class OfhPaymentRequest(models.Model):
         """Return the sale payload to send to SAP-XML-API."""
         self.ensure_one()
         return {
-            'orderNumber': self.order_reference,
+            'orderId': self.order_id,
             'trackId': self.track_id,
             'source': source,
             'requestType': 'refund_order' if
@@ -362,7 +364,7 @@ class OfhPaymentRequest(models.Model):
     def _get_payment_sap_xml_api_payload(self, source):
         """Return the payment payload to send to SAP-XML-API."""
         return {
-            'orderNumber': self.order_reference,
+            'orderId': self.order_id,
             'trackId': self.track_id,
             'source': source,
             'requestType': 'refund_doc' if
