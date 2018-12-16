@@ -205,7 +205,7 @@ class OfhPaymentRequest(models.Model):
     reconciliation_status = fields.Selection(
         string="Supplier Status",
         selection=[
-            ('pending', 'pending'),
+            ('pending', 'Pending'),
             ('matched', 'Matched'),
             ('not_applicable', 'Not Applicable'),
             ('investigate', 'Investigate')],
