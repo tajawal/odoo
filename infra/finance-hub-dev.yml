@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: finance-hub
-        image: 797036517683.dkr.ecr.eu-west-1.amazonaws.com/finance-hub:IMAGETAG
+        image: 797036517683.dkr.ecr.eu-west-1.amazonaws.com/finance-hub:7a2fcf7
         imagePullPolicy: Always
         resources:
           limits:
@@ -89,7 +89,7 @@ spec:
             secretKeyRef:
               name: finance-hub-secret
               value: finance-hub-postgresqldb-password
-         - name: admin_passwd
+        - name: admin_passwd
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
