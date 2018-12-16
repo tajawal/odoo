@@ -97,14 +97,8 @@ class OfhPaymentRequest(models.Model):
                     shamel_cost = max(abs(
                         sum([inv.gds_alshamel_cost for inv in kwd_invoices])),
                         2)
-                    # In refund we reduce the shamel cost.
-                    if rec.request_type == 'refund':
-                        rec.supplier_shamel_total_amount = \
-                            rec.supplier_total_amount - shamel_cost
-                    # In Charges(Ammendments) we add shamel cost.
-                    else:
-                        rec.supplier_shamel_total_amount = \
-                            rec.supplier_total_amount + shamel_cost
+                    rec.supplier_shamel_total_amount = \
+                        rec.supplier_total_amount + shamel_cost
                 continue
             if rec.request_type == 'refund':
                 rec.supplier_total_amount = \
