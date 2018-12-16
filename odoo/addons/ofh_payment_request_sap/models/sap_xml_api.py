@@ -40,6 +40,31 @@ class SapXmlApi:
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not generate token")
 
+    def sent_payment_request(self, payload: dict) -> dict:
+        """Send sale_order/refund_order and sale_doc/refund_doc to SAP.
+
+        Arguments:
+            payload {dict} -- dict containing the payment request reference
+            and the update values to use when sending the document to SAP.
+
+        Returns:
+            dict -- Request response.
+        """
+        if not payload:
+            return {}
+
+        url = '{}api/sap/send-request-xml'.format(self.sap_xml_url)
+        headers = self.headers
+        headers['Authorization'] = self._get_sap_xml_token
+        try:
+            response = requests.post(
+                url, params=payload, headers=headers, timeout=3)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not generate token")
+        return {}
+
     def get_refund_order_details(self, payload: dict) -> dict:
         """Process the refund sale payload xml and return details
         Arguments:

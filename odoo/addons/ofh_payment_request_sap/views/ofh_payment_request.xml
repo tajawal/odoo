@@ -14,6 +14,10 @@
                         type="object"
                         string="Update Integration Details"
                         class="button-primary"/>
+                <button name="send_payment_request_to_sap"
+                        type="object"
+                        string="Send Payment Request to SAP"
+                        class="button-danger"/>
             </header>
             <group name="status_details" position="inside">
                 <field name="sap_status"/>
@@ -58,7 +62,7 @@
                 <separator/>
                 <filter name="not_sent_through_integration" string="No Sent through integration" domain="[('integration_status', '=', 'not_sent')]"/>
                 <filter name="sale_sent_through_integration" string="Sale Sent through integration" domain="[('integration_status', '=', 'sale_sent')]"/>
-                <filter name="payment_sent_through_integration" string="Sale Sent through integration" domain="[('integration_status', '=', 'payment_sent')]"/>
+                <filter name="payment_sent_through_integration" string="Payment Sent through integration" domain="[('integration_status', '=', 'payment_sent')]"/>
                 <filter name="sent_through_integration" string="Sale and payment Sent through integration" domain="[('integration_status', '=', 'sale_payment_sent')]"/>
             </search>
         </field>
