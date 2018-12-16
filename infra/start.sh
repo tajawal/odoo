@@ -29,9 +29,9 @@ EOL
 export PGPASSWORD=${db_password}
 if psql -lqtA -h ${db_endpoint} --username ${db_user}| grep -q ${db_name}; then
   echo "exists"
-  odoo -c ../odoo.cfg -d $db_name -r $db_user -w $db_password --db_host $db_endpoint -u all --without-demo=WITHOUT_DEMO
+  odoo -c /opt/finance_hub/odoo.cfg -d $db_name -r $db_user -w $db_password --db_host $db_endpoint -u all --without-demo=WITHOUT_DEMO
 else
   echo "do not exist"
-  odoo -c ../odoo.cfg -d $db_name -r $db_user -w $db_password --db_host $db_endpoint -i ofh_all --without-demo=WITHOUT_DEMO
+  odoo -c /opt/finance_hub/odoo.cfg -d $db_name -r $db_user -w $db_password --db_host $db_endpoint -i ofh_all --without-demo=WITHOUT_DEMO
 fi
 
