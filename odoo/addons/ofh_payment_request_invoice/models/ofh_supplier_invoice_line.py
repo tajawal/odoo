@@ -50,9 +50,15 @@ class OfhSupplierInvoiceLine(models.Model):
 
     @api.multi
     def unlink_payment_request(self):
-        return self.write({
+        old_payment_requests = self.mapped('payment_request_id')
+        self.write({
             'payment_request_id': False,
         })
+        # Find PRs that aren't matching any more.
+        unmatched_prs = old_payment_requests.filtered(
+            lambda rec: not rec.supplier_invoice_ids)
+        if unmatched_prs:
+            unmatched_prs.write({'reconciliation_status': 'investigate'})
 
     @api.multi
     def _update_payment_request(self, payment_request):
