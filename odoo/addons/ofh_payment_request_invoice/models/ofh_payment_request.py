@@ -87,7 +87,9 @@ class OfhPaymentRequest(models.Model):
                     kwd_invoices = rec.supplier_invoice_ids.filtered(
                         lambda i: i.currency_id == self.env.ref('base.KWD'))
                     rec.supplier_total_amount = sum(
-                        [inv.total for inv in rec.supplier_invoice_ids])
+                        [i.gds_net_amount if
+                         i.invoice_type == 'gds' else i.total
+                         for i in rec.supplier_invoice_ids])
                     rec.supplier_currency_id = \
                         rec.supplier_invoice_ids.mapped('currency_id')[0]
                     if not kwd_invoices:
