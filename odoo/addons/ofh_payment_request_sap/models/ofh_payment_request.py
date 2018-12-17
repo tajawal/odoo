@@ -47,7 +47,7 @@ class OfhPaymentRequest(models.Model):
         string="Integration Status",
         selection=[
             ('not_sent', 'Not sent'),
-            ('payment_sent', 'Payement sent'),
+            ('payment_sent', 'Payment sent'),
             ('sale_sent', 'Sale sent'),
             ('sale_payment_sent', 'Sale & Payment sent')],
         readonly=True,
