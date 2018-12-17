@@ -185,6 +185,29 @@
         </field>
     </record>
 
+    <!-- Mark Payment request as not applicable -->
+    <record model="ir.actions.server" id="ofh_payment_request_mark_not_applicable">
+        <field name="name">Mark as Not Applicable</field>
+        <field name="model_id" ref="model_ofh_payment_request"/>
+        <field name = "binding_model_id" ref = "model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_supplier_status_not_appilicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_payment_request_mark_investigated">
+        <field name="name">Mark as Investigated</field>
+        <field name="model_id" ref="model_ofh_payment_request"/>
+        <field name = "binding_model_id" ref = "model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_mark_as_investigated()
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="ofh_payment_request_all_act_window">
         <field name="name">Payment Requests</field>
         <field name="res_model">ofh.payment.request</field>

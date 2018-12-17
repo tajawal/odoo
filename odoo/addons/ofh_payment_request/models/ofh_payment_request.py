@@ -273,6 +273,12 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
+    is_investigated = fields.Boolean(
+        string="Is Investigated",
+        help="This is a helper flag to mark the records that where "
+             "matching needs investigation as investigated or not.",
+        default=False,
+    )
     # manual fields
     manual_supplier_reference = fields.Char(
         string="Manual Supplier Reference",
@@ -297,7 +303,8 @@ class OfhPaymentRequest(models.Model):
     )
 
     @api.multi
-    @api.depends('reconciliation_status', 'order_created_at', 'created_at')
+    @api.depends('reconciliation_status', 'order_created_at', 'created_at',
+                 'is_investigated')
     def _compute_need_to_investigate(self):
         from_str = fields.Date.from_string
         for rec in self:
@@ -307,6 +314,8 @@ class OfhPaymentRequest(models.Model):
             if not rec.order_created_at:
                 continue
             if rec.request_type != 'charge':
+                continue
+            if rec.is_investigated:
                 continue
             diff = abs((
                 from_str(rec.order_created_at) -
@@ -382,3 +391,18 @@ class OfhPaymentRequest(models.Model):
             "url": hub_url,
             "target": "new",
         }
+
+    @api.multi
+    def action_supplier_status_not_appilicable(self):
+        return self.write({'reconciliation_status': 'not_applicable'})
+
+    @api.multi
+    def action_mark_as_investigated(self):
+        """Mark Selected Records as investigated, so they will not have the
+        red color.
+        """
+
+        records = self.filtered(lambda r: r.need_to_investigate)
+        if records:
+            return records.write({'is_investigated': True})
+        return True
