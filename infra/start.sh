@@ -5,6 +5,8 @@ running_env=$myenv
 admin_passwd=$admin_passwd
 worker=$worker
 server_wide_modules=web,queue_job
+limit_time_cpu = 300
+limit_time_real = 1200
 
 [queue_job]
 channels = root:$worker,root.hub:$worker,root.import:1
@@ -16,7 +18,6 @@ hub_api_password=$hub_api_password
 config_api_url=$config_api_url
 config_api_username=$config_api_username
 config_api_password=$config_api_password
-
 
 [sap_xml_api]
 sap_xml_api_url=$sap_xml_api_url
