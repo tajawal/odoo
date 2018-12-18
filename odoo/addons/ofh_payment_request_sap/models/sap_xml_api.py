@@ -193,14 +193,14 @@ class SapXmlApi:
         if not data.get('data'):
             return {}
         payload = data.get('data')[0].get('payload')
-        self._get_details_from_payment_xml(payload)
+        return self._get_details_from_payment_xml(payload)
 
     def _get_details_from_payment_xml(self, payload: dict) -> dict:
         if not payload:
             return {}
         root = ET.fromstring(payload)
         details = {}
-        # <soapenv:Envelope><soapenv:Body><doc:SalesOrder><Record><Header>
-        for child in root[1][0][0][0]:
+        # <soapenv:Envelope><soapenv:Body><doc:DocumentPosting><Record>
+        for child in root[1][0][0]:
             details[child.tag] = child.text
         return details

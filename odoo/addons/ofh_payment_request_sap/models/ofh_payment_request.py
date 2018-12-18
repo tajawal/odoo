@@ -206,9 +206,7 @@ class OfhPaymentRequest(models.Model):
 
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
-        return self.search([
-            ('integration_status', '!=', 'sale_payment_sent'),
-            ('payment_request_status', '=', 'ready')])
+        return self.search([('integration_status', '!=', 'sale_payment_sent')])
 
     @api.model
     def _get_server_env(self) -> dict:
@@ -251,6 +249,7 @@ class OfhPaymentRequest(models.Model):
             sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
 
         source = integration_details.get(SOURCE)
+
         refund_order = refund_doc = {}
         if self.integration_status in ('not_sent', 'payment_sent'):
             refund_order = sap_xml.get_refund_order_details({
