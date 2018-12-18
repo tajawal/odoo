@@ -30,6 +30,8 @@ EOL
 export PGPASSWORD=${db_password}
 if psql -lqtA -h ${db_endpoint} --username ${db_user}| grep -q ${db_name}; then
   echo "exists"
+  echo "Remove ir_attachement from DB (Hack should be removed)"
+  psql -h ${db_endpoint} --username ${db_user} -d ${db_name} -c "DELETE FROM ir_attachment WHERE url LIKE '/web/content/%';"
   odoo -c /opt/finance_hub/odoo.cfg -d $db_name -r $db_user -w $db_password --db_host $db_endpoint -u all --without-demo=WITHOUT_DEMO
 else
   echo "do not exist"
