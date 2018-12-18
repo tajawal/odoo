@@ -34,6 +34,12 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_supplier_total_amount',
         readonly=True,
     )
+    office_id = fields.Char(
+        compute='_compute_office_id',
+        search='_search_office_id',
+        store=False,
+        readonly=True,
+    )
 
     @api.multi
     def _add_investigate_activity(self):
@@ -110,3 +116,18 @@ class OfhPaymentRequest(models.Model):
                 # Case of amendment
                 rec.supplier_total_amount = rec.total_amount
             rec.supplier_currency_id = rec.order_supplier_currency
+
+    @api.multi
+    @api.depends('supplier_invoice_ids.office_id')
+    def _compute_office_id(self):
+        for rec in self:
+            if not rec.supplier_invoice_ids:
+                rec.office_id = ''
+                continue
+            rec.office_id = ','.join(
+                set([i.office_id for i in rec.supplier_invoice_ids
+                     if i.office_id]))
+
+    @api.multi
+    def _search_office_id(self, operator, value):
+        return [('supplier_invoice_ids.office_id', operator, value)]
