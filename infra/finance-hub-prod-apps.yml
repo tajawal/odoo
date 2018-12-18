@@ -5,7 +5,7 @@ metadata:
   name: finance-hub-config
   namespace: default
 data:
-  db_endpoint: "10.160.12.131"	
+  db_endpoint: "finance-hub-prod-apps.cdvjmqj39m9u.eu-west-1.rds.amazonaws.com"	
   myenv: "live"
   worker: "2"
   hub_source : "hub-live"
