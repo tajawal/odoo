@@ -163,7 +163,9 @@ class OfhPaymentRequest(models.Model):
                 rec.sap_payment_amount2 = rec.total_amount * -1
 
     @api.multi
-    @api.depends('supplier_total_amount', 'supplier_shamel_total_amount')
+    @api.depends(
+        'supplier_total_amount', 'supplier_shamel_total_amount',
+        'supplier_currency_id')
     def _compute_sap_zvd1(self):
         for rec in self:
             rec.sap_zvd1 = 0.0

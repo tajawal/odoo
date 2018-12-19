@@ -81,7 +81,7 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     @api.depends('supplier_invoice_ids', 'total_amount',
-                 'request_type', 'order_type', 'order_amount',
+                 'request_type', 'order_type', 'order_amount', 'currency_id',
                  'order_supplier_cost', 'order_supplier_currency')
     def _compute_supplier_total_amount(self):
         for rec in self:
@@ -112,10 +112,11 @@ class OfhPaymentRequest(models.Model):
                 rec.supplier_total_amount = \
                     ((rec.total_amount / rec.order_amount) *
                      rec.order_supplier_cost)
+                rec.supplier_currency_id = rec.order_supplier_currency
             else:
                 # Case of amendment
                 rec.supplier_total_amount = rec.total_amount
-            rec.supplier_currency_id = rec.order_supplier_currency
+                rec.supplier_currency_id = rec.currency_id
 
     @api.multi
     @api.depends('supplier_invoice_ids.office_id')
