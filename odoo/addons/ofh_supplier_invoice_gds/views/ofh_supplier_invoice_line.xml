@@ -24,6 +24,17 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_tree_view">
+        <field name="name">ofh.supplier.invoice.line.tree (in ofh_supplier_invoice_gds)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="total" position="after">
+                <field name="gds_net_amount" widget="monetary" sum="Total Net Amount"/>
+            </field>
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="gds_supplier_invoice_line_act_window">
         <field name="name">GDS lines</field>
         <field name="res_model">ofh.supplier.invoice.line</field>
