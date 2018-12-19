@@ -156,7 +156,7 @@
                   decoration-bf="reconciliation_status=='matched' and need_to_investigate==False"
                   decoration-danger="need_to_investigate==True"
                   decoration-muted="payment_request_status=='incomplete'"
-                  create="0" duplicate="0" delete="0">
+                  duplicate="0" delete="0">
                 <field name="entity"/>
                 <field name="track_id"/>
                 <field name="order_reference"/>
