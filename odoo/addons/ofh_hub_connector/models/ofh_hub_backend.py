@@ -68,7 +68,6 @@ class HubBackend(models.Model):
     )
     import_payment_request_from_date = fields.Datetime(
         string="Import payment request from date",
-        readonly=True,
     )
     import_sale_order_from_date = fields.Datetime(
         string="Import Sale order from date",
