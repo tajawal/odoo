@@ -1,7 +1,7 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from xml.etree import ElementTree as ET
-
+import json
 import requests
 from odoo.exceptions import MissingError
 
@@ -56,13 +56,11 @@ class SapXmlApi:
         url = '{}api/sap/send-request-xml'.format(self.sap_xml_url)
         headers = self.headers
         headers['Authorization'] = self._get_sap_xml_token
-        try:
-            response = requests.post(
-                url, params=payload, headers=headers, timeout=3)
-            response.raise_for_status()
-            data = response.json()
-        except requests.exceptions.BaseHTTPError:
-            raise MissingError("Could not generate token")
+        response = requests.request(
+            "POST", url, data=json.dumps(payload), headers=headers,
+            timeout=3)
+        response.raise_for_status()
+        data = response.json()
         if not data.get('data'):
             return {}
         xml_data = data.get('data')

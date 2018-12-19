@@ -307,13 +307,21 @@ class OfhPaymentRequest(models.Model):
             sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
 
         source = integration_details.get(SOURCE)
+        sale_details = payment_details = {}
         # Case where both sale and payment should be sent to SAP.
         if self.sap_status in ('pending', 'not_in_sap', 'payment_in_sap'):
-            sale_details = sap_xml.sent_payment_request(
-                self._get_sale_sap_xml_api_payload(source))
-        if self.sap_satatus in ('pending', 'not_in_sap', 'sale_in_sap'):
-            payment_details = sap_xml.sent_payment_request(
-                self._get_payment_sap_xml_api_payload(source))
+            try:
+                sale_details = sap_xml.sent_payment_request(
+                    self._get_sale_sap_xml_api_payload(source))
+            except Exception:
+                self.message_post("Sale has not been sent to SAP.")
+
+        if self.sap_status in ('pending', 'not_in_sap', 'sale_in_sap'):
+            try:
+                payment_details = sap_xml.sent_payment_request(
+                    self._get_payment_sap_xml_api_payload(source))
+            except Exception:
+                self.message_post("Payment has not been sent to SAP")
 
         # Update Integration details after sending the right documents.
         # TODO: Check the code status before updating anything.
