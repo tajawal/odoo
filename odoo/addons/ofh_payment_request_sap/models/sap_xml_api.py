@@ -1,9 +1,13 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from xml.etree import ElementTree as ET
 import json
+import logging
+from xml.etree import ElementTree as ET
+
 import requests
 from odoo.exceptions import MissingError
+
+_logger = logging.getLogger(__name__)
 
 
 class SapXmlApi:
@@ -58,7 +62,8 @@ class SapXmlApi:
         headers['Authorization'] = self._get_sap_xml_token
         response = requests.request(
             "POST", url, data=json.dumps(payload), headers=headers,
-            timeout=3)
+            timeout=10)
+        _logger.info(response.json())
         response.raise_for_status()
         data = response.json()
         if not data.get('data'):
@@ -114,7 +119,8 @@ class SapXmlApi:
         headers['Authorization'] = self._get_sap_xml_token
         try:
             response = requests.post(
-                url, params=payload, headers=headers, timeout=3)
+                url, params=payload, headers=headers, timeout=10)
+            _logger.info(response.json())
             response.raise_for_status()
             data = response.json()
         except requests.exceptions.BaseHTTPError:
@@ -183,7 +189,8 @@ class SapXmlApi:
             self._get_sap_xml_token)
         try:
             response = requests.post(
-                url, params=payload, headers=headers, timeout=3)
+                url, params=payload, headers=headers, timeout=10)
+            _logger.info(response.json())
             response.raise_for_status()
             data = response.json()
         except requests.exceptions.BaseHTTPError:

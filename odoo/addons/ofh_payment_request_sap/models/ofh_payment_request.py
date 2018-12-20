@@ -251,34 +251,44 @@ class OfhPaymentRequest(models.Model):
             sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
 
         source = integration_details.get(SOURCE)
-
+        _logger.info(
+            f"Updating Payment Request {self.track_id} Integration status")
         refund_order = refund_doc = {}
         if self.integration_status in ('not_sent', 'payment_sent'):
+            _logger.info(f"Check if sale part has been sent.")
             refund_order = sap_xml.get_refund_order_details({
                 'orderNumber': self.order_reference,
                 'trackId': self.track_id,
                 'source': source,
-                'requestType': 'refund_order'})
+                'requestType': 'refund_order' if
+                self.request_type == 'refund' else 'sale_order'})
         if self.integration_status in ('not_sent', 'sale_sent'):
+            _logger.info(f"Check if payment part has been sent.")
             refund_doc = sap_xml.get_refund_doc_details({
                 'orderNumber': self.order_reference,
                 'trackId': self.track_id,
                 'source': source,
-                'requestType': 'refund_doc'})
+                'requestType': 'refund_doc' if
+                self.request_type == 'refund' else 'sale_doc'})
 
         if refund_order and refund_doc:
+            integration_status = self._get_new_integration_status(
+                'sale_payment_sent')
             return self.write({
-                'integration_status': 'sale_payment_sent',
+                'integration_status': integration_status,
                 'sap_xml_sale_ref': refund_order.get('BookingNumber'),
                 'sap_xml_file_ref': refund_order.get('FileID')})
         elif refund_order:
+            integration_status = self._get_new_integration_status('sale_sent')
             return self.write({
-                'integration_status': 'sale_sent',
+                'integration_status': integration_status,
                 'sap_xml_sale_ref': refund_order.get('BookingNumber'),
                 'sap_xml_file_ref': refund_order.get('FileID')})
         elif refund_doc:
+            integration_status = self._get_new_integration_status(
+                'payment_sent')
             return self.write({
-                'integration_status': 'payment_sent',
+                'integration_status': integration_status,
                 'sap_xml_sale_ref': refund_doc.get('HeaderText'),
                 'sap_xml_file_ref': refund_doc.get('Assignment')})
         return False
@@ -307,40 +317,46 @@ class OfhPaymentRequest(models.Model):
             sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
 
         source = integration_details.get(SOURCE)
-        sale_details = payment_details = {}
+        _logger.info(f"Start Sending Payment Request {self.track_id} to SAP.")
         # Case where both sale and payment should be sent to SAP.
         if self.sap_status in ('pending', 'not_in_sap', 'payment_in_sap'):
+            payload = self._get_sale_sap_xml_api_payload(source)
+            _logger.info(f"Sending Payment Request Sale part to SAP {payload}")
             try:
-                sale_details = sap_xml.sent_payment_request(
-                    self._get_sale_sap_xml_api_payload(source))
+                sap_xml.sent_payment_request(payload)
             except Exception:
                 self.message_post("Sale has not been sent to SAP.")
 
         if self.sap_status in ('pending', 'not_in_sap', 'sale_in_sap'):
+            payload = self._get_payment_sap_xml_api_payload(source)
+            _logger.info(
+                f"Sending Payment Request payment part to SAP {payload}")
             try:
-                payment_details = sap_xml.sent_payment_request(
-                    self._get_payment_sap_xml_api_payload(source))
+                sap_xml.sent_payment_request(payload)
             except Exception:
                 self.message_post("Payment has not been sent to SAP")
 
-        # Update Integration details after sending the right documents.
-        # TODO: Check the code status before updating anything.
-        if sale_details and payment_details:
-            return self.write({
-                'integration_status': 'sale_payment_sent',
-                'sap_xml_sale_ref': sale_details.get('BookingNumber'),
-                'sap_xml_file_ref': sale_details.get('FileID')})
-        elif sale_details:
-            return self.write({
-                'integration_status': 'sale_sent',
-                'sap_xml_sale_ref': sale_details.get('BookingNumber'),
-                'sap_xml_file_ref': sale_details.get('FileID')})
-        elif payment_details:
-            return self.write({
-                'integration_status': 'payment_sent',
-                'sap_xml_sale_ref': payment_details.get('BookingNumber'),
-                'sap_xml_file_ref': payment_details.get('FileID')})
-        return False
+        _logger.info("Updating Integartion status after sending is done.")
+        return self.update_sap_xml_details()
+
+    @api.multi
+    def _get_new_integration_status(self, integration_status: str) -> str:
+        """Return the new integration status depending on the previous status
+        Arguments:
+            integration_status {str} -- the new integration status
+        Returns:
+            str -- the new status that should be used.
+        """
+        self.ensure_one()
+        old_integration_status = self.integration_status
+        if old_integration_status == 'sale_payment_sent':
+            return old_integration_status
+        if (old_integration_status == 'payment_sent' and
+           integration_status == 'sale_sent') or \
+           (old_integration_status == 'sale_sent' and
+           integration_status == 'payment_sent'):
+            return 'sale_payment_sent'
+        return integration_status
 
     @api.multi
     def _get_sale_sap_xml_api_payload(self, source):
