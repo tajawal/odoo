@@ -9,6 +9,12 @@
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+                 <button name="action_open_invoice_lines_with_pnr"
+                        string="Open Invoices"
+                        help="Open invoices that match the same supplier references in the payment request."
+                        type="object"/>
+            </header>
             <page name="financial_details" position="inside">
                 <group name="supplier_costs" string="Supplier Costs">
                     <field name="supplier_total_amount" widget="monetary"/>
@@ -23,30 +29,37 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_supplier_invoice_main_menu">
-        <field name="name">Import Supplier reports</field>
+        <field name="name">Vendor Invoices</field>
         <field name="parent_id" ref="ofh_payment_request.ofh_payment_request_main_menu"/>
         <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_supplier_invoice_menu">
+        <field name="name">All Invoice lines</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice.ofh_supplier_all_invoice_line_act_window"/>
+        <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_gds_supplier_invoice_menu">
         <field name="name">GDS Report</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
         <field name="action" ref="ofh_supplier_invoice_gds.ofh_supplier_invoice_import_act_window"/>
-        <field name="sequence" eval="10"/>
+        <field name="sequence" eval="20"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_tf_supplier_invoice_import_menu">
         <field name="name">TravelFusion Report</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
         <field name="action" ref="ofh_supplier_invoice_tf.ofh_supplier_invoice_import_act_window"/>
-        <field name="sequence" eval="20"/>
+        <field name="sequence" eval="30"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_aig_supplier_invoice_import_menu">
         <field name="name">AIG Report</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
         <field name="action" ref="ofh_supplier_invoice_aig.ofh_supplier_invoice_import_act_window"/>
-        <field name="sequence" eval="20"/>
+        <field name="sequence" eval="40"/>
     </record>
 
     <!-- Importer Menu -->

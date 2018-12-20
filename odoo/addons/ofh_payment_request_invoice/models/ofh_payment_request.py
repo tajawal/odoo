@@ -132,3 +132,18 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     def _search_office_id(self, operator, value):
         return [('supplier_invoice_ids.office_id', operator, value)]
+
+    @api.multi
+    def action_open_invoice_lines_with_pnr(self):
+        self.ensure_one()
+        if not self.supplier_reference:
+            return {}
+        pnrs = [p for p in self.supplier_reference.split(',') if p]
+        return {
+            'name': _(f"Invoice lines"),
+            'type': "ir.actions.act_window",
+            'res_model': "ofh.supplier.invoice.line",
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'domain': [('locator', 'in', pnrs)],
+        }
