@@ -5,7 +5,7 @@ import logging
 
 from odoo import _, api, fields, models
 from odoo.addons.queue_job.job import job
-from odoo.exceptions import MissingError, UserError, ValidationError
+from odoo.exceptions import ValidationError
 from odoo.tools import float_is_zero
 
 from .sap_xml_api import SapXmlApi
@@ -294,21 +294,34 @@ class OfhPaymentRequest(models.Model):
         return False
 
     @api.multi
-    def send_payment_request_to_sap(self):
-        """Send payment request to SAP through SAP-XML-API.
-        """
-        self.ensure_one()
+    def action_send_multiple_payment_requests_to_sap(self):
+        """Send multiple payment requests to SAP."""
+        for rec in self:
+            rec.with_delay().send_payment_request_to_sap()
 
+    @job(default_channel='root')
+    @api.multi
+    def send_payment_request_to_sap(self):
+        """Send payment request to SAP through SAP-XML-API."""
         # All void payment request should be handleded by automation.
+        _logger.info(
+            f"Check condition to send PR# {self.track_id} to SAP.")
         if self.request_type == 'void':
-            raise MissingError(
-                _("Void payment request are not handeled by the system."))
+            _logger.warn(f"PR# {self.track_id} is `void`. Skipp it.")
+            return False
 
         # Case where nothing should be done everything is in SAP.
         if self.sap_status == 'in_sap':
-            raise UserError(_(
-                f"This Payment Request {self.track_id} has been "
-                f"already sent to SAP."))
+            _logger.warn(f"PR# {self.track_id} already in SAP. Skipp it.")
+            return False
+
+        if self.reconciliation_status not in ('matched', 'not_applicable'):
+            _logger.warn(f"PR# {self.track_id} is not matched yet. Skipp it.")
+            return False
+
+        if self.payment_request_status == 'incomplete':
+            _logger.warn(f"PR# {self.track_id} is incomplete. Skipp it.")
+            return False
 
         integration_details = self._get_server_env()
         sap_xml = SapXmlApi(
@@ -317,27 +330,34 @@ class OfhPaymentRequest(models.Model):
             sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
 
         source = integration_details.get(SOURCE)
-        _logger.info(f"Start Sending Payment Request {self.track_id} to SAP.")
+        _logger.info(f"Start sending PR# {self.track_id} to SAP.")
         # Case where both sale and payment should be sent to SAP.
         if self.sap_status in ('pending', 'not_in_sap', 'payment_in_sap'):
-            payload = self._get_sale_sap_xml_api_payload(source)
-            _logger.info(f"Sending Payment Request Sale part to SAP {payload}")
             try:
+                payload = self._get_sale_sap_xml_api_payload(source)
+                _logger.info(
+                    f"Sending sale part to SAP with the "
+                    f"following values: {payload}")
                 sap_xml.sent_payment_request(payload)
             except Exception:
-                self.message_post("Sale has not been sent to SAP.")
+                _logger.warn("Sending sale part to SAP failed.")
+                self.message_post("Sending sale part to SAP failed.")
 
         if self.sap_status in ('pending', 'not_in_sap', 'sale_in_sap'):
-            payload = self._get_payment_sap_xml_api_payload(source)
-            _logger.info(
-                f"Sending Payment Request payment part to SAP {payload}")
             try:
+                payload = self._get_payment_sap_xml_api_payload(source)
+                _logger.info(
+                    f"Sending payment part to SAP with the "
+                    f"following values: {payload}")
                 sap_xml.sent_payment_request(payload)
             except Exception:
-                self.message_post("Payment has not been sent to SAP")
+                _logger.warn("Sending payment part to SAP failed.")
+                self.message_post("Sending payment part to SAP failed.")
 
-        _logger.info("Updating Integartion status after sending is done.")
-        return self.update_sap_xml_details()
+        _logger.info(
+            "Sending is done. Updating Integartion status "
+            "after sending is done.")
+        self.update_sap_xml_details()
 
     @api.multi
     def _get_new_integration_status(self, integration_status: str) -> str:
