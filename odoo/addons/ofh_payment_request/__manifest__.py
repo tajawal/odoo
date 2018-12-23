@@ -18,6 +18,7 @@
         'security/hub_payment_request.xml',
         'security/ofh_payment_request.xml',
         'security/ofh_hub_backend.xml',
+        'security/queue_job.xml',
         'views/ofh_payment_request.xml',
         'data/mail_activity_type.xml',
     ],
