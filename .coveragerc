@@ -1,4 +1,8 @@
 [run]
 omit=
-  venv*
+  *virtualenvs*
+  src*
+[report]
+omit=
+  *virtualenvs*
   src*
