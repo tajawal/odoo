@@ -13,6 +13,8 @@ ORDER_STATUS_MANUALLY_CONFIRMED = 53
 ORDER_STATUS_MANUALLY_ORDERED = 51
 ORDER_STATUS_AUTO_CONFIRMED = 58
 ORDER_STATUS_REFUNDED = 95
+ORDER_STATUS_CANCELED = 94
+ORDER_STATUS_MANUALLY_CANCELLED = 96
 
 _logger = logging.getLogger(__name__)
 
@@ -250,7 +252,8 @@ class HubPaymentRequestImporter(Component):
             # We skip fail orders
             if product['status'] not in (
                ORDER_STATUS_MANUALLY_CONFIRMED, ORDER_STATUS_AUTO_CONFIRMED,
-               ORDER_STATUS_MANUALLY_ORDERED, ORDER_STATUS_MANUALLY_ORDERED):
+               ORDER_STATUS_MANUALLY_ORDERED, ORDER_STATUS_MANUALLY_ORDERED,
+               ORDER_STATUS_REFUNDED):
                 continue
             # This calculation is only needed for hotels for now, to be used
             # in reverse calculation

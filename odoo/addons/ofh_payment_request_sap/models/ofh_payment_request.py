@@ -165,7 +165,7 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @api.depends(
         'supplier_total_amount', 'supplier_shamel_total_amount',
-        'supplier_currency_id')
+        'supplier_currency_id', 'fare_difference', 'penalty')
     def _compute_sap_zvd1(self):
         for rec in self:
             rec.sap_zvd1 = 0.0
@@ -182,6 +182,15 @@ class OfhPaymentRequest(models.Model):
             else:
                 rec.sap_zvd1 = rec.supplier_total_amount
             rec.sap_zvd1 = abs(rec.sap_zvd1)
+
+            # https://trello.com/c/CQvak1xI/125-fix-order-supplier-cost
+            # we using the payment request currency, bc most probably the
+            # zvd1 is zero because there are not order supplier cost nor
+            # order supplier currency
+            if float_is_zero(
+                    rec.sap_zvd1, precision_rounding=rec.currency_id.rounding)\
+                    and rec.order_type == 'hotel':
+                rec.sap_zvd1 = abs(rec.fare_difference - rec.penalty)
 
     @api.multi
     @api.depends('output_vat_amount')
@@ -224,6 +233,7 @@ class OfhPaymentRequest(models.Model):
                     field_name, section_name)
         return values
 
+    @job(default_channel='root')
     @api.model
     def get_sap_xml_details(self):
         """Update payment request with integration details.
@@ -394,7 +404,9 @@ class OfhPaymentRequest(models.Model):
                 },
                 'item_condition': {
                     'ZVD1': self.sap_zvd1,
-                    'ZVD1_CURRENCY': self.supplier_currency_id.name,
+                    # https://trello.com/c/CQvak1xI/125-fix-order-supplier-cost
+                    'ZVD1_CURRENCY': self.supplier_currency_id.name if
+                    self.supplier_currency_id else self.currency_id.name,
                     'ZSEL': self.sap_zsel,
                     'ZSEL_CURRENCY': self.currency_id.name,
                     'ZVT1': self.sap_zvt1,
