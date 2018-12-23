@@ -224,6 +224,7 @@ class OfhPaymentRequest(models.Model):
                     field_name, section_name)
         return values
 
+    @job(default_channel='root')
     @api.model
     def get_sap_xml_details(self):
         """Update payment request with integration details.

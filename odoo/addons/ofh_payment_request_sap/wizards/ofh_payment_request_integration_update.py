@@ -11,4 +11,5 @@ class OfhPaymentRequestIntegrationUpdate(models.TransientModel):
     @api.multi
     def update_integration_details(self):
         self.ensure_one()
-        return self.env['ofh.payment.request'].get_sap_xml_details()
+        return self.env['ofh.payment.request'].\
+            with_delay().get_sap_xml_details()
