@@ -14,6 +14,10 @@
                         type="object"
                         string="Update Integration Details"
                         class="button-primary"/>
+                <button name="send_payment_request_to_sap"
+                        type="object"
+                        string="Send Payment Request to SAP"
+                        class="button-danger"/>
             </header>
             <group name="status_details" position="inside">
                 <field name="sap_status"/>
@@ -58,7 +62,7 @@
                 <separator/>
                 <filter name="not_sent_through_integration" string="No Sent through integration" domain="[('integration_status', '=', 'not_sent')]"/>
                 <filter name="sale_sent_through_integration" string="Sale Sent through integration" domain="[('integration_status', '=', 'sale_sent')]"/>
-                <filter name="payment_sent_through_integration" string="Sale Sent through integration" domain="[('integration_status', '=', 'payment_sent')]"/>
+                <filter name="payment_sent_through_integration" string="Payment Sent through integration" domain="[('integration_status', '=', 'payment_sent')]"/>
                 <filter name="sent_through_integration" string="Sale and payment Sent through integration" domain="[('integration_status', '=', 'sale_payment_sent')]"/>
             </search>
         </field>
@@ -92,6 +96,18 @@
         <field name="parent_id" ref="ofh_payment_request.import_backend_main_menu"/>
         <field name="action" ref="sap_import_backend_act_window"/>
         <field name="sequence" eval="10"/>
+    </record>
+
+
+    <record model="ir.actions.server" id="ofh_payment_request_send_to_sap">
+        <field name="name">Send to SAP</field>
+        <field name="model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
+        <field name = "binding_model_id" ref = "model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_send_multiple_payment_requests_to_sap()
+        </field>
     </record>
 
 </odoo>

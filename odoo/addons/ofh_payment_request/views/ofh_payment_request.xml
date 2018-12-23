@@ -8,7 +8,7 @@
         <field name="name">ofh.payment.request.form (in ofh_payment_request)</field>
         <field name="model">ofh.payment.request</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="0" duplicate="0" delete="0">
                 <header>
                     <button name="open_order_in_hub"
                             string="Open in HUB"
@@ -42,8 +42,9 @@
                     <group col="4" name="status_details" string="Statuses">
                         <field name="created_at"/>
                         <field name="updated_at"/>
-                        <field name="payment_request_status"/>
+                        <field name="need_to_investigate"/>
                         <field name="reconciliation_status"/>
+                        <field name="payment_request_status"/>
                     </group>
                     <notebook>
                         <page name="financial_details" string="Financial Details">
@@ -61,6 +62,8 @@
                                 <field name="loss_type"/>
                             </group>
                             <group col="4" name="order_financial_details" string="Order Details">
+                                <field name="order_created_at"/>
+                                <field name="order_updated_at"/>
                                 <field name="order_type"/>
                                 <field name="order_supplier_currency" invisible="1"/>
                                 <field name="order_amount"/>
@@ -123,20 +126,24 @@
                         domain="[('payment_request_status', '=', 'incomplete')]"/>
                 <filter name="ready_pr" string="Ready for matching"
                         domain="[('payment_request_status', '=', 'ready')]"/>
-                <!-- Next action status -->
-                <filter name="pending_status" string="No Action" domain="[('state', '=', 'pending')]"/>
-                <filter name="sale_loader_status" string="Need Sale Loader" domain="[('state', '=', 'sale_loader')]"/>
-                <filter name="payment_loader_status" string="Need Payment Loader" domain="[('state', '=', 'payment_loader')]"/>
-                <filter name="sl_py_loader_status" string="Need Sale and Payment Loader" domain="[('state', '=', 'sl_py_loader')]"/>
-                <filter name="no_action_status" string="No Action" domain="[('state', '=', 'no_action')]"/>
-                <!-- Acitivities -->
-                <filter string="Late Activities" name="activities_overdue"
-                        domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
-                        help="Show all records which has next action date is before today"/>
-                <filter string="Today Activities" name="activities_today"
-                        domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
-                <filter string="Future Activities" name="activities_upcoming_all"
-                        domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="charge_pr" string="Charge" 
+                        domain="[('request_type', '=', 'charge')]"/>
+                <filter name="refund_pr" string="Refund"
+                        domain="[('request_type', '=', 'refund')]"/>
+                <filter name="void_pr" string="Void" 
+                        domain="[('request_type', '=', 'void')]"/>
+                
+                <separator/>
+                <!-- Supplier status -->
+                <filter name="supplier_pending_status" string="Pending"
+                        domain="[('reconciliation_status', '=', 'pending')]"/>
+                <filter name="supplier_matched_status" string="matched"
+                        domain="[('reconciliation_status', '=', 'matched')]"/>
+                <filter name="supplier_investigate_status" string="Investigate"
+                        domain="[('reconciliation_status', '=', 'investigate')]"/>
+                <filter name="supplier_not_applicable_status" string="Not Applicable"
+                        domain="[('reconciliation_status', '=', 'not_applicable')]"/>
             </search>
         </field>
     </record>
@@ -145,7 +152,11 @@
         <field name="name">ofh.payment.request.tree (in ofh_payment_request)</field>
         <field name="model">ofh.payment.request</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-warning="reconciliation_status=='investigate'"
+                  decoration-bf="reconciliation_status=='matched' and need_to_investigate==False"
+                  decoration-danger="need_to_investigate==True"
+                  decoration-muted="payment_request_status=='incomplete'"
+                  duplicate="0" delete="0">
                 <field name="entity"/>
                 <field name="track_id"/>
                 <field name="order_reference"/>
@@ -158,6 +169,7 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>
                 <field name="reconciliation_status"/>
+                <field name="need_to_investigate" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -170,6 +182,29 @@
                 <field name="payment_request_status" type="row"/>
                 <field name="request_type" type="row"/>
             </pivot>
+        </field>
+    </record>
+
+    <!-- Mark Payment request as not applicable -->
+    <record model="ir.actions.server" id="ofh_payment_request_mark_not_applicable">
+        <field name="name">Mark as Not Applicable</field>
+        <field name="model_id" ref="model_ofh_payment_request"/>
+        <field name = "binding_model_id" ref = "model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_supplier_status_not_appilicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_payment_request_mark_investigated">
+        <field name="name">Mark as Investigated</field>
+        <field name="model_id" ref="model_ofh_payment_request"/>
+        <field name = "binding_model_id" ref = "model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_mark_as_investigated()
         </field>
     </record>
 

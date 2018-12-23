@@ -34,6 +34,12 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_supplier_total_amount',
         readonly=True,
     )
+    office_id = fields.Char(
+        compute='_compute_office_id',
+        search='_search_office_id',
+        store=False,
+        readonly=True,
+    )
 
     @api.multi
     def _add_investigate_activity(self):
@@ -75,7 +81,7 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     @api.depends('supplier_invoice_ids', 'total_amount',
-                 'request_type', 'order_type', 'order_amount',
+                 'request_type', 'order_type', 'order_amount', 'currency_id',
                  'order_supplier_cost', 'order_supplier_currency')
     def _compute_supplier_total_amount(self):
         for rec in self:
@@ -87,7 +93,9 @@ class OfhPaymentRequest(models.Model):
                     kwd_invoices = rec.supplier_invoice_ids.filtered(
                         lambda i: i.currency_id == self.env.ref('base.KWD'))
                     rec.supplier_total_amount = sum(
-                        [inv.total for inv in rec.supplier_invoice_ids])
+                        [i.gds_net_amount if
+                         i.invoice_type == 'gds' else i.total
+                         for i in rec.supplier_invoice_ids])
                     rec.supplier_currency_id = \
                         rec.supplier_invoice_ids.mapped('currency_id')[0]
                     if not kwd_invoices:
@@ -97,20 +105,45 @@ class OfhPaymentRequest(models.Model):
                     shamel_cost = max(abs(
                         sum([inv.gds_alshamel_cost for inv in kwd_invoices])),
                         2)
-                    # In refund we reduce the shamel cost.
-                    if rec.request_type == 'refund':
-                        rec.supplier_shamel_total_amount = \
-                            rec.supplier_total_amount - shamel_cost
-                    # In Charges(Ammendments) we add shamel cost.
-                    else:
-                        rec.supplier_shamel_total_amount = \
-                            rec.supplier_total_amount + shamel_cost
+                    rec.supplier_shamel_total_amount = \
+                        rec.supplier_total_amount + shamel_cost
                 continue
             if rec.request_type == 'refund':
                 rec.supplier_total_amount = \
                     ((rec.total_amount / rec.order_amount) *
                      rec.order_supplier_cost)
+                rec.supplier_currency_id = rec.order_supplier_currency
             else:
                 # Case of amendment
                 rec.supplier_total_amount = rec.total_amount
-            rec.supplier_currency_id = rec.order_supplier_currency
+                rec.supplier_currency_id = rec.currency_id
+
+    @api.multi
+    @api.depends('supplier_invoice_ids.office_id')
+    def _compute_office_id(self):
+        for rec in self:
+            if not rec.supplier_invoice_ids:
+                rec.office_id = ''
+                continue
+            rec.office_id = ','.join(
+                set([i.office_id for i in rec.supplier_invoice_ids
+                     if i.office_id]))
+
+    @api.multi
+    def _search_office_id(self, operator, value):
+        return [('supplier_invoice_ids.office_id', operator, value)]
+
+    @api.multi
+    def action_open_invoice_lines_with_pnr(self):
+        self.ensure_one()
+        if not self.supplier_reference:
+            return {}
+        pnrs = [p for p in self.supplier_reference.split(',') if p]
+        return {
+            'name': _(f"Invoice lines"),
+            'type': "ir.actions.act_window",
+            'res_model': "ofh.supplier.invoice.line",
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'domain': [('locator', 'in', pnrs)],
+        }

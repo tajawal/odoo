@@ -1,0 +1,170 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finance-hub-config
+  namespace: default
+data:
+  db_endpoint: "finance-hub-dev.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"	
+  myenv: "dev"
+  worker: "2"
+  hub_source : "hub-dev"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: finance-hub
+spec:
+  type: LoadBalancer
+  selector:
+    app: finance-hub
+  ports:
+  - name: finance-hub
+    port: 80
+    targetPort: finance-hub
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finance-hub-deployment
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  minReadySeconds: 80
+  selector:
+    matchLabels:
+      service: finance-hub
+  template:
+    metadata:
+      labels:
+        app: finance-hub
+        service: finance-hub #labels for the pods e.g kubectl get pod -l "service in (http-server)"
+    spec:
+      containers:
+      - name: finance-hub
+        image: 797036517683.dkr.ecr.eu-west-1.amazonaws.com/finance-hub:IMAGETAG
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4Gi
+          requests:
+            cpu: "2"
+            memory: 2Gi
+        ports:
+        - name: finance-hub
+          containerPort: 8069
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8069
+          initialDelaySeconds: 90
+          timeoutSeconds: 30
+          periodSeconds: 60
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8069
+          initialDelaySeconds: 120
+          timeoutSeconds: 45
+          periodSeconds: 120
+        env:
+        - name: db_name
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-postgresqldb-name   
+        - name: db_user
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-postgresqldb-user
+        - name: db_password
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-postgresqldb-password
+        - name: admin_passwd
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-admin-password
+        - name: hub_api_location
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-hub-api-location
+        - name: hub_api_username
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-hub-api-username
+        - name: hub_api_password
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-hub-api-password
+        - name: config_api_url
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-config-api-url
+        - name: config_api_username
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-config-api-username
+        - name: config_api_password
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-config-api-password
+        - name: sap_xml_api_url
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-sap-xml-api-url
+        - name: sap_xml_api_username
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-sap-xml-api-username
+        - name: sap_xml_api_password
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-sap-xml-api-password
+        
+        - name: db_endpoint
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: db_endpoint
+        - name: worker
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: worker
+        - name: myenv
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: myenv
+        - name: hub_source
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: hub_source
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP

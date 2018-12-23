@@ -205,7 +205,7 @@ class OfhPaymentRequest(models.Model):
     reconciliation_status = fields.Selection(
         string="Supplier Status",
         selection=[
-            ('pending', 'pending'),
+            ('pending', 'Pending'),
             ('matched', 'Matched'),
             ('not_applicable', 'Not Applicable'),
             ('investigate', 'Investigate')],
@@ -259,6 +259,26 @@ class OfhPaymentRequest(models.Model):
         currency_field='currency_id',
         readonly=True,
     )
+    order_created_at = fields.Datetime(
+        string="Order Created At",
+        readonly=True,
+    )
+    order_updated_at = fields.Datetime(
+        string="Order Updated At",
+        readonly=True,
+    )
+    need_to_investigate = fields.Boolean(
+        string="Matching needs investigation",
+        compute='_compute_need_to_investigate',
+        readonly=True,
+        store=False,
+    )
+    is_investigated = fields.Boolean(
+        string="Is Investigated",
+        help="This is a helper flag to mark the records that where "
+             "matching needs investigation as investigated or not.",
+        default=False,
+    )
     # manual fields
     manual_supplier_reference = fields.Char(
         string="Manual Supplier Reference",
@@ -281,6 +301,26 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_payment_reference',
         store=False,
     )
+
+    @api.multi
+    @api.depends('reconciliation_status', 'order_created_at', 'created_at',
+                 'is_investigated')
+    def _compute_need_to_investigate(self):
+        from_str = fields.Date.from_string
+        for rec in self:
+            rec.need_to_investigate = False
+            if rec.reconciliation_status != 'matched':
+                continue
+            if not rec.order_created_at:
+                continue
+            if rec.request_type != 'charge':
+                continue
+            if rec.is_investigated:
+                continue
+            diff = abs((
+                from_str(rec.order_created_at) -
+                from_str(rec.created_at)).days)
+            rec.need_to_investigate = diff <= 2
 
     @api.multi
     @api.depends('hub_supplier_reference', 'manual_supplier_reference')
@@ -351,3 +391,18 @@ class OfhPaymentRequest(models.Model):
             "url": hub_url,
             "target": "new",
         }
+
+    @api.multi
+    def action_supplier_status_not_appilicable(self):
+        return self.write({'reconciliation_status': 'not_applicable'})
+
+    @api.multi
+    def action_mark_as_investigated(self):
+        """Mark Selected Records as investigated, so they will not have the
+        red color.
+        """
+
+        records = self.filtered(lambda r: r.need_to_investigate)
+        if records:
+            return records.write({'is_investigated': True})
+        return True

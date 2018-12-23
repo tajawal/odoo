@@ -1,9 +1,13 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import json
+import logging
 from xml.etree import ElementTree as ET
 
 import requests
 from odoo.exceptions import MissingError
+
+_logger = logging.getLogger(__name__)
 
 
 class SapXmlApi:
@@ -39,6 +43,36 @@ class SapXmlApi:
             return data.get('token')
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not generate token")
+
+    def sent_payment_request(self, payload: dict) -> dict:
+        """Send sale_order/refund_order and sale_doc/refund_doc to SAP.
+
+        Arguments:
+            payload {dict} -- dict containing the payment request reference
+            and the update values to use when sending the document to SAP.
+
+        Returns:
+            dict -- Request response.
+        """
+        if not payload:
+            return {}
+
+        url = '{}api/sap/send-request-xml'.format(self.sap_xml_url)
+        headers = self.headers
+        headers['Authorization'] = self._get_sap_xml_token
+        response = requests.request(
+            "POST", url, data=json.dumps(payload), headers=headers,
+            timeout=10)
+        _logger.info(response.json())
+        response.raise_for_status()
+        data = response.json()
+        if not data.get('data'):
+            return {}
+        xml_data = data.get('data')
+        if payload.get('requestType') in ('sale_order', 'refund_order'):
+            return self._get_details_from_order_xml(xml_data)
+        elif payload.get('requestType') in ('sale_doc', 'refund_doc'):
+            return self._get_details_from_payment_xml(xml_data)
 
     def get_refund_order_details(self, payload: dict) -> dict:
         """Process the refund sale payload xml and return details
@@ -85,7 +119,8 @@ class SapXmlApi:
         headers['Authorization'] = self._get_sap_xml_token
         try:
             response = requests.post(
-                url, params=payload, headers=headers, timeout=3)
+                url, params=payload, headers=headers, timeout=10)
+            _logger.info(response.json())
             response.raise_for_status()
             data = response.json()
         except requests.exceptions.BaseHTTPError:
@@ -93,6 +128,9 @@ class SapXmlApi:
         if not data.get('data'):
             return {}
         payload = data.get('data')[0].get('payload')
+        return self._get_details_from_order_xml(payload)
+
+    def _get_details_from_order_xml(self, payload: dict) -> dict:
         if not payload:
             return {}
         root = ET.fromstring(payload)
@@ -151,7 +189,8 @@ class SapXmlApi:
             self._get_sap_xml_token)
         try:
             response = requests.post(
-                url, params=payload, headers=headers, timeout=3)
+                url, params=payload, headers=headers, timeout=10)
+            _logger.info(response.json())
             response.raise_for_status()
             data = response.json()
         except requests.exceptions.BaseHTTPError:
@@ -159,6 +198,9 @@ class SapXmlApi:
         if not data.get('data'):
             return {}
         payload = data.get('data')[0].get('payload')
+        return self._get_details_from_payment_xml(payload)
+
+    def _get_details_from_payment_xml(self, payload: dict) -> dict:
         if not payload:
             return {}
         root = ET.fromstring(payload)
