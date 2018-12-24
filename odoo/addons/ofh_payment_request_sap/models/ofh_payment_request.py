@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
-
+from datetime import datetime
 from odoo import _, api, fields, models
 from odoo.addons.queue_job.job import job
 from odoo.exceptions import ValidationError
@@ -399,6 +399,11 @@ class OfhPaymentRequest(models.Model):
             'requestType': 'refund_order' if
             self.request_type == 'refund' else 'sale_order',
             'updates': {
+                'header':{
+                    'BookingDate': datetime.strftime(
+                        fields.Datetime.from_string(
+                            self.created_at), '%Y%m%d'),
+                },
                 'item_general': {
                     'pnr': self.sap_pnr
                 },
@@ -413,7 +418,7 @@ class OfhPaymentRequest(models.Model):
                     'ZVT1_CURRENCY': self.currency_id.name,
                     'ZDIS': self.sap_zdis,
                     'ZDIS_CURRENCY': self.currency_id.name,
-                }
+                },
             }
         }
 
@@ -427,6 +432,9 @@ class OfhPaymentRequest(models.Model):
             'requestType': 'refund_doc' if
             self.request_type == 'refund' else 'sale_doc',
             'updates': {
+                'DocumentDate': datetime.strftime(
+                    fields.Datetime.from_string(
+                        self.created_at), '%Y%m%d'),
                 'Amount1': self.sap_payment_amount1,
                 'Amount2': self.sap_payment_amount2,
             }
