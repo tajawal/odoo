@@ -217,7 +217,9 @@ class OfhPaymentRequest(models.Model):
 
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
-        return self.search([('integration_status', '!=', 'sale_payment_sent')])
+        return self.search(
+            [('integration_status', '!=', 'sale_payment_sent'),
+             ('payment_request_status', '=', 'ready')])
 
     @api.model
     def _get_server_env(self) -> dict:
