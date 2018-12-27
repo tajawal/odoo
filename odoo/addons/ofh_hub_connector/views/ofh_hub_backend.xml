@@ -10,9 +10,6 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="import_payment_requests"
-                            type="object"
-                            string="Import Payment request"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
