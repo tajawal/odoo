@@ -67,12 +67,6 @@ Release
 First make sure you have been testing using the correct dependencies by
 running ``./freeze.sh`` and checking there is no change in ``requirements.txt``.
 
-To relase using gitlab-ci
-.........................
-
-- run acsoo tag, the deploy to the test environment will be automatic, and
-  gitlab will show a button on the pipeline to deploy to production.
-
 To release manually
 ...................
 

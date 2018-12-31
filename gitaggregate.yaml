@@ -12,9 +12,9 @@
 ./src/connector-interfaces:
     remotes:
         oca: https://github.com/OCA/connector-interfaces
-        origin: https://github.com/zakiuu/connector-interfaces
+        origin: git@github.com:zakiuu/connector-interfaces.git
     merges:
         - oca 11.0
         - origin 11.0
-        - oca refs/pull/44/head # Migrating to 11.0
+        - origin 11-add-connector_importer_fix_zak # Migrating to 11.0 with bug fixes
     target: origin 11.0-connector_importer

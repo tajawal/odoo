@@ -82,7 +82,9 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @api.depends('supplier_invoice_ids', 'total_amount',
                  'request_type', 'order_type', 'order_amount', 'currency_id',
-                 'order_supplier_cost', 'order_supplier_currency')
+                 'order_supplier_cost', 'order_supplier_currency',
+                 'reconciliation_status', 'fare_difference', 'insurance',
+                 'penalty')
     def _compute_supplier_total_amount(self):
         for rec in self:
             rec.supplier_total_amount = rec.supplier_shamel_total_amount = 0.0
@@ -107,6 +109,18 @@ class OfhPaymentRequest(models.Model):
                         2)
                     rec.supplier_shamel_total_amount = \
                         rec.supplier_total_amount + shamel_cost
+                # If a flight don't match with any supplier invoice and is
+                # marked as not applicable we reverse calculate the cost using
+                # the fees of the payment request.
+                elif rec.reconciliation_status == 'not_applicable':
+                    if rec.request_type == 'charge':
+                        rec.supplier_total_amount = \
+                            rec.fare_difference + rec.insurance + rec.penalty
+                    elif rec.request_type == 'refund':
+                        rec.supplier_total_amount = \
+                            rec.fare_difference - rec.insurance - rec.penalty
+                    rec.supplier_currency_id = \
+                        rec.order_supplier_currency or rec.currency_id
                 continue
             if rec.request_type == 'refund':
                 rec.supplier_total_amount = \

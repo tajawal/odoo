@@ -32,5 +32,8 @@ class OfhSupplierInvoiceLine(models.Model):
         uniq_ref = \
             f"{self.locator}{self.passenger}{self.invoice_date}" \
             f"{self.total}{self.index}"
+        # blake2b accepts only 64 bytes
+        if len(uniq_ref) >= 64:
+            uniq_ref = uniq_ref[:64]
         uniq_ref = blake2b(key=str.encode(uniq_ref), digest_size=9).hexdigest()
         self.name = 'tf_{}'.format(uniq_ref)

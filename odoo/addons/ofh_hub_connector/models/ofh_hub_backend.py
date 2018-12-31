@@ -154,6 +154,7 @@ class HubBackend(models.Model):
 
     @api.multi
     def import_payment_requests(self):
-        self._import_from_date(
+        backend = self.search([], limit=1)
+        backend._import_from_date(
             'hub.payment.request', 'import_payment_request_from_date')
         return True

@@ -18,6 +18,7 @@
     'data': [
         'wizards/ofh_payment_request_integration_update.xml',
         'data/backend.xml',
+        'data/cron.xml',
         'views/ofh_payment_request.xml',
         'wizards/ofh_payment_request_sap_import.xml',
     ],

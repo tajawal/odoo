@@ -120,6 +120,10 @@ class SupplierInvoiceLineHandler(Component):
         uniq_ref = f"{values.get('locator')}{values.get('passenger')}" \
                    f"{values.get('invoice_date')}{values.get('total')}" \
                    f"{values.get('index')}"
+
+        # blake2b accepts only 64 bytes
+        if len(uniq_ref) >= 64:
+            uniq_ref = uniq_ref[:64]
         uniq_ref = blake2b(key=str.encode(uniq_ref), digest_size=9).hexdigest()
 
         return [

@@ -15,6 +15,7 @@
     'data': [
         # 'security/ofh_hub_backend.xml',
         'views/ofh_hub_backend.xml',
+        'data/cron.xml',
     ],
     'demo': [
         'demo/hub_backend.xml',
