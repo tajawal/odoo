@@ -9,7 +9,7 @@ limit_time_cpu = 300
 limit_time_real = 1200
 
 [queue_job]
-channels = root:$worker,root.hub:2,root.import:1
+channels = root:2,root.hub:2,root.import:1:throttle=2
 
 [hub_backend.$myenv-hub]
 hub_api_location=$hub_api_location
