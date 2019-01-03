@@ -5,10 +5,11 @@ metadata:
   name: finance-hub-config
   namespace: default
 data:
-  db_endpoint: "finance-hub-dev.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"	
+  db_endpoint: "finance-hub-dev.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"
   myenv: "dev"
   worker: "2"
   hub_source : "hub-dev"
+  logging_json: "1"
 
 ---
 
@@ -61,24 +62,24 @@ spec:
           containerPort: 8069
         livenessProbe:
           httpGet:
-            path: /
+            path: /monitoring/status
             port: 8069
-          initialDelaySeconds: 90
-          timeoutSeconds: 30
-          periodSeconds: 60
+          initialDelaySeconds: 60
+          timeoutSeconds: 15
+          periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /
+            path: /monitoring/status
             port: 8069
-          initialDelaySeconds: 120
-          timeoutSeconds: 45
-          periodSeconds: 120
+          initialDelaySeconds: 75
+          timeoutSeconds: 20
+          periodSeconds: 15
         env:
         - name: db_name
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              key: finance-hub-postgresqldb-name   
+              key: finance-hub-postgresqldb-name
         - name: db_user
           valueFrom:
             secretKeyRef:
@@ -139,7 +140,7 @@ spec:
             secretKeyRef:
               name: finance-hub-secret
               key: finance-hub-sap-xml-api-password
-        
+
         - name: db_endpoint
           valueFrom:
             configMapKeyRef:
@@ -160,6 +161,11 @@ spec:
             configMapKeyRef:
               name: finance-hub-config
               key: hub_source
+        - name: ODOO_LOGGING_JSON
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: logging_json
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:
