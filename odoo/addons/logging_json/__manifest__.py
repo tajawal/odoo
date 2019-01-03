@@ -12,7 +12,7 @@
         'base'
     ],
     'external_dependencies': {
-        'python': ['pythonjsonlogger'],
+        'python': ['python-json-logger'],
     },
     'website': 'http://www.camptocamp.com',
     'data': [],
