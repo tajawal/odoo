@@ -4,7 +4,7 @@ cat > /opt/finance_hub/odoo.cfg << EOL
 running_env=$myenv
 admin_passwd=$admin_passwd
 worker=$worker
-server_wide_modules=web,queue_job
+server_wide_modules=web,queue_job,logging_json
 limit_time_cpu = 300
 limit_time_real = 1200
 
