@@ -24,6 +24,9 @@
         'web_dialog_size',
         'web_environment_ribbon',
         'web_sheet_full_width',
+        # Infra modules
+        'logging_json',
+        'monitoring_status',
     ],
     'data': [
     ],

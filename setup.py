@@ -13,11 +13,17 @@ setup(
     setup_requires=['setuptools-odoo'],
     install_requires=[
         'click-odoo-contrib',
+        'python-json-logger',
     ],
     odoo_addons={
         'depends_override': {
             'module_auto_update':
                 'odoo11-addon-module_auto_update>=11.0.2.0.0',
+        },
+        'external_dependencies_override': {
+            'python': {
+                'pythonjsonlogger': 'python-json-logger>=0.1.10',
+            },
         },
     },
 )
