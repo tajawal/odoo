@@ -28,5 +28,9 @@ class Monitoring(http.Controller):
         # tested in odoo source code, but we wouldn't check the health of
         # Redis.
         if not session.uid:
-            session.should_save = False
+            # in werkzeug `should_save` is property attribute that depends on
+            # `modified` attribute. So it can't be set directly instead we
+            # set the `modified` attribute to false when odoo checks
+            # `should_save` it wll be False hence the session won't be stored.
+            session.modified = False
         return werkzeug.wrappers.Response(json.dumps(info), headers=headers)
