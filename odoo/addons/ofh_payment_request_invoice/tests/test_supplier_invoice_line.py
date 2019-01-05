@@ -11,6 +11,7 @@ class TestSupplierInvoiceLine(TransactionCase):
     def setUp(self):
         super(TestSupplierInvoiceLine, self).setUp()
         self.invoice_line_model = self.env['ofh.supplier.invoice.line']
+        self.pr_model = self.env['ofh.payment.request']
 
         # Payment requests
         self.payment_request_1 = self.env.ref(
@@ -95,7 +96,7 @@ class TestSupplierInvoiceLine(TransactionCase):
             self.payment_request_2.reconciliation_status, 'investigate')
         self.assertEquals(len(self.payment_request_2.supplier_invoice_ids), 0)
         self.assertEquals(
-            self.supplier_invoice_3.state, 'not_matched')
+            self.supplier_invoice_3.state, 'ready')
 
         # Case Suggest matching
         self.assertEquals(
@@ -112,7 +113,7 @@ class TestSupplierInvoiceLine(TransactionCase):
         self.assertEquals(
             self.payment_request_5.reconciliation_status, 'investigate')
         self.assertEquals(
-            self.supplier_invoice_5.state, 'not_matched')
+            self.supplier_invoice_5.state, 'ready')
 
     def test_tf_match_supplier_invoice_lines(self):
         # Case where one PR matches one or multiple supplier invoices
@@ -129,7 +130,7 @@ class TestSupplierInvoiceLine(TransactionCase):
             len(self.payment_request_6.supplier_invoice_ids), 2)
 
         # Case where the PR doesn't match any supplier invoice
-        self.assertEquals(self.supplier_invoice_8.state, 'not_matched')
+        self.assertEquals(self.supplier_invoice_8.state, 'ready')
         self.assertEquals(
             self.payment_request_7.reconciliation_status, 'investigate')
         self.assertEquals(
@@ -142,13 +143,8 @@ class TestSupplierInvoiceLine(TransactionCase):
         self.assertEquals(
             len(self.payment_request_8.supplier_invoice_ids), 1)
 
-        # Case Multiple payment requests against one supplier invoice
-        self.assertEquals(
-            self.payment_request_9.reconciliation_status, 'investigate')
-        self.assertEquals(
-            self.payment_request_10.reconciliation_status, 'investigate')
-        self.assertEquals(self.supplier_invoice_10.state, 'not_matched')
-        self.assertEquals(self.supplier_invoice_11.state, 'not_matched')
+        self.assertEquals(self.supplier_invoice_10.state, 'ready')
+        self.assertEquals(self.supplier_invoice_11.state, 'matched')
 
     def test_aig_match_supplier_invoice_lines(self):
         # Case where one PR matches one or multiple supplier invoices
@@ -165,8 +161,8 @@ class TestSupplierInvoiceLine(TransactionCase):
 
         self.assertEquals(
             self.payment_request_13.reconciliation_status, 'investigate')
-        self.assertEquals(self.supplier_invoice_14.state, 'not_matched')
-        self.assertEquals(self.supplier_invoice_15.state, 'not_matched')
+        self.assertEquals(self.supplier_invoice_14.state, 'ready')
+        self.assertEquals(self.supplier_invoice_15.state, 'ready')
 
     def test_force_match(self):
         self.payment_request_1.order_type = 'flight'
@@ -194,3 +190,23 @@ class TestSupplierInvoiceLine(TransactionCase):
                 {'line_id': self.supplier_invoice_3.id,
                  'new_payment_request_id': self.payment_request_1.id})
             wizard.force_match()
+
+    def test_unlink_payment_request(self):
+        self.payment_request_1.supplier_invoice_ids = \
+            self.supplier_invoice_1 | self.supplier_invoice_2
+        self.payment_request_1.reconciliation_status = 'matched'
+        self.payment_request_1.supplier_invoice_ids.write(
+            {'state': 'forced'})
+        self.assertEquals(
+            self.supplier_invoice_1.payment_request_id, self.payment_request_1)
+        self.assertEquals(
+            self.supplier_invoice_2.payment_request_id, self.payment_request_1)
+
+        self.supplier_invoice_1.unlink_payment_request()
+        self.assertFalse(self.supplier_invoice_1.payment_request_id)
+        self.assertEquals(self.supplier_invoice_1.state, 'not_matched')
+
+        self.supplier_invoice_2.unlink_payment_request()
+        self.assertFalse(self.payment_request_1.supplier_invoice_ids)
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'investigate')

@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, _
-from dateutil.relativedelta import relativedelta
 
 
 class OfhPaymentRequest(models.Model):
@@ -41,31 +40,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
     )
 
-    @api.multi
-    def _add_investigate_activity(self):
-        activity_type_id = self.env.ref(
-            'ofh_payment_request.ofh_payment_request_activity_match').id
-        users = self.env.ref(
-            'ofh_payment_request.ofh_payment_request_manager').users
-        deadline = fields.Date.from_string(
-            fields.Date.today()) + relativedelta(days=2)
-        note = _("The payment request didn't match with any Supplier "
-                 "Inovice. Please investigate it.")
-        model_id = self.env.ref(
-            'ofh_payment_request.model_ofh_payment_request').id
-        for rec in self:
-            if rec.reconciliation_status != 'investigate':
-                continue
-            rec.env['mail.activity'].create({
-                'activity_type_id': activity_type_id,
-                'note': note,
-                'res_id': rec.id,
-                'date_deadline': fields.Date.to_string(deadline),
-                'res_model_id': model_id,
-                'user_ids': [(6, 0, users.ids)]
-            })
-        return True
-
     @api.model
     def _get_unreconciled_payment_requests(self):
         """
@@ -95,9 +69,8 @@ class OfhPaymentRequest(models.Model):
                     kwd_invoices = rec.supplier_invoice_ids.filtered(
                         lambda i: i.currency_id == self.env.ref('base.KWD'))
                     rec.supplier_total_amount = sum(
-                        [i.gds_net_amount if
-                         i.invoice_type == 'gds' else i.total
-                         for i in rec.supplier_invoice_ids])
+                        [i.gds_net_amount if i.invoice_type == 'gds' else
+                         i.total for i in rec.supplier_invoice_ids])
                     rec.supplier_currency_id = \
                         rec.supplier_invoice_ids.mapped('currency_id')[0]
                     if not kwd_invoices:
@@ -123,10 +96,11 @@ class OfhPaymentRequest(models.Model):
                         rec.order_supplier_currency or rec.currency_id
                 continue
             if rec.request_type == 'refund':
-                rec.supplier_total_amount = \
-                    ((rec.total_amount / rec.order_amount) *
-                     rec.order_supplier_cost)
-                rec.supplier_currency_id = rec.order_supplier_currency
+                if rec.order_amount:
+                    rec.supplier_total_amount = \
+                        ((rec.total_amount / rec.order_amount) *
+                         rec.order_supplier_cost)
+                    rec.supplier_currency_id = rec.order_supplier_currency
             else:
                 # Case of amendment
                 rec.supplier_total_amount = rec.total_amount

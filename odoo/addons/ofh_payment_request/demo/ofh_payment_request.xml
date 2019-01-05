@@ -291,4 +291,26 @@
         <field name="charge_id">charge_A8EBFC278J1D7A1C689D</field>
     </record>
 
+    <record id="ofh_payment_request_generic_1" model="ofh.payment.request">
+        <field name="track_id">pr-A8888888888-1540490197011</field>
+        <field name="order_reference">A8888888888</field>
+        <field name="created_at">2018-08-30</field>
+        <field name="updated_at">2018-08-30</field>
+        <field name="request_type">refund</field>
+        <field name="request_reason">Fraud</field>
+        <field name="request_status">Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5b4bc485d6f217e9fb58c523</field>
+        <field name="hub_supplier_reference">KC282969</field>
+        <field name="vendor_id">GF</field>
+        <field name="total_amount">5083</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="tax_code">sz</field>
+        <field name="fees">
+            {"fareDifference": 5083}
+        </field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="charge_id">charge_A8EBFC278J1D7A1C689D</field>
+    </record>
+
 </odoo>
