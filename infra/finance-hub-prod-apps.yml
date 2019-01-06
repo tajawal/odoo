@@ -52,10 +52,10 @@ spec:
         resources:
           limits:
             cpu: "4"
-            memory: 4Gi
+            memory: 8Gi
           requests:
             cpu: "3"
-            memory: 3Gi
+            memory: 6Gi
         ports:
         - name: finance-hub
           containerPort: 8069
