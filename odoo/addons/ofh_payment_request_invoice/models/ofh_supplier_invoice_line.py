@@ -1,9 +1,10 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
+
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
-import logging
 
 _logger = logging.getLogger(__name__)
 
@@ -78,8 +79,18 @@ class OfhSupplierInvoiceLine(models.Model):
     @job(default_channel='root')
     def match_supplier_invoice_lines(self):
         """Match supplier invoice lines with payment request."""
-        _logger.info('Matching payment requests with invoice lines started')
+        _logger.info('Matching payment requests with invoice lines')
+
+        # Get all payment requests that haven't been matched yet.
         pr_model = self.env['ofh.payment.request']
+        _logger.info('Get payment request matching condidates')
+        unreconciled_prs = pr_model._get_unreconciled_payment_requests()
+        if not unreconciled_prs:
+            return self.env.user.notify_info(
+                "No Payment Request available for matching.")
+        _logger.info(
+            '%s payments request matching condidates', len(unreconciled_prs))
+
         # Get all the invoice lines that haven't been matched yet.
         _logger.info('Get invoice lines matching condidates')
         pending_lines = self._get_pending_invoice_lines()
@@ -90,20 +101,12 @@ class OfhSupplierInvoiceLine(models.Model):
                 "No Supplier Invoice Line available for matching.")
         _logger.info('%s lines matching condidates found', len(pending_lines))
 
-        _logger.info('Get payment request matching condidates')
-        unreconciled_prs = pr_model._get_unreconciled_payment_requests()
-        # If all PRS are reconciled. Means the payment request related to
-        # selected invoices are not synchronised yet.
-        if not unreconciled_prs:
-            pending_lines.write({'state': 'not_matched'})
-            return self.env.user.notify_info(
-                "No Payment Request available for matching.")
-        _logger.info(
-            '%s lines payment request matching condidates',
-            len(unreconciled_prs))
         from_str = fields.Date.from_string
+
         # Pivot the supplier lines by date and locator
         lines_by_pnr = pending_lines._get_invoice_lines_by_pnr()
+
+        _logger.info('Matching payment requests with invoice lines started.')
         pr_by_invoices = {}
         for pr in unreconciled_prs:
             for dt in lines_by_pnr:
@@ -120,6 +123,7 @@ class OfhSupplierInvoiceLine(models.Model):
                             pr_by_invoices[pr] |= \
                                 lines_by_pnr[dt][status][locator]
         _logger.info(
+            "Matching payment requests with invoice lines started is done."
             "Updating the matched invoice lines with the payment request.")
         with self.env.norecompute():
             for pr in pr_by_invoices:
@@ -145,9 +149,6 @@ class OfhSupplierInvoiceLine(models.Model):
 
         # Recompute computed fields, been skipped using the context previously.
         unreconciled_prs.recompute()
-        unreconciled_prs
-        _logger.info(
-            'Matching payment requests with invoice lines is done.')
 
         return self.env.user.notify_info(
             "Matching with Supplier Invoices is done.")

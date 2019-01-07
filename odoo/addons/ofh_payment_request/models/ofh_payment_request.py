@@ -304,7 +304,7 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     @api.depends('reconciliation_status', 'order_created_at', 'created_at',
-                 'is_investigated')
+                 'is_investigated', 'request_type')
     def _compute_need_to_investigate(self):
         from_str = fields.Date.from_string
         for rec in self:
@@ -368,6 +368,8 @@ class OfhPaymentRequest(models.Model):
     @api.depends('order_reference')
     def _compute_payment_request_status(self):
         for rec in self:
+            # TODO: not sure what to use here,
+            # either order_id or order reference
             rec.payment_request_status = \
                 'ready' if rec.order_reference else 'incomplete'
 
@@ -394,7 +396,9 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     def action_supplier_status_not_appilicable(self):
-        return self.write({'reconciliation_status': 'not_applicable'})
+        records = self.filtered(
+            lambda r: r.reconciliation_status in ('investigate', 'pending'))
+        return records.write({'reconciliation_status': 'not_applicable'})
 
     @api.multi
     def action_mark_as_investigated(self):

@@ -136,6 +136,7 @@ class OfhPaymentRequest(models.Model):
     @api.depends('order_discount', 'request_type', 'total_amount', 'discount',
                  'order_amount')
     def _compute_sap_zsel(self):
+        """Compute Gross revenue, discount, payment amount 1 and 2."""
         for rec in self:
             rec.sap_zsel = rec.sap_zdis = rec.sap_payment_amount1 = \
                 rec.sap_payment_amount2 = 0.0
@@ -154,8 +155,12 @@ class OfhPaymentRequest(models.Model):
             # For refunds we prorate the discount using the initial order
             # amount and initial order discount.
             else:
-                discount = \
-                    (rec.total_amount / rec.order_amount) * rec.order_discount
+                if rec.order_amount:
+                    discount = \
+                        (rec.total_amount / rec.order_amount) * \
+                        rec.order_discount
+                else:
+                    discount = 0
                 discount = abs(discount)
                 rec.sap_zsel = rec.total_amount + discount
                 rec.sap_zdis = discount
@@ -167,6 +172,7 @@ class OfhPaymentRequest(models.Model):
         'supplier_total_amount', 'supplier_shamel_total_amount',
         'supplier_currency_id', 'fare_difference', 'penalty')
     def _compute_sap_zvd1(self):
+        """ Compute supplier cost to send to SAP."""
         for rec in self:
             rec.sap_zvd1 = 0.0
             if rec.reconciliation_status not in ('matched', 'not_applicable'):
@@ -195,6 +201,7 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @api.depends('output_vat_amount')
     def _compute_sap_zvt1(self):
+        """ Compute output VAT to SAP."""
         for rec in self:
             rec.sap_zvt1 = 0.0
             if rec.reconciliation_status not in ('matched', 'not_applicable'):
@@ -401,7 +408,7 @@ class OfhPaymentRequest(models.Model):
             'requestType': 'refund_order' if
             self.request_type == 'refund' else 'sale_order',
             'updates': {
-                'header':{
+                'header': {
                     'BookingDate': datetime.strftime(
                         fields.Datetime.from_string(
                             self.created_at), '%Y%m%d'),

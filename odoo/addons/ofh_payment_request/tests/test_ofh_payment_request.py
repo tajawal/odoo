@@ -54,11 +54,133 @@ class TestOfhPaymentRequest(TransactionCase):
         # Payment Request 1
         self.assertEquals(
             self.payment_request_1.payment_request_status, 'ready')
-        self.assertEquals(self.payment_request_1.sap_status, 'pending')
-        self.assertEquals(self.payment_request_1.state, 'pending')
 
-        # Payment Request 2
+        self.payment_request_1.order_reference = False
+
         self.assertEquals(
-            self.payment_request_2.payment_request_status, 'ready')
-        self.assertEquals(self.payment_request_2.sap_status, 'pending')
-        self.assertEquals(self.payment_request_2.state, 'pending')
+            self.payment_request_1.payment_request_status, 'incomplete')
+
+    def test_action_supplier_status_not_appilicable(self):
+        payment_requests = self.payment_request_1 + self.payment_request_2
+
+        # Case 1: both payment request reconcilation status are pending
+        payment_requests.action_supplier_status_not_appilicable()
+
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'not_applicable')
+        self.assertEquals(
+            self.payment_request_2.reconciliation_status, 'not_applicable')
+
+        # Case 2: both payment requests reconcilation status are investigate
+        payment_requests.write({'reconciliation_status': 'investigate'})
+        payment_requests.action_supplier_status_not_appilicable()
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'not_applicable')
+        self.assertEquals(
+            self.payment_request_2.reconciliation_status, 'not_applicable')
+
+        # Case 3: one of the payment request is already matched
+        payment_requests.write({'reconciliation_status': 'pending'})
+        self.payment_request_1.reconciliation_status = 'matched'
+        payment_requests.action_supplier_status_not_appilicable()
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'matched')
+        self.assertEquals(
+            self.payment_request_2.reconciliation_status, 'not_applicable')
+
+        # Case 4: one of the payment request is already not_applicable
+        self.payment_request_1.reconciliation_status = 'pending'
+        payment_requests.action_supplier_status_not_appilicable()
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'not_applicable')
+        self.assertEquals(
+            self.payment_request_2.reconciliation_status, 'not_applicable')
+
+    def test_compute_need_to_investigate(self):
+
+        # Case 1: reconciliation status is not in `matched` state.
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+        # Case 2: Payment request is in matched state and has no order creation
+        # date.
+        self.payment_request_1.reconciliation_status = 'matched'
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+        # Case 3: Payment is in matched state and has order creation date but
+        # it is a refund PR.
+        self.payment_request_1.order_created_at = '2018-10-09'
+        self.payment_request_1.request_type = 'refund'
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+        # Case 4: Payment request already investigated
+        self.payment_request_1.is_investigated = True
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+        # Case 5: All conditions are matched
+        self.payment_request_1.is_investigated = False
+        self.payment_request_1.request_type = 'charge'
+        self.assertTrue(self.payment_request_1.need_to_investigate)
+
+        # Case 6 order date is before request date
+        self.payment_request_1.order_created_at = '2018-10-08'
+        self.assertTrue(self.payment_request_1.need_to_investigate)
+
+        # Case 7 order date is after request date
+        self.payment_request_1.order_created_at = '2018-10-11'
+        self.assertTrue(self.payment_request_1.need_to_investigate)
+
+        # Case 8 order date is before request date and diff > 2
+        self.payment_request_1.order_created_at = '2018-10-06'
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+        # Case 9 order date is after request date
+        self.payment_request_1.order_created_at = '2018-10-13'
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+    def test_action_mark_as_investigated(self):
+
+        self.payment_request_1.order_created_at = '2018-10-09'
+        self.payment_request_1.reconciliation_status = 'matched'
+        self.assertTrue(self.payment_request_1.need_to_investigate)
+
+        self.payment_request_1.action_mark_as_investigated()
+
+        self.assertTrue(self.payment_request_1.is_investigated)
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+        self.payment_request_1.reconciliation_status = 'pending'
+        self.payment_request_1.is_investigated = False
+        self.payment_request_1.action_mark_as_investigated()
+
+        self.assertFalse(self.payment_request_1.is_investigated)
+        self.assertFalse(self.payment_request_1.need_to_investigate)
+
+    def test_compute_payment_reference(self):
+        self.assertEquals(
+            self.payment_request_1.charge_id,
+            self.payment_request_1.payment_reference)
+
+        self.payment_request_1.manual_payment_reference = 'manual_charge'
+        self.assertEquals(
+            self.payment_request_1.manual_payment_reference,
+            self.payment_request_1.payment_reference)
+
+        self.payment_request_1.manual_payment_reference = False
+        self.assertEquals(
+            self.payment_request_1.charge_id,
+            self.payment_request_1.payment_reference)
+
+    def test_compute_supplier_reference(self):
+        self.assertEquals(
+            self.payment_request_1.hub_supplier_reference,
+            self.payment_request_1.supplier_reference)
+
+        self.payment_request_1.manual_supplier_reference = 'manual_reference'
+        self.assertEquals(
+            self.payment_request_1.manual_supplier_reference,
+            self.payment_request_1.supplier_reference)
+
+        self.payment_request_1.manual_supplier_reference = False
+        self.assertEquals(
+            self.payment_request_1.hub_supplier_reference,
+            self.payment_request_1.supplier_reference)
