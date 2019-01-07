@@ -270,6 +270,7 @@ class OfhPaymentRequest(models.Model):
     need_to_investigate = fields.Boolean(
         string="Matching needs investigation",
         compute='_compute_need_to_investigate',
+        search='_search_need_to_investigate',
         readonly=True,
         store=False,
     )
@@ -321,6 +322,22 @@ class OfhPaymentRequest(models.Model):
                 from_str(rec.order_created_at) -
                 from_str(rec.created_at)).days)
             rec.need_to_investigate = diff <= 2
+
+    def _search_need_to_investigate(self, operator, operand):
+        self.env.cr.execute(
+            """
+            SELECT id
+            FROM ofh_payment_request as pr
+            WHERE ABS(
+                EXTRACT(DAY FROM pr.created_at) -
+                EXTRACT(DAY FROM pr.order_created_at)) <= 2 AND
+                reconciliation_status = 'matched' AND request_type = 'charge'
+            """)
+        ids = self.env.cr.fetchall()
+        if (operator == '=' and operand) or (operator == '!=' and not operand):
+            return [('id', 'in', ids)]
+        else:
+            return [('id', 'not in', ids)]
 
     @api.multi
     @api.depends('hub_supplier_reference', 'manual_supplier_reference')

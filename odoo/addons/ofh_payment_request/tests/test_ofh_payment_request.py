@@ -10,6 +10,7 @@ class TestOfhPaymentRequest(TransactionCase):
     def setUp(self):
         super(TestOfhPaymentRequest, self).setUp()
 
+        self.pr_model = self.env['ofh.payment.request']
         self.payment_request_1 = self.env.ref(
             'ofh_payment_request.ofh_payment_request_gds_1')
         self.payment_request_2 = self.env.ref(
@@ -136,6 +137,32 @@ class TestOfhPaymentRequest(TransactionCase):
         # Case 9 order date is after request date
         self.payment_request_1.order_created_at = '2018-10-13'
         self.assertFalse(self.payment_request_1.need_to_investigate)
+
+    def test_search_need_to_investigate(self):
+        payment_requests = self.pr_model.search([])
+        count = len(payment_requests)
+        pr_no_investigations = self.pr_model.search(
+            [('need_to_investigate', '=', False)])
+        self.assertEquals(len(pr_no_investigations), count)
+
+        pr_need_investigations = self.pr_model.search(
+            [('need_to_investigate', '=', True)])
+        self.assertFalse(pr_need_investigations)
+
+        self.payment_request_1.write({
+            'order_created_at': '2018-10-11',
+            'request_type': 'charge',
+            'reconciliation_status': 'matched',
+        })
+
+        pr_no_investigations = self.pr_model.search(
+            [('need_to_investigate', '=', False)])
+        self.assertEquals(len(pr_no_investigations), count - 1)
+
+        pr_need_investigations = self.pr_model.search(
+            [('need_to_investigate', '=', True)])
+        self.assertTrue(pr_need_investigations)
+        self.assertEquals(len(pr_need_investigations), 1)
 
     def test_action_mark_as_investigated(self):
 
