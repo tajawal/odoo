@@ -118,22 +118,24 @@
                 <field name="supplier_reference"/>
                 <field name="vendor_id"/>
                 <separator/>
+                <filter name="need_to_investigate" string="Need to Investigate" domain="[('need_to_investigate', '=', True)]"/>
+                <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
                 <filter name="almosafer" string="Almosafer" domain="[('entity', '=', 'almosafer')]"/>
                 <!-- Payment Request Status -->
                 <separator/>
-                <filter name="incomplete_pr" string="Incomplete Data" 
+                <filter name="incomplete_pr" string="Incomplete Data"
                         domain="[('payment_request_status', '=', 'incomplete')]"/>
                 <filter name="ready_pr" string="Ready for matching"
                         domain="[('payment_request_status', '=', 'ready')]"/>
                 <separator/>
-                <filter name="charge_pr" string="Charge" 
+                <filter name="charge_pr" string="Charge"
                         domain="[('request_type', '=', 'charge')]"/>
                 <filter name="refund_pr" string="Refund"
                         domain="[('request_type', '=', 'refund')]"/>
-                <filter name="void_pr" string="Void" 
+                <filter name="void_pr" string="Void"
                         domain="[('request_type', '=', 'void')]"/>
-                
+
                 <separator/>
                 <!-- Supplier status -->
                 <filter name="supplier_pending_status" string="Pending"
