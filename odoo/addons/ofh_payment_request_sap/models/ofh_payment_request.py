@@ -401,6 +401,9 @@ class OfhPaymentRequest(models.Model):
     def _get_sale_sap_xml_api_payload(self, source):
         """Return the sale payload to send to SAP-XML-API."""
         self.ensure_one()
+        booking_date = datetime.strftime(
+            fields.Datetime.from_string(
+                self.created_at), '%Y%m%d'),
         return {
             'orderId': self.order_id,
             'trackId': self.track_id,
@@ -409,12 +412,11 @@ class OfhPaymentRequest(models.Model):
             self.request_type == 'refund' else 'sale_order',
             'updates': {
                 'header': {
-                    'BookingDate': datetime.strftime(
-                        fields.Datetime.from_string(
-                            self.created_at), '%Y%m%d'),
+                    'BookingDate': booking_date,
                 },
                 'item_general': {
-                    'pnr': self.sap_pnr
+                    'pnr': self.sap_pnr,
+                    'BillingDate': booking_date,
                 },
                 'item_condition': {
                     'ZVD1': self.sap_zvd1,
