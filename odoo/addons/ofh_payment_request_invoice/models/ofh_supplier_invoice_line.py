@@ -3,6 +3,7 @@
 
 import logging
 
+from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
 
@@ -46,8 +47,11 @@ class OfhSupplierInvoiceLine(models.Model):
             suggested.write({'state': 'suggested'})
 
     @api.model
-    def _get_pending_invoice_lines(self):
-        return self.search([('state', 'in', ('ready', 'not_matched'))])
+    def _get_pending_invoice_lines(self, min_date=False):
+        domain = [('state', 'in', ('ready', 'not_matched'))]
+        if min_date:
+            domain.append(('invoice_date', '>=', min_date))
+        return self.search(domain)
 
     @api.multi
     def unlink_payment_request(self):
@@ -93,7 +97,13 @@ class OfhSupplierInvoiceLine(models.Model):
 
         # Get all the invoice lines that haven't been matched yet.
         _logger.info('Get invoice lines matching condidates')
-        pending_lines = self._get_pending_invoice_lines()
+
+        # beceause prs are ordered by creation date ASC we're allowed to do
+        # the following
+        min_date = fields.Date.to_string(
+            fields.Date.from_string(unreconciled_prs[0].created_at) -
+            relativedelta(days=3))
+        pending_lines = self._get_pending_invoice_lines(min_date=min_date)
 
         # This is an ultimate case goal but can happen.
         if not pending_lines:
@@ -123,7 +133,7 @@ class OfhSupplierInvoiceLine(models.Model):
                             pr_by_invoices[pr] |= \
                                 lines_by_pnr[dt][status][locator]
         _logger.info(
-            "Matching payment requests with invoice lines started is done."
+            "Matching payment requests with invoice lines is done."
             "Updating the matched invoice lines with the payment request.")
         with self.env.norecompute():
             for pr in pr_by_invoices:
