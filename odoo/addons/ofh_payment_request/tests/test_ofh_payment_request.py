@@ -164,6 +164,24 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertTrue(pr_need_investigations)
         self.assertEquals(len(pr_need_investigations), 1)
 
+        # Case created_at date and order_created_at date are timestamp format
+        self.payment_request_1.created_at = '2018-10-11 23:50:55'
+        self.payment_request_1.order_created_at = '2018-10-09 23:55:00'
+        pr_need_investigations = self.pr_model.search(
+            [('need_to_investigate', '=', True)])
+        self.assertTrue(pr_need_investigations)
+
+        self.payment_request_1.created_at = '2018-10-11 23:50:55'
+        self.payment_request_1.order_created_at = '2018-10-08 22:00:00'
+        pr_need_investigations = self.pr_model.search(
+            [('need_to_investigate', '=', True)])
+        self.assertFalse(pr_need_investigations)
+
+        self.payment_request_1.is_investigated = True
+        pr_need_investigations = self.pr_model.search(
+            [('need_to_investigate', '=', True)])
+        self.assertFalse(pr_need_investigations)
+
     def test_action_mark_as_investigated(self):
 
         self.payment_request_1.order_created_at = '2018-10-09'

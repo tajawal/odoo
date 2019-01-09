@@ -328,9 +328,9 @@ class OfhPaymentRequest(models.Model):
             """
             SELECT id
             FROM ofh_payment_request as pr
-            WHERE ABS(
-                EXTRACT(DAY FROM pr.created_at) -
-                EXTRACT(DAY FROM pr.order_created_at)) <= 2 AND
+            WHERE
+                is_investigated = False AND
+                pr.created_at - pr.order_created_at  <= interval '48 hours' AND
                 reconciliation_status = 'matched' AND request_type = 'charge'
             """)
         ids = self.env.cr.fetchall()
