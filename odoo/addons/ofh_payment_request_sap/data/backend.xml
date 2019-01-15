@@ -7,6 +7,7 @@
     <record id="sap_sale_import_backend" model="import.backend">
         <field name="name">SAP Sale Report Importer</field>
         <field name="version">1.0</field>
+        <field name="cron_cleanup_keep">1</field>
     </record>
 
     <record id="sap_sale_import_type" model="import.type">
@@ -20,6 +21,7 @@
     <record id="sap_payment_import_backend" model="import.backend">
         <field name="name">SAP Payment Report Importer</field>
         <field name="version">1.0</field>
+        <field name="cron_cleanup_keep">1</field>
     </record>
 
     <record id="sap_payment_import_type" model="import.type">
