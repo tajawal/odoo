@@ -70,9 +70,8 @@ running ``./freeze.sh`` and checking there is no change in ``requirements.txt``.
 To release manually
 ...................
 
-- update version in ``acsoo.cfg`` and ``odoo_finance_hub_all/__manifest__.py``
-- commit everything
-- run ``acsoo release``
+- update ``bumpversion patch|minor|major``
+- run ``acsoo release`` to tag the commit.
 
 At that point the resulting wheel files in ``./release`` contain all the
 code to be deployed.
