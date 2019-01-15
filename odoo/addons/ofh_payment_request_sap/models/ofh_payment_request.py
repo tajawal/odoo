@@ -250,6 +250,8 @@ class OfhPaymentRequest(models.Model):
         """
         pr_not_in_integration = \
             self._get_payment_request_not_sent_by_integration()
+        pr_not_in_integration = pr_not_in_integration.with_context(
+            tracking_disable=True)
         for payment_request in pr_not_in_integration:
             payment_request.with_delay().update_sap_xml_details()
 
