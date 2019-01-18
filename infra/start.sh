@@ -5,8 +5,12 @@ running_env=$myenv
 admin_passwd=$admin_passwd
 worker=$worker
 server_wide_modules=web,queue_job,logging_json
-limit_time_cpu = 300
+limit_memory_hard = 1677721600
+limit_memory_soft = 629145600
+limit_request = 8192
+limit_time_cpu = 600
 limit_time_real = 1200
+max_cron_threads = 1
 
 [queue_job]
 channels = root:2,root.hub:2,root.import:1:throttle=2
