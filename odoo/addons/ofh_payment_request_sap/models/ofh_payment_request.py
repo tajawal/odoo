@@ -438,7 +438,8 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     def _get_payment_sap_xml_api_payload(self, source):
         """Return the payment payload to send to SAP-XML-API."""
-        return {
+        self.ensure_one()
+        payload = {
             'orderId': self.order_id,
             'trackId': self.track_id,
             'source': source,
@@ -452,6 +453,10 @@ class OfhPaymentRequest(models.Model):
                 'Amount2': self.sap_payment_amount2,
             }
         }
+        if self.auth_code:
+            payload['updates']['ReferenceKey3'] = self.auth_code
+
+        return payload
 
     @api.multi
     def write(self, vals):
