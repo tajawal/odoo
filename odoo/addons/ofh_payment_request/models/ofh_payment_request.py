@@ -49,6 +49,13 @@ class OfhPaymentRequest(models.Model):
         index=True,
         readonly=True,
     )
+    is_egypt = fields.Boolean(
+        string='Is Egypt?',
+        index=True,
+        default=False,
+        help='True of the Payment request is related to an order created from'
+             'Egypt office',
+    )
     auth_code = fields.Char(
         readonly=True,
     )

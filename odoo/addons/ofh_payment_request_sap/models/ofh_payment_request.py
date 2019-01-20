@@ -149,7 +149,7 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     @api.depends('order_discount', 'request_type', 'total_amount', 'discount',
-                 'order_amount')
+                 'order_amount', 'sap_zvd1', 'is_egypt')
     def _compute_sap_zsel(self):
         """Compute Gross revenue, discount, payment amount 1 and 2."""
         for rec in self:
@@ -181,6 +181,10 @@ class OfhPaymentRequest(models.Model):
                 rec.sap_zdis = discount
                 rec.sap_payment_amount1 = rec.total_amount
                 rec.sap_payment_amount2 = rec.total_amount * -1
+
+            # For Egypt orders the zsel is the zvd1 amount
+            if rec.is_egypt:
+                rec.sap_zsel = rec.sap_zvd1
 
     @api.multi
     @api.depends(

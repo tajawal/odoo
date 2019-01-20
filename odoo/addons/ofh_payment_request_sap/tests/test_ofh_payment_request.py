@@ -186,6 +186,15 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
         self.assertAlmostEquals(
             self.pr_1.sap_payment_amount2, self.pr_1.sap_payment_amount1 * -1)
 
+        # Egypte order
+        self.pr_1.is_egypt = True
+        self.assertAlmostEquals(self.pr_1.sap_zsel, self.pr_1.sap_zvd1)
+        self.assertAlmostEquals(self.pr_1.sap_zdis, 0)
+        self.assertAlmostEquals(
+            self.pr_1.sap_payment_amount1, self.pr_1.total_amount)
+        self.assertAlmostEquals(
+            self.pr_1.sap_payment_amount2, self.pr_1.sap_payment_amount1 * -1)
+
     def test_compute_transaction_type_1(self):
         """
         - Case 1: Refund/void order with checkout as provider

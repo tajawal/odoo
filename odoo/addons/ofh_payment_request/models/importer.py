@@ -154,6 +154,12 @@ class HubPaymentRequestImportMapper(Component):
             'payment_method': record['response']['metadata'].get('paymentMode')
         }
 
+    def is_egypt(self, record):
+        app_details = record.get('app_details')
+        if not app_details:
+            return {}
+        return {'is_egypt': app_details.get('is_almosafer_egypt', False)}
+
 
 class HubPaymentRequestBatchImporter(Component):
     _name = 'hub.batch.payment.request.importer'
