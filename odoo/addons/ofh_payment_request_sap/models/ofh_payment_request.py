@@ -451,6 +451,7 @@ class OfhPaymentRequest(models.Model):
                         self.created_at), '%Y%m%d'),
                 'Amount1': self.sap_payment_amount1,
                 'Amount2': self.sap_payment_amount2,
+                'Currency': self.currency_id.name,
             }
         }
         if self.auth_code:
