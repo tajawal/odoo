@@ -12,8 +12,7 @@ try:
     from odoo.addons.server_environment import serv_config
 except ImportError:
     logging.getLogger('odoo.module').warning(
-        'server_environment not available in addons path. '
-        'server_env_connector_magento will not be usable')
+        'server_environment not available in addons path.')
 
 _logger = logging.getLogger(__name__)
 
