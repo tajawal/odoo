@@ -15,7 +15,7 @@
                     <field name="file_name" invisible="1"/>
                 </group>
                 <footer>
-                    <button name="run_matching"
+                    <button name="import_report"
                             string="Run Matching"
                             class="btn-primary"
                             type="object"/>

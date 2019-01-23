@@ -12,7 +12,7 @@
     'website': 'https://tajawal.com',
     'depends': [
         'mail',
-        'connector_importer',
+        'ofh_connector_importer',
         'web_notify',
     ],
     'data': [

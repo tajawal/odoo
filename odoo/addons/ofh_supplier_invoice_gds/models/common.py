@@ -15,7 +15,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def invoice_date(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
         dt = datetime.strptime(record.get('Date'), '%m/%d/%Y')
@@ -35,7 +35,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def invoice_status(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(
                 SupplierInvoiceLineMapper, self).invoice_status(record)
@@ -49,7 +49,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def passenger(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).passenger(record)
         return {'passenger': record.get("Passenger's name")}
@@ -57,7 +57,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def office_id(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).office_id(record)
         return {'office_id': record.get('Office ID')}
@@ -65,7 +65,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def ticket_number(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).ticket_number(record)
         return {'ticket_number': record.get("Ticket number")}
@@ -73,7 +73,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def locator(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).locator(record)
         return {'locator': record.get("Record locator")}
@@ -81,7 +81,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def vendor_id(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).vendor_id(record)
         return {'vendor_id': record.get("Airline Code")}
@@ -89,7 +89,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def total(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).total(record)
         return {'total': record.get('Total')}
@@ -97,7 +97,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def invoice_type(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_type(record)
         return {'invoice_type': 'gds'}
@@ -105,7 +105,7 @@ class SupplierInvoiceLineMapper(Component):
     @mapping
     def currency_id(self, record):
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record != gds_backend:
             return super(SupplierInvoiceLineMapper, self).currency_id(record)
         office = record.get("Office ID")
@@ -128,7 +128,7 @@ class SupplierInvoiceLineHandler(Component):
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the GDS invoice line record in odoo."""
         gds_backend = self.env.ref(
-           'ofh_supplier_invoice_gds.gds_import_backend')
+            'ofh_supplier_invoice_gds.gds_import_backend')
         if self.backend_record == gds_backend:
             return [
                 ('invoice_type', '=', 'gds'),

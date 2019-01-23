@@ -21,17 +21,11 @@ class OfhPaymentRequestSapImport(models.TransientModel):
     )
 
     @api.multi
-    def run_matching(self):
+    def import_report(self):
         """
         Run the matching of the uploaded file against payment
         """
         self.ensure_one()
-        source = self.env['import.source.csv'].create({
-            'csv_file': self.upload_file,
-            'csv_filename': self.file_name,
-            'csv_delimiter': ','})
-
-        # Run the import depending the type of file uploaded.
         if self.report_type == 'va05':
             import_type = self.env.ref(
                 'ofh_payment_request_sap.sap_sale_import_type')
@@ -43,10 +37,7 @@ class OfhPaymentRequestSapImport(models.TransientModel):
             backend = self.env.ref(
                 'ofh_payment_request_sap.sap_payment_import_backend')
 
-        recordset = self.env['import.recordset'].create({
-            'backend_id': backend.id,
-            'import_type_id': import_type.id,
-            'source_id': source.id,
-            'source_model': 'import.source.csv',
-        })
-        return recordset.run_import()
+        return backend._import_report(
+            import_type=import_type,
+            file_name=self.upload_file,
+            data=self.file_name)
