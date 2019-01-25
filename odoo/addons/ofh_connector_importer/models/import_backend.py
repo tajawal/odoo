@@ -4,9 +4,9 @@
 from odoo import api, models
 
 
-class ImportRecord(models.Model):
+class ImportBackend(models.Model):
 
-    _inherit = 'import.record'
+    _inherit = 'import.backend'
 
     @api.multi
     def _import_report(self, import_type, file_name, data):

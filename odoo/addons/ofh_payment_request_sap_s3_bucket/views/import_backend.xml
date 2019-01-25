@@ -4,23 +4,23 @@
 
 <odoo>
 
-    <record model="ir.ui.view" id="import_record_form_view">
-        <field name="name">import.record.form (in s3_bucket_connector_import)</field>
-        <field name="model">import.record</field>
+    <backend model="ir.ui.view" id="import_backend_form_view">
+        <field name="name">import.backend.form (in s3_bucket_connector_import)</field>
+        <field name="model">import.backend</field>
         <field name="inherit_id" ref="TODO othermodule.form_view"/>
         <field name="arch" type="xml">
             <!-- TODO -->
         </field>
-    </record>
+    </backend>
 
 
-    <record model="ir.ui.view" id="import_record_tree_view">
-        <field name="name">import.record.tree (in s3_bucket_connector_import)</field>
-        <field name="model">import.record</field>
+    <backend model="ir.ui.view" id="import_backend_tree_view">
+        <field name="name">import.backend.tree (in s3_bucket_connector_import)</field>
+        <field name="model">import.backend</field>
         <field name="inherit_id" ref="TODO othermodule.tree_view"/>
         <field name="arch" type="xml">
             <!-- TODO -->
         </field>
-    </record>
+    </backend>
 
 </odoo>

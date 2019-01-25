@@ -21,5 +21,5 @@ class OfhSupplierInvoiceImport(models.TransientModel):
 
         return backend._import_report(
             import_type=import_type,
-            file_name=self.upload_file,
-            data=self.file_name)
+            file_name=self.file_name,
+            data=self.upload_file)

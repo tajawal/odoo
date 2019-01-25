@@ -17,9 +17,9 @@ _logger = logging.getLogger(__name__)
 AWS_CONFIG_SECTION_NAME = 'aws.credentials'
 
 
-class ImportRecord(models.Model):
+class ImportBackend(models.Model):
 
-    _inherit = 'import.record'
+    _inherit = 'import.backend'
 
     is_s3_bucket = fields.Boolean(
         string='Use S3 Bucket',

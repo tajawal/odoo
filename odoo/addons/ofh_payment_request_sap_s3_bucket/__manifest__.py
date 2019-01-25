@@ -16,6 +16,6 @@
         'python': ['boto3'],
     },
     'data': [
-        # 'views/import_record.xml',
+        # 'views/import_backend.xml',
     ],
 }
