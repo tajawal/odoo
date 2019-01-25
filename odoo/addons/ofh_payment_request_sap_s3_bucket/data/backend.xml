@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_payment_request_sap.sap_sale_import_backend" model="import.backend">
+        <field name="is_s3_bucket" eval="True"/>
+        <field name="s3_bucket_file_prefix">VBAK</field>
+    </record>
+
+</odoo>

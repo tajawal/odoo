@@ -4,23 +4,25 @@
 
 <odoo>
 
-    <backend model="ir.ui.view" id="import_backend_form_view">
+    <record model="ir.ui.view" id="import_backend_form_view">
         <field name="name">import.backend.form (in s3_bucket_connector_import)</field>
         <field name="model">import.backend</field>
-        <field name="inherit_id" ref="TODO othermodule.form_view"/>
+        <field name="inherit_id" ref="connector_importer.view_import_backend_form"/>
         <field name="arch" type="xml">
-            <!-- TODO -->
+            <group name="actions" position="before">
+                <group name="s3_bucket"
+                       col="4"
+                       string="S3 Bucket Configuratin"
+                       attrs="{'invisible': [('is_s3_bucket', '=', False)]}">
+                    <field name="bucket_name"/>
+                    <field name="is_s3_bucket"/>
+                    <field name="last_sync_date"/>
+                    <field name="s3_bucket_file_prefix"/>
+                    <field name="aws_access_key_id"/>
+                    <field name="aws_secret_access_key"/>
+                </group>
+            </group>
         </field>
-    </backend>
-
-
-    <backend model="ir.ui.view" id="import_backend_tree_view">
-        <field name="name">import.backend.tree (in s3_bucket_connector_import)</field>
-        <field name="model">import.backend</field>
-        <field name="inherit_id" ref="TODO othermodule.tree_view"/>
-        <field name="arch" type="xml">
-            <!-- TODO -->
-        </field>
-    </backend>
+    </record>
 
 </odoo>
