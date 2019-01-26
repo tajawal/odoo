@@ -6,6 +6,7 @@ import io
 import logging
 
 import boto3
+import pytz
 from botocore.exceptions import ClientError
 from odoo import api, fields, models
 
@@ -132,12 +133,14 @@ class ImportBackend(models.Model):
         :rtype: list
         """
         self.ensure_one()
-        from_date = fields.Datetime.from_string(self.last_sync_date) or None
+        from_date = fields.Datetime.from_string(
+            self.last_sync_date).replace(tzinfo=pytz.timezone('UTC')) or None
         if from_date:
             files_to_import = [
                 content['Key'] for content in client.list_objects(
                     Bucket=self.bucket_name)['Contents'] if
-                from_date <= content['LastModified'] and
+                from_date <= content['LastModified'].replace(
+                    tzinfo=pytz.timezone('UTC')) and
                 str(content['Key']).startswith(self.s3_bucket_file_prefix)]
         else:
             files_to_import = [
