@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.cron" id="cron_ofh_payment_request_sap_sale_report_import">
+        <field name="name">Payment Request - Sync Sale Report</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="connector_importer.model_import_backend"/>
+        <field name="state">code</field>
+        <field name="code">model._import_sap_sale_report()</field>
+    </record>
+
+</odoo>

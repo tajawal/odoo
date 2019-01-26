@@ -17,6 +17,7 @@
     },
     'data': [
         'data/backend.xml',
+        'data/cron.xml',
         'views/import_backend.xml',
     ],
 }
