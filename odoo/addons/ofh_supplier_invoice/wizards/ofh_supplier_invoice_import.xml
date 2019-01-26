@@ -11,7 +11,7 @@
             <form>
                 <group>
                     <field name="file_type"/>
-                    <field name="upload_file" filename="file_name"/>
+                    <field name="upload_file" options="{'max_file_size': '100m'}" filename="file_name"/>
                     <field name="file_name" invisible="1"/>
                 </group>
                 <footer>

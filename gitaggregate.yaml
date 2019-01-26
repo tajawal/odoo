@@ -3,10 +3,11 @@
         odoo: https://github.com/odoo/odoo.git
         oca: https://github.com/OCA/OCB.git
         acsone: https://github.com/acsone/odoo.git
-        origin: https://github.com/zakiuu/odoo.git
+        origin: git@github.com:zakiuu/odoo.git
     merges:
         - oca 11.0
         - acsone 11.0-with-setup
+        - origin 11.0-backport_remove_arbitrary_file_upload_zak
     target: origin 11.0-ofh_master
 
 ./src/connector-interfaces:

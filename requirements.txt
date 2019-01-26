@@ -4,6 +4,7 @@
 argcomplete==1.9.4
 Babel==2.3.4
 beautifulsoup4==4.6.3
+boto3==1.9.83
 cachetools==2.1.0
 certifi==2018.10.15
 chardet==3.0.4
@@ -25,7 +26,7 @@ Mako==1.0.4
 MarkupSafe==0.23
 mock==2.0.0
 num2words==0.5.4
--e git+https://github.com/zakiuu/odoo.git@b1f85661e06e954a199916c28c254322b017c68d#egg=odoo
+-e git+https://github.com/zakiuu/odoo.git@b43df0ca3adca697840f9a2404ba1a42d35b8868#egg=odoo
 odoo11-addon-base-optional-quick-create==11.0.1.0.0.99.dev2
 odoo11-addon-component==11.0.1.1.0.99.dev10
 odoo11-addon-component-event==11.0.1.0.0.99.dev7
