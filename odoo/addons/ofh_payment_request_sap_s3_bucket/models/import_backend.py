@@ -95,12 +95,6 @@ class ImportBackend(models.Model):
 
         _importer_logger.info(
             "Get the list of files to import from the bucket.")
-        objects = client.list_objects(Bucket=backend.bucket_name)['Contents']
-        if not objects:
-            _importer_logger.warning(
-                f"The bucket {backend.bucket_name} is empty, "
-                "no file to import.")
-            return None
 
         files_to_import = backend._get_files_to_download(client=client)
 
@@ -134,18 +128,27 @@ class ImportBackend(models.Model):
         """
         self.ensure_one()
         from_date = fields.Datetime.from_string(
-            self.last_sync_date).replace(tzinfo=pytz.timezone('UTC')) or None
+            self.last_sync_date) or None
+        if from_date:
+            from_date = from_date.replace(tzinfo=pytz.timezone('UTC'))
+
+        objects = client.list_objects(Bucket=self.bucket_name).get('Contents')
+
+        if not objects:
+            _importer_logger.warning(
+                f"The bucket {self.bucket_name} is empty, "
+                "no file to import.")
+            return []
+
         if from_date:
             files_to_import = [
-                content['Key'] for content in client.list_objects(
-                    Bucket=self.bucket_name)['Contents'] if
+                content['Key'] for content in objects if
                 from_date <= content['LastModified'].replace(
                     tzinfo=pytz.timezone('UTC')) and
                 str(content['Key']).startswith(self.s3_bucket_file_prefix)]
         else:
             files_to_import = [
-                content['Key'] for content in client.list_objects(
-                    Bucket=self.bucket_name)['Contents'] if
+                content['Key'] for content in objects if
                 str(content['Key']).startswith(self.s3_bucket_file_prefix)]
 
         _importer_logger.info(

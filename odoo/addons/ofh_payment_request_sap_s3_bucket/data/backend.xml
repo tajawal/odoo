@@ -6,7 +6,7 @@
 
     <record id="ofh_payment_request_sap.sap_sale_import_backend" model="import.backend">
         <field name="is_s3_bucket" eval="True"/>
-        <field name="s3_bucket_file_prefix">VBAK</field>
+        <field name="s3_bucket_file_prefix">VBAK_</field>
     </record>
 
 </odoo>
