@@ -24,6 +24,15 @@ SAP_XML_USERNAME = 'sap_xml_api_username'
 SAP_XML_PASSWORD = 'sap_xml_api_password'
 SOURCE = 'hub_source'
 
+CREDIT_CARD_PAYMENT_PROVIDERS = [
+    'checkoutcom',
+    'fort',
+    'payfort',
+    'sadad',
+    'hyperpay',
+    'tp',
+]
+
 
 class OfhPaymentRequest(models.Model):
 
@@ -112,6 +121,12 @@ class OfhPaymentRequest(models.Model):
     sap_pnr = fields.Char(
         string="SAP PNR",
         compute='_compute_sap_pnr',
+        readonly=True,
+        store=False,
+    )
+    transaction_type = fields.Char(
+        string="Transaction type",
+        compute='_compute_transaction_type',
         readonly=True,
         store=False,
     )
@@ -221,6 +236,31 @@ class OfhPaymentRequest(models.Model):
                 continue
             rec.sap_pnr = ','.join(
                 set(rec.supplier_invoice_ids.mapped('locator')))
+
+    @api.multi
+    @api.depends('provider', 'payment_mode', 'request_type')
+    def _compute_transaction_type(self):
+        for rec in self:
+            rec.transaction_type = ''
+            if not rec.provider:
+                continue
+            if rec.provider in CREDIT_CARD_PAYMENT_PROVIDERS:
+                if rec.request_type == 'charge':
+                    rec.transaction_type = 'RV_CARD'
+                else:
+                    rec.transaction_type = 'PV_CARD'
+                continue
+            if rec.provider == 'op':
+                if rec.payment_mode and rec.request_type == 'charge':
+                    rec.transaction_type = 'BANK_TRANSFER'
+                elif rec.payment_mode and \
+                        rec.request_type in ('refund', 'void'):
+                    rec.transaction_type = 'PV_CASH'
+                elif not rec.payment_mode and rec.request_type == 'charge':
+                    rec.transaction_type = 'RV_CHEQUE'
+                elif not rec.payment_mode and \
+                        rec.request_type in ('refund', 'void'):
+                    rec.transaction_type = 'PV_CHEQUE'
 
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
@@ -456,6 +496,8 @@ class OfhPaymentRequest(models.Model):
         }
         if self.auth_code:
             payload['updates']['ReferenceKey3'] = self.auth_code
+        if self.transaction_type:
+            payload['updates']['Transaction'] = self.transaction_type
 
         return payload
 

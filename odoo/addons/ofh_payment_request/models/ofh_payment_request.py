@@ -163,7 +163,14 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         index=True,
     )
-
+    payment_mode = fields.Char(
+        string="Payment Method",
+        readonly=True,
+    )
+    provider = fields.Char(
+        string="Provider",
+        readonly=True,
+    )
     # Technical fields
     order_id = fields.Char(
         string="Order ID",
