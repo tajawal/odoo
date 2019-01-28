@@ -154,6 +154,7 @@ class HubPaymentRequestImportMapper(Component):
             'payment_method': record['response']['metadata'].get('paymentMode')
         }
 
+    @mapping
     def is_egypt(self, record):
         app_details = record.get('app_details')
         if not app_details:

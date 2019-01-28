@@ -53,3 +53,27 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
         self.assertEquals(binding.order_reference, 'A8122509254')
         self.assertEquals(binding.track_id, 'pr-A8122509254-1548669730206')
         self.assertEquals(binding.provider, 'checkoutcom')
+
+    @recorder.use_cassette
+    def test_import_payment_request_egypt_refund(self):
+        self.binding_pr_model.import_record(
+            backend=self.backend,
+            external_id='pr-A90126251060-1548660909033')
+
+        binding = self.binding_pr_model.search([
+            ('backend_id', '=', self.backend.id),
+            ('external_id', '=', 'pr-A90126251060-1548660909033')])
+
+        self.assertTrue(binding.is_egypt)
+
+    @recorder.use_cassette
+    def test_import_payment_request_egypt_charge(self):
+        self.binding_pr_model.import_record(
+            backend=self.backend,
+            external_id='pr-A90126206860-1548533642417')
+
+        binding = self.binding_pr_model.search([
+            ('backend_id', '=', self.backend.id),
+            ('external_id', '=', 'pr-A90126206860-1548533642417')])
+
+        self.assertTrue(binding.is_egypt)
