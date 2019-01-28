@@ -185,3 +185,84 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
             self.pr_1.sap_payment_amount1, self.pr_1.total_amount)
         self.assertAlmostEquals(
             self.pr_1.sap_payment_amount2, self.pr_1.sap_payment_amount1 * -1)
+
+    def test_compute_transaction_type_1(self):
+        """
+        - Case 1: Refund/void order with checkout as provider
+        """
+        self.assertFalse(self.pr_1.transaction_type)
+
+        self.pr_1.write({
+            'provider': 'checkoutcom',
+            'request_type': 'refund'
+        })
+
+        self.assertEquals(self.pr_1.transaction_type, 'PV_CARD')
+
+        self.pr_1.request_type = 'void'
+        self.assertEquals(self.pr_1.transaction_type, 'PV_CARD')
+
+    def test_compute_transaction_type_2(self):
+        """
+        - Case 2: charge order with checkout as provider
+        """
+        self.pr_1.write({
+            'provider': 'checkoutcom',
+            'request_type': 'charge'
+        })
+
+        self.assertEquals(self.pr_1.transaction_type, 'RV_CARD')
+
+    def test_compute_transaction_type_3(self):
+        """
+        - Case 3: Refund/void order with checkout as provider and Payment Mode
+        """
+        self.pr_1.write({
+            'provider': 'op',
+            'request_type': 'refund',
+            'payment_mode': 'Bank Transfer',
+        })
+
+        self.assertEquals(self.pr_1.transaction_type, 'PV_CASH')
+
+        self.pr_1.request_type = 'void'
+        self.assertEquals(self.pr_1.transaction_type, 'PV_CASH')
+
+    def test_compute_transaction_type_4(self):
+        """
+        - Case 4: Refund/void order with checkout as provider and
+        no Payment Mode
+        """
+        self.pr_1.write({
+            'provider': 'op',
+            'request_type': 'refund',
+        })
+
+        self.assertEquals(self.pr_1.transaction_type, 'PV_CHEQUE')
+
+        self.pr_1.request_type = 'void'
+        self.assertEquals(self.pr_1.transaction_type, 'PV_CHEQUE')
+
+    def test_compute_transaction_type_5(self):
+        """
+        - Case 5: Charge order with checkout as provider and Payment Mode
+        """
+        self.pr_1.write({
+            'provider': 'op',
+            'request_type': 'charge',
+            'payment_mode': 'Bank Transfer',
+        })
+
+        self.assertEquals(self.pr_1.transaction_type, 'BANK_TRANSFER')
+
+    def test_compute_transaction_type_6(self):
+        """
+        - Case 6: Charge order with checkout as provider and
+        no Payment Mode
+        """
+        self.pr_1.write({
+            'provider': 'op',
+            'request_type': 'charge',
+        })
+
+        self.assertEquals(self.pr_1.transaction_type, 'RV_CHEQUE')
