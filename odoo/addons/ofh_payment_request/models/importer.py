@@ -138,6 +138,22 @@ class HubPaymentRequestImportMapper(Component):
             return {'reconciliation_status': 'not_applicable'}
         return {}
 
+    @mapping
+    def provider(self, record):
+        if 'response' in record:
+            return {'provider': record['response'].get('provider')}
+        return {}
+
+    @mapping
+    def payment_method(self, record):
+        if 'response' not in record:
+            return {}
+        if 'metadata' not in record['response']:
+            return {}
+        return {
+            'payment_method': record['response']['metadata'].get('paymentMode')
+        }
+
 
 class HubPaymentRequestBatchImporter(Component):
     _name = 'hub.batch.payment.request.importer'

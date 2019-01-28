@@ -72,14 +72,14 @@
                             </group>
                         </page>
                         <page name="payment_details" string="Payment Details">
-                            <group>
-                                <group>
-                                    <field name="payment_reference"/>
-                                    <field name="manual_payment_reference"/>
-                                </group>
-                                <group>
-                                    <field name="auth_code"/>
-                                </group>
+                            <group col="4" name="payment_general_info">
+                                <field name="auth_code"/>
+                                <field name="provider"/>
+                                <field name="payment_mode"/>
+                            </group>
+                            <group col="4" name="payment_charge">
+                                <field name="payment_reference"/>
+                                <field name="manual_payment_reference"/>
                             </group>
                         </page>
                         <page name="binding_details" string="Bidings">

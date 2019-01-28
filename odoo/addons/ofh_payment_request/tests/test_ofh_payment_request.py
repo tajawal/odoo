@@ -3,6 +3,15 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
+from vcr import VCR
+from os.path import dirname, join
+
+recorder = VCR(
+    record_mode='once',
+    cassette_library_dir=join(dirname(__file__), 'fixtures/cassettes'),
+    path_transformer=VCR.ensure_suffix('.yaml'),
+    filter_headers=['Authorization'],
+)
 
 
 class TestOfhPaymentRequest(TransactionCase):
