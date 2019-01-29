@@ -38,6 +38,8 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
         self.assertEquals(binding.track_id, 'pr-A90126214952-1548581919557')
         self.assertEquals(binding.provider, 'checkoutcom')
 
+        self.assertEquals(binding.estimated_cost, 676.52)
+
     @recorder.use_cassette
     def test_import_payment_request_charge(self):
         self.binding_pr_model.import_record(
@@ -53,6 +55,8 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
         self.assertEquals(binding.order_reference, 'A8122509254')
         self.assertEquals(binding.track_id, 'pr-A8122509254-1548669730206')
         self.assertEquals(binding.provider, 'checkoutcom')
+
+        self.assertEquals(binding.estimated_cost, 150)
 
     @recorder.use_cassette
     def test_import_payment_request_egypt_refund(self):

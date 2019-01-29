@@ -83,3 +83,60 @@ class TestOfhPaymentRequest(TransactionCase):
         payment_request = self.pr_model.search(
             [('office_id', '=', 'DXBAD31DO')])
         self.assertFalse(payment_request)
+
+    def test_compute_reconciliation_tag(self):
+
+        self.assertEqual(self.payment_request_1.request_type, 'refund')
+        self.assertEquals(self.payment_request_1.reconciliation_tag, 'loss')
+        self.assertAlmostEquals(
+            self.payment_request_1.reconciliation_amount,
+            self.payment_request_1.estimated_cost_in_supplier_currency -
+            self.payment_request_1.supplier_total_amount)
+
+        self.payment_request_1.request_type = 'charge'
+        self.assertEquals(self.payment_request_1.reconciliation_tag, 'deal')
+        self.assertAlmostEquals(
+            self.payment_request_1.reconciliation_amount,
+            self.payment_request_1.estimated_cost_in_supplier_currency -
+            self.payment_request_1.supplier_total_amount)
+
+        self.payment_request_1.reconciliation_status = 'pending'
+        self.assertEquals(self.payment_request_1.reconciliation_tag, 'none')
+        self.assertAlmostEquals(
+            self.payment_request_1.reconciliation_amount, 0)
+
+    def test_optimise_matching(self):
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 2)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 2)
+        self.payment_request_1.is_investigated = True
+        self.supplier_invoice_3.total += \
+            self.payment_request_1.estimated_cost_in_supplier_currency
+
+        self.payment_request_1.supplier_invoice_ids |= self.supplier_invoice_3
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 3)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 3)
+
+        self.supplier_invoice_3.total += \
+            self.payment_request_1.estimated_cost_in_supplier_currency * 1.5
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 3)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 2)
+
+        self.payment_request_1.is_investigated = False
+        self.payment_request_1.supplier_invoice_ids = self.supplier_invoice_3
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 1)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 0)
+        self.assertFalse(self.payment_request_1.is_investigated)
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'investigate')
