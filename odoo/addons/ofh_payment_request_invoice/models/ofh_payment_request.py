@@ -46,6 +46,23 @@ class OfhPaymentRequest(models.Model):
         store=False,
         readonly=True,
     )
+    reconciliation_tag = fields.Selection(
+        string="Deal/Loss",
+        selection=[
+            ('deal', 'DEAL'),
+            ('loss', 'LOSS'),
+            ('none', 'N/A')],
+        compute='_compute_reconciliation_tag',
+        readonly=True,
+        store=False,
+    )
+    reconciliation_amount = fields.Monetary(
+        string="Deal/Loss Amount",
+        compute='_compute_reconciliation_tag',
+        currency_field='supplier_currency_id',
+        readonly=True,
+        store=False,
+    )
 
     @api.multi
     @api.depends(
@@ -127,6 +144,37 @@ class OfhPaymentRequest(models.Model):
                 # Case of amendment
                 rec.supplier_total_amount = rec.total_amount
                 rec.supplier_currency_id = rec.currency_id
+
+    @api.multi
+    @api.depends(
+        'supplier_invoice_ids', 'reconciliation_status', 'need_to_investigate',
+        'supplier_total_amount', 'estimated_cost_in_supplier_currency',
+        'request_type')
+    def _compute_reconciliation_tag(self):
+        for rec in self:
+            rec.reconciliation_tag = 'none'
+            rec.reconciliation_amount = 0
+            if rec.reconciliation_status != 'matched' or \
+                    rec.need_to_investigate:
+                continue
+            rec.reconciliation_amount = \
+                abs(rec.estimated_cost_in_supplier_currency) - \
+                abs(rec.supplier_total_amount)
+            if rec.request_type == 'charge':
+                # It's a loss because the amendment cost us more than what we
+                # received from the customer.
+                if rec.reconciliation_amount < 0:
+                    rec.reconciliation_tag = 'loss'
+                elif rec.reconciliation_amount > 0:
+                    rec.reconciliation_tag = 'deal'
+            else:
+                # It's a deal because the refunded money to the customer
+                # is less than the money received from the supplier,
+                # we keep the rest to our pocket.
+                if rec.reconciliation_amount < 0:
+                    rec.reconciliation_tag = 'deal'
+                elif rec.reconciliation_amount > 0:
+                    rec.reconciliation_tag = 'loss'
 
     @api.multi
     @api.depends('supplier_invoice_ids.office_id')

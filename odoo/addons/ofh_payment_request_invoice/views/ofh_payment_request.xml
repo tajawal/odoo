@@ -19,6 +19,8 @@
                 <field name="estimated_cost_in_supplier_currency"/>
                 <field name="supplier_total_amount" widget="monetary"/>
                 <field name="supplier_shamel_total_amount" widget="monetary"/>
+                <field name="reconciliation_tag"/>
+                <field name="reconciliation_amount"/>
                 <field name="supplier_currency_id" invisible="1"/>
             </group>
             <page name="cost_details" position="inside">

@@ -83,3 +83,24 @@ class TestOfhPaymentRequest(TransactionCase):
         payment_request = self.pr_model.search(
             [('office_id', '=', 'DXBAD31DO')])
         self.assertFalse(payment_request)
+
+    def test_compute_reconciliation_tag(self):
+
+        self.assertEqual(self.payment_request_1.request_type, 'refund')
+        self.assertEquals(self.payment_request_1.reconciliation_tag, 'loss')
+        self.assertAlmostEquals(
+            self.payment_request_1.reconciliation_amount,
+            self.payment_request_1.estimated_cost_in_supplier_currency -
+            self.payment_request_1.supplier_total_amount)
+
+        self.payment_request_1.request_type = 'charge'
+        self.assertEquals(self.payment_request_1.reconciliation_tag, 'deal')
+        self.assertAlmostEquals(
+            self.payment_request_1.reconciliation_amount,
+            self.payment_request_1.estimated_cost_in_supplier_currency -
+            self.payment_request_1.supplier_total_amount)
+
+        self.payment_request_1.reconciliation_status = 'pending'
+        self.assertEquals(self.payment_request_1.reconciliation_tag, 'none')
+        self.assertAlmostEquals(
+            self.payment_request_1.reconciliation_amount, 0)
