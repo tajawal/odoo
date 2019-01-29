@@ -161,6 +161,13 @@ class OfhPaymentRequest(models.Model):
         default='sz',
         readonly=True,
     )
+    estimated_cost = fields.Monetary(
+        string="Estimated Cost",
+        currency_field='currency_id',
+        readonly=True,
+        compute='_compute_estimated_cost',
+        store=False,
+    )
     # End of amount fields
     entity = fields.Selection(
         selection=[
@@ -361,6 +368,20 @@ class OfhPaymentRequest(models.Model):
                 rec.supplier_reference = rec.manual_supplier_reference
             else:
                 rec.supplier_reference = rec.hub_supplier_reference
+
+    @api.multi
+    @api.depends('insurance', 'fare_difference', 'penalty')
+    def _compute_estimated_cost(self):
+        for rec in self:
+            rec.estimated_cost = 0.0
+            if rec.request_type not in ('charge', 'refund'):
+                continue
+            if rec.request_type == 'charge':
+                rec.estimated_cost = \
+                    rec.fare_difference + rec.insurance + rec.penalty
+            else:
+                rec.estimated_cost = \
+                    rec.fare_difference - rec.insurance - rec.penalty
 
     @api.multi
     @api.depends('manual_payment_reference', 'charge_id')
