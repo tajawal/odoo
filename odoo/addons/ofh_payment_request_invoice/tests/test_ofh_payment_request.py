@@ -104,3 +104,39 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertEquals(self.payment_request_1.reconciliation_tag, 'none')
         self.assertAlmostEquals(
             self.payment_request_1.reconciliation_amount, 0)
+
+    def test_optimise_matching(self):
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 2)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 2)
+        self.payment_request_1.is_investigated = True
+        self.supplier_invoice_3.total += \
+            self.payment_request_1.estimated_cost_in_supplier_currency
+
+        self.payment_request_1.supplier_invoice_ids |= self.supplier_invoice_3
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 3)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 3)
+
+        self.supplier_invoice_3.total += \
+            self.payment_request_1.estimated_cost_in_supplier_currency * 1.5
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 3)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 2)
+
+        self.payment_request_1.is_investigated = False
+        self.payment_request_1.supplier_invoice_ids = self.supplier_invoice_3
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 1)
+        self.payment_request_1._optimise_matching()
+
+        self.assertEquals(len(self.payment_request_1.supplier_invoice_ids), 0)
+        self.assertFalse(self.payment_request_1.is_investigated)
+        self.assertEquals(
+            self.payment_request_1.reconciliation_status, 'investigate')

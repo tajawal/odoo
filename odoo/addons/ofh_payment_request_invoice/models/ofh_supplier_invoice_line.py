@@ -135,31 +135,36 @@ class OfhSupplierInvoiceLine(models.Model):
         _logger.info(
             "Matching payment requests with invoice lines is done."
             "Updating the matched invoice lines with the payment request.")
-        with self.env.norecompute():
-            for pr in pr_by_invoices:
-                supplier_invoice_ids = []
-                for line in pr_by_invoices[pr]:
-                    if line.payment_request_id:
-                        line.message_post(
-                            self._get_multiple_payment_request_message(pr))
-                    else:
-                        supplier_invoice_ids.append(((4, line.id)))
-                pr.write({
-                    'supplier_invoice_ids': supplier_invoice_ids,
-                    'reconciliation_status': 'matched'})
 
-            # Once the matching logic is done we update all the payment request
-            # that have not being matched with any invoice to investigate
-            _logger.info(
-                "Updating status of unmatched payment requets to investigate.")
-            payment_requests = unreconciled_prs.filtered(
-                lambda rec: not rec.supplier_invoice_ids and
-                rec.reconciliation_status != 'investigate')
-            payment_requests.write({'reconciliation_status': 'investigate'})
+        reconciled_prs = pr_model.browse()
+        for pr in pr_by_invoices:
+            supplier_invoice_ids = []
+            for line in pr_by_invoices[pr]:
+                if line.payment_request_id:
+                    line.message_post(
+                        self._get_multiple_payment_request_message(pr))
+                else:
+                    supplier_invoice_ids.append(((4, line.id)))
+            pr.write({
+                'supplier_invoice_ids': supplier_invoice_ids,
+                'reconciliation_status': 'matched'})
+            if pr.need_to_investigate:
+                reconciled_prs |= pr
 
-        # Recompute computed fields, been skipped using the context previously.
-        unreconciled_prs.recompute()
+        # Once the matching logic is done we update all the payment request
+        # that have not being matched with any invoice to investigate
+        _logger.info(
+            "Updating status of unmatched payment requests to investigate.")
 
+        payment_requests = unreconciled_prs.filtered(
+            lambda rec: not rec.supplier_invoice_ids and
+            rec.reconciliation_status != 'investigate')
+
+        payment_requests.write({'reconciliation_status': 'investigate'})
+
+        reconciled_prs.optmise_matching_result()
+
+        # reconciled_prs.matching_optimizations()
         return self.env.user.notify_info(
             "Matching with Supplier Invoices is done.")
 

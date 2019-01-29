@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, _
+from odoo.addons.queue_job.job import job
 
 
 class OfhPaymentRequest(models.Model):
@@ -93,7 +94,8 @@ class OfhPaymentRequest(models.Model):
             order='created_at asc')
 
     @api.multi
-    @api.depends('supplier_invoice_ids', 'total_amount',
+    @api.depends('supplier_invoice_ids.gds_net_amount',
+                 'supplier_invoice_ids.total', 'total_amount',
                  'request_type', 'order_type', 'order_amount', 'currency_id',
                  'order_supplier_cost', 'order_supplier_currency',
                  'reconciliation_status', 'fare_difference', 'insurance',
@@ -205,3 +207,61 @@ class OfhPaymentRequest(models.Model):
             'view_mode': 'tree,form',
             'domain': [('locator', 'in', pnrs)],
         }
+
+    @api.multi
+    def optmise_matching_result(self):
+        """
+        Payment requests of type charge, that matched with supplier, will
+        always needs further matching investigation, as from the supplier side
+        there are no difference between a ticket issued from an initial order
+        or a ticket issued from an amendment. To reduce such risk we run
+        a matching optimisation based on the amount.
+        """
+        for rec in self:
+            if not rec.need_to_investigate:
+                continue
+            rec.with_delay()._optimise_matching()
+
+    @api.multi
+    @job(default_channel='root')
+    def _optimise_matching(self):
+        """ Optimise the matching logic for a given transaction using the
+        the following algorithm.
+        1- Apply the formula: Supplier Cost / Calculated Cost)
+        2- IF the % is greater than 135, THEN remove the highest amount
+            Invoice line from the Payment Request.
+        3- Apply the above formula again
+        4- Re-do the exercise until it is less than 135 or no more line
+            items are remaining
+        5- IF the % is equal to or less than 135, THEN mark as
+        investigated, else change reconciliation status to `investigate`.
+        """
+        self.ensure_one
+        supplier_cost = self.supplier_shamel_total_amount if \
+            not self.supplier_currency_id.is_zero(
+                self.supplier_shamel_total_amount) else \
+            self.supplier_total_amount
+
+        invoice_lines = self.supplier_invoice_ids.sorted(
+            lambda l: l.total, reverse=True)
+
+        diff = abs(supplier_cost / self.estimated_cost_in_supplier_currency)
+
+        while diff > 1.35:
+            invoice_lines[0].payment_request_id = False
+            if not self.supplier_invoice_ids:
+                break
+            supplier_cost = self.supplier_shamel_total_amount if \
+                not self.supplier_currency_id.is_zero(
+                    self.supplier_shamel_total_amount) else \
+                self.supplier_total_amount
+            diff = abs(
+                supplier_cost / self.estimated_cost_in_supplier_currency)
+            invoice_lines = self.supplier_invoice_ids.sorted(
+                lambda l: l.total, reverse=True)
+
+        if self.supplier_invoice_ids:
+            self.is_investigated = True
+        else:
+            self.reconciliation_status = 'investigate'
+        return True
