@@ -27,6 +27,13 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         help="Supplier total amount including Shamel cost",
     )
+    estimated_cost_in_supplier_currency = fields.Monetary(
+        string="Estimated Cost",
+        currency_field='supplier_currency_id',
+        readonly=True,
+        compute='_compute_estimated_cost',
+        store=False,
+    )
     supplier_currency_id = fields.Many2one(
         string="Supplier Currency",
         comodel_name='res.currency',
@@ -40,10 +47,25 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
     )
 
+    @api.multi
+    @api.depends(
+        'insurance', 'fare_difference', 'penalty',
+        'supplier_currency_id', 'currency_id')
+    def _compute_estimated_cost(self):
+        res = super(OfhPaymentRequest, self)._compute_estimated_cost()
+        for rec in self:
+            rec.estimated_cost_in_supplier_currency = 0.0
+            if not rec.supplier_currency_id:
+                continue
+            rec.estimated_cost_in_supplier_currency = \
+                rec.currency_id.compute(
+                    rec.estimated_cost, rec.supplier_currency_id)
+        return res
+
     @api.model
     def _get_unreconciled_payment_requests(self):
         """
-        Return Unreconcilided payment request
+        Return Unreconciled payment request
         """
         return self.search([
             ('reconciliation_status', 'in', ['pending', 'investigate']),
@@ -75,7 +97,7 @@ class OfhPaymentRequest(models.Model):
                         rec.supplier_invoice_ids.mapped('currency_id')[0]
                     if not kwd_invoices:
                         continue
-                    # Shamel cost mininum is 2 KWD. we take the absolute value
+                    # Shamel cost minimum is 2 KWD. we take the absolute value
                     # because the cost will be negative in case of refund.
                     shamel_cost = max(abs(
                         sum([inv.gds_alshamel_cost for inv in kwd_invoices])),

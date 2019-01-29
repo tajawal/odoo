@@ -15,12 +15,13 @@
                         help="Open invoices that match the same supplier references in the payment request."
                         type="object"/>
             </header>
-            <page name="financial_details" position="inside">
-                <group name="supplier_costs" string="Supplier Costs">
-                    <field name="supplier_total_amount" widget="monetary"/>
-                    <field name="supplier_shamel_total_amount" widget="monetary"/>
-                    <field name="supplier_currency_id" invisible="1"/>
-                </group>
+            <group name="cost_pr_details" position="inside">
+                <field name="estimated_cost_in_supplier_currency"/>
+                <field name="supplier_total_amount" widget="monetary"/>
+                <field name="supplier_shamel_total_amount" widget="monetary"/>
+                <field name="supplier_currency_id" invisible="1"/>
+            </group>
+            <page name="cost_details" position="inside">
                 <field name="supplier_invoice_ids" col="2" nolabel="1"
                        options="{'reload_on_button': true}"
                        attrs="{'invisible': [('order_type', '=', 'hotel')]}"/>
