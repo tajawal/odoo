@@ -130,6 +130,14 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
+    sap_line_ids = fields.One2many(
+        string="SAP Sale Lines",
+        comodel_name='ofh.payment.request.sap.line',
+        inverse_name='payment_request_id',
+        compute="_compute_sap_line_ids",
+        readonly=True,
+        store=False,
+    )
 
     @api.multi
     @api.constrains(
@@ -265,6 +273,22 @@ class OfhPaymentRequest(models.Model):
                 elif not rec.payment_mode and \
                         rec.request_type in ('refund', 'void'):
                     rec.transaction_type = 'PV_CHEQUE'
+
+    @api.multi
+    @api.depends('supplier_invoice_ids')
+    def _compute_sap_line_ids(self):
+        for rec in self:
+            sap_line_model = self.env['ofh.payment.request.sap.line']
+            if rec.sap_line_ids or not rec.supplier_invoice_ids:
+                continue
+            if rec.supplier_invoice_ids.filtered(
+                    lambda l: l.invoice_type != 'gds'):
+                continue
+            for line in rec.supplier_invoice_ids:
+                rec.sap_line_ids |= sap_line_model.create({
+                    'payment_request_id': rec.id,
+                    'supplier_invoice_line': line.id
+                })
 
     @api.model
     def _get_payment_request_not_sent_by_integration(self):
@@ -450,7 +474,7 @@ class OfhPaymentRequest(models.Model):
         booking_date = datetime.strftime(
             fields.Datetime.from_string(
                 self.created_at), '%Y%m%d'),
-        return {
+        payload = {
             'orderId': self.order_id,
             'trackId': self.track_id,
             'source': source,
@@ -459,7 +483,15 @@ class OfhPaymentRequest(models.Model):
             'updates': {
                 'header': {
                     'BookingDate': booking_date,
-                },
+                }
+            }
+        }
+
+        if self.sap_line_ids:
+            payload['updates']['lineItems'] = [
+                line.to_dict() for line in self.sap_line_ids]
+        else:
+            payload['updates']['lineItems'] = [{
                 'item_general': {
                     'pnr': self.sap_pnr,
                     'BillingDate': booking_date,
@@ -475,9 +507,10 @@ class OfhPaymentRequest(models.Model):
                     'ZVT1_CURRENCY': self.currency_id.name,
                     'ZDIS': self.sap_zdis,
                     'ZDIS_CURRENCY': self.currency_id.name,
-                },
-            }
-        }
+                }
+            }]
+
+        return payload
 
     @api.multi
     def _get_payment_sap_xml_api_payload(self, source):
