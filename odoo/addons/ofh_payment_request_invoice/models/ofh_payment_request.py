@@ -29,7 +29,7 @@ class OfhPaymentRequest(models.Model):
         help="Supplier total amount including Shamel cost",
     )
     estimated_cost_in_supplier_currency = fields.Monetary(
-        string="Estimated Cost",
+        string="Estimated Cost in Supplier Currency",
         currency_field='supplier_currency_id',
         readonly=True,
         compute='_compute_estimated_cost',
@@ -236,7 +236,7 @@ class OfhPaymentRequest(models.Model):
         5- IF the % is equal to or less than 135, THEN mark as
         investigated, else change reconciliation status to `investigate`.
         """
-        self.ensure_one
+        self.ensure_one()
         supplier_cost = self.supplier_shamel_total_amount if \
             not self.supplier_currency_id.is_zero(
                 self.supplier_shamel_total_amount) else \
