@@ -15,16 +15,13 @@ class OfhSupplierInvoiceImport(models.TransientModel):
 
     @api.multi
     def _aig_import_report(self):
-        source = self.env['import.source.csv'].create({
-            'csv_file': self.upload_file,
-            'csv_filename': self.file_name,
-            'csv_delimiter': ','})
-        recordset = self.env['import.recordset'].create({
-            'backend_id': self.env.ref(
-                'ofh_supplier_invoice_aig.aig_import_backend').id,
-            'import_type_id': self.env.ref(
-                'ofh_supplier_invoice_aig.aig_import_type').id,
-            'source_id': source.id,
-            'source_model': 'import.source.csv',
-        })
-        return recordset.run_import()
+
+        backend = self.env.ref(
+            'ofh_supplier_invoice_aig.aig_import_backend')
+        import_type = self.env.ref(
+            'ofh_supplier_invoice_aig.aig_import_type')
+
+        return backend._import_report(
+            import_type=import_type,
+            file_name=self.file_name,
+            data=self.upload_file)

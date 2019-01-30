@@ -14,6 +14,7 @@ setup(
     install_requires=[
         'click-odoo-contrib',
         'python-json-logger',
+        'boto3',
     ],
     odoo_addons={
         'depends_override': {

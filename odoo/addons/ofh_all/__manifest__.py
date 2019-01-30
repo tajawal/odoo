@@ -10,8 +10,10 @@
     'version': '11.0.1.3.6',
     'license': 'AGPL-3',
     'depends': [
-        # odoo_finance_hub addons
-        'ofh_payment_request_sap',
+        # odoo_finance_hub open source addons
+        'ofh_payment_request_invoice',
+        'ofh_payment_request_sap_s3_bucket',
+
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
         'base_optional_quick_create',
