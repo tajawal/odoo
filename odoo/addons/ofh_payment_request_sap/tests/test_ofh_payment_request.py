@@ -36,6 +36,12 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
         self.pr_5 = self.env.ref(
             'ofh_payment_request.ofh_payment_request_gds_5')
 
+        # Supplier invoices.
+        self.inv_1 = self.env.ref(
+            'ofh_supplier_invoice_gds.ofh_supplier_invoice_line_gds_1')
+        self.inv_2 = self.env.ref(
+            'ofh_supplier_invoice_gds.ofh_supplier_invoice_line_gds_2')
+
         # Update reconciliation, integration and SAP status
         self.pr_1.write({
             'sap_status': 'payment_in_sap',
@@ -275,3 +281,14 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
         })
 
         self.assertEquals(self.pr_1.transaction_type, 'RV_CHEQUE')
+
+    def test_compute_sap_line_ids(self):
+        self.pr_1.supplier_invoice_ids = \
+            self.inv_1 | self.inv_2
+
+        self.assertTrue(self.pr_1.sap_line_ids)
+        self.assertEquals(len(self.pr_1.sap_line_ids), 2)
+
+        self.inv_2.payment_request_id = False
+        self.assertTrue(self.pr_1.sap_line_ids)
+        self.assertEquals(len(self.pr_1.sap_line_ids), 1)
