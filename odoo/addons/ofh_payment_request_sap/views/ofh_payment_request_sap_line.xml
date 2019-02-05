@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_sap_line_tree_view">
+        <field name="name">ofh.payment.request.sap.line.tree (in ofh_payment_request_sap)</field>
+        <field name="model">ofh.payment.request.sap.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="payment_request_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="supplier_currency_id" invisible="1"/>
+                <field name="supplier_invoice_line" invisible="1"/>
+                <field name="sap_ticket_number"/>
+                <field name="sap_pax_name"/>
+                <field name="sap_owner_id"/>
+                <field name="sap_pnr"/>
+                <field name="sap_billing_date"/>
+                <field name="sap_tax_code"/>
+                <field name="sap_zsel" widget="monetary"/>
+                <field name="sap_zdis" widget="monetary"/>
+                <field name="sap_zvt1" widget="monetary"/>
+                <field name="sap_zvd1" widget="monetary"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
