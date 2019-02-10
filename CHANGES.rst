@@ -1,6 +1,10 @@
 Changes
 -------
 
+1.4.1 (2019-02-10)
+------------------
+* Fix SAP Sale payload and zvt1 proration.
+
 1.4.0 (2019-02-05)
 -----------------
 * AYESHA-18: Automatically download SAP Sale report from S3 bucket.
