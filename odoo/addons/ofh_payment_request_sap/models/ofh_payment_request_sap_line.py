@@ -134,7 +134,7 @@ class OfhPaymentRequestSapLine(models.Model):
             rec.sap_zdis = \
                 rec.payment_request_id.sap_zdis * rec.sap_zvd1 / supplier_cost
 
-            rec.sap_dis = \
+            rec.sap_zvt1 = \
                 rec.payment_request_id.sap_zvt1 * rec.sap_zvd1 / supplier_cost
 
     @api.multi
@@ -142,7 +142,7 @@ class OfhPaymentRequestSapLine(models.Model):
         self.ensure_one()
         booking_date = datetime.strftime(
             fields.Datetime.from_string(
-                self.sap_billing_date), '%Y%m%d'),
+                self.sap_billing_date), '%Y%m%d')
         return {
             "item_general": {
                 "BillingDate": booking_date,

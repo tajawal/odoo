@@ -473,7 +473,7 @@ class OfhPaymentRequest(models.Model):
         self.ensure_one()
         booking_date = datetime.strftime(
             fields.Datetime.from_string(
-                self.created_at), '%Y%m%d'),
+                self.created_at), '%Y%m%d')
         payload = {
             'orderId': self.order_id,
             'trackId': self.track_id,
