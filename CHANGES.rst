@@ -1,6 +1,10 @@
 Changes
 -------
 
+1.4.2 (2019-02-11)
+------------------
+* Allow users to import exchange rates.
+
 1.4.1 (2019-02-10)
 ------------------
 * Fix SAP Sale payload and zvt1 proration.
