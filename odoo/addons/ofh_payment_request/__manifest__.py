@@ -12,6 +12,7 @@
     'depends': [
         'ofh_hub_connector',
         'ofh_mail_activity',
+        'ofh_base_currency',
     ],
     'data': [
         'security/groups.xml',

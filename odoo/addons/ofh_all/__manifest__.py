@@ -11,6 +11,7 @@
     'license': 'AGPL-3',
     'depends': [
         # odoo_finance_hub open source addons
+        'ofh_base_currency',
         'ofh_payment_request_invoice',
         'ofh_payment_request_sap_s3_bucket',
 
