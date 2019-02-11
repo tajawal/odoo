@@ -301,4 +301,24 @@ if records:
         <field name="sequence" eval="50"/>
     </record>
 
+    <record model="ir.ui.menu" id="ofh_payment_request_currencies_main_menu">
+        <field name="name">Currencies</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="100"/>
+    </record>
+
+    <record model="ir.ui.menu" id="res_currency_menu">
+        <field name="name">Currencies</field>
+        <field name="parent_id" ref="ofh_payment_request_currencies_main_menu"/>
+        <field name="action" ref="base.action_currency_form"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="res_currency_rate_menu">
+        <field name="name">Currency Rates</field>
+        <field name="parent_id" ref="ofh_payment_request_currencies_main_menu"/>
+        <field name="action" ref="ofh_base_currency.res_currency_rate_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
 </odoo>
