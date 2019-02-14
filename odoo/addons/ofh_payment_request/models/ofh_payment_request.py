@@ -4,6 +4,7 @@
 import json
 
 from odoo import api, fields, models
+from odoo.tools import float_is_zero
 
 
 class OfhPaymentRequest(models.Model):
@@ -157,9 +158,9 @@ class OfhPaymentRequest(models.Model):
     tax_code = fields.Selection(
         string='Tax code',
         selection=[('ss', 'SS'), ('sz', 'SZ')],
-        required=True,
-        default='sz',
+        compute='_compute_fees',
         readonly=True,
+        store=False,
     )
     estimated_cost = fields.Monetary(
         string="Estimated Cost",
@@ -406,6 +407,7 @@ class OfhPaymentRequest(models.Model):
                     rec.booking_fee = rec.discount = rec.input_vat_amount = \
                     rec.output_vat_amount = rec.adm_amount = 0.0
                 rec.loss_type = ''
+                rec.tax_code = 'sz'
             rec.fare_difference = fees_dict.get('fareDifference')
             rec.change_fee = fees_dict.get('changeFee')
             rec.penalty = fees_dict.get('penalty')
@@ -415,6 +417,12 @@ class OfhPaymentRequest(models.Model):
             rec.output_vat_amount = fees_dict.get('outputVat')
             rec.adm_amount = fees_dict.get('adm')
             rec.loss_type = fees_dict.get('lossType')
+            if float_is_zero(
+                    rec.output_vat_amount,
+                    precision_rounding=rec.currency_id.rounding):
+                rec.tax_code = 'sz'
+            else:
+                rec.tax_code = 'ss'
 
     @api.multi
     @api.depends('order_reference')
