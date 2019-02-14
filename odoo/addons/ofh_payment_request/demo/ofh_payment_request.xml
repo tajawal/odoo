@@ -23,7 +23,6 @@
             {"fareDifference": 280,"changeFee": 80,"penalty": 300}
         </field>
         <field name="total_amount">660</field>
-        <field name="tax_code">sz</field>
         <field name="vendor_id">AI</field>
     </record>
 
@@ -41,7 +40,6 @@
         <field name="vendor_id">9W</field>
         <field name="total_amount">465</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 900,"bookingFee": 15,"penalty": 420}
         </field>
@@ -63,7 +61,6 @@
         <field name="vendor_id">AI</field>
         <field name="total_amount">390</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 250,"ChangeFee": 40,"penalty": 100}
         </field>
@@ -85,7 +82,6 @@
         <field name="vendor_id">AI</field>
         <field name="total_amount">390</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 280,"ChangeFee": 40,"penalty": 300}
         </field>
@@ -107,7 +103,6 @@
         <field name="vendor_id">AI</field>
         <field name="total_amount">390</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 280,"ChangeFee": 40,"penalty": 300}
         </field>
@@ -129,7 +124,6 @@
         <field name="vendor_id">G9</field>
         <field name="total_amount">52</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 52}
         </field>
@@ -151,7 +145,6 @@
         <field name="vendor_id">IX</field>
         <field name="total_amount">763</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 763}
         </field>
@@ -173,7 +166,6 @@
         <field name="vendor_id">D7</field>
         <field name="total_amount">632</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 632}
         </field>
@@ -195,7 +187,6 @@
         <field name="vendor_id">IND</field>
         <field name="total_amount">632</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 632}
         </field>
@@ -217,7 +208,6 @@
         <field name="vendor_id">IND</field>
         <field name="total_amount">630</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 630}
         </field>
@@ -239,7 +229,6 @@
         <field name="vendor_id">GF</field>
         <field name="total_amount">5083</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 5083}
         </field>
@@ -261,7 +250,6 @@
         <field name="vendor_id">GF</field>
         <field name="total_amount">5083</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 5083}
         </field>
@@ -283,7 +271,6 @@
         <field name="vendor_id">GF</field>
         <field name="total_amount">5083</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 5083}
         </field>
@@ -305,7 +292,6 @@
         <field name="vendor_id">GF</field>
         <field name="total_amount">5083</field>
         <field name="currency_id" ref="base.AED"/>
-        <field name="tax_code">sz</field>
         <field name="fees">
             {"fareDifference": 5083}
         </field>

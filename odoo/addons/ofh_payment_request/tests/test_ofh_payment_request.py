@@ -36,6 +36,14 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertAlmostEquals(self.payment_request_1.output_vat_amount, 0)
         self.assertAlmostEquals(self.payment_request_1.adm_amount, 0)
         self.assertFalse(self.payment_request_1.loss_type)
+        self.assertEqual(self.payment_request_1.tax_code, 'sz')
+
+        self.payment_request_1.fees = \
+            '{"fareDifference": 280,"changeFee": 80,"penalty": 300,' \
+            '"outputVat": 5}'
+
+        self.assertAlmostEquals(self.payment_request_1.output_vat_amount, 5)
+        self.assertEqual(self.payment_request_1.tax_code, 'ss')
 
         # Payment Request 2
         self.assertAlmostEquals(self.payment_request_2.fare_difference, 900)
@@ -47,6 +55,7 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertAlmostEquals(self.payment_request_2.output_vat_amount, 0)
         self.assertAlmostEquals(self.payment_request_2.adm_amount, 0)
         self.assertFalse(self.payment_request_2.loss_type)
+        self.assertEqual(self.payment_request_2.tax_code, 'sz')
 
         # Case where the fees field is not set:
         self.payment_request_1.fees = False
@@ -59,6 +68,8 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertAlmostEquals(self.payment_request_1.output_vat_amount, 0)
         self.assertAlmostEquals(self.payment_request_1.adm_amount, 0)
         self.assertFalse(self.payment_request_1.loss_type)
+        self.assertEqual(self.payment_request_1.tax_code, 'sz')
+
 
     def test_compute_payment_request_status(self):
         # Payment Request 1
