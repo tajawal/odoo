@@ -1,6 +1,9 @@
 Changes
 -------
 
+1.4.3 (2019-02-14)
+------------------
+* AYES-38: Compute tax code using output vat
 1.4.2 (2019-02-11)
 ------------------
 * Allow users to import exchange rates.
