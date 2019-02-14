@@ -282,7 +282,9 @@ class OfhPaymentRequest(models.Model):
             if rec.sap_line_ids or not rec.supplier_invoice_ids:
                 continue
             if rec.supplier_invoice_ids.filtered(
-                    lambda l: l.invoice_type != 'gds'):
+                    lambda l: l.invoice_type != 'gds' or
+                    float_is_zero(
+                        l.total, precision_digits=l.currency_id.rounding)):
                 continue
             for line in rec.supplier_invoice_ids:
                 rec.sap_line_ids |= sap_line_model.create({

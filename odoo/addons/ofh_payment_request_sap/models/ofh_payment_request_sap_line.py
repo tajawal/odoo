@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 from datetime import datetime
+from odoo.tools import float_is_zero
 
 
 class OfhPaymentRequestSapLine(models.Model):
@@ -127,6 +128,11 @@ class OfhPaymentRequestSapLine(models.Model):
                     rec.payment_request_id.supplier_shamel_total_amount
             else:
                 supplier_cost = rec.payment_request_id.supplier_total_amount
+
+            if float_is_zero(
+                    supplier_cost,
+                    precision_rounding=rec.supplier_currency_id.rounding):
+                continue
 
             rec.sap_zsel = \
                 rec.payment_request_id.sap_zsel * rec.sap_zvd1 / supplier_cost
