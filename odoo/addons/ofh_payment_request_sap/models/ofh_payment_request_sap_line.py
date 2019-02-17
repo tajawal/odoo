@@ -119,9 +119,9 @@ class OfhPaymentRequestSapLine(models.Model):
             rec.sap_zsel = rec.sap_zvd1 = rec.sap_dis = rec.sap_zvt1 = 0
 
             if rec.supplier_invoice_line.invoice_type == 'gds':
-                rec.sap_zvd1 = rec.supplier_invoice_line.gds_net_amount
+                sap_zvd1 = rec.supplier_invoice_line.gds_net_amount
             else:
-                rec.sap_zvd1 = rec.supplier_invoice_line.total
+                sap_zvd1 = rec.supplier_invoice_line.total
 
             if rec.supplier_currency_id == self.env.ref('base.KWD'):
                 supplier_cost = \
@@ -134,14 +134,16 @@ class OfhPaymentRequestSapLine(models.Model):
                     precision_rounding=rec.supplier_currency_id.rounding):
                 continue
 
-            rec.sap_zsel = \
-                rec.payment_request_id.sap_zsel * rec.sap_zvd1 / supplier_cost
+            rec.sap_zvd1 = abs(sap_zvd1)
 
-            rec.sap_zdis = \
-                rec.payment_request_id.sap_zdis * rec.sap_zvd1 / supplier_cost
+            rec.sap_zsel = abs(
+                rec.payment_request_id.sap_zsel * rec.sap_zvd1 / supplier_cost)
 
-            rec.sap_zvt1 = \
-                rec.payment_request_id.sap_zvt1 * rec.sap_zvd1 / supplier_cost
+            rec.sap_zdis = abs(
+                rec.payment_request_id.sap_zdis * rec.sap_zvd1 / supplier_cost)
+
+            rec.sap_zvt1 = abs(
+                rec.payment_request_id.sap_zvt1 * rec.sap_zvd1 / supplier_cost)
 
     @api.multi
     def to_dict(self):
