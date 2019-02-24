@@ -475,7 +475,7 @@ class OfhPaymentRequest(models.Model):
         self.ensure_one()
         booking_date = datetime.strftime(
             fields.Datetime.from_string(
-                self.created_at), '%Y%m%d')
+                self.updated_at), '%Y%m%d')
         payload = {
             'orderId': self.order_id,
             'trackId': self.track_id,
@@ -527,7 +527,7 @@ class OfhPaymentRequest(models.Model):
             'updates': {
                 'DocumentDate': datetime.strftime(
                     fields.Datetime.from_string(
-                        self.created_at), '%Y%m%d'),
+                        self.updated_at), '%Y%m%d'),
                 'Amount1': self.sap_payment_amount1,
                 'Amount2': self.sap_payment_amount2,
                 'Currency': self.currency_id.name,
