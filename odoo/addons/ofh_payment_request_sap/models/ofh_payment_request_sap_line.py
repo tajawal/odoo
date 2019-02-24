@@ -90,7 +90,7 @@ class OfhPaymentRequestSapLine(models.Model):
     )
     sap_billing_date = fields.Datetime(
         string="Billing Date",
-        related="payment_request_id.created_at",
+        related="payment_request_id.updated_at",
         readonly=True,
         store=False,
     )
