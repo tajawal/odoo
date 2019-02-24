@@ -1,8 +1,12 @@
 Changes
 -------
+
+1.4.5 (2019-02-24)
+------------------
+* AYESHA-41: Use update_at date when sending to SAP.
+
 1.4.4 (2019-02-14)
 ------------------
-
 * GDS lines with zero amount should not be sent to SAP
 
 1.4.3 (2019-02-14)
