@@ -119,11 +119,14 @@ class OfhPaymentRequestSapLine(models.Model):
             rec.sap_zsel = rec.sap_zvd1 = rec.sap_dis = rec.sap_zvt1 = 0
 
             if rec.supplier_invoice_line.invoice_type == 'gds':
-                sap_zvd1 = rec.supplier_invoice_line.gds_net_amount
+                if rec.supplier_invoice_line == self.env.ref('base.KWD'):
+                    sap_zvd1 = rec.supplier_invoice_line.gds_alshamel_cost
+                else:
+                    sap_zvd1 = rec.supplier_invoice_line.gds_net_amount
             else:
                 sap_zvd1 = rec.supplier_invoice_line.total
 
-            if rec.supplier_currency_id == self.env.ref('base.KWD'):
+            if rec.supplier_invoice_line == self.env.ref('base.KWD'):
                 supplier_cost = \
                     rec.payment_request_id.supplier_shamel_total_amount
             else:
