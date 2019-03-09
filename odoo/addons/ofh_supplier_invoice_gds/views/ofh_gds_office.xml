@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_gds_office_form_view">
+        <field name="name">ofh.gds.office.form (in ofh_supplier_invoice_gds)</field>
+        <field name="model">ofh.gds.office</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_gds_office_form_tree">
+        <field name="name">ofh.gds.office.tree (in ofh_supplier_invoice_gds)</field>
+        <field name="model">ofh.gds.office</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

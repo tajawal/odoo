@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_gds_office_bah3t38tj" model="ofh.gds.office">
+        <field name="name">BAH3T38TJ</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_bey3t38tj" model="ofh.gds.office">
+        <field name="name">BEY3T38TJ</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_cai3t38eh" model="ofh.gds.office">
+        <field name="name">CAI3T38EH</field>
+    </record>
+
+    <record id="ofh_gds_office_cai3t38tj" model="ofh.gds.office">
+        <field name="name">CAI3T38TJ</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_caieg21q4" model="ofh.gds.office">
+        <field name="name">CAIEG21Q4</field>
+    </record>
+
+    <record id="ofh_gds_office_cas3t38tj" model="ofh.gds.office">
+        <field name="name">cas3t38tj</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_doh3t38tj" model="ofh.gds.office">
+        <field name="name">DOH3T38TJ</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_dxb3t38tj" model="ofh.gds.office">
+        <field name="name">DXB3T38TJ</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_dxbad31dn" model="ofh.gds.office">
+        <field name="name">DXBAD31DN</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_dxbad31do" model="ofh.gds.office">
+        <field name="name">DXBAD31DO</field>
+    </record>
+
+    <record id="ofh_gds_office_dxbad38tj" model="ofh.gds.office">
+        <field name="name">DXBAD38TJ</field>
+    </record>
+
+    <record id="ofh_gds_office_kwi3t38tj" model="ofh.gds.office">
+        <field name="name">KWI3T38TJ</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_kwikt2662" model="ofh.gds.office">
+        <field name="name">KWIKT2662</field>
+    </record>
+
+    <record id="ofh_gds_office_kwikt2665" model="ofh.gds.office">
+        <field name="name">KWIKT2665</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_kwikt2714" model="ofh.gds.office">
+        <field name="name">KWIKT2714</field>
+    </record>
+
+    <record id="ofh_gds_office_ruhaa28wh" model="ofh.gds.office">
+        <field name="name">RUHAA28WH</field>
+    </record>
+
+    <record id="ofh_gds_office_ruhaa2136" model="ofh.gds.office">
+        <field name="name">RUHAA2136</field>
+    </record>
+
+    <record id="ofh_gds_office_ruhaa2218" model="ofh.gds.office">
+        <field name="name">RUHAA2218</field>
+    </record>
+
+    <record id="ofh_gds_office_shj3t38tj" model="ofh.gds.office">
+        <field name="name">SHJ3T38TJ</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_shjad3446" model="ofh.gds.office">
+        <field name="name">SHJAD3446</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ofh_gds_office_shjad3642" model="ofh.gds.office">
+        <field name="name">SHJAD3642</field>
+        <field name="active" eval="False"/>
+    </record>
+
+</odoo>

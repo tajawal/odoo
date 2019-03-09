@@ -143,6 +143,38 @@ class HubAPI:
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get sotre details")
 
+    def get_gds_daily_report(self, office_id: str, report_day: str) -> dict:
+        """[summary]
+
+        :param office_id: [description]
+        :type office_id: str
+        :param report_day: [description]
+        :type report_day: str
+        :raises MissingError: [description]
+        :return: [description]
+        :rtype: dict
+        """
+
+        if not office_id or not report_day:
+            return {}
+
+        url = "http://localhost:5000/gds_reports/daily_report"
+        headers = {
+            'cache-control': "no-cache",
+            'Content-Type': "application/json",
+        }
+        payload = {
+            'office': office_id,
+            'report_day': report_day,
+        }
+        try:
+            response = requests.post(
+                url, json=payload, headers=headers)
+            response.raise_for_status()
+            return response.json().get('data')
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not get payment request details")
+
 
 class HubAdapter(AbstractComponent):
     """[summary]."""

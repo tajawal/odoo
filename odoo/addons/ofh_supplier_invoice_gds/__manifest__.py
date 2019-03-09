@@ -12,11 +12,14 @@
     'depends': [
         'ofh_supplier_invoice',
         'connector_importer',
+        'ofh_hub_connector',
     ],
     'data': [
         'data/backend.xml',
+        'data/ofh_gds_office.xml',
         'wizards/ofh_supplier_invoice_import.xml',
         'views/ofh_supplier_invoice_line.xml',
+        'views/ofh_gds_office.xml',
     ],
     'demo': [
         'demo/ofh_supplier_invoice_gds.xml',

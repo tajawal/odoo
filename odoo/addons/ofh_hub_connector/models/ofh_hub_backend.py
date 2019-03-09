@@ -110,7 +110,7 @@ class HubBackend(models.Model):
         # client once (lazily on the first use) and propagate it
         # through all the sync session, instead of recreating a client
         # in each backend adapter usage.
-        #
+
         hub_api = HubAPI(
             hub_url=self.hub_api_location,
             hub_username=self.hub_api_username,
