@@ -122,15 +122,37 @@ class HubAPI:
             raise MissingError("Could not get payment request details")
 
     def get_raw_order(self, order_id: str) -> dict:
-        url = '{}api/sap/order-raw/{}'.format(self.hub_url, order_id)
-        headers = self.headers
-        headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
+        # TODO: this is purely manual for test purpose only
+        url = f"http://localhost:5000/sale_orders/detail/{order_id}"
+        headers = {
+            'cache-control': "no-cache",
+        }
+        # url = '{}api/sap/order-raw/{}'.format(self.hub_url, order_id)
+        # headers = self.headers
+        # headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
         try:
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get payment request details")
+
+    def get_list_order(self, from_date: datetime, to_date: datetime) -> dict:
+        # TODO: this is purely manual for test purpose only
+        url = "http://localhost:5000/sale_orders/list"
+        headers = {
+            'cache-control': "no-cache",
+        }
+        query = {
+            'date_to': to_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'date_from': from_date.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        try:
+            response = requests.get(url, headers=headers, params=query)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.HTTPError:
+            raise MissingError("Could find payment requests")
 
     def get_raw_store(self, store_id: int) -> dict:
         url = '{}store/{}'.format(self.config_url, store_id)

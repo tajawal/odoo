@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_sale_order_form_view">
+        <field name="name">ofh.sale.order.form (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    <group name="header" col="4">
+                        <field name="name"/>
+                        <field name="track_id"/>
+                        <field name="created_at"/>
+                        <field name="updated_at"/>
+                        <field name="order_status"/>
+                        <field name="payment_status"/>
+                        <field name="store_id"/>
+                        <field name="group_id"/>
+                        <field name="currency_id"/>
+                    </group>
+                    <group col="4" name="sale_totals" string="Cost Totals">
+                        <field name="office_id"/>
+                        <field name="ticketing_office_id"/>
+                        <field name="lines_total_service_fee" widget="monetary"/>
+                        <field name="total_service_fee" widget="monetary"/>
+                        <field name="lines_total_discount" widget="monetary"/>
+                        <field name="total_discount" widget="monetary"/>
+                        <field name="lines_total_tax" widget="monetary"/>
+                        <field name="total_tax" widget="monetary"/>
+                        <field name="lines_total_amount" widget="monetary"/>
+                        <field name="total_amount" widget="monetary"/>
+                    </group>
+                    <group col="4" name="sale_totals" string="Sales Totals">
+                        <field name="vendor_reference"/>
+                        <field name="supplier_reference"/>
+                        <field name="total_vendor_cost" widget="monetary"/>
+                        <field name="lines_total_vendor_cost" widget="monetary"/>
+                        <field name="total_supplier_cost" widget="monetary"/>
+                        <field name="vendor_currency_id"/>
+                        <field name="supplier_currency_id"/>
+                    </group>
+                    <notebook>
+                        <page name="sale_lines" string="Lines">
+                            <field name="line_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter"></div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_sale_order_search_view">
+        <field name="name">ofh.sale.order.search (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="track_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_sale_order_tree_view">
+        <field name="name">ofh.sale.order.tree (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="created_at"/>
+                <field name="updated_at"/>
+                <field name="ticketing_office_id"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="vendor_currency_id" invisible="1"/>
+                <field name="supplier_currency_id" invisible="1"/>
+                <field name="total_amount"/>
+                <field name="total_vendor_cost"/>
+                <field name="total_supplier_cost"/>
+                <field name="order_status"/>
+                <field name="payment_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">ofh.sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_main_menu">
+        <field name="name">Sales Orders</field>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_menu">
+        <field name="name">Sales Orders</field>
+        <field name="parent_id" ref="ofh_sale_order_main_menu"/>
+        <field name="action" ref="ofh_sale_order_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">
+        <field name="name">Sales Order Lines</field> <!-- TODO -->
+        <field name="res_model">ofh.sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_line_menu">
+        <field name="name">Sales Order lines</field>
+        <field name="parent_id" ref="ofh_sale_order_main_menu"/>
+        <field name="action" ref="ofh_sale_order_line_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+</odoo>

@@ -16,5 +16,6 @@ class HubModelBinder(Component):
     _inherit = ['base.binder', 'base.hub.connector']
 
     _apply_on = [
-        'hub.payment.request'
+        'hub.payment.request',
+        'hub.sale.order',
     ]

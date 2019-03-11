@@ -68,10 +68,6 @@ class HubBackend(models.Model):
     import_payment_request_from_date = fields.Datetime(
         string="Import payment request from date",
     )
-    import_sale_order_from_date = fields.Datetime(
-        string="Import Sale order from date",
-        readonly=True,
-    )
 
     _sql_constraints = [
         ('unique_hub_backend', 'unique(name)',
@@ -137,8 +133,7 @@ class HubBackend(models.Model):
                 filters={'from': from_date,
                          'to': import_start_time}
             )
-        # TODO: update this comment
-        # Records from Hub are imported based on their `created_at`
+        # Records from Hub are imported based on their `updated_at`
         # date.  This date is set on Hub at the beginning of a
         # transaction, so if the import is run between the beginning and
         # the end of a transaction, the import of a record may be

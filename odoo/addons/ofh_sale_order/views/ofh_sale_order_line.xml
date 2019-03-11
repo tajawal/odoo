@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_sale_order_line_form_view">
+        <field name="name">ofh.sale.order.line.form (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
+                <sheet>
+                    <group name="general_info" col="4">
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="created_at"/>
+                        <field name="updated_at"/>
+                        <field name="line_type"/>
+                        <field name="line_category"/>
+                        <field name="is_domestic_ksa"/>
+                    </group>
+                    <group name="traveller_info" col="4" string="Traveller Details"
+                           attrs="{'invisible': [('line_type', '!=', 'flight')]}">
+                        <field name="traveller"/>
+                        <field name="traveller_type"/>
+                        <field name="ticket_number"/>
+                        <field name="office_id"/>
+                        <field name="ticketing_office_id"/>
+                        <field name="tour_code_office_id"/>
+                    </group>
+                    <group name="segment_info" col="4" string="Hotel Details"
+                           attrs="{'invisible': [('line_type', '!=', 'hotel')]}">
+                        <field name="contract"/>
+                        <field name="hotel_id"/>
+                        <field name="hotel_city"/>
+                        <field name="hotel_country"/>
+                    </group>
+                    <notebook>
+                        <page name="finance_details"
+                              string="Financial Details">
+                            <group name="sale_detail" string="Sale" col="4">
+                                <field name="service_fee_amount" widget="monetary"/>
+                                <field name="sale_price" widget="monetary"/>
+                                <field name="discount_amount" widget="monetary"/>
+                                <field name="subtotal_amount"/>
+                                <field name="tax_amount" widget="monetary"/>
+                                <field name="total_amount"/>
+                                <field name="currency_id"/>
+                                <field name="tax_code"/>
+                            </group>
+                            <group name="vendor_detail" string="Vendor" col="4">
+                                <field name="vendor_name"/>
+                                <field name="vendor_confirmation_number"/>
+                                <field name="vendor_cost_amount" widget="monetary"/>
+                                <field name="vendor_currency_id"/>
+                            </group>
+                            <group name="supplier_detail" string="Supplier" col="4">
+                                <field name="supplier_name"/>
+                                <field name="supplier_confirmation_number"/>
+                                <field name="supplier_cost_amount" widget="monetary"/>
+                                <field name="supplier_currency_id"/>
+                                <field name="exchange_rate"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter"></div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_sale_order_line_tree_view">
+        <field name="name">ofh.sale.order.line.tree (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name" invisible="1"/>
+                <field name="order_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="supplier_currency_id" invisible="1"/>
+                <field name="vendor_currency_id" invisible="1"/>
+                <field name="line_type"/>
+                <field name="line_category"/>
+                <field name="vendor_cost_amount" sum="Total"/>
+                <field name="service_fee_amount" widget="monetary" sum="Total"/>
+                <field name="sale_price" sum="Total"/>
+                <field name="discount_amount" widget="monetary" sum="Total"/>
+                <field name="subtotal_amount" widget="monetary" sum="Total"/>
+                <field name="tax_amount" widget="monetary" sum="Total"/>
+                <field name="total_amount" widget="monetary" sum="Total"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
