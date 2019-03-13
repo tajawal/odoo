@@ -1,6 +1,11 @@
 Changes
 -------
 
+1.5.0 (2019-03-13)
+------------------
+* VAT on change fee.
+* Fix Payment Transaction calculation.
+
 1.4.5 (2019-02-24)
 ------------------
 * AYESHA-41: Use update_at date when sending to SAP.
