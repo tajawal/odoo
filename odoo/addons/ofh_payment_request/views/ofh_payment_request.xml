@@ -59,6 +59,13 @@
                                 <field name="loss_amount" widget="monetary"/>
                                 <field name="input_vat_amount" widget="monetary"/>
                                 <field name="output_vat_amount" widget="monetary"/>
+                                <field name="change_fee_vat_amount" widget="monetary"/>
+                                <field name="fare_difference_vat_amount" widget="monetary"/>
+                                <field name="penalty_vat_amount" widget="monetary"/>
+                                <field name="adm_vat_amount" widget="monetary"/>
+                                <field name="booking_fee_vat_amount" widget="monetary"/>
+                                <field name="deals_vat_amount" widget="monetary"/>
+                                <field name="discount_vat_amount" widget="monetary"/>
                                 <field name="tax_code"/>
                                 <field name="loss_type"/>
                             </group>

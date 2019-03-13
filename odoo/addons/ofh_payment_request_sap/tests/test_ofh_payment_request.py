@@ -36,6 +36,14 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
         self.pr_5 = self.env.ref(
             'ofh_payment_request.ofh_payment_request_gds_5')
 
+        # Change Fee LineItem test for Refund
+        self.pr_refund = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_gds_refund')
+        # Change Fee LineItem test for Charge
+        self.pr_charge = self.env.ref(
+            'ofh_payment_request.'
+            'ofh_payment_request_gds_charge_with_change_fee')
+
         # Supplier invoices.
         self.inv_1 = self.env.ref(
             'ofh_supplier_invoice_gds.ofh_supplier_invoice_line_gds_1')
@@ -157,6 +165,22 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
         self.assertEquals(self.pr_4.sap_status, 'in_sap')
         self.assertEquals(self.pr_5.sap_status, 'in_sap')
 
+    def test_compute_change_fee_line(self):
+
+        # Only matched or not applicable PRs have SAP fields calculated
+        self.assertAlmostEquals(self.pr_refund.sap_zvt1, 0)
+        self.assertAlmostEquals(self.pr_refund.sap_zdis, 0)
+        self.assertAlmostEquals(self.pr_refund.sap_change_fee_zsel, 25)
+        self.assertAlmostEquals(self.pr_refund.sap_change_fee_zvt1, 1)
+        self.assertEquals(self.pr_refund.sap_change_fee_tax_code, "SS")
+
+        # Only matched or not applicable PRs have SAP fields calculated
+        self.assertAlmostEquals(self.pr_charge.sap_zvt1, 0)
+        self.assertAlmostEquals(self.pr_charge.sap_zdis, 0)
+        self.assertAlmostEquals(self.pr_charge.sap_change_fee_zsel, 25)
+        self.assertAlmostEquals(self.pr_charge.sap_change_fee_zvt1, 1)
+        self.assertEquals(self.pr_refund.sap_change_fee_tax_code, "SS")
+
     def test_compute_sap_zsel(self):
 
         # Only matched or not applicable PRs have SAP fields calculated
@@ -176,7 +200,7 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
         # Case 2: Charge case
         self.pr_1.reconciliation_status = 'matched'
         self.pr_1.request_type = 'charge'
-        self.assertAlmostEquals(self.pr_1.sap_zsel, self.pr_1.total_amount)
+        self.assertAlmostEquals(self.pr_1.sap_zsel, 580)
         self.assertAlmostEquals(self.pr_1.sap_zdis, self.pr_1.discount)
         self.assertAlmostEquals(
             self.pr_1.sap_payment_amount1, self.pr_1.total_amount * -1)
@@ -185,7 +209,7 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
 
         # Case 3: Refund case without discount
         self.pr_1.request_type = 'refund'
-        self.assertAlmostEquals(self.pr_1.sap_zsel, self.pr_1.total_amount)
+        self.assertAlmostEquals(self.pr_1.sap_zsel, 740)
         self.assertAlmostEquals(self.pr_1.sap_zdis, 0)
         self.assertAlmostEquals(
             self.pr_1.sap_payment_amount1, self.pr_1.total_amount)
@@ -200,6 +224,12 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
             self.pr_1.sap_payment_amount1, self.pr_1.total_amount)
         self.assertAlmostEquals(
             self.pr_1.sap_payment_amount2, self.pr_1.sap_payment_amount1 * -1)
+
+        # Change Fee for Amendment
+        self.assertAlmostEquals(self.pr_charge.sap_zsel, 0)
+        self.assertAlmostEquals(self.pr_charge.sap_zdis, 0)
+        self.assertAlmostEquals(self.pr_charge.sap_zvt1, 0)
+        self.assertAlmostEquals(self.pr_charge.sap_zvd1, 0)
 
     def test_compute_transaction_type_1(self):
         """

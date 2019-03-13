@@ -4,6 +4,53 @@
 
 <odoo>
 
+    <record id="ofh_payment_request_gds_refund" model="ofh.payment.request">
+        <field name="track_id">pr-H90212009052-1551261525547</field>
+        <field name="order_reference">H90212009052</field>
+        <field name="created_at">2018-10-09</field>
+        <field name="updated_at">2018-10-09</field>
+        <field name="request_type">refund</field>
+        <field name="request_reason">Tajawal Fee</field>
+        <field name="request_status">Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5ba61f8b67e5a565907d3712</field>
+        <field name="charge_id">charge_8BBBBCF61X1D5F1D6CA2</field>
+        <field name="hub_supplier_reference">YRNJ4,KZ90EE</field>
+        <field name="auth_code">588555</field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="currency_id" ref="base.SAR"/>
+        <field name="fees">
+            { "fareDifference": 1548, "changeFee": 25, "outputVat": 6, "total": 1530,
+            "changeFeeVat": 1, "fareDifferenceVat": 7 }
+        </field>
+        <field name="total_amount">660</field>
+        <field name="vendor_id">AI</field>
+    </record>
+
+    <record id="ofh_payment_request_gds_charge_with_change_fee" model="ofh.payment.request">
+        <field name="track_id">pr-A90226005450-1551263684232</field>
+        <field name="order_reference">A90226005450</field>
+        <field name="created_at">2018-10-09</field>
+        <field name="updated_at">2018-10-09</field>
+        <field name="request_type">refund</field>
+        <field name="request_reason">Amendment</field>
+        <field name="request_status">Customer Processed</field>
+        <field name="entity">tajawal</field>
+        <field name="order_id">5ba61f8b67e5a565907d3712</field>
+        <field name="charge_id">charge_8BBBBCF61X1D5F1D6CA2</field>
+        <field name="hub_supplier_reference">YRNJ4,KZ90EE</field>
+        <field name="auth_code">588555</field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            { "fareDifference": 100, "changeFee": 25, "penalty": 50, "outputVat": 8, "inputVat": 44, "total":
+            182, "changeFeeVat": 1, "fareDifferenceVat": 5, "penaltyVat": 2
+            }
+        </field>
+        <field name="total_amount">660</field>
+        <field name="vendor_id">AI</field>
+    </record>
+
     <record id="ofh_payment_request_gds_1" model="ofh.payment.request">
         <field name="track_id">pr-A8092211814-1539070315235</field>
         <field name="order_reference">A8092211814</field>

@@ -139,6 +139,43 @@ class OfhPaymentRequest(models.Model):
         store=False,
     )
 
+    sap_change_fee_zsel = fields.Monetary(
+        string="SAP Change Fee ZSEL",
+        currency_field='currency_id',
+        compute='_compute_change_fee_line',
+        readonly=True,
+        store=False,
+    )
+
+    sap_change_fee_zvt1 = fields.Monetary(
+        string="SAP Change Fee ZVT1",
+        currency_field='currency_id',
+        compute='_compute_change_fee_line',
+        readonly=True,
+        store=False,
+    )
+
+    sap_change_fee_service_item = fields.Char(
+        string="SAP SERVICE ITEM",
+        compute='_compute_change_fee_line',
+        readonly=True,
+        store=False,
+    )
+
+    sap_change_fee_tax_code = fields.Char(
+        string="Change Fee Tax Code",
+        compute='_compute_change_fee_line',
+        readonly=True,
+        store=False,
+    )
+
+    sap_tax_code = fields.Char(
+        string="SAP Tax Code",
+        compute='_compute_sap_zvt1',
+        readonly=True,
+        store=False,
+    )
+
     @api.multi
     @api.constrains(
         'integration_status', 'sap_xml_sale_ref', 'sap_xml_file_ref')
@@ -169,9 +206,11 @@ class OfhPaymentRequest(models.Model):
                 continue
             if rec.request_type == 'void':
                 continue
-            # For the ammendment we take whatever amounts are in the PR
+            # For the amendment we take whatever amounts are in the PR
             if rec.request_type == 'charge':
-                rec.sap_zsel = rec.total_amount
+                # Subtracted changeFee in case of
+                # Charges i.e (- rec.change_fee)
+                rec.sap_zsel = rec.total_amount - rec.change_fee
                 rec.sap_zdis = rec.discount
                 rec.sap_payment_amount1 = rec.total_amount * -1
                 rec.sap_payment_amount2 = rec.total_amount
@@ -185,7 +224,8 @@ class OfhPaymentRequest(models.Model):
                 else:
                     discount = 0
                 discount = abs(discount)
-                rec.sap_zsel = rec.total_amount + discount
+                # Added changeFee in case of Refunds i.e (+ rec.change_fee)
+                rec.sap_zsel = rec.total_amount + discount + rec.change_fee
                 rec.sap_zdis = discount
                 rec.sap_payment_amount1 = rec.total_amount
                 rec.sap_payment_amount2 = rec.total_amount * -1
@@ -237,7 +277,21 @@ class OfhPaymentRequest(models.Model):
                 continue
             if rec.request_type == 'void':
                 continue
-            rec.sap_zvt1 = rec.output_vat_amount
+
+            # If Charge subtract ChangeFeeVat
+            if rec.request_type == 'charge':
+                rec.sap_zvt1 = \
+                    rec.output_vat_amount - rec.change_fee_vat_amount
+            # If Refund Add ChangeFeeVat
+            if rec.request_type == 'refund':
+                rec.sap_zvt1 = \
+                    rec.output_vat_amount + rec.change_fee_vat_amount
+
+            # Tax Code logic is redefined
+            if rec.sap_zvt1 == 0.0:
+                rec.sap_tax_code = "SZ"
+            else:
+                rec.sap_tax_code = "SS"
 
     @api.multi
     @api.depends('supplier_invoice_ids.locator')
@@ -495,6 +549,7 @@ class OfhPaymentRequest(models.Model):
         else:
             payload['updates']['lineItems'] = [{
                 'item_general': {
+                    'VATTaxCode': self.sap_tax_code,
                     'pnr': self.sap_pnr,
                     'BillingDate': booking_date,
                 },
@@ -512,7 +567,59 @@ class OfhPaymentRequest(models.Model):
                 }
             }]
 
+        if not float_is_zero(
+                self.change_fee,
+                precision_rounding=self.currency_id.rounding):
+            change_fee_line_item = self.get_change_fee_line_item()
+            payload['updates']['lineItems'].append(change_fee_line_item)
+
         return payload
+
+    @api.multi
+    def get_change_fee_line_item(self):
+
+        """Return the Change Fee LineItem."""
+        self.ensure_one()
+        booking_date = datetime.strftime(
+            fields.Datetime.from_string(
+                self.updated_at), '%Y%m%d')
+
+        line_item = {
+            'item_general': {
+                'VATTaxCode': self.sap_change_fee_tax_code,
+                'ServiceItem': self.sap_change_fee_service_item,
+                'BillingDate': booking_date,
+            },
+            'item_condition': {
+                'ZVD1': 0.0,
+                'ZVD1_CURRENCY': self.supplier_currency_id.name if
+                self.supplier_currency_id else self.currency_id.name,
+                'ZSEL': self.sap_change_fee_zsel,
+                'ZSEL_CURRENCY': self.currency_id.name,
+                'ZVT1': self.sap_change_fee_zvt1,
+                'ZVT1_CURRENCY': self.currency_id.name,
+                'ZDIS': 0.0,
+                'ZDIS_CURRENCY': self.currency_id.name,
+            }
+        }
+
+        return line_item
+
+    @api.multi
+    @api.depends('change_fee', 'change_fee_vat_amount')
+    def _compute_change_fee_line(self):
+        """Compute Gross revenue, discount, payment amount 1 and 2."""
+        for rec in self:
+            rec.sap_change_fee_zsel = rec.sap_change_fee_zvt1 = 0.0
+
+            # Change Fee Line Item ZSEL and ZVT1
+            rec.sap_change_fee_zsel = rec.change_fee
+            rec.sap_change_fee_zvt1 = rec.change_fee_vat_amount
+            # TODO: move it to SAP-XML-API we should not keep any master data
+            # in finance hub. Also we need to remove it as field.
+            rec.sap_change_fee_service_item = 700000647
+            rec.sap_change_fee_tax_code = "SZ" if \
+                rec.sap_change_fee_zvt1 == 0.0 else "SS"
 
     @api.multi
     def _get_payment_sap_xml_api_payload(self, source):

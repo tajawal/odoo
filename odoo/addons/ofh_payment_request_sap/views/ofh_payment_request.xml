@@ -36,6 +36,16 @@
                     <group name="integration_details" string="SAP Item General" col="4">
                         <field name="sap_pnr"/>
                         <field name="sap_xml_sale_ref"/>
+                        <field name="sap_tax_code"/>
+                    </group>
+                    <group name="integration_details" string="SAP Change Fee Item General" col="4">
+                        <field name="sap_change_fee_service_item"/>
+                        <field name="sap_change_fee_tax_code"/>
+                    </group>
+
+                    <group name="integration_details" string="SAP Change Fee Conditions" col="4">
+                        <field name="sap_change_fee_zsel"/>
+                        <field name="sap_change_fee_zvt1"/>
                     </group>
                     <group name="sap_conditions" string="SAP Payment details Conditions" col="4">
                         <field name="sap_payment_amount1"/>

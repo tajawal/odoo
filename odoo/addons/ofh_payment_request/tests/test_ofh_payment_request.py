@@ -24,6 +24,13 @@ class TestOfhPaymentRequest(TransactionCase):
             'ofh_payment_request.ofh_payment_request_gds_1')
         self.payment_request_2 = self.env.ref(
             'ofh_payment_request.ofh_payment_request_gds_2')
+        # Change Fee LineItem test for Refund
+        self.payment_request_refund = self.env.ref(
+            'ofh_payment_request.ofh_payment_request_gds_refund')
+        # Change Fee LineItem test for Amendment
+        self.payment_request_charge = self.env.ref(
+            'ofh_payment_request.'
+            'ofh_payment_request_gds_charge_with_change_fee')
 
     def test_compute_fees(self):
         # Paymemnt Request 1
@@ -70,6 +77,48 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertFalse(self.payment_request_1.loss_type)
         self.assertEqual(self.payment_request_1.tax_code, 'sz')
 
+        # Payment Request Refund with Change Fee
+        self.assertAlmostEquals(
+            self.payment_request_refund.fare_difference, 1548)
+        self.assertAlmostEquals(
+            self.payment_request_refund.penalty, 0)
+        self.assertAlmostEquals(
+            self.payment_request_refund.change_fee, 25)
+        self.assertAlmostEquals(
+            self.payment_request_refund.booking_fee, 0)
+        self.assertAlmostEquals(
+            self.payment_request_refund.discount, 0)
+        self.assertAlmostEquals(
+            self.payment_request_refund.input_vat_amount, 0)
+        self.assertAlmostEquals(
+            self.payment_request_refund.output_vat_amount, 6)
+        self.assertAlmostEquals(
+            self.payment_request_refund.adm_amount, 0)
+        self.assertFalse(
+            self.payment_request_refund.loss_type)
+        self.assertEqual(self.payment_request_refund.tax_code, 'ss')
+
+        # Payment Request Amendment with Change Fee
+        self.assertAlmostEquals(
+            self.payment_request_charge.fare_difference, 100)
+        self.assertAlmostEquals(
+            self.payment_request_charge.penalty, 50)
+        self.assertAlmostEquals(
+            self.payment_request_charge.change_fee, 25)
+        self.assertAlmostEquals(
+            self.payment_request_charge.booking_fee, 0)
+        self.assertAlmostEquals(
+            self.payment_request_charge.discount, 0)
+        self.assertAlmostEquals(
+            self.payment_request_charge.input_vat_amount, 44)
+        self.assertAlmostEquals(
+            self.payment_request_charge.output_vat_amount, 8)
+        self.assertAlmostEquals(
+            self.payment_request_charge.adm_amount, 0)
+        self.assertFalse(
+            self.payment_request_charge.loss_type)
+        self.assertEqual(
+            self.payment_request_charge.tax_code, 'ss')
 
     def test_compute_payment_request_status(self):
         # Payment Request 1

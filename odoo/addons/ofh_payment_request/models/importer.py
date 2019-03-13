@@ -145,13 +145,13 @@ class HubPaymentRequestImportMapper(Component):
         return {}
 
     @mapping
-    def payment_method(self, record):
+    def payment_mode(self, record):
         if 'response' not in record:
             return {}
         if 'metadata' not in record['response']:
             return {}
         return {
-            'payment_method': record['response']['metadata'].get('paymentMode')
+            'payment_mode': record['response']['metadata'].get('paymentMode')
         }
 
     @mapping

@@ -325,6 +325,63 @@ class OfhPaymentRequest(models.Model):
         store=False,
     )
 
+    # newly added VAT fields
+    change_fee_vat_amount = fields.Monetary(
+        string="Change Fee VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+
+    fare_difference_vat_amount = fields.Monetary(
+        string="Fare Difference VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+
+    penalty_vat_amount = fields.Monetary(
+        string="Penalty VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+
+    adm_vat_amount = fields.Monetary(
+        string="ADM VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+
+    booking_fee_vat_amount = fields.Monetary(
+        string="Booking Fee VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+
+    deals_vat_amount = fields.Monetary(
+        string="Deals VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+
+    discount_vat_amount = fields.Monetary(
+        string="Discount VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+
     @api.multi
     @api.depends('reconciliation_status', 'order_created_at', 'created_at',
                  'is_investigated', 'request_type')
@@ -417,6 +474,15 @@ class OfhPaymentRequest(models.Model):
             rec.output_vat_amount = fees_dict.get('outputVat')
             rec.adm_amount = fees_dict.get('adm')
             rec.loss_type = fees_dict.get('lossType')
+            # newly added vat fields
+            rec.change_fee_vat_amount = fees_dict.get('changeFeeVat')
+            rec.fare_difference_vat_amount = fees_dict.get('fareDifferenceVat')
+            rec.penalty_vat_amount = fees_dict.get('penaltyVat')
+            rec.adm_vat_amount = fees_dict.get('admVat')
+            rec.booking_fee_vat_amount = fees_dict.get('bookingFeeVat')
+            rec.deals_vat_amount = fees_dict.get('dealsVat')
+            rec.discount_vat_amount = fees_dict.get('discountVat')
+
             if float_is_zero(
                     rec.output_vat_amount,
                     precision_rounding=rec.currency_id.rounding):
