@@ -589,6 +589,7 @@ class OfhPaymentRequest(models.Model):
                 'VATTaxCode': self.sap_change_fee_tax_code,
                 'ServiceItem': self.sap_change_fee_service_item,
                 'BillingDate': booking_date,
+                'GDSCode': "",
             },
             'item_condition': {
                 'ZVD1': 0.0,
