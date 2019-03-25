@@ -1,6 +1,11 @@
 Changes
 -------
 
+1.5.1 (2019-03-25)
+------------------
+* Empty GDSCode for change fee lineitem
+* Change fee material for live sap.
+
 1.5.0 (2019-03-13)
 ------------------
 * VAT on change fee.
