@@ -577,7 +577,6 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     def get_change_fee_line_item(self):
-
         """Return the Change Fee LineItem."""
         self.ensure_one()
         booking_date = datetime.strftime(
@@ -607,7 +606,7 @@ class OfhPaymentRequest(models.Model):
         return line_item
 
     @api.multi
-    @api.depends('change_fee', 'change_fee_vat_amount')
+    @api.depends('change_fee', 'change_fee_vat_amount', 'order_type')
     def _compute_change_fee_line(self):
         """Compute Gross revenue, discount, payment amount 1 and 2."""
         for rec in self:
@@ -618,7 +617,10 @@ class OfhPaymentRequest(models.Model):
             rec.sap_change_fee_zvt1 = rec.change_fee_vat_amount
             # TODO: move it to SAP-XML-API we should not keep any master data
             # in finance hub. Also we need to remove it as field.
-            rec.sap_change_fee_service_item = 700000647
+            if rec.order_type == 'flight':
+                rec.sap_change_fee_service_item = '700000548'
+            else:
+                rec.sap_change_fee_service_item = '700000549'
             rec.sap_change_fee_tax_code = "SZ" if \
                 rec.sap_change_fee_zvt1 == 0.0 else "SS"
 
