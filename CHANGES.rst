@@ -1,6 +1,10 @@
 Changes
 -------
 
+1.5.2 (2019-03-26)
+------------------
+* Manual OUTPUT VAT amount.
+
 1.5.1 (2019-03-25)
 ------------------
 * Empty GDSCode for change fee lineitem
