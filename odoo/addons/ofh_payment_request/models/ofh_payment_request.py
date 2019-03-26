@@ -4,7 +4,7 @@
 import json
 
 from odoo import api, fields, models
-from odoo.tools import float_is_zero
+from odoo.tools import float_is_zero, float_compare
 
 
 class OfhPaymentRequest(models.Model):
@@ -499,12 +499,12 @@ class OfhPaymentRequest(models.Model):
             rec.deals_vat_amount = fees_dict.get('dealsVat')
             rec.discount_vat_amount = fees_dict.get('discountVat')
 
-            if float_is_zero(
-                    rec.output_vat_amount,
-                    precision_rounding=rec.currency_id.rounding):
-                rec.tax_code = 'sz'
-            else:
+            if float_compare(
+                    rec.output_vat_amount, 0.0,
+                    precision_digits=rec.currency_id.rounding) > 0:
                 rec.tax_code = 'ss'
+            else:
+                rec.tax_code = 'sz'
 
     @api.multi
     @api.depends('order_reference')
