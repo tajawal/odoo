@@ -150,6 +150,12 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
+    manual_output_vat_amount = fields.Monetary(
+        string="Manual Output VAT",
+        currency_field='currency_id',
+        help="Technical field to ajust VAT when neeeded",
+        track_visibility='onchange',
+    )
     total_amount = fields.Monetary(
         string="Total",
         currency_field='currency_id',
@@ -451,7 +457,7 @@ class OfhPaymentRequest(models.Model):
                 rec.payment_reference = rec.charge_id
 
     @api.multi
-    @api.depends('fees')
+    @api.depends('fees', 'manual_output_vat_amount')
     def _compute_fees(self):
         for rec in self:
             fees = rec.fees
@@ -471,7 +477,17 @@ class OfhPaymentRequest(models.Model):
             rec.booking_fee = fees_dict.get('bookingFee')
             rec.discount = fees_dict.get('discount')
             rec.input_vat_amount = fees_dict.get('inputVat')
-            rec.output_vat_amount = fees_dict.get('outputVat')
+
+            # Sometimes the user correct manual the output vat amount.
+            # For this reason we use the manual field instead the one fetched
+            # from hub.
+            if not float_is_zero(
+                    rec.manual_output_vat_amount,
+                    precision_rounding=rec.currency_id.rounding):
+                rec.output_vat_amount = rec.manual_output_vat_amount
+            else:
+                rec.output_vat_amount = fees_dict.get('outputVat')
+
             rec.adm_amount = fees_dict.get('adm')
             rec.loss_type = fees_dict.get('lossType')
             # newly added vat fields

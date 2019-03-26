@@ -59,6 +59,7 @@
                                 <field name="loss_amount" widget="monetary"/>
                                 <field name="input_vat_amount" widget="monetary"/>
                                 <field name="output_vat_amount" widget="monetary"/>
+                                <field name="manual_output_vat_amount" widget="monetary"/>
                                 <field name="change_fee_vat_amount" widget="monetary"/>
                                 <field name="fare_difference_vat_amount" widget="monetary"/>
                                 <field name="penalty_vat_amount" widget="monetary"/>

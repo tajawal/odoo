@@ -120,6 +120,14 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertEqual(
             self.payment_request_charge.tax_code, 'ss')
 
+        # Manual output vat amount
+        self.payment_request_charge.manual_output_vat_amount = 5
+        self.assertAlmostEquals(
+            self.payment_request_charge.output_vat_amount, 5)
+        self.payment_request_charge.manual_output_vat_amount = 0
+        self.assertAlmostEquals(
+            self.payment_request_charge.output_vat_amount, 8)
+
     def test_compute_payment_request_status(self):
         # Payment Request 1
         self.assertEquals(
