@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record id="ofh_supplier_invoice_line_tv_1" model="ofh.supplier.invoice.line">
+        <field name="ticket_number">4510126</field>
+        <field name="invoice_type">tv</field>
+        <field name="locator">189961815</field>
+        <field name="invoice_from">Travel Port</field>
+        <field name="vendor_id">Hawthorn Suites By Wyndham Abu Dhabi City Center</field>
+        <field name="invoice_date">01/19/2019</field>
+        <field name="total">474.65</field>
+        <field name="supplier_reference">15070387</field>
+        <field name="supplier_currency">AED</field>
+        <field name="passenger">Mr KhalidBB Yusuf</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="office_id">Hotels</field>
+        <field name="index">4468974</field>
+    </record>
+</odoo>

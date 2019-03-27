@@ -72,7 +72,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <!-- TODO: Not strong enough we should find a better way -->
-        <field name="domain">[('name', 'in', ['TravelFusion Report Importer', 'GDS Report Importer', 'AIG Report Importer'])]</field>
+        <field name="domain">[('name', 'in', ['TravelFusion Report Importer', 'GDS Report Importer', 'AIG Report Importer','TravelPort Report Importer'])]</field>
         <field name="context">{}</field>
     </record>
 
