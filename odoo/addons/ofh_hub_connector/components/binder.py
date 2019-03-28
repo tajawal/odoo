@@ -18,4 +18,5 @@ class HubModelBinder(Component):
     _apply_on = [
         'hub.payment.request',
         'hub.sale.order',
+        'hub.sale.order.line',
     ]

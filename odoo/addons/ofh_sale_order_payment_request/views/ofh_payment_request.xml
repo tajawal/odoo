@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_form_view">
+        <field name="name">ofh.payment.request.form (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
+        <field name="arch" type="xml">
+            <field name="entity" position="after">
+                <field name="ticketing_office_id"/>
+            </field>
+            <group name="general_details" position="inside">
+                <field name="order_id"/>
+            </group>
+            <group name="status_details" position="inside">
+                <field name="need_to_investigate"/>
+            </group>
+            <page name="order_details" position="inside">
+                <group col="4" name="sale_order_details" string="Order Details">
+                    <field name="order_created_at"/>
+                    <field name="order_updated_at"/>
+                    <field name="order_type"/>
+                    <field name="order_amount"/>
+                    <field name="order_discount"/>
+                </group>
+            </page>
+            <page name="cost_details" position="inside">
+                <field name="order_supplier_currency" invisible="1"/>
+                <group col="4" name="cost_order_details">
+                    <field name="order_supplier_cost" widget="monetary"/>
+                </group>
+            </page>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_search_view">
+        <field name="name">ofh.payment.request.search (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_search_view"/>
+        <field name="arch" type="xml">
+            <field name="vendor_id" position="after">
+                <separator/>
+                <filter name="need_to_investigate" string="Need to Investigate" domain="[('need_to_investigate', '=', True)]"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="ofh_payment_request_tree_view">
+        <field name="name">ofh.payment.request.tree (in ofh_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="decoration-bf">reconciliation_status=='matched' and need_to_investigate==False</attribute>
+                <attribute name="decoration-danger">need_to_investigate==True</attribute>
+            </tree>
+            <tree position="inside">
+                <field name="need_to_investigate" invisible="1"/>
+            </tree>
+             <field name="entity" position="after">
+                <field name="request_type"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

@@ -10,7 +10,6 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" widget="statusbar" nolabel="1"/>
                 </header>
                 <sheet>
                     <group name="general_info" col="4">
@@ -20,6 +19,7 @@
                         <field name="updated_at"/>
                         <field name="line_type"/>
                         <field name="line_category"/>
+                        <field name="state"/>
                         <field name="is_domestic_ksa"/>
                     </group>
                     <group name="traveller_info" col="4" string="Traveller Details"
@@ -27,9 +27,16 @@
                         <field name="traveller"/>
                         <field name="traveller_type"/>
                         <field name="ticket_number"/>
+                        <field name="booking_class"/>
                         <field name="office_id"/>
                         <field name="ticketing_office_id"/>
                         <field name="tour_code_office_id"/>
+                        <field name="segment_count"/>
+                        <field name="passengers_count"/>
+                        <field name="destination_city"/>
+                        <field name="route"/>
+                        <field name="departure_date"/>
+                        <field name="last_leg_flying_date"/>
                     </group>
                     <group name="segment_info" col="4" string="Hotel Details"
                            attrs="{'invisible': [('line_type', '!=', 'hotel')]}">
@@ -77,19 +84,21 @@
         <field name="model">ofh.sale.order.line</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="sequence" widget="handle"/>
                 <field name="name" invisible="1"/>
                 <field name="order_id" invisible="1"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="supplier_currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>
                 <field name="line_type"/>
-                <field name="line_category"/>
-                <field name="vendor_cost_amount" sum="Total"/>
+                <field name="tickets"/>
+                <field name="vendor_name"/>
+                <field name="vendor_confirmation_number" string="Vendor Reference"/>
+                <field name="supplier_name"/>
+                <field name="supplier_confirmation_number" string="Supplier Reference"/>
+                <field name="vendor_cost_amount" widget="monetary" sum="Total"/>
+                <field name="supplier_cost_amount" widget="monetary" sum="Total"/>
                 <field name="service_fee_amount" widget="monetary" sum="Total"/>
-                <field name="sale_price" sum="Total"/>
                 <field name="discount_amount" widget="monetary" sum="Total"/>
-                <field name="subtotal_amount" widget="monetary" sum="Total"/>
                 <field name="tax_amount" widget="monetary" sum="Total"/>
                 <field name="total_amount" widget="monetary" sum="Total"/>
                 <field name="state"/>

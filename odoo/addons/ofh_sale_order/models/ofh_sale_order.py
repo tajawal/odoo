@@ -8,6 +8,43 @@ class OfhSaleOrder(models.Model):
 
     _name = 'ofh.sale.order'
     _description = 'Ofh Sale Order'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
+    @api.model
+    def _get_order_status_selection(self):
+        return [
+            ("10", "New"), ("15", "Tour Code in Progress"),
+            ("18", "Booking in Progress"), ("25", "PNR in Progress"),
+            ("30", "TST Error"), ("35", "TST in Progress"),
+            ("39", "TST Created"), ("40", "New TF Booking"),
+            ("41", "Incomplete TF booking"), ("42", "Unconfirmed TF Booking"),
+            ("43", "Contact TF Support"), ("44", "Pending"),
+            ("50", "Confirm Decision"), ("51", "Manually Ordered"),
+            ("52", "Manual Confirm Queue"), ("53", "Manually Confirmed"),
+            ("54", "Auto Confirm Started"), ("55", "Auto Confirm Queue"),
+            ("56", "Auto Confirm in Progress"),
+            ("57", "Auto Confirmed Partial Booking"),
+            ("58", "Auto Confirmed"), ("60", "Auto Confirm Failed"),
+            ("61", "Auto Confirm Cancelled"), ("62", "Auto Confirm Deleted"),
+            ("64", "Manual Payment"), ("65", "Reprice Confirm Queue"),
+            ("89", "Unprocessed"), ("91", "Failed"), ("94", "Cancelled"),
+            ("95", "Refunded"), ("96", "Manually Cancelled"),
+            ("100", "Duplicate"), ("101", "Cancellation under process"),
+            ("102", "Cancellation cannot be processed"),
+            ("200", "Reorder"), ("201", "Smart booking cancelled"),
+            ("1000", "Mixed")
+        ]
+
+    @api.model
+    def _get_payment_status_selection(self):
+        return [
+            ("79", 'Authorized - Risk flagged'), ("70", 'Error'),
+            ("71", 'Pending'), ("72", 'Progress'), ("73", 'Timeout'),
+            ("74", 'Empty'), ("77", 'Partial Paid'),
+            ("76", 'Full Refund'), ("75", 'Partial Refund'),
+            ("78", 'Authorized'), ("80", 'Captured'),
+            ("83", 'Manually Captured'),
+            ("81", 'Voided'), ("64", 'Manual Payment'), ("1000", 'Mixed')]
 
     name = fields.Char(
         string="Order ID",
@@ -25,42 +62,84 @@ class OfhSaleOrder(models.Model):
         required=True,
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     track_id = fields.Char(
         string="Track ID",
         required=True,
         readonly=True,
+        index=True,
     )
-    order_status = fields.Char(
+    order_type = fields.Selection(
+        string="Order Type",
+        selection=[
+            ('hotel', 'Hotel'),
+            ('flight', 'Flight'),
+            ('package', 'Package')],
+        required=True,
+        readonly=True,
+        index=True,
+    )
+    entity = fields.Selection(
+        selection=[
+            ('almosafer', 'Almosafer'),
+            ('tajawal', 'Tajawal')],
+        required=True,
+        readonly=True,
+        index=True,
+    )
+    order_status = fields.Selection(
         string="Order Status",
+        selection=_get_order_status_selection,
         required=True,
         readonly=True,
+        index=True,
+        track_visibility='onchange',
     )
-    payment_status = fields.Char(
+    is_egypt = fields.Boolean(
+        string="Is Egypt?",
+        readonly=True,
+        default=False,
+        index=True,
+    )
+    payment_status = fields.Selection(
         string="payment Status",
+        selection=_get_payment_status_selection,
         required=True,
         readonly=True,
+        index=True,
+        track_visibility='onchange',
+    )
+    paid_at = fields.Datetime(
+        string="Paid At",
+        readonly=True,
+        index=True,
+        track_visibility='onchange',
     )
     store_id = fields.Char(
         string="Store ID",
         required=True,
         readonly=True,
+        index=True,
     )
     group_id = fields.Char(
         string="Group ID",
         required=True,
         readonly=True,
+        index=True,
     )
     currency_id = fields.Many2one(
         string="Currency",
         comodel_name='res.currency',
         required=True,
         readonly=True,
+        index=True,
     )
     vendor_currency_id = fields.Many2one(
         string="Vendor Currency",
         comodel_name='res.currency',
         readonly=True,
+        index=True,
     )
     supplier_currency_id = fields.Many2one(
         string="Supplier Currency",
@@ -107,25 +186,34 @@ class OfhSaleOrder(models.Model):
         string='Vendor Reference',
         compute='_compute_vendor_reference',
         readonly=True,
-        store=False,
+        # Storing this value to be able to search a search on it
+        store=True,
+        index=True,
+        track_visibility='onchange',
     )
     supplier_reference = fields.Char(
         string="Supplier Reference",
         compute='_compute_supplier_reference',
         readonly=True,
-        store=False,
+        # Storing the value to be able to run a search on it
+        store=True,
+        index=True,
+        track_visibility='onchange',
     )
     office_id = fields.Char(
         string="Office ID",
         compute='_compute_office_id',
         readonly=True,
         store=False,
+        index=True,
     )
     ticketing_office_id = fields.Char(
         string="Ticketing Office ID",
         compute='_compute_ticketing_office_id',
         readonly=True,
-        store=False,
+        store=True,
+        index=True,
+        track_visibility='onchange',
     )
     hub_bind_ids = fields.One2many(
         comodel_name='hub.sale.order',
@@ -175,6 +263,19 @@ class OfhSaleOrder(models.Model):
         currency_field='currency_id',
         readonly=True,
         store=False,
+    )
+    matching_status = fields.Selection(
+        string="Matching Status",
+        selection=[
+            ('pending', 'Pending'),
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable'),
+            ('investigate', 'Investigate')],
+        default='pending',
+        required=True,
+        index=True,
+        readonly=True,
+        track_visibility='onchange',
     )
 
     @api.multi

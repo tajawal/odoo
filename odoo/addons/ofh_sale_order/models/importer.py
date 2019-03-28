@@ -1,3 +1,5 @@
+# Copyright 2019 Tajawal LCC
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 
@@ -12,8 +14,9 @@ class HubSaleOrderImportMapper(Component):
     direct = [
         ('name', 'name'),
         ('track_id', 'track_id'),
-        ('order_status', 'order_status'),
-        ('payment_status', 'payment_status'),
+        ('order_type', 'order_type'),
+        ('entity', 'entity'),
+        ('is_egypt', 'is_egypt'),
         ('store_id', 'store_id'),
         ('group_id', 'group_id'),
         ('total_amount', 'total_amount'),
@@ -30,6 +33,14 @@ class HubSaleOrderImportMapper(Component):
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
+
+    @mapping
+    def order_status(self, record):
+        return {'order_status': str(record.get('order_status', ''))}
+
+    @mapping
+    def payment_status(self, record):
+        return {'payment_status': str(record.get('payment_status', ''))}
 
     @mapping
     def currency_id(self, record):
@@ -52,6 +63,13 @@ class HubSaleOrderImportMapper(Component):
             return {
                 'updated_at': fields.Datetime.from_string(
                     record['updated_at'])}
+        return {}
+
+    @mapping
+    def paid_at(self, record):
+        if 'paid_at' in record:
+            return {'paid_at': fields.Datetime.from_string(
+                    record['paid_at'])}
         return {}
 
     @mapping
@@ -81,7 +99,6 @@ class HubSaleOrderLineImportMapper(Component):
         ('product_category', 'line_category'),
         ('sequence', 'sequence'),
         ('product_id', 'name'),
-        ('line_status', 'state'),
         ('is_domestic_ksa', 'is_domestic_ksa'),
     ]
 
@@ -213,7 +230,13 @@ class HubSaleOrderLineImportMapper(Component):
             return {}
         if 'traveller' not in record:
             return {}
-        return {'ticket_number': record['traveller'].get('ticket_number')}
+        ticket = record['traveller'].get('ticket')
+        if not ticket:
+            return {}
+        if '-' in ticket:
+            return {'ticket_number': ticket.split('-')[1]}
+        else:
+            return {'ticket_number': ticket}
 
     @mapping
     def office_id(self, record):
@@ -340,6 +363,50 @@ class HubSaleOrderLineImportMapper(Component):
             {'tax_code': record.get('tax_code').lower()}
         return {}
 
+    @mapping
+    def state(self, record):
+        return {'state': str(record['line_status'])}
+
+    @mapping
+    def passengers_count(self, record):
+        if 'nb_passengers' in record.get('traveller', {}):
+            return {
+                'passengers_count': record['traveller'].get('nb_passengers')}
+        return {}
+
+    @mapping
+    def last_leg_flying_date(self, record):
+        if 'last_leg_flying_date' in record.get('traveller', {}):
+            return {
+                'last_leg_flying_date': record['traveller'].get(
+                    'last_leg_flying_date', '')}
+
+    @mapping
+    def segment_count(self, record):
+        if 'segment_count' in record.get('traveller', {}):
+            return {
+                'segment_count': record['traveller'].get('segment_count', '')}
+
+    @mapping
+    def destination_city(self, record):
+        if 'destination_city' in record.get('traveller', {}):
+            return {
+                'destination_city': record['traveller'].get(
+                    'destination_city', '')}
+
+    @mapping
+    def departure_date(self, record):
+        if 'departure_date' in record.get('traveller', {}):
+            return {
+                'departure_date': record['traveller'].get(
+                    'departure_date', '')}
+
+    @mapping
+    def route(self, record):
+        if 'route' in record.get('traveller', {}):
+            return {
+                'route': record['traveller'].get('route', '')}
+
 
 class HubSaleOrderBatchImporter(Component):
     _name = 'hub.batch.sale.order.importer'
@@ -349,9 +416,9 @@ class HubSaleOrderBatchImporter(Component):
     def run(self, filters=None):
         """ Run the synchronization """
         records = self.backend_adapter.search(filters)
-        tracking_ids = [r['_id']['$oid'] for r in records]
-        for external_id in tracking_ids:
-            self._import_record(external_id)
+        for record in records:
+            if record['orderNumber'].startswith('A'):
+                self._import_record(record['_id']['$oid'])
 
 
 class HubSaleOrderImporter(Component):
@@ -359,3 +426,20 @@ class HubSaleOrderImporter(Component):
     _name = 'hub.sale.order.importer'
     _inherit = 'hub.importer'
     _apply_on = ['hub.sale.order']
+
+    def _is_uptodate(self, binding) -> bool:
+        if not binding:
+            return False    # The record has never been synchronised.
+
+        assert self.hub_record
+
+        sync_date = fields.Datetime.from_string(binding.sync_date)
+        hub_date = fields.Datetime.from_string(
+            self.hub_record.get('updated_at'))
+
+        hub_payment_status = str(self.hub_record.get('payment_status'))
+        hub_order_status = str(self.hub_record.get('order_status'))
+
+        return hub_date <= sync_date and (
+            hub_payment_status == binding.payment_status or
+            hub_order_status == binding.order_status)

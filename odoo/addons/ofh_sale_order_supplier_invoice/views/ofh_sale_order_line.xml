@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_sale_order_line_form_view">
+        <field name="name">ofh.sale.order.line.form (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.sale.order.line</field>
+        <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_line_form_view"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="invoice_lines" string="Invoices">
+                    <field name="invoice_line_ids" nolabel="1"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_sale_order_line_tree_view">
+        <field name="name">ofh.sale.order.line.tree (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.sale.order.line</field>
+        <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_line_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="reconciliation_status"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

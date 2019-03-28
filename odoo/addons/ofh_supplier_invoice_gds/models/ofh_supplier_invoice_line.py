@@ -98,11 +98,11 @@ class OfhSupplierInvoiceLine(models.Model):
             return False
         source_model = 'import.source.command_cryptic'
         source = self.env[source_model].search(
-            [('office_id', '=', office), ('report_day', '=', report_day)],
+            [('office_id', '=', office.name), ('report_day', '=', report_day)],
             limit=1)
         if not source:
             source = self.env[source_model].create({
-                'office_id': office, 'report_day': report_day})
+                'office_id': office.name, 'report_day': report_day})
 
         backend = self.env.ref('ofh_supplier_invoice_gds.gds_import_backend')
         import_type = self.env.ref('ofh_supplier_invoice_gds.gds_import_type')

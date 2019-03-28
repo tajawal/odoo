@@ -83,18 +83,9 @@ class OfhSupplierInvoiceLine(models.Model):
         default=_get_default_currency_id,
         readonly=True,
     )
-    state = fields.Selection(
-        string="Matching Status",
-        selection=[
-            ('ready', 'Pending'),
-            ('suggested', 'Suggested Matching'),
-            ('forced', 'Forced Matching'),
-            ('matched', 'Matched'),
-            ('not_matched', 'Not Matched')],
-        required=True,
-        default='ready',
-        readonly=True,
-        track_visibility='always',
+    active = fields.Boolean(
+        string="Active",
+        default=True,
     )
 
     _sql_constraints = [

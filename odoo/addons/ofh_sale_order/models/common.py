@@ -1,3 +1,5 @@
+# Copyright 2019 Tajawal LCC
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models, _
 from odoo.addons.component.core import Component
 from datetime import datetime

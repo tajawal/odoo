@@ -60,9 +60,6 @@ class OfhPaymentRequest(models.Model):
     auth_code = fields.Char(
         readonly=True,
     )
-    office_id = fields.Char(
-        readonly=True,
-    )
     vendor_id = fields.Char(
         string="Airline",
         readonly=True,
@@ -192,11 +189,6 @@ class OfhPaymentRequest(models.Model):
         string="Provider",
         readonly=True,
     )
-    # Technical fields
-    order_id = fields.Char(
-        string="Order ID",
-        readonly=True,
-    )
     charge_id = fields.Char(
         string="Payment reference",
         required=True,
@@ -205,12 +197,6 @@ class OfhPaymentRequest(models.Model):
     track_id = fields.Char(
         required=True,
         readonly=True,
-    )
-    # End of technical fields.
-    hub_supplier_reference = fields.Char(
-        string="Supplier Reference",
-        readonly=True,
-        index=True,
     )
     plan_code = fields.Char(
         readonly=True,
@@ -270,37 +256,6 @@ class OfhPaymentRequest(models.Model):
             ('flight', 'Flight'),
             ('package', 'Package')],
         readonly=True,
-    )
-    order_amount = fields.Monetary(
-        currency_field='currency_id',
-        readonly=True,
-    )
-    order_supplier_cost = fields.Monetary(
-        currency_field='order_supplier_currency',
-        readonly=True,
-    )
-    order_supplier_currency = fields.Many2one(
-        comodel_name='res.currency',
-        readonly=True,
-    )
-    order_discount = fields.Monetary(
-        currency_field='currency_id',
-        readonly=True,
-    )
-    order_created_at = fields.Datetime(
-        string="Order Created At",
-        readonly=True,
-    )
-    order_updated_at = fields.Datetime(
-        string="Order Updated At",
-        readonly=True,
-    )
-    need_to_investigate = fields.Boolean(
-        string="Matching needs investigation",
-        compute='_compute_need_to_investigate',
-        search='_search_need_to_investigate',
-        readonly=True,
-        store=False,
     )
     is_investigated = fields.Boolean(
         string="Is Investigated",
@@ -387,51 +342,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-
-    @api.multi
-    @api.depends('reconciliation_status', 'order_created_at', 'created_at',
-                 'is_investigated', 'request_type')
-    def _compute_need_to_investigate(self):
-        from_str = fields.Date.from_string
-        for rec in self:
-            rec.need_to_investigate = False
-            if rec.reconciliation_status != 'matched':
-                continue
-            if not rec.order_created_at:
-                continue
-            if rec.request_type != 'charge':
-                continue
-            if rec.is_investigated:
-                continue
-            diff = abs((
-                from_str(rec.order_created_at) -
-                from_str(rec.created_at)).days)
-            rec.need_to_investigate = diff <= 2
-
-    def _search_need_to_investigate(self, operator, operand):
-        self.env.cr.execute(
-            """
-            SELECT id
-            FROM ofh_payment_request as pr
-            WHERE
-                is_investigated = False AND
-                pr.created_at - pr.order_created_at  <= interval '48 hours' AND
-                reconciliation_status = 'matched' AND request_type = 'charge'
-            """)
-        ids = self.env.cr.fetchall()
-        if (operator == '=' and operand) or (operator == '!=' and not operand):
-            return [('id', 'in', ids)]
-        else:
-            return [('id', 'not in', ids)]
-
-    @api.multi
-    @api.depends('hub_supplier_reference', 'manual_supplier_reference')
-    def _compute_supplier_reference(self):
-        for rec in self:
-            if rec.manual_supplier_reference:
-                rec.supplier_reference = rec.manual_supplier_reference
-            else:
-                rec.supplier_reference = rec.hub_supplier_reference
 
     @api.multi
     @api.depends('insurance', 'fare_difference', 'penalty')

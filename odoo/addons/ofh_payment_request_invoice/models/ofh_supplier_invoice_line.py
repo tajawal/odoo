@@ -17,41 +17,9 @@ class OfhSupplierInvoiceLine(models.Model):
     payment_request_id = fields.Many2one(
         string="Payment request",
         comodel_name='ofh.payment.request',
-        inverse='_inverse_payment_request_id',
         readonly=True,
         track_visibility='always',
     )
-
-    @api.multi
-    def _inverse_payment_request_id(self):
-        from_str = fields.Date.from_string
-        if self.env.context.get('forced'):
-            return self.write({'state': 'forced'})
-        not_matched = matched = suggested = self.browse()
-        for rec in self:
-            if not rec.payment_request_id:
-                not_matched |= rec
-                continue
-            day_diff = abs((from_str(
-                rec.payment_request_id.created_at) - from_str(
-                    rec.invoice_date)).days)
-            if day_diff == 0:
-                matched |= rec
-            elif day_diff <= 2:
-                suggested |= rec
-        if not_matched:
-            not_matched.write({'state': 'not_matched'})
-        if matched:
-            matched.write({'state': 'matched'})
-        if suggested:
-            suggested.write({'state': 'suggested'})
-
-    @api.model
-    def _get_pending_invoice_lines(self, min_date=False):
-        domain = [('state', 'in', ('ready', 'not_matched'))]
-        if min_date:
-            domain.append(('invoice_date', '>=', min_date))
-        return self.search(domain)
 
     @api.multi
     def unlink_payment_request(self):

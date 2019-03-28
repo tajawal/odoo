@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="hub_backend_form_view">
+        <field name="name">hub.backend.form (in ofh_sale_order)</field>
+        <field name="model">hub.backend</field>
+        <field name="inherit_id" ref="ofh_hub_connector.hub_backend_form_view"/>
+        <field name="arch" type="xml">
+            <group name="sync_dates" position="inside">
+                <field name="import_sale_order_from_date"/>
+            </group>
+        </field>
+    </record>
+
+</odoo>

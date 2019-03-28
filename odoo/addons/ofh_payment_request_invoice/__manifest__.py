@@ -10,7 +10,7 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
-        'ofh_payment_request',
+        'ofh_sale_order_payment_request',
         'ofh_supplier_invoice_gds',
         'ofh_supplier_invoice_tf',
         'ofh_supplier_invoice_aig',

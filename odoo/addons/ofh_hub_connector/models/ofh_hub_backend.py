@@ -146,7 +146,7 @@ class HubBackend(models.Model):
         next_time = fields.Datetime.to_string(next_time)
         self.write({from_date_field: next_time})
 
-    @api.multi
+    @api.model
     def import_payment_requests(self):
         backend = self.search([], limit=1)
         backend._import_from_date(

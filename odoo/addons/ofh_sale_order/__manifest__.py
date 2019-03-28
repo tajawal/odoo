@@ -17,6 +17,7 @@
         'views/ofh_sale_order_line.xml',
         'security/ofh_sale_order.xml',
         'views/ofh_sale_order.xml',
+        'views/ofh_hub_backend.xml',
     ],
     # 'demo': [
     #     'demo/ofh_sale_order_line.xml',

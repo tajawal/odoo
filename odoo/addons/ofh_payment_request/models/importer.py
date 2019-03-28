@@ -27,7 +27,6 @@ class HubPaymentRequestImportMapper(Component):
     direct = [
         ('type', 'request_type'),
         ('status', 'request_status'),
-        ('orderId', 'order_id'),
         ('airline_code', 'vendor_id'),
         ('order_supplier_cost', 'order_supplier_cost'),
         ('order_amount', 'order_amount'),
@@ -202,116 +201,10 @@ class HubPaymentRequestImporter(Component):
             )
 
         # Get the entity using the config API to get all the store details
+        # TODO: remove when we switch to oms-finance-api endpoint.
         if 'additionalData' in record:
             store_id = record['additionalData'].get('storeId')
             if store_id:
                 record['app_details'] = hub_api.get_raw_store(int(store_id))
 
-        # This should be done in the dependency method when we have the
-        # sale order integration, for now we will have it here.
-        order_id = record.get('orderId')
-        if not order_id:
-            return record
-
-        order = hub_api.get_raw_order(order_id)
-        record['order_type'] = order.get('type')
-        record['order_created_at'] = order.get('createdAt')
-        record['order_updated_at'] = order.get('updatedAt')
-        record['order_amount'] = order['totals']['total']
-        record['order_supplier_cost'], record['order_supplier_currency'] = \
-            self._get_order_supplier_details(order.get('products'))
-        record['hub_supplier_reference'] = self._get_supplier_reference(
-            order.get('products'))
-        record['plan_code'] = self._get_plan_code(order.get('products'))
-        record['airline_code'] = self._get_airline_code(order.get('products'))
-        record['order_discount'] = self._get_order_discount(
-            order.get('products'))
         return record
-
-    def _get_supplier_reference(self, products: list) -> str:
-        if not products:
-            return ''
-        supplier_references = [
-            product.get('vendorConfirmationNumber', '')
-            for product in products if product['type'] in
-            ('flight', 'hotel', 'insurance', 'package')]
-        supplier_references.extend([
-            product.get('supplierConfirmationNumber', '')
-            for product in products if product['type'] in
-            ('flight', 'hotel', 'insurance', 'package')])
-        return ",".join(set([r for r in supplier_references]))
-
-    def _get_plan_code(self, products: list) -> str:
-        if not products:
-            return ''
-        plan_codes = [
-            product['options'].get('plan_code') for product in products if
-            product.get('options') and product['type'] == 'insurance']
-        return ", ".join(set([p for p in plan_codes if p]))
-
-    def _get_airline_code(self, products: list) -> str:
-        if not products:
-            return ''
-        airline_codes = [
-            product.get('supplierName', '') for product in products
-            if product['type'] == 'flight']
-        return ", ".join(set(airline_codes))
-
-    def _get_order_supplier_details(self, products: list) -> tuple:
-        """Get supplier cost details from order related to the payment request.
-
-        Arguments:
-            products {list} -- Product list from the order dictionary
-
-        Returns:
-            tuple -- (supplier amount, supplier currency)
-        """
-        # TODO for now i'm keeping the calculation very simple, when we will
-        # have the sale orders in the platform the calculation will be diffrent
-        # and easier.
-        supplier_amount = net_price = 0
-        supplier_currency = net_price_currency = ''
-        for product in products:
-            # We skip fail orders
-            if product['status'] not in (
-               ORDER_STATUS_MANUALLY_CONFIRMED, ORDER_STATUS_AUTO_CONFIRMED,
-               ORDER_STATUS_MANUALLY_ORDERED, ORDER_STATUS_MANUALLY_ORDERED,
-               ORDER_STATUS_REFUNDED):
-                continue
-            # This calculation is only needed for hotels for now, to be used
-            # in reverse calculation
-            if product['type'] != 'hotel':
-                continue
-            supplier_name = product.get('supplierName')
-
-            # Expedia Hotels will use net price
-            if product['additionalData'].get('netPrice'):
-                net_price += product['additionalData']['netPrice'].get('price')
-                net_price_currency = \
-                    product['additionalData']['netPrice'].get('currency')
-
-            if product['additionalData'].get('financeReport'):
-                for freport in product['additionalData']['financeReport']:
-                    segments = freport.get('Segments')
-                    segments_count = len(segments)
-                    for segment in segments:
-                        supplier_currency = segment.get('SupplierCurrency')
-                        supplier_amount += segment.get(
-                            'PriceInSupplierCurrency', 0)
-                        if supplier_name == 'Expedia':
-                            supplier_amount += (net_price / segments_count)
-                            if net_price_currency:
-                                supplier_currency = net_price_currency
-
-        return (supplier_amount, supplier_currency)
-
-    def _get_order_discount(self, products: list) -> float:
-        discount = 0.0
-        for product in products:
-            if product['type'] not in ('rule', 'coupon'):
-                continue
-            if product['type'] == 'coupon':
-                discount += product['price']['total']
-            elif product['price']['total'] < 0:
-                discount += product['price']['total']
-        return discount

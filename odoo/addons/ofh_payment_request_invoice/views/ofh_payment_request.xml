@@ -9,12 +9,6 @@
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
-            <header position="inside">
-                 <button name="action_open_invoice_lines_with_pnr"
-                        string="Open Invoices"
-                        help="Open invoices that match the same supplier references in the payment request."
-                        type="object"/>
-            </header>
             <group name="cost_pr_details" position="inside">
                 <field name="estimated_cost_in_supplier_currency"/>
                 <field name="supplier_total_amount" widget="monetary"/>

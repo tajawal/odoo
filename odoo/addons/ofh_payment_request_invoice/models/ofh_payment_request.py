@@ -1,7 +1,7 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
 
 
@@ -39,12 +39,6 @@ class OfhPaymentRequest(models.Model):
         string="Supplier Currency",
         comodel_name='res.currency',
         compute='_compute_supplier_total_amount',
-        readonly=True,
-    )
-    office_id = fields.Char(
-        compute='_compute_office_id',
-        search='_search_office_id',
-        store=False,
         readonly=True,
     )
     reconciliation_tag = fields.Selection(
@@ -177,36 +171,6 @@ class OfhPaymentRequest(models.Model):
                     rec.reconciliation_tag = 'deal'
                 elif rec.reconciliation_amount > 0:
                     rec.reconciliation_tag = 'loss'
-
-    @api.multi
-    @api.depends('supplier_invoice_ids.office_id')
-    def _compute_office_id(self):
-        for rec in self:
-            if not rec.supplier_invoice_ids:
-                rec.office_id = ''
-                continue
-            rec.office_id = ','.join(
-                set([i.office_id for i in rec.supplier_invoice_ids
-                     if i.office_id]))
-
-    @api.multi
-    def _search_office_id(self, operator, value):
-        return [('supplier_invoice_ids.office_id', operator, value)]
-
-    @api.multi
-    def action_open_invoice_lines_with_pnr(self):
-        self.ensure_one()
-        if not self.supplier_reference:
-            return {}
-        pnrs = [p for p in self.supplier_reference.split(',') if p]
-        return {
-            'name': _(f"Invoice lines"),
-            'type': "ir.actions.act_window",
-            'res_model': "ofh.supplier.invoice.line",
-            'view_type': 'form',
-            'view_mode': 'tree,form',
-            'domain': [('locator', 'in', pnrs)],
-        }
 
     @api.multi
     def optmise_matching_result(self):

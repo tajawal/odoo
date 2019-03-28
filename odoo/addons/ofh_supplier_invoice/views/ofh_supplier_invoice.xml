@@ -10,9 +10,6 @@
         <field name="arch" type="xml">
             <form create="0" edit="0" delete="0">
                 <header>
-                    <field name="state"
-                           widget="statusbar"
-                           statusbar_visible="ready,suggested,forced,matched,not_matched"/>
                 </header>
                 <sheet>
                     <field name="currency_id" invisible="1"/>
@@ -66,7 +63,6 @@
                 <field name="locator"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="total" widget="monetary"/>
-                <field name="state"/>
             </tree>
         </field>
     </record>
@@ -99,14 +95,14 @@
     <record model="ir.ui.menu" id="ofh_supplier_invoice_line_main_menu">
         <field name="name">Invoices lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
-        <field name="sequence" eval="10"/> 
+        <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="all_supplier_invoice_line_menu">
         <field name="name">All lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice_line_main_menu"/>
         <field name="action" ref="ofh_supplier_all_invoice_line_act_window"/>
-        <field name="sequence" eval="10"/> 
+        <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_supplier_invoice_import_main_menu">

@@ -1,13 +1,18 @@
 # Copyright 2019 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class OfhSaleOrderLine(models.Model):
 
     _name = 'ofh.sale.order.line'
     _description = 'Ofh Sale Order Line'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
+    @api.model
+    def _get_order_status_selection(self):
+        return self.env['ofh.sale.order']._get_order_status_selection()
 
     name = fields.Char(
         string="Product",
@@ -31,12 +36,14 @@ class OfhSaleOrderLine(models.Model):
         required=True,
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     updated_at = fields.Datetime(
         string="Updated At",
         required=True,
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     line_type = fields.Char(
         string="type",
@@ -48,10 +55,12 @@ class OfhSaleOrderLine(models.Model):
         required=True,
         readonly=True,
     )
-    state = fields.Char(
+    state = fields.Selection(
         string="Status",
+        selection=_get_order_status_selection,
         required=True,
         readonly=True,
+        track_visibility='onchange',
     )
     is_domestic_ksa = fields.Boolean(
         string="Is Domestic KSA",
@@ -64,6 +73,7 @@ class OfhSaleOrderLine(models.Model):
         string="Vendor Confirmation Number",
         required=True,
         readonly=True,
+        track_visibility='onchange',
     )
     vendor_name = fields.Char(
         string="Vendor Name",
@@ -88,6 +98,7 @@ class OfhSaleOrderLine(models.Model):
         string="Supplier Confirmation Number",
         required=True,
         readonly=True,
+        track_visibility='onchange',
     )
     supplier_name = fields.Char(
         string="Supplier Name",
@@ -127,6 +138,7 @@ class OfhSaleOrderLine(models.Model):
         string="Ticketing Office ID",
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     tour_code_office_id = fields.Char(
         string="Tour Code",
@@ -137,27 +149,65 @@ class OfhSaleOrderLine(models.Model):
         string="Ticket",
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
-
+    tickets = fields.Char(
+        string="Tickets",
+        compute='_compute_tickets',
+        readonly=True,
+        store=False,
+    )
+    passengers_count = fields.Integer(
+        string="Number of passengers",
+        readonly=True,
+    )
+    last_leg_flying_date = fields.Char(
+        string="Last LEG Flying date",
+        readonly=True,
+    )
+    segment_count = fields.Integer(
+        string="Number of Segments",
+        readonly=True,
+    )
+    booking_class = fields.Char(
+        string="Booking Class",
+        readonly=True,
+    )
+    destination_city = fields.Char(
+        string="Destination City",
+        readonly=True,
+    )
+    departure_date = fields.Char(
+        string="Departure Date",
+        readonly=True,
+    )
+    route = fields.Char(
+        string="Route",
+        readonly=True,
+    )
     # Segment details
     contract = fields.Char(
         string="Contract",
         readonly=True,
+        track_visibility='onchange',
     )
     hotel_id = fields.Char(
         string="Hotel ID",
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     hotel_city = fields.Char(
         string="Hotel City",
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     hotel_country = fields.Char(
         string="Hotel Country",
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
 
     # Sale price data
@@ -218,3 +268,32 @@ class OfhSaleOrderLine(models.Model):
         string="Hub Bindings",
         readonly=True,
     )
+    matching_status = fields.Selection(
+        string="Matching Status",
+        selection=[
+            ('pending', 'Pending'),
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable'),
+            ('investigate', 'Investigate')],
+        default='pending',
+        required=True,
+        index=True,
+        readonly=True,
+        track_visibility='onchange',
+    )
+
+    @api.multi
+    @api.depends('ticket_number')
+    def _compute_tickets(self):
+        for rec in self:
+            if not rec.ticket_number:
+                rec.tickets = ''
+                continue
+            tickets = rec.ticket_number.split('/')
+            if len(tickets) == 1:
+                rec.tickets = tickets[0]
+                continue
+            root = tickets[0].strip()[0:-3]
+            tickets[0] = tickets[0].strip()[-3:]
+            rec.tickets = ','.join(
+                [f"{root}{t.strip()}" for t in tickets if t.strip()])
