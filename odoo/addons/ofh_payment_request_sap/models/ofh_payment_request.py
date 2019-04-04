@@ -468,6 +468,11 @@ class OfhPaymentRequest(models.Model):
             _logger.warn(f"PR# {self.track_id} is incomplete. Skipp it.")
             return False
 
+        # Added check to avoid sending SPAN payment
+        if self.transaction_type == "":
+            _logger.warn(f"PR# {self.track_id} is a SPAN. Skipp it.")
+            return False
+
         integration_details = self._get_server_env()
         sap_xml = SapXmlApi(
             sap_xml_url=integration_details.get(SAP_XML_URL),
