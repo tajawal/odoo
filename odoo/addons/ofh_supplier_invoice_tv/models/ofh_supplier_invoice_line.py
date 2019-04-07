@@ -15,11 +15,6 @@ class OfhSupplierInvoiceLine(models.Model):
         selection_add=[('tv', 'Travel Port')],
     )
 
-    invoice_from = fields.Char(
-        string="Invoice From",
-        readonly=True,
-    )
-
     supplier_currency = fields.Char(
         string="Supplier Currency",
         readonly=True,

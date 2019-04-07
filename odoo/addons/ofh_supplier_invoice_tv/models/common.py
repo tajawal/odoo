@@ -40,16 +40,6 @@ class SupplierInvoiceLineMapper(Component):
         return {'locator': record.get('SupplierConfirmation')}
 
     @mapping
-    def invoice_from(self, record):
-        tv_backend = self.env.ref(
-            'ofh_supplier_invoice_tv.tv_import_backend')
-        if self.backend_record != tv_backend:
-            return super(SupplierInvoiceLineMapper, self).invoice_from(record)
-        if 'Supplier' in record:
-            return {'invoice_from': record.get('Supplier')}
-        return {}
-
-    @mapping
     def vendor_id(self, record):
         tv_backend = self.env.ref(
             'ofh_supplier_invoice_tv.tv_import_backend')
@@ -87,7 +77,7 @@ class SupplierInvoiceLineMapper(Component):
         tv_backend = self.env.ref(
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
-            return super(SupplierInvoiceLineMapper, self).supplier_reference(record)
+            return {}
         supplier_ref = record.get('SupplierReference')
         if not supplier_ref:
             return {}
@@ -98,7 +88,7 @@ class SupplierInvoiceLineMapper(Component):
         tv_backend = self.env.ref(
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
-            return super(SupplierInvoiceLineMapper, self).supplier_currency(record)
+            return {}
         supplier_curr = record.get('SupplierCurrency')
         if not supplier_curr:
             return {}

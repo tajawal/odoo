@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record id="ofh_supplier_invoice_line_galileo_1" model="ofh.supplier.invoice.line">
+        <field name="ticket_number">3055215450</field>
+        <field name="invoice_type">galileo</field>
+        <field name="locator">T99JQM</field>
+        <field name="invoice_type">galileo</field>
+        <field name="vendor_id">098</field>
+        <field name="invoice_date">3/11/2019</field>
+        <field name="total">120</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="passenger">KAMALASANAN/BINU</field>
+        <field name="invoice_status"></field>
+        <field name="office_id">8RJ6</field>
+    </record>
+</odoo>

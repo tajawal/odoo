@@ -7,7 +7,6 @@
         <field name="ticket_number">4510126</field>
         <field name="invoice_type">tv</field>
         <field name="locator">189961815</field>
-        <field name="invoice_from">Travel Port</field>
         <field name="vendor_id">Hawthorn Suites By Wyndham Abu Dhabi City Center</field>
         <field name="invoice_date">01/19/2019</field>
         <field name="total">474.65</field>
