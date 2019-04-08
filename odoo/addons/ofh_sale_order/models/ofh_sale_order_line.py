@@ -209,6 +209,10 @@ class OfhSaleOrderLine(models.Model):
         index=True,
         track_visibility='onchange',
     )
+    hotel_supplier_id = fields.Char(
+        string="Hotel Supplier ID",
+        readonly=True,
+    )
 
     # Sale price data
     tax_code = fields.Selection(

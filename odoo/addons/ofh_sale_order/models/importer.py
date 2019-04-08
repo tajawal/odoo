@@ -81,11 +81,14 @@ class HubSaleOrderImportMapper(Component):
 
     @mapping
     def supplier_currency_id(self, record):
-        if 'supplier_currency' in record:
-            currency = record.get('supplier_currency')
-            return {
-                'supplier_currency_id': self.env.ref(f'base.{currency}').id}
-        return {}
+        if 'supplier_currency' not in record:
+            return {}
+
+        currency = record.get('supplier_currency')
+        if not currency:
+            return {}
+        return {
+            'supplier_currency_id': self.env.ref(f'base.{currency}').id}
 
 
 class HubSaleOrderLineImportMapper(Component):
@@ -242,61 +245,89 @@ class HubSaleOrderLineImportMapper(Component):
     def office_id(self, record):
         if record.get('product_type').lower() != 'flight':
             return {}
-        if 'office' not in record:
+        if 'traveller' not in record:
             return {}
-        return {'office_id': record['office'].get('office_id')}
+        if 'office' not in record['traveller']:
+            return {}
+        office = record['traveller'].get('office')
+        return {'office_id': office.get('office_id')}
 
     @mapping
     def ticketing_office_id(self, record):
         if record.get('product_type').lower() != 'flight':
             return {}
-        if 'office' not in record:
+        if 'traveller' not in record:
             return {}
-        return {
-            'ticketing_office_id': record['office'].get('ticketing_office_id')
-        }
+        if 'office' not in record['traveller']:
+            return {}
+        office = record['traveller'].get('office')
+        return {'ticketing_office_id': office.get('ticketing_office_id')}
 
     @mapping
     def tour_code_office_id(self, record):
         if record.get('product_type').lower() != 'flight':
             return {}
-        if 'office' not in record:
+        if 'traveller' not in record:
             return {}
-        return {
-            'tour_code_office_id': record['office'].get('tour_code_office_id')
-        }
+        if 'office' not in record['traveller']:
+            return {}
+        office = record['traveller'].get('office')
+        return {'tour_code_office_id': office.get('tour_code_office_id')}
 
     @mapping
     def contract(self, record):
         if record.get('product_type').lower() != 'hotel':
             return {}
-        if 'hotel' not in record:
+        if 'segment' not in record:
             return {}
-        return {'contract': record['hotel'].get('contract')}
+        if 'hotel' not in record['segment']:
+            return {}
+        hotel = record['segment'].get('hotel')
+        return {'contract': hotel.get('contract')}
 
     @mapping
     def hotel_id(self, record):
         if record.get('product_type').lower() != 'hotel':
             return {}
-        if 'hotel' not in record:
+        if 'segment' not in record:
             return {}
-        return {'hotel_id': record['hotel'].get('hotel_id')}
+        if 'hotel' not in record['segment']:
+            return {}
+        hotel = record['segment'].get('hotel')
+        return {'hotel_id': hotel.get('hotel_id')}
 
     @mapping
     def hotel_country(self, record):
         if record.get('product_type').lower() != 'hotel':
             return {}
-        if 'hotel' not in record:
+        if 'segment' not in record:
             return {}
-        return {'hotel_country': record['hotel'].get('country')}
+        if 'hotel' not in record['segment']:
+            return {}
+        hotel = record['segment'].get('hotel')
+        return {'hotel_country': hotel.get('country')}
 
     @mapping
     def hotel_city(self, record):
         if record.get('product_type').lower() != 'hotel':
             return {}
-        if 'hotel' not in record:
+        if 'segment' not in record:
             return {}
-        return {'hotel_city': record['hotel'].get('city')}
+        if 'hotel' not in record['segment']:
+            return {}
+        hotel = record['segment'].get('hotel')
+        return {'hotel_city': hotel.get('city')}
+
+    @mapping
+    def hotel_supplier_id(self, record):
+        if record.get('product_type').lower() != 'hotel':
+            return {}
+        if 'segment' not in record:
+            return {}
+        if 'hotel' not in record['segment']:
+            return {}
+        hotel = record['segment'].get('hotel')
+        return {'hotel_supplier_id': hotel.get('supplier_id')}
 
     @mapping
     def currency_id(self, record):
@@ -417,8 +448,7 @@ class HubSaleOrderBatchImporter(Component):
         """ Run the synchronization """
         records = self.backend_adapter.search(filters)
         for record in records:
-            if record['orderNumber'].startswith('A'):
-                self._import_record(record['_id']['$oid'])
+            self._import_record(record['_id']['$oid'])
 
 
 class HubSaleOrderImporter(Component):
@@ -437,9 +467,4 @@ class HubSaleOrderImporter(Component):
         hub_date = fields.Datetime.from_string(
             self.hub_record.get('updated_at'))
 
-        hub_payment_status = str(self.hub_record.get('payment_status'))
-        hub_order_status = str(self.hub_record.get('order_status'))
-
-        return hub_date <= sync_date and (
-            hub_payment_status == binding.payment_status or
-            hub_order_status == binding.order_status)
+        return hub_date <= sync_date
