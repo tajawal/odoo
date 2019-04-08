@@ -132,8 +132,7 @@ class SupplierInvoiceLineMapper(Component):
         galileo_backend = self.env.ref(
             'ofh_supplier_invoice_galileo.galileo_import_backend')
         if self.backend_record != galileo_backend:
-            return super(SupplierInvoiceLineMapper, self)\
-                .gds_net_amount(record)
+            return {}
         return {'gds_net_amount': record.get('Amount Due')}
 
     @mapping
@@ -141,8 +140,7 @@ class SupplierInvoiceLineMapper(Component):
         galileo_backend = self.env.ref(
             'ofh_supplier_invoice_galileo.galileo_import_backend')
         if self.backend_record != galileo_backend:
-            return super(SupplierInvoiceLineMapper, self)\
-                .gds_net_amount(record)
+            return {}
         return {'gds_net_amount': record.get('Amount Due')}
 
     @mapping
@@ -150,8 +148,7 @@ class SupplierInvoiceLineMapper(Component):
         galileo_backend = self.env.ref(
             'ofh_supplier_invoice_galileo.galileo_import_backend')
         if self.backend_record != galileo_backend:
-            return super(SupplierInvoiceLineMapper, self)\
-                .gds_base_fare_amount(record)
+            return {}
         return {'gds_base_fare_amount': record.get('Base Fare')}
 
     @mapping
@@ -159,8 +156,7 @@ class SupplierInvoiceLineMapper(Component):
         galileo_backend = self.env.ref(
             'ofh_supplier_invoice_galileo.galileo_import_backend')
         if self.backend_record != galileo_backend:
-            return super(SupplierInvoiceLineMapper, self)\
-                .gds_iata_commission_amount(record)
+            return {}
         return {'gds_iata_commission_amount': record.get('Commission')}
 
     @mapping
@@ -168,8 +164,7 @@ class SupplierInvoiceLineMapper(Component):
         galileo_backend = self.env.ref(
             'ofh_supplier_invoice_galileo.galileo_import_backend')
         if self.backend_record != galileo_backend:
-            return super(SupplierInvoiceLineMapper, self)\
-                .gds_tax_amount(record)
+            return {}
         return {'gds_tax_amount': record.get('Tax')}
 
     @mapping
@@ -177,8 +172,7 @@ class SupplierInvoiceLineMapper(Component):
         galileo_backend = self.env.ref(
             'ofh_supplier_invoice_galileo.galileo_import_backend')
         if self.backend_record != galileo_backend:
-            return super(SupplierInvoiceLineMapper, self)\
-                .gds_fee_amount(record)
+            return {}
         return {'gds_fee_amount': record.get('Fee')}
 
 

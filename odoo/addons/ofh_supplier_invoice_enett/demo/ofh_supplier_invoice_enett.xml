@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record id="ofh_supplier_invoice_line_enett_1" model="ofh.supplier.invoice.line">
+        <field name="ticket_number">48701998417570</field>
+        <field name="invoice_type">enett</field>
+        <field name="locator">48701998417570</field>
+        <field name="vendor_id">SPIRIT48701998417570</field>
+        <field name="invoice_date">02/03/2019</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="passenger">ALSUWAIDI/ABDUL</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="office_id">Travel Fusion</field>
+        <field name="order_reference">A4468322974</field>
+    </record>
+</odoo>

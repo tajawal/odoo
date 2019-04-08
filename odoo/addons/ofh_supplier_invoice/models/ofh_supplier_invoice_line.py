@@ -88,6 +88,11 @@ class OfhSupplierInvoiceLine(models.Model):
         default=True,
     )
 
+    order_reference = fields.Char(
+        string="Tajawal ID",
+        readonly=True,
+    )
+
     _sql_constraints = [
         ('unique_invoice_line', 'unique(name)',
          _("This line has been uploaded"))
