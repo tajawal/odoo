@@ -1,6 +1,10 @@
 Changes
 -------
 
+1.5.3 (2019-04-08)
+------------------
+* Do not send SPAN Payment request.
+
 1.5.2 (2019-03-26)
 ------------------
 * Manual OUTPUT VAT amount.
