@@ -2,8 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import json
 import logging
-from datetime import datetime
 
+from odoo import fields
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 
@@ -98,6 +98,26 @@ class HubPaymentRequestImporter(Component):
     _name = 'hub.payment.request.importer'
     _inherit = 'hub.importer'
     _apply_on = ['hub.payment.request']
+
+    def _is_uptodate(self, binding) -> bool:
+        """Check if record is already up-to-date.
+
+        Arguments:
+            binding {hub.binder} -- [Binder instance for hub records]
+
+        Returns:
+            bool -- Return True if the import should be skipped else False
+        """
+        if not binding:
+            return False    # The record has never been synchronised.
+
+        assert self.hub_record
+
+        sync_date = fields.Datetime.from_string(binding.sync_date)
+        hub_date = fields.Datetime.from_string(
+            self.hub_record.get('updated_at'))
+
+        return hub_date < sync_date
 
     def _must_skip(self) -> bool:
         """ For payment request we process only records that are already

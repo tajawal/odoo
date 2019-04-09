@@ -467,4 +467,4 @@ class HubSaleOrderImporter(Component):
         hub_date = fields.Datetime.from_string(
             self.hub_record.get('updated_at'))
 
-        return hub_date <= sync_date
+        return hub_date < sync_date
