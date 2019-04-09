@@ -12,34 +12,31 @@ class OfhSupplierInvoiceLine(models.Model):
     order_id = fields.Many2one(
         string='Order',
         comodel_name='ofh.sale.order',
-        inverse='_inverse_order_id',
         track_visibility='always',
     )
     order_line_id = fields.Many2one(
         string='Order Line',
         comodel_name='ofh.sale.order.line',
         track_visibility='always',
-        inverse='_update_reconciliation_status',
+        inverse='_update_matching_status',
     )
     payment_request_id = fields.Many2one(
-        inverse='_update_reconciliation_status',
+        inverse='_update_matching_status',
     )
     matching_status = fields.Selection(
         string="Matching Status",
         selection=[
-            ('ready', 'Ready for matching'),
-            ('matched', 'Matched'),
-            ('forced', 'Forced Matching'),
-            ('not_applicable', 'not_applicable'),
-            ('investigate', 'Investigate')
+            ('order_matched', 'Ready for matching'),
+            ('pr_matched', 'Matched'),
+            ('unmatched', 'Unmatched'),
+            ('unused_ticket', 'Unused Ticket'),
+            ('adm', 'ADM'),
         ],
         required=True,
-        default='ready',
+        default='unmatched',
         index=True,
         readonly=True,
-        help="The matching status get updated when an invoice line matches "
-             "with a sale order using the locator only",
-
+        track_visibility='always',
     )
     reconciliation_status = fields.Selection(
         string="Reconciliation status",
@@ -51,9 +48,7 @@ class OfhSupplierInvoiceLine(models.Model):
         required=True,
         index=True,
         readonly=True,
-        help="The reconciliation status get updated when the invoice line "
-             "matches with an order line or a payment request using either a "
-             "reference (e.x. ticket number) or an amount check",
+        track_visibility='always',
     )
     cost_amount = fields.Monetary(
         string="Supplier Cost",
@@ -76,19 +71,7 @@ class OfhSupplierInvoiceLine(models.Model):
                 rec.cost_amount = rec.total
 
     @api.multi
-    def _inverse_order_id(self):
-        for rec in self:
-            if not rec.order_id:
-                rec.matching_status == 'investigate'
-                continue
-            if rec.matching_status == 'forced':
-                continue
-            if rec.matching_status == 'ready':
-                rec.matching_status = 'matched'
-                continue
-
-    @api.multi
-    def _update_reconciliation_status(self):
+    def _update_matching_status(self):
         for rec in self:
             if rec.order_line_id or rec.payment_request_id:
                 rec.reconciliation_status = 'reconciled'
