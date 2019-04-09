@@ -9,7 +9,6 @@
         <field name="track_id">pr-H90212009052-1551261525547</field>
         <field name="auth_code">048031</field>
         <field name="status">10000</field>
-        <field name="currency">SAR</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -27,7 +26,6 @@
         <field name="track_id">pr-H902120090345-1551261525547</field>
         <field name="auth_code">048031</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -45,7 +43,6 @@
         <field name="track_id">pr-H92330090345-1551261525547</field>
         <field name="auth_code">048321</field>
         <field name="status">10002</field>
-        <field name="currency">SAR</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -63,7 +60,6 @@
         <field name="track_id">pr-H92330090333-15512615435</field>
         <field name="auth_code">048332</field>
         <field name="status">10002</field>
-        <field name="currency">USD</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -81,7 +77,6 @@
         <field name="track_id">pr-H923300450333-222512615435</field>
         <field name="auth_code">0483452</field>
         <field name="status">10002</field>
-        <field name="currency">USD</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -99,7 +94,6 @@
         <field name="track_id">pr-H92330045033223-22251261545</field>
         <field name="auth_code">0483452</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">756</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -117,7 +111,6 @@
         <field name="track_id">pr-H92330045111-22251261345</field>
         <field name="auth_code">0483562</field>
         <field name="status">10000</field>
-        <field name="currency">SAR</field>
         <field name="total">156</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -135,7 +128,6 @@
         <field name="track_id">pr-H92330045222-22251212345</field>
         <field name="auth_code">0483002</field>
         <field name="status">10000</field>
-        <field name="currency">SAR</field>
         <field name="total">156</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -153,7 +145,6 @@
         <field name="track_id">pr-H923300453352-233554546</field>
         <field name="auth_code">048322</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">7893</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -171,7 +162,6 @@
         <field name="track_id">pr-H92330456752-2335541126</field>
         <field name="auth_code">048321</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">7866</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -189,7 +179,6 @@
         <field name="track_id">pr-H92330453232-2335567826</field>
         <field name="auth_code">334832</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">856</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -207,7 +196,6 @@
         <field name="track_id">pr-H923304890872-2335567325</field>
         <field name="auth_code">334222</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">556</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -225,7 +213,6 @@
         <field name="track_id">pr-H923300000872-2300007325</field>
         <field name="auth_code">334000</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">586</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -243,7 +230,6 @@
         <field name="track_id">pr-H923344444872-230000337325</field>
         <field name="auth_code">332200</field>
         <field name="status">10000</field>
-        <field name="currency">SAR</field>
         <field name="total">886</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -261,7 +247,6 @@
         <field name="track_id">pr-H923344446662-23000666325</field>
         <field name="auth_code">332660</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">546</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -279,7 +264,6 @@
         <field name="track_id">pr-H923344447772-333000666325</field>
         <field name="auth_code">22344</field>
         <field name="status">10000</field>
-        <field name="currency">AED</field>
         <field name="total">846</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>

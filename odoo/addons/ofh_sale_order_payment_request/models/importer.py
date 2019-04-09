@@ -9,7 +9,7 @@ class HubPaymentRequestImportMapper(Component):
 
     @mapping
     def order_id(self, record):
-        order_id = record.get('orderId')
+        order_id = record.get('order_id')
         if not order_id:
             return {}
 
@@ -24,7 +24,7 @@ class HubPaymentRequestImporter(Component):
     _inherit = 'hub.payment.request.importer'
 
     def _import_dependencies(self):
-        order_id = self.hub_record.get('orderId')
+        order_id = self.hub_record.get('order_id')
         # TODO Maybe we should add a date check.
         # hub_date = datetime.fromtimestamp(
         #     int(self.hub_record['updatedAt']['$date'].get(

@@ -27,7 +27,7 @@ class HubPaymentRequestImportMapper(Component):
     direct = [
         ('request_type', 'request_type'),
         ('status', 'request_status'),
-        # ('airline_code', 'vendor_id'),
+        ('processed_by', 'processed_by'),
         ('reason', 'request_reason'),
         ('track_id', 'track_id'),
         ('auth_code', 'auth_code'),

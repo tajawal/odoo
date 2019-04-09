@@ -1,13 +1,23 @@
 # Copyright 2018 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class OfhPaymentCharge(models.Model):
     _name = 'ofh.payment.charge'
     _description = "Ofh Payment Charge"
     _rec_name = 'charge_id'
+
+    @api.model
+    def _get_charge_status_selection(self):
+        return [
+            ("11111", "Captured"), ("83027", "Refund"),
+            ("83026", "Refund In Progress"), ("83025", "Refund Failed"),
+            ("00000", "Declined"), ("10000", "Authorized"),
+            ("Pending", "20118"), ("83035", "Void"), ("99999", "Deleted"),
+            ("10100", "Flagged")
+        ]
 
     currency_id = fields.Many2one(
         string='Currency',
@@ -44,14 +54,9 @@ class OfhPaymentCharge(models.Model):
         readonly=True,
         index=True,
     )
-    status = fields.Char(
+    status = fields.Selection(
         string="Status",
-        required=True,
-        readonly=True,
-        index=True,
-    )
-    currency = fields.Char(
-        string="Currency",
+        selection=_get_charge_status_selection,
         required=True,
         readonly=True,
         index=True,

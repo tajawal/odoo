@@ -12,6 +12,9 @@ class OfhPaymentRequest(models.Model):
         string="Order ID",
         readonly=True,
     )
+    order_reference = fields.Char(
+        related="order_id.name",
+    )
     order_created_at = fields.Datetime(
         string="Order Created At",
         related='order_id.created_at',
@@ -111,6 +114,10 @@ class OfhPaymentRequest(models.Model):
         search='_search_need_to_investigate',
         readonly=True,
         store=False,
+    )
+    payment_request_status = fields.Selection(
+        compute='_compute_payment_request_status',
+        store=True,
     )
 
     @api.multi

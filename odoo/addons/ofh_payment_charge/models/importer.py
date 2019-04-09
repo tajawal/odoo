@@ -19,7 +19,6 @@ class HubPaymentChargeImportMapper(Component):
         ('track_id', 'track_id'),
         ('auth_code', 'auth_code'),
         ('status', 'status'),
-        ('currency', 'currency'),
         ('value', 'total'),
         ('provider', 'provider'),
         ('payment_mode', 'payment_mode'),

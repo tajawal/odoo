@@ -29,6 +29,10 @@ class OfhPaymentRequest(models.Model):
         string="Order #",
         readonly=True,
     )
+    processed_by = fields.Char(
+        string="Processed By",
+        readonly=True,
+    )
     request_type = fields.Selection(
         required=True,
         selection=[
@@ -250,14 +254,6 @@ class OfhPaymentRequest(models.Model):
         string="Hub Bindings",
         readonly=True,
     )
-    # order details
-    order_type = fields.Selection(
-        selection=[
-            ('hotel', 'Hotel'),
-            ('flight', 'Flight'),
-            ('package', 'Package')],
-        readonly=True,
-    )
     is_investigated = fields.Boolean(
         string="Is Investigated",
         help="This is a helper flag to mark the records that where "
@@ -295,7 +291,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-
     fare_difference_vat_amount = fields.Monetary(
         string="Fare Difference VAT",
         currency_field='currency_id',
@@ -303,7 +298,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-
     penalty_vat_amount = fields.Monetary(
         string="Penalty VAT",
         currency_field='currency_id',
@@ -311,7 +305,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-
     adm_vat_amount = fields.Monetary(
         string="ADM VAT",
         currency_field='currency_id',
@@ -319,7 +312,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-
     booking_fee_vat_amount = fields.Monetary(
         string="Booking Fee VAT",
         currency_field='currency_id',
@@ -327,7 +319,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-
     deals_vat_amount = fields.Monetary(
         string="Deals VAT",
         currency_field='currency_id',
@@ -335,7 +326,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-
     discount_vat_amount = fields.Monetary(
         string="Discount VAT",
         currency_field='currency_id',

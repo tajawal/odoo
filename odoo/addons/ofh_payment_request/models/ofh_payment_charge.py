@@ -11,4 +11,5 @@ class OfhPaymentCharge(models.Model):
         comodel_name="ofh.payment.request",
         string="Payment Request ID",
         readonly=True,
+        ondelete="cascade",
     )

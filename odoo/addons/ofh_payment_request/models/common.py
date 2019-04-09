@@ -75,7 +75,8 @@ class HubPaymentCharge(models.Model):
     @api.model
     def create(self, vals):
         hub_payment_request_id = vals['hub_payment_request_id']
-        binding = self.env['hub.payment.request'].browse(hub_payment_request_id)
+        binding = self.env['hub.payment.request'].browse(
+            hub_payment_request_id)
         vals['payment_request_id'] = binding.odoo_id.id
         binding = super(HubPaymentCharge, self).create(vals)
         return binding
