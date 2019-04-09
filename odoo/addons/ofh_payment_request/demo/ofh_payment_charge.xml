@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_2' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_charge_with_change_fee"/>
+    </record>
+
+
+    <record id='ofh_payment_charge.ofh_payment_charge_2' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_charge_with_change_fee"/>
+    </record>
+
+
+    <record id='ofh_payment_charge.ofh_payment_charge_3' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_1"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_4' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_2"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_5' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_3"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_6' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_4"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_7' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_5"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_8' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_1"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_9' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_2"/>
+    </record>
+    <record id='ofh_payment_charge.ofh_payment_charge_10' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_3"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_11' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_4"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_12' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_5"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_13' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_1"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_14' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_2"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_15' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_3"/>
+    </record>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_16' model="ofh.payment.charge">
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_generic_1"/>
+    </record>
+
+</odoo>

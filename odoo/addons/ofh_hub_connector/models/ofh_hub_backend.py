@@ -65,6 +65,12 @@ class HubBackend(models.Model):
         store=False,
         readonly=True,
     )
+    oms_finance_api_url = fields.Char(
+        string="OMS Finance API URL",
+        compute='_compute_server_env',
+        store=False,
+        readonly=True,
+    )
     import_payment_request_from_date = fields.Datetime(
         string="Import payment request from date",
     )
@@ -82,7 +88,8 @@ class HubBackend(models.Model):
             'hub_api_password',
             'config_api_url',
             'config_api_username',
-            'config_api_password')
+            'config_api_password',
+            'oms_finance_api_url')
 
     @api.multi
     def _compute_server_env(self):
@@ -113,7 +120,9 @@ class HubBackend(models.Model):
             hub_password=self.hub_api_password,
             config_url=self.config_api_url,
             config_username=self.config_api_username,
-            config_password=self.config_api_password)
+            config_password=self.config_api_password,
+            oms_finance_api_url=self.oms_finance_api_url
+        )
         _super = super(HubBackend, self)
         # from the components we'll be able to do: self.work.hub_api
         with _super.work_on(model_name, hub_api=hub_api, **kwargs) as work:

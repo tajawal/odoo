@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_payment_charge_1" model="ofh.payment.charge">
+        <field name="charge_id">charge_E98BBE672S1B0E0D5D9B</field>
+        <field name="track_id">pr-H90212009052-1551261525547</field>
+        <field name="auth_code">048031</field>
+        <field name="status">10000</field>
+        <field name="currency">SAR</field>
+        <field name="total">796</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">109052</field>
+        <field name="last_four">7234</field>
+        <field name="card_bin">455734</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-10-09</field>
+        <field name="updated_at">2018-10-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_2" model="ofh.payment.charge">
+        <field name="charge_id">charge_E98BBE63322S1B0E0D5D9B</field>
+        <field name="track_id">pr-H902120090345-1551261525547</field>
+        <field name="auth_code">048031</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">796</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">109052</field>
+        <field name="last_four">3434</field>
+        <field name="card_bin">455734</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-10-09</field>
+        <field name="updated_at">2018-10-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_3" model="ofh.payment.charge">
+        <field name="charge_id">charge_E98BBE631222S1B0E0D5D9B</field>
+        <field name="track_id">pr-H92330090345-1551261525547</field>
+        <field name="auth_code">048321</field>
+        <field name="status">10002</field>
+        <field name="currency">SAR</field>
+        <field name="total">796</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">1092252</field>
+        <field name="last_four">3434</field>
+        <field name="card_bin">455234</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-10-09</field>
+        <field name="updated_at">2018-10-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_4" model="ofh.payment.charge">
+        <field name="charge_id">charge_E98BBE631222S14556RT5D9B</field>
+        <field name="track_id">pr-H92330090333-15512615435</field>
+        <field name="auth_code">048332</field>
+        <field name="status">10002</field>
+        <field name="currency">USD</field>
+        <field name="total">796</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">1025322</field>
+        <field name="last_four">3467</field>
+        <field name="card_bin">452344</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-10-09</field>
+        <field name="updated_at">2018-10-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_5" model="ofh.payment.charge">
+        <field name="charge_id">charge_E98HJKI99631222S14556RT5D9B</field>
+        <field name="track_id">pr-H923300450333-222512615435</field>
+        <field name="auth_code">0483452</field>
+        <field name="status">10002</field>
+        <field name="currency">USD</field>
+        <field name="total">796</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">1025872</field>
+        <field name="last_four">3467</field>
+        <field name="card_bin">45274</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-12-09</field>
+        <field name="updated_at">2018-12-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_6" model="ofh.payment.charge">
+        <field name="charge_id">charge_POI89631222S14556RT5D9B</field>
+        <field name="track_id">pr-H92330045033223-22251261545</field>
+        <field name="auth_code">0483452</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">756</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">1025122</field>
+        <field name="last_four">3067</field>
+        <field name="card_bin">45124</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2019-02-09</field>
+        <field name="updated_at">2019-02-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_7" model="ofh.payment.charge">
+        <field name="charge_id">charge_PO5679631222S14556RT5D9B</field>
+        <field name="track_id">pr-H92330045111-22251261345</field>
+        <field name="auth_code">0483562</field>
+        <field name="status">10000</field>
+        <field name="currency">SAR</field>
+        <field name="total">156</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">102322</field>
+        <field name="last_four">3099</field>
+        <field name="card_bin">45344</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2019-02-09</field>
+        <field name="updated_at">2019-02-09</field>
+    </record>
+
+     <record id="ofh_payment_charge_8" model="ofh.payment.charge">
+        <field name="charge_id">charge_PO5679631222S145345T5D9B</field>
+        <field name="track_id">pr-H92330045222-22251212345</field>
+        <field name="auth_code">0483002</field>
+        <field name="status">10000</field>
+        <field name="currency">SAR</field>
+        <field name="total">156</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">102399</field>
+        <field name="last_four">3011</field>
+        <field name="card_bin">45333</field>
+         <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2019-02-09</field>
+        <field name="updated_at">2019-02-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_9" model="ofh.payment.charge">
+        <field name="charge_id">charge_PO5679631222S1453QWERB</field>
+        <field name="track_id">pr-H923300453352-233554546</field>
+        <field name="auth_code">048322</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">7893</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">10229</field>
+        <field name="last_four">3325</field>
+        <field name="card_bin">45233</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-02-09</field>
+        <field name="updated_at">2018-02-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_10" model="ofh.payment.charge">
+        <field name="charge_id">charge_PO32091222S1453QWERB</field>
+        <field name="track_id">pr-H92330456752-2335541126</field>
+        <field name="auth_code">048321</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">7866</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">10210</field>
+        <field name="last_four">3322</field>
+        <field name="card_bin">45277</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2019-03-09</field>
+        <field name="updated_at">2019-03-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_11" model="ofh.payment.charge">
+        <field name="charge_id">charge_QWERTY43422S1453QWERB</field>
+        <field name="track_id">pr-H92330453232-2335567826</field>
+        <field name="auth_code">334832</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">856</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">1045610</field>
+        <field name="last_four">3327</field>
+        <field name="card_bin">45667</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2019-03-09</field>
+        <field name="updated_at">2019-03-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_12" model="ofh.payment.charge">
+        <field name="charge_id">charge_QWERTY43422S145KIMJU</field>
+        <field name="track_id">pr-H923304890872-2335567325</field>
+        <field name="auth_code">334222</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">556</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">1675610</field>
+        <field name="last_four">3427</field>
+        <field name="card_bin">4867</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-04-09</field>
+        <field name="updated_at">2018-04-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_13" model="ofh.payment.charge">
+        <field name="charge_id">charge_QWERTY4UJYHS145KIMJU</field>
+        <field name="track_id">pr-H923300000872-2300007325</field>
+        <field name="auth_code">334000</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">586</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">1677810</field>
+        <field name="last_four">3417</field>
+        <field name="card_bin">486734</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2019-04-09</field>
+        <field name="updated_at">2019-04-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_14" model="ofh.payment.charge">
+        <field name="charge_id">charge_QWERTY4U87878MM5KIMJU</field>
+        <field name="track_id">pr-H923344444872-230000337325</field>
+        <field name="auth_code">332200</field>
+        <field name="status">10000</field>
+        <field name="currency">SAR</field>
+        <field name="total">886</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">13447810</field>
+        <field name="last_four">3007</field>
+        <field name="card_bin">400734</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-05-09</field>
+        <field name="updated_at">2018-05-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_15" model="ofh.payment.charge">
+        <field name="charge_id">charge_QWEDOPO88D4U87878MM5KIMJU</field>
+        <field name="track_id">pr-H923344446662-23000666325</field>
+        <field name="auth_code">332660</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">546</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">13440</field>
+        <field name="last_four">3017</field>
+        <field name="card_bin">400733</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2018-05-09</field>
+        <field name="updated_at">2018-05-09</field>
+    </record>
+
+    <record id="ofh_payment_charge_16" model="ofh.payment.charge">
+        <field name="charge_id">charge_PO8989PO88D4U87878MM5KIMJU</field>
+        <field name="track_id">pr-H923344447772-333000666325</field>
+        <field name="auth_code">22344</field>
+        <field name="status">10000</field>
+        <field name="currency">AED</field>
+        <field name="total">846</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">134234</field>
+        <field name="last_four">3019</field>
+        <field name="card_bin">400223</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="created_at">2019-02-19</field>
+        <field name="updated_at">2018-02-19</field>
+    </record>
+</odoo>

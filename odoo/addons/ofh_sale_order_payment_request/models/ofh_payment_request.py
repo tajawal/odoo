@@ -90,6 +90,10 @@ class OfhPaymentRequest(models.Model):
         default=False,
         index=True,
     )
+    entity = fields.Selection(
+        related='order_id.entity',
+        store=True,
+    )
     manual_supplier_reference = fields.Char(
         string="Manual Supplier Reference",
         index=True,

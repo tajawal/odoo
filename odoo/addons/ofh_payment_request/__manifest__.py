@@ -13,6 +13,7 @@
         'ofh_hub_connector',
         'ofh_mail_activity',
         'ofh_base_currency',
+        'ofh_payment_charge',
     ],
     'data': [
         'security/groups.xml',
@@ -25,5 +26,6 @@
     ],
     'demo': [
         'demo/ofh_payment_request.xml',
+        'demo/ofh_payment_charge.xml',
     ],
 }

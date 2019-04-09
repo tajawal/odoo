@@ -25,82 +25,43 @@ class HubPaymentRequestImportMapper(Component):
     _apply_on = 'hub.payment.request'
 
     direct = [
-        ('type', 'request_type'),
+        ('request_type', 'request_type'),
         ('status', 'request_status'),
-        ('airline_code', 'vendor_id'),
-        ('order_supplier_cost', 'order_supplier_cost'),
-        ('order_amount', 'order_amount'),
-        ('order_type', 'order_type'),
-        ('hub_supplier_reference', 'hub_supplier_reference'),
-        ('plan_code', 'plan_code'),
-        ('order_discount', 'order_discount'),
-        ('order_created_at', 'order_created_at'),
-        ('order_updated_at', 'order_updated_at'),
+        # ('airline_code', 'vendor_id'),
+        ('reason', 'request_reason'),
+        ('track_id', 'track_id'),
+        ('auth_code', 'auth_code'),
+        ('remarks', 'notes'),
+        ('payment_mode', 'payment_mode'),
+        ('total_amount', 'total_amount'),
     ]
+
+    children = [
+        ('charges', 'hub_charge_ids', 'hub.payment.charge')]
 
     @mapping
     def created_at(self, record) -> dict:
-        dt = datetime.fromtimestamp(
-            int(record['createdAt']['$date'].get('$numberLong')) / 1000)
-        return {'created_at': dt.strftime("%Y-%m-%d %H:%M:%S")}
+        dt = datetime.strptime(record['created_at'], "%Y-%m-%d %H:%M:%S")
+        return {'created_at': dt}
 
     @mapping
     def updated_at(self, record) -> dict:
-        dt = datetime.fromtimestamp(
-            int(record['updatedAt']['$date'].get('$numberLong')) / 1000)
-        return {'updated_at': dt.strftime("%Y-%m-%d %H:%M:%S")}
+        dt = datetime.strptime(record['updated_at'], "%Y-%m-%d %H:%M:%S")
 
-    @mapping
-    def request_reason(self, record) -> dict:
-        if 'additionalData' in record:
-            return {'request_reason': record['additionalData'].get('reason')}
-        return {}
+        return {'updated_at': dt}
 
     @mapping
     def request_date(self, record) -> dict:
         """ SHould convert date """
 
     @mapping
-    def charge_id(self, record) -> dict:
-        if 'response' in record:
-            return {'charge_id': record['response'].get('chargeId')}
-        return {}
-
-    @mapping
-    def track_id(self, record) -> dict:
-        if 'additionalData' in record:
-            return {'track_id': record['additionalData'].get('trackId')}
-        return {}
-
-    @mapping
-    def auth_code(self, record) -> dict:
-        if 'response' in record:
-            return {'auth_code': record['response'].get('authCode')}
-        return {}
-
-    @mapping
     def currency_id(self, record) -> dict:
         if 'currency' in record:
             currency = self.env['res.currency'].search(
-                [('name', '=', record.get('currency'))], limit=1)
+                [('name', '=', record['currency'])], limit=1)
             if currency:
                 return {'currency_id': currency.id}
         return {'currency_id': self.env.ref('base.AED').id}
-
-    @mapping
-    def order_supplier_currency(self, record) -> dict:
-        if 'order_supplier_currency' in record:
-            currency = self.env['res.currency'].search(
-                [('name', '=', record.get('order_supplier_currency'))],
-                limit=1)
-            if currency:
-                return {'order_supplier_currency': currency.id}
-
-    @mapping
-    def total_amount(self, record) -> dict:
-        if 'fees' in record:
-            return {'total_amount': record['fees'].get('total')}
-        return {'total_amount': 0.0}
 
     @mapping
     def fees(self, record) -> dict:
@@ -108,26 +69,8 @@ class HubPaymentRequestImportMapper(Component):
             return {'fees': json.dumps(record.get('fees'))}
 
     @mapping
-    def order_reference(self, record) -> dict:
-        if 'additionalData' in record:
-            return {
-                'order_reference': record['additionalData'].get('orderNumber')}
-        return {}
-
-    @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
-
-    @mapping
-    def notes(self, record):
-        if 'additionalData' in record:
-            return {'notes': record['additionalData'].get('remarks')}
-        return {}
-
-    @mapping
-    def entity(self, record):
-        if 'app_details' in record:
-            return {'entity': record['app_details'].get('site')}
 
     @mapping
     def reconciliation_status(self, record):
@@ -136,29 +79,6 @@ class HubPaymentRequestImportMapper(Component):
         if order_type == 'hotel' or not locator:
             return {'reconciliation_status': 'not_applicable'}
         return {}
-
-    @mapping
-    def provider(self, record):
-        if 'response' in record:
-            return {'provider': record['response'].get('provider')}
-        return {}
-
-    @mapping
-    def payment_mode(self, record):
-        if 'response' not in record:
-            return {}
-        if 'metadata' not in record['response']:
-            return {}
-        return {
-            'payment_mode': record['response']['metadata'].get('paymentMode')
-        }
-
-    @mapping
-    def is_egypt(self, record):
-        app_details = record.get('app_details')
-        if not app_details:
-            return {}
-        return {'is_egypt': app_details.get('is_almosafer_egypt', False)}
 
 
 class HubPaymentRequestBatchImporter(Component):

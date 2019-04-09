@@ -177,7 +177,7 @@ class OfhPaymentRequest(models.Model):
         selection=[
             ('almosafer', 'Almosafer'),
             ('tajawal', 'Tajawal')],
-        required=True,
+        required=False,  # TODO: Fix it!
         readonly=True,
         index=True,
     )
@@ -189,9 +189,10 @@ class OfhPaymentRequest(models.Model):
         string="Provider",
         readonly=True,
     )
-    charge_id = fields.Char(
-        string="Payment reference",
-        required=True,
+    charge_ids = fields.One2many(
+        comodel_name="ofh.payment.charge",
+        string="Charge IDs",
+        inverse_name='payment_request_id',
         readonly=True,
     )
     track_id = fields.Char(
@@ -357,14 +358,19 @@ class OfhPaymentRequest(models.Model):
                 rec.estimated_cost = \
                     rec.fare_difference - rec.insurance - rec.penalty
 
+    # TODO: check how to
     @api.multi
-    @api.depends('manual_payment_reference', 'charge_id')
+    @api.depends('manual_payment_reference', 'charge_ids')
     def _compute_payment_reference(self):
         for rec in self:
             if rec.manual_payment_reference:
                 rec.payment_reference = rec.manual_payment_reference
+                continue
+            if rec.charge_ids:
+                rec.payment_reference = rec.charge_ids[0].charge_id
+                continue
             else:
-                rec.payment_reference = rec.charge_id
+                rec.payment_reference = ""
 
     @api.multi
     @api.depends('fees', 'manual_output_vat_amount')

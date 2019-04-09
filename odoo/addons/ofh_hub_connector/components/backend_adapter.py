@@ -10,8 +10,9 @@ class HubAPI:
 
     def __init__(
             self, hub_url: str, hub_username: str, hub_password: str,
-            config_url: str, config_username: str, config_password: str):
+            config_url: str, config_username: str, config_password: str, oms_finance_api_url: str):
         self.hub_url = hub_url
+        self.oms_finance_api_url = oms_finance_api_url
         self.hub_username = hub_username
         self.hub_password = hub_password
         self.config_url = config_url
@@ -114,6 +115,20 @@ class HubAPI:
             self.hub_url, track_id)
         headers = self.headers
         headers['Authorization'] = "Bearer {}".format(self._get_hub_token)
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not get payment request details")
+
+    # Get payment request details using oms-finance-api
+    def get_payment_request_by_track_id_ofa(self, track_id) -> dict:
+        url = '{}payment_request/detail/{}'.format(
+            self.oms_finance_api_url, track_id)
+        headers = {
+            'cache-control': "no-cache",
+        }
         try:
             response = requests.get(url, headers=headers)
             response.raise_for_status()

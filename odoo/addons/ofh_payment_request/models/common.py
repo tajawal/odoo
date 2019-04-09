@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import datetime
 
-from odoo import fields, models
+from odoo import api, fields, models
 from odoo.addons.component.core import Component
 
 
@@ -17,6 +17,11 @@ class HubPaymentRequest(models.Model):
         string='Payment Request',
         required=True,
         ondelete='cascade'
+    )
+    hub_charge_ids = fields.One2many(
+        comodel_name='hub.payment.charge',
+        inverse_name='hub_payment_request_id',
+        string="Hub Charges",
     )
 
 
@@ -53,4 +58,24 @@ class PaymentRequestAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
-        return hub_api.get_payment_request_by_track_id(external_id)
+        return hub_api.get_payment_request_by_track_id_ofa(external_id)
+
+
+class HubPaymentCharge(models.Model):
+    _inherit = 'hub.payment.charge'
+
+    hub_payment_request_id = fields.Many2one(
+        string="HUB Payment Charge",
+        comodel_name='hub.payment.request',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+
+    @api.model
+    def create(self, vals):
+        hub_payment_request_id = vals['hub_payment_request_id']
+        binding = self.env['hub.payment.request'].browse(hub_payment_request_id)
+        vals['payment_request_id'] = binding.odoo_id.id
+        binding = super(HubPaymentCharge, self).create(vals)
+        return binding

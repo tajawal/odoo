@@ -19,4 +19,5 @@ class HubModelBinder(Component):
         'hub.payment.request',
         'hub.sale.order',
         'hub.sale.order.line',
+        'hub.payment.charge',
     ]
