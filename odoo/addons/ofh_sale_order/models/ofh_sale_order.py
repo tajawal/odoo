@@ -264,15 +264,15 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         store=False,
     )
-    matching_status = fields.Selection(
+    order_matching_status = fields.Selection(
         string="Matching Status",
         selection=[
-            ('pending', 'Pending'),
+            ('unmatched', 'Unmatched'),
             ('matched', 'Matched'),
-            ('not_applicable', 'Not Applicable'),
-            ('investigate', 'Investigate')],
-        default='pending',
-        required=True,
+            ('not_applicable', 'Not Applicable')],
+        default='unmatched',
+        compute='_compute_order_matching_status',
+        store=True,
         index=True,
         readonly=True,
         track_visibility='onchange',
@@ -321,3 +321,9 @@ class OfhSaleOrder(models.Model):
                 rec.lines_total_discount += line.discount_amount
                 rec.lines_total_tax += line.tax_amount
                 rec.lines_total_amount += line.total_amount
+
+    @api.multi
+    @api.depends('line_ids.matching_status')
+    def _compute_order_matching_status(self):
+        for rec in self:
+            pass

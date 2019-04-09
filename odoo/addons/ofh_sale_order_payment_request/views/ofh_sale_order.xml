@@ -17,4 +17,15 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_sale_order_tree_view">
+        <field name="name">ofh.sale.order.tree (in ofh_sale_order_payment_request)</field>
+        <field name="model">ofh.sale.order</field>
+        <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="payment_request_matching_status"/>
+            </tree>
+        </field>
+    </record>
+
 </odoo>

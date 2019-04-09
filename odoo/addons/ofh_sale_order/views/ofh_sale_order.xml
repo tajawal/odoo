@@ -107,7 +107,7 @@
                 <field name="total_supplier_cost"/>
                 <field name="order_status"/>
                 <field name="payment_status"/>
-                <field name="matching_status"/>
+                <field name="order_matching_status"/>
             </tree>
         </field>
     </record>
