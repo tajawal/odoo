@@ -14,6 +14,8 @@
         'ofh_supplier_invoice_gds',
         'ofh_supplier_invoice_tf',
         'ofh_supplier_invoice_aig',
+        'ofh_supplier_invoice_galileo',
+        'ofh_supplier_invoice_enett',
         'web_notify',
     ],
     'data': [

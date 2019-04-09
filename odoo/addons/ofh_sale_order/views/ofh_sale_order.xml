@@ -65,9 +65,24 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="vendor_reference"/>
-                <field name="supplier_reference"/>
+                <field name="vendor_reference" filter_domain="['|', ('vendor_reference','ilike',self), ('supplier_reference','ilike', self)]" string="Locator"/>
                 <field name="ticketing_office_id"/>
+                <field name="office_id"/>
+                <separator/>
+                <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('entity', '=', 'almosafer')]"/>
+                <filter name="egypt" string="Egypt" domain="[('is_egypt', '=', True)]"/>
+                <separator/>
+                <filter name="updated_this_month" string="Updated This month" domain="[('updated_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_this_month" string="Created this month" domain="[('created_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter name="hotel" string="Hotel" domain="[('order_type', '=', 'hotel')]"/>
+                <filter name="flight" string="Flight" domain="[('order_type', '=', 'flight')]"/>
+                <separator/>
+                <filter name="gds_order" string="GDS Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '!=', 'TRAVEL FUSION')]"/>
+                <filter name="gds_order" string="Travel Fusion Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '=', 'TRAVEL FUSION')]"/>
             </search>
         </field>
     </record>
