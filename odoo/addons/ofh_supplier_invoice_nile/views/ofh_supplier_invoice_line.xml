@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_form_view">
+        <field name="name">ofh.supplier.invoice.line.form (in ofh_supplier_invoice_nile)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="nile_fees_details" string="Nile FEES DETAILS" attrs="{'invisible': [('invoice_type', '!=', 'nile')]}">
+                    <group name="fees_details" col="4">
+                        <field name="gds_net_amount"  widget="monetary"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="nile_supplier_invoice_line_act_window">
+        <field name="name">Nile lines</field>
+        <field name="res_model">ofh.supplier.invoice.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('invoice_type', '=', 'nile')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_supplier_invoice_line_line_menu">
+        <field name="name">Nile lines</field>
+        <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_main_menu"/>
+        <field name="action" ref="nile_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="20"/> 
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_nile_supplier_invoice_menu">
+        <field name="name">Nile Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_import_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_nile.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+</odoo>

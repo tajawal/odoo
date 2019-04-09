@@ -1,0 +1,3 @@
+Entity,Order ID,TKT Issue Date,GDS PNR,IATA Number,Ticket Number,Pax Name,Route,Pax Paid Amount,Ticket Issued Amount,Remarks
+AlMosafer Online,A90210116150,04-Mar-19,T99JQM,71490392,325-2400832313,mohamed/mohamed awad,GIZ- CAI,561.00,551.00,Booking cancelled from alnmosafer system and issued in Nile air altea
+AlMosafer Online,A90210095150,11-Apr-19,T55JQM,71490392,325-2400832314,almutairi/meshari ghazi,ELQ-CAI-ELQ,959.00,944.00,Booking cancelled from alnmosafer system and issued in Nile air altea

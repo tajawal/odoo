@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record id="ofh_supplier_invoice_line_nile_1" model="ofh.supplier.invoice.line">
+        <field name="ticket_number">325-2400832313</field>
+        <field name="invoice_type">nile</field>
+        <field name="locator">T99JQM</field>
+        <field name="vendor_id">Nile Air</field>
+        <field name="invoice_date">04-Mar-19</field>
+        <field name="gds_net_amount">551</field>
+        <field name="currency_id" ref="base.SAR"/>
+        <field name="passenger">mohamed/mohamed awad</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="order_reference">A90210116150</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_nile_2" model="ofh.supplier.invoice.line">
+        <field name="ticket_number">325-2400832314</field>
+        <field name="invoice_type">nile</field>
+        <field name="locator">T99JRE</field>
+        <field name="vendor_id">Nile Air</field>
+        <field name="invoice_date">11-Mar-19</field>
+        <field name="gds_net_amount">944</field>
+        <field name="currency_id" ref="base.SAR"/>
+        <field name="passenger">almutairi/meshari ghazi</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="order_reference">A90210095150</field>
+    </record>
+</odoo>
