@@ -41,13 +41,12 @@ class HubPaymentRequestImportMapper(Component):
 
     @mapping
     def created_at(self, record) -> dict:
-        dt = datetime.strptime(record['created_at'], "%Y-%m-%d %H:%M:%S")
+        dt = fields.Datetime.from_string(record['created_at'])
         return {'created_at': dt}
 
     @mapping
     def updated_at(self, record) -> dict:
-        dt = datetime.strptime(record['updated_at'], "%Y-%m-%d %H:%M:%S")
-
+        dt = fields.Datetime.from_string(record['updated_at'])
         return {'updated_at': dt}
 
     @mapping

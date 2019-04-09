@@ -27,12 +27,10 @@ class OfhPaymentCharge(models.Model):
     )
     created_at = fields.Datetime(
         required=True,
-        index=True,
         readonly=True,
     )
     updated_at = fields.Datetime(
         required=True,
-        index=True,
         readonly=True,
         track_visibility='always',
     )
@@ -40,62 +38,49 @@ class OfhPaymentCharge(models.Model):
         string="Charge Id",
         required=True,
         readonly=True,
-        index=True,
     )
     track_id = fields.Char(
         string="Track Id",
         required=True,
         readonly=True,
-        index=True,
     )
     auth_code = fields.Char(
         string="Auth Code",
-        required=True,
         readonly=True,
-        index=True,
     )
     status = fields.Selection(
         string="Status",
         selection=_get_charge_status_selection,
         required=True,
         readonly=True,
-        index=True,
     )
     total = fields.Monetary(
         string="Total",
         currency_field='currency_id',
-        required=True,
         readonly=True,
-        index=True,
     )
     provider = fields.Char(
         string="Provider",
         required=True,
         readonly=True,
-        index=True,
     )
     payment_mode = fields.Char(
         string="Payment Mode",
         readonly=True,
-        index=True,
     )
     card_type = fields.Char(
         string="Card Type",
         readonly=True,
-        index=True,
     )
     mid = fields.Char(
         string="Mid",
         readonly=True,
-        index=True,
     )
     last_four = fields.Char(
         string="Last Four",
         readonly=True,
-        index=True,
     )
     card_bin = fields.Char(
         string="Card Bin",
         readonly=True,
-        index=True,
     )
