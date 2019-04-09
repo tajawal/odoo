@@ -1,31 +1,4 @@
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: finance-hub-config
-  namespace: default
-data:
-  db_endpoint: "finance-hub-prod-apps.cdvjmqj39m9u.eu-west-1.rds.amazonaws.com"
-  myenv: "live"
-  worker: "9"
-  hub_source : "hub-live"
-  logging_json: "1"
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: finance-hub
-spec:
-  type: LoadBalancer
-  selector:
-    app: finance-hub
-  ports:
-  - name: finance-hub
-    port: 80
-    targetPort: finance-hub
-
----
 
 apiVersion: apps/v1
 kind: Deployment
