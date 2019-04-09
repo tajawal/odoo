@@ -23,4 +23,20 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_sale_order_search_view">
+        <field name="name">ofh.sale.order.search (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.sale.order</field>
+        <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_search_view"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <filter name="order_reconciled_status" string="Order Reconciled" domain="[('order_reconciliation_status', '=', 'reconciled')]"/>
+                <filter name="order_unreconciled_status" string="Order Unreconciled" domain="[('order_reconciliation_status', '=', 'unreconciled')]"/>
+                <separator/>
+                <filter name="payment_request_reconciled_status" string="Payment Request Reconciled" domain="[('payment_request_reconciliation_status', '=', 'reconciled')]"/>
+                <filter name="payment_request_unreconciled_status" string="Payment Request Unreconciled" domain="[('payment_request_reconciliation_status', '=', 'unreconciled')]"/>
+            </search>
+        </field>
+    </record>
+
 </odoo>

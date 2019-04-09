@@ -83,6 +83,10 @@
                 <separator/>
                 <filter name="gds_order" string="GDS Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '!=', 'TRAVEL FUSION')]"/>
                 <filter name="gds_order" string="Travel Fusion Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '=', 'TRAVEL FUSION')]"/>
+                <separator/>
+                <filter name="order_matched_status" string="Order Matched" domain="[('order_matching_status', '=', 'matched')]"/>
+                <filter name="order_unmatched_status" string="Order Unmatched" domain="[('order_matching_status', '=', 'unmatched')]"/>
+                <filter name="order_not_applicable_status" string="Order Not Applicable" domain="[('order_matching_status', '=', 'not_applicable')]"/>
             </search>
         </field>
     </record>
@@ -132,8 +136,8 @@
         <field name="sequence" eval="10"/>
     </record>
 
-    <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">
-        <field name="name">Sales Order Lines</field> <!-- TODO -->
+    <!-- <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">
+        <field name="name">Sales Order Lines</field>
         <field name="res_model">ofh.sale.order.line</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
@@ -145,6 +149,6 @@
         <field name="parent_id" ref="ofh_sale_order_main_menu"/>
         <field name="action" ref="ofh_sale_order_line_act_window"/>
         <field name="sequence" eval="10"/>
-    </record>
+    </record> -->
 
 </odoo>

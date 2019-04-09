@@ -18,6 +18,30 @@ class OfhSaleOrder(models.Model):
         compute='_compute_air_india_commission',
         readonly=True,
     )
+    order_reconciliation_status = fields.Selection(
+        string="Order Reconciliation Status",
+        selection=[
+            ('reconciled', 'Reconciled'),
+            ('unreconciled', 'Unreconciled'),
+        ],
+        compute='_compute_order_reconciliation_status',
+        default='unreconciled',
+        readonly=True,
+        store=True,
+        index=True,
+    )
+    payment_request_reconciliation_status = fields.Selection(
+        string="Payment Request Reconciliation Status",
+        selection=[
+            ('reconciled', 'Reconciled'),
+            ('unreconciled', 'Unreconciled'),
+        ],
+        compute='_compute_payment_request_reconciliation_status',
+        default='unreconciled',
+        readonly=True,
+        store=True,
+        index=True,
+    )
 
     @api.multi
     @api.depends('line_ids.air_india_commission')
@@ -43,3 +67,13 @@ class OfhSaleOrder(models.Model):
             'view_mode': 'tree,form',
             'domain': domain,
         }
+
+    @api.multi
+    def _compute_order_reconciliation_status(self):
+        for rec in self:
+            pass
+
+    @api.multi
+    def _compute_payment_request_reconciliation_status(self):
+        for rec in self:
+            pass

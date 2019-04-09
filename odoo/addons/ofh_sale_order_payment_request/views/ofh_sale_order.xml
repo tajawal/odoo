@@ -28,4 +28,18 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_sale_order_search_view">
+        <field name="name">ofh.sale.order.search (in ofh_sale_order_payment_request)</field>
+        <field name="model">ofh.sale.order</field>
+        <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_search_view"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <filter name="payment_request_matched_status" string="Payment Request Matched" domain="[('payment_request_matching_status', '=', 'matched')]"/>
+                <filter name="payment_request_unmatched_status" string="Payment Request Unmatched" domain="[('payment_request_matching_status', '=', 'unmatched')]"/>
+                <filter name="payment_request_not_applicable_status" string="Payment Request Not Applicable" domain="[('payment_request_matching_status', '=', 'not_applicable')]"/>
+            </search>
+        </field>
+    </record>
+
 </odoo>

@@ -284,8 +284,8 @@ class OfhSaleOrderLine(models.Model):
         readonly=True,
         track_visibility='onchange',
     )
-    not_applicable_reason = fields.Selection(
-        string="Not applicable reason",
+    not_applicable_flag = fields.Selection(
+        string="Not applicable flag",
         selection=[
             ('none', 'N/A'),
             ('low_fare', 'Low Fare'),

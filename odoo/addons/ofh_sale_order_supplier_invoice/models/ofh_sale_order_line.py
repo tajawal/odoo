@@ -19,17 +19,16 @@ class OfhSaleOrderLine(models.Model):
         compute='_compute_air_india_commission',
     )
     reconciliation_status = fields.Selection(
-        string="Supplier Status",
+        string="Reconciliation Status",
         selection=[
-            ('pending', 'Pending'),
-            ('matched', 'Matched'),
-            ('not_applicable', 'Not Applicable'),
-            ('investigate', 'Investigate')],
-        default='pending',
+            ('reconciled', 'Reconciled'),
+            ('unreconciled', 'Unreconciled'),
+        ],
+        default='unreconciled',
         required=True,
         index=True,
         readonly=True,
-        track_visibility='always',
+        track_visibility='onchange',
     )
     reconciliation_tag = fields.Selection(
         string="Deal/Loss",
@@ -38,6 +37,7 @@ class OfhSaleOrderLine(models.Model):
             ('loss', 'LOSS'),
             ('none', 'N/A')],
         compute='_compute_reconciliation_tag',
+        default='none',
         readonly=True,
         store=False,
     )
