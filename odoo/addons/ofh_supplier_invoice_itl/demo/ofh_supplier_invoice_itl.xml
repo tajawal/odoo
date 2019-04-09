@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record id="ofh_supplier_invoice_line_itl_1" model="ofh.supplier.invoice.line">
+        <field name="ticket_number">5955176037</field>
+        <field name="invoice_type">itl</field>
+        <field name="locator">LBYHWC</field>
+        <field name="vendor_id">LATAM Airlines Brasil</field>
+        <field name="invoice_date">2017-12-15</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="passenger">PAEZ/ANDREA</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="office_id">ITL</field>
+        <field name="order_reference">A7121416784</field>
+        <field name="gds_net_amount">2440</field>
+        <field name="gds_base_fare_amount">1670</field>
+        <field name="gds_tax_amount">750</field>
+    </record>
+
+    <record id="ofh_supplier_invoice_line_itl_2" model="ofh.supplier.invoice.line">
+        <field name="ticket_number">5955176038</field>
+        <field name="invoice_type">itl</field>
+        <field name="locator">LERHWC</field>
+        <field name="vendor_id">LATAM Airlines Brasil</field>
+        <field name="invoice_date">2017-11-11</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="passenger">PAEZ/CAMILA</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="office_id">ITL</field>
+        <field name="order_reference">A7121416224</field>
+        <field name="gds_net_amount">2070</field>
+        <field name="gds_base_fare_amount">1330</field>
+        <field name="gds_tax_amount">720</field>
+    </record>
+</odoo>
