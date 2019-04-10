@@ -15,7 +15,7 @@ class OfhPaymentCharge(models.Model):
             ("11111", "Captured"), ("83027", "Refund"),
             ("83026", "Refund In Progress"), ("83025", "Refund Failed"),
             ("00000", "Declined"), ("10000", "Authorized"),
-            ("Pending", "20118"), ("83035", "Void"), ("99999", "Deleted"),
+            ("20118", "Pending"), ("83035", "Void"), ("99999", "Deleted"),
             ("10100", "Flagged")
         ]
 
