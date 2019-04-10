@@ -115,12 +115,6 @@ class HubBackend(models.Model):
         # in each backend adapter usage.
 
         hub_api = HubAPI(
-            hub_url=self.hub_api_location,
-            hub_username=self.hub_api_username,
-            hub_password=self.hub_api_password,
-            config_url=self.config_api_url,
-            config_username=self.config_api_username,
-            config_password=self.config_api_password,
             oms_finance_api_url=self.oms_finance_api_url
         )
         _super = super(HubBackend, self)
