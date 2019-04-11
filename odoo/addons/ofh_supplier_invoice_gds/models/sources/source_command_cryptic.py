@@ -35,12 +35,8 @@ class SourceCommandCryptic(models.Model):
             return {}
 
         hub_api = HubAPI(
-            hub_url=backend.hub_api_location,
-            hub_username=backend.hub_api_username,
-            hub_password=backend.hub_api_password,
-            config_url=backend.config_api_url,
-            config_username=backend.config_api_username,
-            config_password=backend.config_api_password)
+            oms_finance_api_url=backend.oms_finance_api_url
+        )
 
         return hub_api.get_gds_daily_report(
             office_id=self.office_id, report_day=self.report_day)
