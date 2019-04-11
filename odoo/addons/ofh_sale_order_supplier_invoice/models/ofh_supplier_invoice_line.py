@@ -26,11 +26,11 @@ class OfhSupplierInvoiceLine(models.Model):
     matching_status = fields.Selection(
         string="Matching Status",
         selection=[
-            ('order_matched', 'Ready for matching'),
-            ('pr_matched', 'Matched'),
+            ('order_matched', 'Matched With Initial Booking'),
+            ('pr_matched', 'Matched with Payment Request'),
             ('unmatched', 'Unmatched'),
             ('unused_ticket', 'Unused Ticket'),
-            ('adm', 'ADM'),
+            ('adm', 'Debit Memo'),
         ],
         required=True,
         default='unmatched',
@@ -73,10 +73,12 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.multi
     def _update_matching_status(self):
         for rec in self:
-            if rec.order_line_id or rec.payment_request_id:
-                rec.reconciliation_status = 'reconciled'
+            if rec.order_line_id:
+                rec.matching_status = 'order_matched'
+            elif rec.payment_request_id:
+                rec.matching_status = 'pr_matched'
             else:
-                rec.reconciliation_status = 'unreconciled'
+                rec.matching_status = 'unmatched'
 
     @api.multi
     @job(default_channel='root')
@@ -137,17 +139,21 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.multi
     def _match_with_flight_sale_order_line(self, line):
         from_str = fields.Date.from_string
+
+        # Refund an Amendments never matches with Initial Booking.
+        if self.invoice_status in ('AMND', 'RFND'):
+            return
+
+        # GDS matches with the ticket number.
         if self.invoice_type == 'gds':
-            if self.invoice_status in ('AMND', 'RFND'):
-                return
-            if self.ticket_number in line.tickets.split(','):
+            if self.ticket_number in line.line_reference:
                 line.write({
                     'invoice_line_ids': [(4, self.id)],
-                    'reconciliation_status': 'matched',
+                    'matching_status': 'matched',
                 })
+
+        # Travel Fusion matching is based on dates.
         elif self.invoice_type == 'tf':
-            if self.invoice_status in ('AMND', 'RFND'):
-                return
             day_diff = abs((
                 from_str(line.created_at) -
                 from_str(self.invoice_date)).days)
@@ -155,7 +161,7 @@ class OfhSupplierInvoiceLine(models.Model):
                 return
             line.write({
                 'invoice_line_ids': [(4, self.id)],
-                'reconciliation_status': 'matched',
+                'matching_status': 'matched',
             })
 
         return
