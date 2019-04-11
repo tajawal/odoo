@@ -46,7 +46,7 @@ class PaymentRequestAdapter(Component):
         to_date = filters.pop('to')
         if not to_date:
             to_date = datetime.now()
-        return hub_api.getProcessedPaymentRequest(
+        return hub_api.get_list_payment_request(
             from_date=from_date, to_date=to_date)
 
     def read(self, external_id, attributes={}) -> dict:
