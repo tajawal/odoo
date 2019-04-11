@@ -124,16 +124,50 @@
         <field name="context">{}</field>
     </record>
 
+    <record model="ir.actions.act_window" id="ofh_sale_order_almosafer_act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">ofh.sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('entity', '=', 'almosafer')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_tajawal_act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">ofh.sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('entity', '=', 'tajawal')]</field>
+    </record>
+
     <record model="ir.ui.menu" id="ofh_sale_order_main_menu">
         <field name="name">Sales Orders</field>
-        <field name="sequence" eval="20"/>
+        <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_sale_order_menu">
         <field name="name">Sales Orders</field>
         <field name="parent_id" ref="ofh_sale_order_main_menu"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_all_menu">
+        <field name="name">All Sales Orders</field>
+        <field name="parent_id" ref="ofh_sale_order_menu"/>
         <field name="action" ref="ofh_sale_order_act_window"/>
         <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_almosafer_menu">
+        <field name="name">Almosafer Sales Orders</field>
+        <field name="parent_id" ref="ofh_sale_order_menu"/>
+        <field name="action" ref="ofh_sale_order_almosafer_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_tajawal_menu">
+        <field name="name">Tajawal Sales Orders</field>
+        <field name="parent_id" ref="ofh_sale_order_menu"/>
+        <field name="action" ref="ofh_sale_order_tajawal_act_window"/>
+        <field name="sequence" eval="30"/>
     </record>
 
     <!-- <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">

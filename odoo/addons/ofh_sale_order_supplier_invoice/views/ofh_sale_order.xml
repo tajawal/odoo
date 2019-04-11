@@ -39,4 +39,107 @@
         </field>
     </record>
 
+    <record model="ir.ui.menu" id="ofh_supplier_invoice_main_menu">
+        <field name="name">Vendor Invoices</field>
+        <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_supplier_invoice_menu">
+        <field name="name">All Invoice lines</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice.ofh_supplier_all_invoice_line_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_gds_supplier_invoice_menu">
+        <field name="name">GDS Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_gds.gds_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_tf_supplier_invoice_menu">
+        <field name="name">TravelFusion Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_tf.tf_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_itl_supplier_invoice_menu">
+        <field name="name">ITL Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_itl.itl_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_galileo_supplier_invoice_menu">
+        <field name="name">Galileo Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_galileo.galileo_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_enett_supplier_invoice_menu">
+        <field name="name">Enett Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_enett.enett_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="50"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_tv_supplier_invoice_menu">
+        <field name="name">Travelutionary Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_tv.tv_supplier_invoice_line_act_window"/>
+        <field name="sequence" eval="60"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_import_supplier_invoice_main_menu">
+        <field name="name">Import Vendor Invoices</field>
+        <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_gds_supplier_invoice_import_menu">
+        <field name="name">GDS Report</field>
+        <field name="parent_id" ref="ofh_import_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_gds.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_tf_supplier_invoice_import_menu">
+        <field name="name">TravelFusion Report</field>
+        <field name="parent_id" ref="ofh_import_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_tf.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_itl_supplier_invoice_import_menu">
+        <field name="name">ITL Report</field>
+        <field name="parent_id" ref="ofh_import_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_itl.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_galileo_supplier_invoice_import_menu">
+        <field name="name">Galileo Report</field>
+        <field name="parent_id" ref="ofh_import_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_galileo.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_enett_supplier_invoice_import_menu">
+        <field name="name">Enett Report</field>
+        <field name="parent_id" ref="ofh_import_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_enett.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="50"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_tv_supplier_invoice_import_menu">
+        <field name="name">Travelutionary Report</field>
+        <field name="parent_id" ref="ofh_import_supplier_invoice_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_tv.ofh_supplier_invoice_import_act_window"/>
+        <field name="sequence" eval="60"/>
+    </record>
+
 </odoo>

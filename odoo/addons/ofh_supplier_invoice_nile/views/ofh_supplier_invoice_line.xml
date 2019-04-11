@@ -30,7 +30,7 @@
         <field name="name">Nile lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_main_menu"/>
         <field name="action" ref="nile_supplier_invoice_line_act_window"/>
-        <field name="sequence" eval="20"/> 
+        <field name="sequence" eval="20"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_nile_supplier_invoice_menu">

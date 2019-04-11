@@ -11,6 +11,7 @@ class OfhPaymentRequest(models.Model):
         comodel_name="ofh.sale.order",
         string="Order ID",
         readonly=True,
+        ondelete="cascade",
     )
     order_reference = fields.Char(
         related="order_id.name",
