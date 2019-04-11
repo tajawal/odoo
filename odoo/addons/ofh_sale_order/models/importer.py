@@ -228,18 +228,20 @@ class HubSaleOrderLineImportMapper(Component):
         return {'traveller_type': record['traveller'].get('type')}
 
     @mapping
-    def ticket_number(self, record):
-        if record.get('product_type').lower() != 'flight':
-            return {}
-        if 'traveller' not in record:
-            return {}
-        ticket = record['traveller'].get('ticket')
-        if not ticket:
-            return {}
-        if '-' in ticket:
-            return {'ticket_number': ticket.split('-')[1]}
+    def line_reference(self, record):
+        if record.get('product_type').lower() == 'flight':
+            if 'traveller' not in record:
+                return {}
+            line_reference = record['traveller'].get('line_reference')
         else:
-            return {'ticket_number': ticket}
+            if 'segment' not in record:
+                return {}
+            line_reference = str(record['segment'].get('line_reference'))
+
+        if '-' in line_reference:
+            return {'line_reference': line_reference.split('-')[1]}
+        else:
+            return {'line_reference': line_reference}
 
     @mapping
     def office_id(self, record):

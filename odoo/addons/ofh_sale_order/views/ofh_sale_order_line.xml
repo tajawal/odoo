@@ -26,7 +26,7 @@
                            attrs="{'invisible': [('line_type', '!=', 'flight')]}">
                         <field name="traveller"/>
                         <field name="traveller_type"/>
-                        <field name="ticket_number"/>
+                        <field name="line_reference" string="Ticket"/>
                         <field name="booking_class"/>
                         <field name="office_id"/>
                         <field name="ticketing_office_id"/>
@@ -40,11 +40,12 @@
                     </group>
                     <group name="segment_info" col="4" string="Hotel Details"
                            attrs="{'invisible': [('line_type', '!=', 'hotel')]}">
+                        <field name="line_reference" string="Segment ID"/>
+                        <field name="hotel_supplier_id"/>
                         <field name="contract"/>
                         <field name="hotel_id"/>
                         <field name="hotel_city"/>
                         <field name="hotel_country"/>
-                        <field name="hotel_supplier_id"/>
                     </group>
                     <group name="line_statuses" col="4" string="Statuses">
                         <field name="matching_status"/>
@@ -96,7 +97,7 @@
                 <field name="supplier_currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>
                 <field name="line_type"/>
-                <field name="tickets"/>
+                <field name="line_reference"/>
                 <field name="vendor_name"/>
                 <field name="vendor_confirmation_number" string="Vendor Reference"/>
                 <field name="supplier_name"/>

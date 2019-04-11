@@ -9,6 +9,7 @@ class OfhSaleOrderLine(models.Model):
     _name = 'ofh.sale.order.line'
     _description = 'Ofh Sale Order Line'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _rec_name = 'line_reference'
 
     @api.model
     def _get_order_status_selection(self):
@@ -145,8 +146,8 @@ class OfhSaleOrderLine(models.Model):
         readonly=True,
         index=True,
     )
-    ticket_number = fields.Char(
-        string="Ticket",
+    line_reference = fields.Char(
+        string="Ticket/Segment",
         readonly=True,
         index=True,
         track_visibility='onchange',
@@ -298,17 +299,7 @@ class OfhSaleOrderLine(models.Model):
     )
 
     @api.multi
-    @api.depends('ticket_number')
+    @api.depends('line_reference')
     def _compute_tickets(self):
         for rec in self:
-            if not rec.ticket_number:
-                rec.tickets = ''
-                continue
-            tickets = rec.ticket_number.split('/')
-            if len(tickets) == 1:
-                rec.tickets = tickets[0]
-                continue
-            root = tickets[0].strip()[0:-3]
-            tickets[0] = tickets[0].strip()[-3:]
-            rec.tickets = ','.join(
-                [f"{root}{t.strip()}" for t in tickets if t.strip()])
+            pass
