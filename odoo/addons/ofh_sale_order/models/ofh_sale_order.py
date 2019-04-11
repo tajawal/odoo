@@ -327,3 +327,22 @@ class OfhSaleOrder(models.Model):
     def _compute_order_matching_status(self):
         for rec in self:
             pass
+
+    @api.multi
+    def open_order_in_hub(self):
+        """Open the order link to the payment request in hub using URL
+        Returns:
+            [dict] -- URL action dictionary
+        """
+
+        self.ensure_one()
+        hub_backend = self.env['hub.backend'].search([], limit=1)
+        if not hub_backend:
+            return
+        hub_url = "{}admin/order/air/detail/{}".format(
+            hub_backend.hub_api_location, self.name)
+        return {
+            "type": "ir.actions.act_url",
+            "url": hub_url,
+            "target": "new",
+        }
