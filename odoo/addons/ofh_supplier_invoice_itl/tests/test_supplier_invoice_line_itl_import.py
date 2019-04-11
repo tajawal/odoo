@@ -67,13 +67,11 @@ class TestSupplierInvoiceITLImport(common.TransactionComponentRegistryCase):
 
         # First test case
         first_line = self.invoice_line_model.search(
-            [('locator', '=', 'LBYHWC')])
+            [('order_reference', '=', 'A7121416784')])
         self.assertTrue(first_line)
         self.assertEquals(len(first_line), 1)
         self.assertEquals(first_line.passenger, 'PAEZ/ANDREA')
-        self.assertEquals(first_line.gds_net_amount, 2440)
-        self.assertEquals(first_line.gds_base_fare_amount, 1670)
-        self.assertEquals(first_line.gds_tax_amount, 750)
+        self.assertAlmostEquals(first_line.total, 2440.0)
         self.assertEquals(first_line.invoice_status, "TKTT")
         self.assertEquals(first_line.office_id, "ITL")
         self.assertEquals(first_line.invoice_type, "itl")
@@ -82,13 +80,11 @@ class TestSupplierInvoiceITLImport(common.TransactionComponentRegistryCase):
 
         # Second test case
         second_line = self.invoice_line_model.search(
-            [('locator', '=', 'LERHWC')])
+            [('order_reference', '=', 'A7121416224')])
         self.assertTrue(second_line)
         self.assertEquals(len(second_line), 1)
         self.assertEquals(second_line.passenger, 'PAEZ/CAMILA')
-        self.assertEquals(second_line.gds_net_amount, 2070)
-        self.assertEquals(second_line.gds_base_fare_amount, 1330)
-        self.assertEquals(second_line.gds_tax_amount, 720)
+        self.assertAlmostEquals(second_line.total, 2440.0)
         self.assertEquals(second_line.invoice_status, "TKTT")
         self.assertEquals(second_line.office_id, "ITL")
         self.assertEquals(second_line.invoice_type, "itl")

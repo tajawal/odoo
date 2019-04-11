@@ -16,7 +16,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self).ticket_number(record)
-        segment_id = record.get('Ticket Number')
+        segment_id = record.get('Ticket No.')
         if not segment_id:
             return {}
         return {'ticket_number': segment_id}
@@ -30,23 +30,12 @@ class SupplierInvoiceLineMapper(Component):
         return {'invoice_type': 'itl'}
 
     @mapping
-    def locator(self, record):
-        itl_backend = self.env.ref(
-            'ofh_supplier_invoice_itl.itl_import_backend')
-        if self.backend_record != itl_backend:
-            return super(SupplierInvoiceLineMapper, self).locator(record)
-        return {'locator': record.get('PNR')}
-
-    @mapping
     def vendor_id(self, record):
         itl_backend = self.env.ref(
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self).vendor_id(record)
-        hn = record.get('Airline Name')
-        if not hn:
-            return {}
-        return {'vendor_id': hn}
+        return {'vendor_id': "ITL"}
 
     @mapping
     def invoice_date(self, record):
@@ -54,7 +43,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
-        dt = datetime.strptime(record.get('Date'), '%Y-%m-%d')
+        dt = datetime.strptime(record.get('Date'), '%d-%b-%Y')
         if not dt:
             return {}
         return {'invoice_date': dt}
@@ -73,10 +62,21 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self).passenger(record)
-        passeng = record.get('Passenger Name')
+        passeng = record.get('PAX Name')
         if not passeng:
             return {}
-        return {'passenger': passeng}
+        return {'passenger': passeng}\
+
+    @mapping
+    def total(self, record):
+        itl_backend = self.env.ref(
+            'ofh_supplier_invoice_itl.itl_import_backend')
+        if self.backend_record != itl_backend:
+            return super(SupplierInvoiceLineMapper, self).total(record)
+        totl = record.get('Ticket Total')
+        if not totl:
+            return {}
+        return {'total': totl}
 
     @mapping
     def invoice_status(self, record):
@@ -85,8 +85,8 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self) \
                 .invoice_status(record)
-        net_payable = record.get('Net Payable')
-        if int(net_payable) >= 0:
+        net_payable = record.get('Ticket Total')
+        if float(net_payable) >= 0:
             return {'invoice_status': "TKTT"}
         return {'invoice_status': "RFND"}
 
@@ -99,12 +99,20 @@ class SupplierInvoiceLineMapper(Component):
         return {'office_id': "ITL"}
 
     @mapping
-    def gds_net_amount(self, record):
+    def locator(self, record):
+        itl_backend = self.env.ref(
+            'ofh_supplier_invoice_itl.itl_import_backend')
+        if self.backend_record != itl_backend:
+            return super(SupplierInvoiceLineMapper, self).locator(record)
+        return {'locator': "/"}
+
+    @mapping
+    def gds_fee_amount(self, record):
         itl_backend = self.env.ref(
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return {}
-        return {'gds_net_amount': float(record.get('Net Payable'))}
+        return {'gds_fee_amount': float(record.get('S/F'))}
 
     @mapping
     def gds_base_fare_amount(self, record):
@@ -112,7 +120,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return {}
-        return {'gds_base_fare_amount': float(record.get('Basic Fare'))}
+        return {'gds_base_fare_amount': float(record.get('Fare'))}
 
     @mapping
     def gds_tax_amount(self, record):
@@ -120,7 +128,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return {}
-        return {'gds_tax_amount': float(record.get('Taxes'))}
+        return {'gds_tax_amount': float(record.get('Tax'))}
 
     @mapping
     def order_reference(self, record):
@@ -129,7 +137,7 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self) \
                 .order_reference(record)
-        return {'order_reference': record.get('Tajawal ID')}
+        return {'order_reference': record.get('LPO No.')}
 
 
 class SupplierInvoiceLineHandler(Component):
@@ -143,7 +151,7 @@ class SupplierInvoiceLineHandler(Component):
             return [
                 ('invoice_type', '=', 'itl'),
                 (self.unique_key, '=', 'itl_{}_{}'.format(
-                    values.get('Tajawal ID'),
-                    values.get('Ticket Number')))]
+                    values.get('LPO No.'),
+                    values.get('Ticket No.')))]
         return super(SupplierInvoiceLineHandler, self).odoo_find_domain(
             values, orig_values)
