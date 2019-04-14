@@ -9,6 +9,13 @@
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+                <button name="gds_retrieve_pnr"
+                        string="Retrieve PNR"
+                        class="btn-primary"
+                        type="object"
+                        attrs="{'invisible': [('invoice_type', '!=', 'gds')]}"/>
+            </header>
             <notebook position="inside">
                 <page name="gds_fees_details" string="GDS FEES DETAILS" attrs="{'invisible': [('invoice_type', '!=', 'gds')]}">
                     <group name="fees_details" col="4">
@@ -47,7 +54,7 @@
         <field name="name">GDS lines</field>
         <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_main_menu"/>
         <field name="action" ref="gds_supplier_invoice_line_act_window"/>
-        <field name="sequence" eval="20"/> 
+        <field name="sequence" eval="20"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_gds_supplier_invoice_menu">
@@ -55,6 +62,17 @@
         <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_import_main_menu"/>
         <field name="action" ref="ofh_supplier_invoice_gds.ofh_supplier_invoice_import_act_window"/>
         <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_supplier_invoice_gds_record_locator">
+        <field name="name">Retrieve PNR</field>
+        <field name="model_id" ref="ofh_supplier_invoice.model_ofh_supplier_invoice_line"/>
+        <field name = "binding_model_id" ref = "ofh_supplier_invoice.model_ofh_supplier_invoice_line"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_gds_record_locator()
+        </field>
     </record>
 
 </odoo>

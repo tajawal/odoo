@@ -93,6 +93,32 @@ class HubAPI:
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get payment request details")
 
+    def gds_retrieve_pnr(self, office_id: str, locator: str) -> dict:
+        """[summary]
+
+        :param office_id: [description]
+        :type office_id: str
+        :param locator: [description]
+        :type report_day: str
+        :raises MissingError: [description]
+        :return: [description]
+        :rtype: dict
+        """
+        if not office_id or not locator:
+            return {}
+        url = f"{self.oms_finance_api_url}gds_reports/retrive_pnr"
+        payload = {
+            'office': office_id,
+            'locator': locator,
+        }
+        try:
+            response = requests.post(
+                url, json=payload, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            return response.json().get('order_id')
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not get payment request details")
+
 
 class HubAdapter(AbstractComponent):
     """[summary]."""

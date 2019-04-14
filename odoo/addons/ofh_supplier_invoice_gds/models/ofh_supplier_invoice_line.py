@@ -4,6 +4,7 @@
 from odoo import api, fields, models
 from datetime import datetime, timedelta
 from odoo.addons.queue_job.job import job
+from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -115,3 +116,21 @@ class OfhSupplierInvoiceLine(models.Model):
         })
 
         return recordset.run_import()
+
+    @api.multi
+    def action_gds_record_locator(self):
+        for line in self.filtered(lambda l: l.invoice_type == 'gds'):
+            line.with_delay().gds_retrieve_pnr()
+
+    @api.multi
+    @job(default_channel='root.hub')
+    def gds_retrieve_pnr(self):
+        self.ensure_one()
+        backend = self.env['hub.backend'].search([], limit=1)
+        if not backend:
+            return {}
+
+        hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
+
+        self.order_reference = hub_api.gds_retrieve_pnr(
+            office_id=self.office_id, locator=self.locator)
