@@ -9,6 +9,13 @@
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_unused_tickets_invoice_lines"
+                        string="Mark as Unused Ticket"
+                        class="btn-primary"
+                        type="object"
+                        attrs="{'invisible': [('invoice_type', 'not in', ('gds', 'tf', 'galileo'))]}"/>
+            </header>
             <group name="main_group" position="inside">
                 <field name="order_id"/>
                 <field name="order_line_id"/>
@@ -46,6 +53,18 @@
                 <field name="matching_status"/>
                 <field name="reconciliation_status"/>
             </tree>
+        </field>
+    </record>
+
+    <!-- Mark Invoice Lines as not applicable -->
+    <record model="ir.actions.server" id="ofh_supplier_invoice_line_not_applicable">
+        <field name="name">Mark as Unused Ticket</field>
+        <field name="model_id" ref="ofh_supplier_invoice.model_ofh_supplier_invoice_line"/>
+        <field name = "binding_model_id" ref = "ofh_supplier_invoice.model_ofh_supplier_invoice_line"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_unused_tickets_invoice_lines()
         </field>
     </record>
 

@@ -1,7 +1,7 @@
 # Copyright 2019 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
 
 
@@ -43,6 +43,7 @@ class OfhSupplierInvoiceLine(models.Model):
         selection=[
             ('reconciled', 'Reconciled'),
             ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
         ],
         default='unreconciled',
         required=True,
@@ -73,6 +74,8 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.multi
     def _update_matching_status(self):
         for rec in self:
+            if rec.matching_status in ('unused_ticket', 'adm'):
+                continue
             if rec.order_line_id:
                 rec.matching_status = 'order_matched'
             elif rec.payment_request_id:
@@ -94,8 +97,7 @@ class OfhSupplierInvoiceLine(models.Model):
         self.ensure_one()
 
         domain = []
-        # if self.invoice_type == 'gds':
-        #     domain.append(('ticketing_office_id', 'like', self.office_id[:3]))
+
         if self.invoice_type == 'tf':
             domain.append(('ticketing_office_id', '=', 'TRAVEL FUSION'))
 
@@ -222,3 +224,18 @@ class OfhSupplierInvoiceLine(models.Model):
         invoice_lines = self._get_pending_invoice_lines()
         for line in invoice_lines:
             line.with_delay().match_with_sale_order()
+
+    @api.multi
+    def action_unused_tickets_invoice_lines(self):
+        lines = self.filtered(
+            lambda l: l.invoice_type in ('gds', 'tf', 'galileo'))
+        if not lines:
+            return
+
+        return lines.write({
+            'order_id': False,
+            'order_line_id': False,
+            'payment_request_id': False,
+            'matching_status': 'unused_ticket',
+            'reconciliation_status': 'not_applicable',
+        })
