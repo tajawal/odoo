@@ -10,6 +10,11 @@
         <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
+                <button name="match_with_sale_order"
+                        string="Match Line"
+                        class="btn-primary"
+                        type="object"
+                        attrs="{'invisible': [('order_id', '!=', False)]}"/>
                 <button name="action_unused_tickets_invoice_lines"
                         string="Mark as Unused Ticket"
                         class="btn-primary"

@@ -74,13 +74,13 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.multi
     def _update_matching_status(self):
         for rec in self:
-            if rec.matching_status in ('unused_ticket', 'adm'):
-                continue
             if rec.order_line_id:
                 rec.matching_status = 'order_matched'
             elif rec.payment_request_id:
                 rec.matching_status = 'pr_matched'
             else:
+                if rec.matching_status in ('unused_ticket', 'adm'):
+                    continue
                 rec.matching_status = 'unmatched'
 
     @api.multi
@@ -97,6 +97,9 @@ class OfhSupplierInvoiceLine(models.Model):
         self.ensure_one()
 
         domain = []
+
+        if self.order_reference:
+            return [('name', '=', self.order_reference)]
 
         if self.invoice_type == 'tf':
             domain.append(('ticketing_office_id', '=', 'TRAVEL FUSION'))
