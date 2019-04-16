@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_gds_daily_report_form_view">
+        <field name="name">ofh.gds.daily.report.form (in ofh_supplier_invoice_gds)</field>
+        <field name="model">ofh.gds.daily.report</field>
+        <field name="arch" type="xml">
+            <form string="Ofh Gds Daily Report">
+                <!-- TODO -->
+                <group col="4">
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+                <footer>
+                    <button name="download_gds_report"
+                            string="Import"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_gds_daily_report_act_window">
+        <field name="name">Sync GDS Daily Report</field>
+        <field name="res_model">ofh.gds.daily.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_gds_daily_report_menu">
+        <field name="name">Sync GDS Report</field>
+        <field name="parent_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_import_main_menu"/>
+        <field name="action" ref="ofh_gds_daily_report_act_window"/>
+        <field name="sequence" eval="80"/>
+    </record>
+
+</odoo>
