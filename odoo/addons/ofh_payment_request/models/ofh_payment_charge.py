@@ -12,4 +12,5 @@ class OfhPaymentCharge(models.Model):
         string="Payment Request ID",
         readonly=True,
         ondelete="cascade",
+        index=True,
     )
