@@ -21,6 +21,11 @@ class HubSaleOrder(models.Model):
         inverse_name='hub_order_id',
         string="Hub Order Lines",
     )
+    hub_payment_ids = fields.One2many(
+        comodel_name='hub.payment',
+        inverse_name='hub_order_id',
+        string="HUB Payments",
+    )
 
     _sql_constraints = [
         ('hub_uniq', 'unique(backend_id, external_id)',
@@ -53,6 +58,26 @@ class HubSaleOrderLine(models.Model):
         binding = self.env['hub.sale.order'].browse(hub_order_id)
         vals['order_id'] = binding.odoo_id.id
         binding = super(HubSaleOrderLine, self).create(vals)
+        return binding
+
+
+class HubPayment(models.Model):
+    _inherit = 'hub.payment'
+
+    hub_order_id = fields.Many2one(
+        string="HUB Sale order",
+        comodel_name='hub.sale.order',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+
+    @api.model
+    def create(self, vals):
+        hub_order_id = vals['hub_order_id']
+        binding = self.env['hub.sale.order'].browse(hub_order_id)
+        vals['order_id'] = binding.odoo_id.id
+        binding = super(HubPayment, self).create(vals)
         return binding
 
 

@@ -56,6 +56,9 @@
                         <page name="sale_lines" string="Lines">
                             <field name="line_ids" nolabel="1"/>
                         </page>
+                        <page name="payments" string="Payments">
+                            <field name="payment_ids" nolabel="1"/>
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter"></div>

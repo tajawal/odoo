@@ -42,7 +42,7 @@
         <field name="charge_id">charge_E98BBE631222S1B0E0D5D9B</field>
         <field name="track_id">pr-H92330090345-1551261525547</field>
         <field name="auth_code">048321</field>
-        <field name="status">10002</field>
+        <field name="status">11111</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -59,7 +59,7 @@
         <field name="charge_id">charge_E98BBE631222S14556RT5D9B</field>
         <field name="track_id">pr-H92330090333-15512615435</field>
         <field name="auth_code">048332</field>
-        <field name="status">10002</field>
+        <field name="status">11111</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -76,7 +76,7 @@
         <field name="charge_id">charge_E98HJKI99631222S14556RT5D9B</field>
         <field name="track_id">pr-H923300450333-222512615435</field>
         <field name="auth_code">0483452</field>
-        <field name="status">10002</field>
+        <field name="status">11111</field>
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
@@ -275,4 +275,22 @@
         <field name="created_at">2019-02-19</field>
         <field name="updated_at">2018-02-19</field>
     </record>
+
+    <record id="ofh_payment_charge_17" model="ofh.payment.charge">
+        <field name="charge_id">charge_DAA9EDF70I1C4B0B58EA</field>
+        <field name="track_id">f610e7ec-0725-4fa1-bc81-759924f580e2</field>
+        <field name="auth_code">081124</field>
+        <field name="status">10000</field>
+        <field name="total">310.34</field>
+        <field name="provider">checkoutcom</field>
+        <field name="payment_mode">Visa</field>
+        <field name="card_type">dummy</field>
+        <field name="mid">109052</field>
+        <field name="last_four">7234</field>
+        <field name="card_bin">455734</field>
+        <field name="currency_id" ref="base.SAR"/>
+        <field name="created_at">2019-01-20</field>
+        <field name="updated_at">2019-01-20</field>
+    </record>
+
 </odoo>

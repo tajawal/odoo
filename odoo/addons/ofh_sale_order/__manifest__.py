@@ -11,6 +11,7 @@
     'website': 'https://tajawal.com',
     'depends': [
         'ofh_hub_connector',
+        'ofh_payment',
     ],
     'data': [
         'security/ofh_sale_order_line.xml',

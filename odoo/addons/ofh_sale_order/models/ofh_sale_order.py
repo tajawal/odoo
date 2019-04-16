@@ -277,6 +277,12 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         track_visibility='onchange',
     )
+    payment_ids = fields.One2many(
+        string="Payments",
+        comodel_name='ofh.payment',
+        inverse_name='order_id',
+        readonly=True
+    )
 
     @api.multi
     @api.depends('line_ids.vendor_confirmation_number')

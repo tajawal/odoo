@@ -8,6 +8,7 @@ class OfhPaymentCharge(models.Model):
     _name = 'ofh.payment.charge'
     _description = "Ofh Payment Charge"
     _rec_name = 'charge_id'
+    _order = 'created_at DESC'
 
     @api.model
     def _get_charge_status_selection(self):
@@ -61,7 +62,6 @@ class OfhPaymentCharge(models.Model):
     )
     provider = fields.Char(
         string="Provider",
-        required=True,
         readonly=True,
     )
     payment_mode = fields.Char(

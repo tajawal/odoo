@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id='ofh_payment_charge.ofh_payment_charge_17' model="ofh.payment.charge">
+        <field name="payment_id" ref="ofh_payment.ofh_payment_1"/>
+    </record>
+
+</odoo>

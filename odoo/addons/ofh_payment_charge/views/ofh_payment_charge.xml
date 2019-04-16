@@ -47,6 +47,7 @@
                 <field name="mid"/>
                 <field name="auth_code"/>
                 <field name="total"/>
+                <field name="status"/>
             </tree>
         </field>
     </record>
