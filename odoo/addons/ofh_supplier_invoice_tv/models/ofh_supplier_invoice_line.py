@@ -1,11 +1,6 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
-from hashlib import blake2b
-
-from odoo import api, fields, models, _
-from datetime import datetime, timedelta
-from odoo.addons.queue_job.job import job
+from odoo import api, fields, models
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -24,8 +19,6 @@ class OfhSupplierInvoiceLine(models.Model):
         string="Supplier Reference",
         readonly=True,
     )
-
-    index = fields.Char()
 
     @api.multi
     def _tv_compute_name(self):

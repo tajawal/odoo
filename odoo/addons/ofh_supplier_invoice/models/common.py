@@ -49,6 +49,10 @@ class SupplierInvoiceLineMapper(Component):
     def currency_id(self, record):
         return {}
 
+    @mapping
+    def index(self, record):
+        return {}
+
 
 class SupplierInvoiceLineRecordImporter(Component):
 

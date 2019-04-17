@@ -14,7 +14,6 @@ class OfhSupplierInvoiceLine(models.Model):
     invoice_type = fields.Selection(
         selection_add=[('tf', 'TravelFusion')],
     )
-    index = fields.Char()
 
     @api.constrains('invoice_type', 'index')
     @api.multi

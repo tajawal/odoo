@@ -1,10 +1,8 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import json
 from datetime import datetime
 
-from odoo import fields
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 
@@ -110,7 +108,8 @@ class SupplierInvoiceLineMapper(Component):
         tv_backend = self.env.ref(
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
-            return super(SupplierInvoiceLineMapper, self).invoice_status(record)
+            return super(SupplierInvoiceLineMapper, self).invoice_status(
+                record)
         invoice_stat = record.get('SegmentStatus')
         if not invoice_stat or invoice_stat != "OK":
             return {}
@@ -132,7 +131,7 @@ class SupplierInvoiceLineMapper(Component):
         tv_backend = self.env.ref(
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
-            return {}
+            return super(SupplierInvoiceLineMapper, self).index(record)
         return {'index': record.get('OrderId')}
 
 

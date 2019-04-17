@@ -102,7 +102,7 @@ class SupplierInvoiceLineMapper(Component):
         tf_backend = self.env.ref(
             'ofh_supplier_invoice_tf.tf_import_backend')
         if self.backend_record != tf_backend:
-            return {}
+            return super(SupplierInvoiceLineMapper, self).index(record)
         return {'index': record.get('Index')}
 
 

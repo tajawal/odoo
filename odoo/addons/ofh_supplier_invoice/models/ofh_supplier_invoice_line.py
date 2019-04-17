@@ -87,6 +87,7 @@ class OfhSupplierInvoiceLine(models.Model):
         string="Active",
         default=True,
     )
+    index = fields.Char()
 
     order_reference = fields.Char(
         string="Tajawal ID",
