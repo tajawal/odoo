@@ -11,14 +11,7 @@
     'website': 'https://tajawal.com',
     'depends': [
         'ofh_sale_order_payment_request',
-        'ofh_supplier_invoice_gds',
-        'ofh_supplier_invoice_tf',
-        'ofh_supplier_invoice_aig',
-        'ofh_supplier_invoice_galileo',
-        'ofh_supplier_invoice_enett',
-        'ofh_supplier_invoice_itl',
-        'ofh_supplier_invoice_nile',
-        'ofh_supplier_invoice_tv',
+        'ofh_supplier_invoice',
         'web_notify',
     ],
     'data': [

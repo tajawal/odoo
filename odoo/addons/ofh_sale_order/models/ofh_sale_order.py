@@ -272,7 +272,7 @@ class OfhSaleOrder(models.Model):
             ('not_applicable', 'Not Applicable')],
         default='unmatched',
         compute='_compute_order_matching_status',
-        store=True,
+        store=False,
         index=True,
         readonly=True,
         track_visibility='onchange',
@@ -332,7 +332,15 @@ class OfhSaleOrder(models.Model):
     @api.depends('line_ids.matching_status')
     def _compute_order_matching_status(self):
         for rec in self:
-            pass
+            if all([l.matching_status == 'not_applicable'
+                    for l in rec.line_ids]):
+                rec.order_matching_status = 'not_applicable'
+                continue
+            if all([l.matching_status in ('matched', 'not_applicable')
+                    for l in rec.line_ids]):
+                rec.order_matching_status = 'matched'
+                continue
+            rec.order_matching_status = 'unmatched'
 
     @api.multi
     def open_order_in_hub(self):
