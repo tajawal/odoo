@@ -15,6 +15,7 @@
         'ofh_payment_request_invoice',
         'ofh_payment_request_sap_s3_bucket',
         'ofh_sale_order_supplier_invoice_gds',
+        'ofh_sale_order_supplier_invoice_tf',
 
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
