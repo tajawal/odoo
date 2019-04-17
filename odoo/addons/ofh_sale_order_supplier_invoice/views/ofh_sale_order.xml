@@ -15,11 +15,11 @@
                         help="Open invoices that match the same supplier references in the order."
                         type="object"/>
             </header>
-            <notebook position="inside">
-                <page name="invoice_lines" string="Invoices">
+            <page name="costs" position="inside">
+                <group name="invoice_lines" string="Invoices">
                     <field name="invoice_line_ids" nolabel="1"/>
-                </page>
-            </notebook>
+                </group>
+            </page>
         </field>
     </record>
 

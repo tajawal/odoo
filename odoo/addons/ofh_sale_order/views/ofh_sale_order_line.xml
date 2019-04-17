@@ -99,18 +99,14 @@
                 <field name="line_type"/>
                 <field name="line_reference"/>
                 <field name="vendor_name"/>
-                <field name="vendor_confirmation_number" string="Vendor Reference"/>
                 <field name="supplier_name"/>
-                <field name="supplier_confirmation_number" string="Supplier Reference"/>
                 <field name="vendor_cost_amount" widget="monetary" sum="Total"/>
                 <field name="supplier_cost_amount" widget="monetary" sum="Total"/>
                 <field name="service_fee_amount" widget="monetary" sum="Total"/>
                 <field name="discount_amount" widget="monetary" sum="Total"/>
                 <field name="tax_amount" widget="monetary" sum="Total"/>
                 <field name="total_amount" widget="monetary" sum="Total"/>
-                <field name="state"/>
                 <field name="matching_status"/>
-                <field name="not_applicable_flag"/>
             </tree>
         </field>
     </record>

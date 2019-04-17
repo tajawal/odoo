@@ -16,48 +16,60 @@
                             type="object"/>
                 </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
                     <group name="header" col="4">
-                        <field name="name"/>
-                        <field name="track_id"/>
                         <field name="entity"/>
                         <field name="order_type"/>
                         <field name="created_at"/>
                         <field name="updated_at"/>
                         <field name="order_status"/>
-                        <field name="payment_status"/>
-                        <field name="paid_at"/>
                         <field name="currency_id"/>
-                        <field name="store_id"/>
-                        <field name="group_id"/>
-                        <field name="is_egypt"/>
-                    </group>
-                    <group col="4" name="sale_totals" string="Cost Totals">
-                        <field name="office_id"/>
-                        <field name="ticketing_office_id"/>
-                        <field name="lines_total_service_fee" widget="monetary"/>
-                        <field name="total_service_fee" widget="monetary"/>
-                        <field name="lines_total_discount" widget="monetary"/>
-                        <field name="total_discount" widget="monetary"/>
-                        <field name="lines_total_tax" widget="monetary"/>
-                        <field name="total_tax" widget="monetary"/>
-                        <field name="lines_total_amount" widget="monetary"/>
                         <field name="total_amount" widget="monetary"/>
-                    </group>
-                    <group col="4" name="sale_totals" string="Sales Totals">
-                        <field name="vendor_reference"/>
-                        <field name="supplier_reference"/>
-                        <field name="total_vendor_cost" widget="monetary"/>
-                        <field name="lines_total_vendor_cost" widget="monetary"/>
-                        <field name="total_supplier_cost" widget="monetary"/>
-                        <field name="vendor_currency_id"/>
-                        <field name="supplier_currency_id"/>
+                        <field name="is_egypt"/>
                     </group>
                     <notebook>
                         <page name="sale_lines" string="Lines">
-                            <field name="line_ids" nolabel="1"/>
+                            <group name="line_details" col="4">
+                                <field name="office_id"/>
+                                <field name="ticketing_office_id"/>
+                                <field name="vendor_reference"/>
+                                <field name="supplier_reference"/>
+                            </group>
+                            <group name="sale_lines">
+                                <field name="line_ids" nolabel="1"/>
+                            </group>
+                            <group col="4" name="sale_totals" string="Sales Totals">
+                                <field name="lines_total_service_fee" widget="monetary"/>
+                                <field name="total_service_fee" widget="monetary"/>
+                                <field name="lines_total_discount" widget="monetary"/>
+                                <field name="total_discount" widget="monetary"/>
+                                <field name="lines_total_tax" widget="monetary"/>
+                                <field name="total_tax" widget="monetary"/>
+                                <field name="lines_total_amount" widget="monetary"/>
+                                <field name="total_amount" widget="monetary"/>
+                            </group>
                         </page>
                         <page name="payments" string="Payments">
-                            <field name="payment_ids" nolabel="1"/>
+                            <group name="payment_details" col="4">
+                                <field name="payment_status"/>
+                                <field name="paid_at"/>
+                            </group>
+                            <group name="payment_lines">
+                                <field name="payment_ids" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page name="costs" string="Cost">
+                            <group col="4" name="cost_totals" string="Cost Totals">
+                                <field name="total_vendor_cost" widget="monetary"/>
+                                <field name="lines_total_vendor_cost" widget="monetary"/>
+                                <field name="total_supplier_cost" widget="monetary"/>
+                                <field name="vendor_currency_id"/>
+                                <field name="supplier_currency_id"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -108,14 +120,11 @@
                 <field name="updated_at"/>
                 <field name="order_type"/>
                 <field name="ticketing_office_id"/>
-                <field name="vendor_reference"/>
-                <field name="supplier_reference"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>
                 <field name="supplier_currency_id" invisible="1"/>
                 <field name="total_amount"/>
                 <field name="total_vendor_cost"/>
-                <field name="total_supplier_cost"/>
                 <field name="order_status"/>
                 <field name="payment_status"/>
                 <field name="order_matching_status"/>
@@ -177,7 +186,7 @@
         <field name="sequence" eval="30"/>
     </record>
 
-    <!-- <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">
+    <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">
         <field name="name">Sales Order Lines</field>
         <field name="res_model">ofh.sale.order.line</field>
         <field name="view_mode">tree,form</field>
@@ -190,6 +199,6 @@
         <field name="parent_id" ref="ofh_sale_order_main_menu"/>
         <field name="action" ref="ofh_sale_order_line_act_window"/>
         <field name="sequence" eval="10"/>
-    </record> -->
+    </record>
 
 </odoo>
