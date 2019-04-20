@@ -97,7 +97,8 @@ class SupplierInvoiceLineMapper(Component):
         itl_backend = self.env.ref(
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
-            return {}
+            return super(
+                SupplierInvoiceLineMapper, self).order_reference(record)
         return {'order_reference': record.get('Order ID')}
 
 

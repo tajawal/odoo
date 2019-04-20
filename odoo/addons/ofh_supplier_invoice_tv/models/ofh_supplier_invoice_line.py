@@ -22,6 +22,6 @@ class OfhSupplierInvoiceLine(models.Model):
 
     @api.multi
     def _tv_compute_name(self):
-        self.ensure_one
+        self.ensure_one()
         self.name = '{}_{}_{}'.format(
             self.invoice_type, self.index, self.ticket_number)

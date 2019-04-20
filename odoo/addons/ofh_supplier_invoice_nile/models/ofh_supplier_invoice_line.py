@@ -13,6 +13,6 @@ class OfhSupplierInvoiceLine(models.Model):
 
     @api.multi
     def _nile_compute_name(self):
-        self.ensure_one
+        self.ensure_one()
         self.name = '{}_{}_{}'.format(
             self.invoice_type, self.order_reference, self.ticket_number)

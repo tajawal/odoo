@@ -50,6 +50,10 @@ class SupplierInvoiceLineMapper(Component):
         return {}
 
     @mapping
+    def order_reference(self, record):
+        return {}
+
+    @mapping
     def index(self, record):
         return {}
 

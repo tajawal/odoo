@@ -27,7 +27,7 @@ class OfhSupplierInvoiceLine(models.Model):
 
     @api.multi
     def _tf_compute_name(self):
-        self.ensure_one
+        self.ensure_one()
         uniq_ref = \
             f"{self.locator}{self.passenger}{self.invoice_date}" \
             f"{self.total}{self.index}"

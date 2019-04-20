@@ -55,7 +55,7 @@ class OfhSupplierInvoiceLine(models.Model):
 
     @api.multi
     def _gds_compute_name(self):
-        self.ensure_one
+        self.ensure_one()
         self.name = '{}_{}{}'.format(
             self.invoice_type, self.ticket_number, self.invoice_status)
 

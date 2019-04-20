@@ -54,16 +54,16 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_enett.enett_import_backend')
         if self.backend_record != enett_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
-        dt = datetime.strptime(record.get('Date'), '%m/%d/%Y %H:%M:%S %p')
+        dt = datetime.strptime(record.get('Date'), '%m/%d/%Y')
         if not dt:
             return {}
         return {'invoice_date': dt}
 
     @mapping
     def currency_id(self, record):
-        gds_backend = self.env.ref(
-            'ofh_supplier_invoice_gds.gds_import_backend')
-        if self.backend_record != gds_backend:
+        enett_backend = self.env.ref(
+            'ofh_supplier_invoice_enett.enett_import_backend')
+        if self.backend_record != enett_backend:
             return super(SupplierInvoiceLineMapper, self).currency_id(record)
         currency = record.get('POS Settle Curr')
         if not currency:
@@ -113,10 +113,8 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_enett.enett_import_backend')
         if self.backend_record != enett_backend:
             return super(SupplierInvoiceLineMapper, self).total(record)
-        supplier_pr = record.get('POS Settle Amt')
-        if not supplier_pr:
-            return {}
-        return {'total': supplier_pr}
+
+        return {'total': float(record.get('POS Settle Amt'))}
 
 
 class SupplierInvoiceLineHandler(Component):

@@ -14,7 +14,7 @@ class OfhSupplierInvoiceLine(models.Model):
             return
 
         order_ids = self.env['ofh.sale.order'].search(
-            self._get_sale_order_domain())
+            self._get_tf_sale_order_domain())
 
         if len(order_ids) == 1:
             self.order_id = order_ids[0]
@@ -42,7 +42,7 @@ class OfhSupplierInvoiceLine(models.Model):
                 return
             line.write({
                 'invoice_line_ids': [(4, self.id)],
-                # 'matching_status': 'matched',
+                'matching_status': 'matched',
             })
 
         return
@@ -89,12 +89,12 @@ class OfhSupplierInvoiceLine(models.Model):
 
             payment_request.write({
                 'supplier_invoice_ids': [(4, self.id)],
-                # 'reconciliation_status': 'matched',
+                'reconciliation_status': 'matched',
             })
         return
 
     @api.multi
-    def _get_sale_order_domain(self):
+    def _get_tf_sale_order_domain(self):
         self.ensure_one()
         # TODO: we've issue of module dependency here, I should takeout the
         # GDS office IDs
