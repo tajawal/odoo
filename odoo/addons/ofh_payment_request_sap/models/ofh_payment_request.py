@@ -124,12 +124,6 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
-    transaction_type = fields.Char(
-        string="Transaction type",
-        compute='_compute_transaction_type',
-        readonly=True,
-        store=False,
-    )
     sap_line_ids = fields.One2many(
         string="SAP Sale Lines",
         comodel_name='ofh.payment.request.sap.line',
@@ -304,31 +298,6 @@ class OfhPaymentRequest(models.Model):
                 set(rec.supplier_invoice_ids.mapped('locator')))
 
     @api.multi
-    @api.depends('provider', 'payment_mode', 'request_type')
-    def _compute_transaction_type(self):
-        for rec in self:
-            rec.transaction_type = ''
-            if not rec.provider:
-                continue
-            if rec.provider in CREDIT_CARD_PAYMENT_PROVIDERS:
-                if rec.request_type == 'charge':
-                    rec.transaction_type = 'RV_CARD'
-                else:
-                    rec.transaction_type = 'PV_CARD'
-                continue
-            if rec.provider == 'op':
-                if rec.payment_mode and rec.request_type == 'charge':
-                    rec.transaction_type = 'BANK_TRANSFER'
-                elif rec.payment_mode and \
-                        rec.request_type in ('refund', 'void'):
-                    rec.transaction_type = 'PV_CASH'
-                elif not rec.payment_mode and rec.request_type == 'charge':
-                    rec.transaction_type = 'RV_CHEQUE'
-                elif not rec.payment_mode and \
-                        rec.request_type in ('refund', 'void'):
-                    rec.transaction_type = 'PV_CHEQUE'
-
-    @api.multi
     @api.depends('supplier_invoice_ids')
     def _compute_sap_line_ids(self):
         for rec in self:
@@ -466,11 +435,6 @@ class OfhPaymentRequest(models.Model):
 
         if self.payment_request_status == 'incomplete':
             _logger.warn(f"PR# {self.track_id} is incomplete. Skipp it.")
-            return False
-
-        # Added check to avoid sending SPAN payment
-        if self.transaction_type == "":
-            _logger.warn(f"PR# {self.track_id} is a SPAN. Skipp it.")
             return False
 
         integration_details = self._get_server_env()
@@ -650,8 +614,6 @@ class OfhPaymentRequest(models.Model):
         }
         if self.auth_code:
             payload['updates']['ReferenceKey3'] = self.auth_code
-        if self.transaction_type:
-            payload['updates']['Transaction'] = self.transaction_type
 
         return payload
 

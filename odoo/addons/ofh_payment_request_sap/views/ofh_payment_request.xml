@@ -51,7 +51,6 @@
                         <field name="sap_payment_amount1"/>
                         <field name="sap_payment_amount2"/>
                         <field name="sap_xml_file_ref"/>
-                        <field name="transaction_type"/>
                     </group>
 
                 </page>
