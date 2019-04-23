@@ -84,9 +84,9 @@ class SupplierInvoiceLineMapper(Component):
 
     @mapping
     def currency_id(self, record):
-        gds_backend = self.env.ref(
-            'ofh_supplier_invoice_gds.gds_import_backend')
-        if self.backend_record != gds_backend:
+        galileo_backend = self.env.ref(
+            'ofh_supplier_invoice_galileo.galileo_import_backend')
+        if self.backend_record != galileo_backend:
             return super(SupplierInvoiceLineMapper, self).currency_id(record)
         currency = record.get('Currency')
         if not currency:

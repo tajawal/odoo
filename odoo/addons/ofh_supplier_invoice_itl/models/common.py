@@ -50,9 +50,9 @@ class SupplierInvoiceLineMapper(Component):
 
     @mapping
     def currency_id(self, record):
-        gds_backend = self.env.ref(
-            'ofh_supplier_invoice_gds.gds_import_backend')
-        if self.backend_record != gds_backend:
+        itl_backend = self.env.ref(
+            'ofh_supplier_invoice_itl.itl_import_backend')
+        if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self).currency_id(record)
         return {'currency_id': self.env.ref('base.AED').id}
 
