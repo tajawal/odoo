@@ -30,7 +30,7 @@ class OfhPaymentRequest(models.Model):
     )
     estimated_cost_in_supplier_currency = fields.Monetary(
         string="Estimated Cost in Supplier Currency",
-        currency_field='supplier_currency_id',
+        currency_field='order_supplier_currency_id',
         readonly=True,
         compute='_compute_estimated_cost',
         store=False,
@@ -62,16 +62,16 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @api.depends(
         'insurance', 'fare_difference', 'penalty',
-        'supplier_currency_id', 'currency_id')
+        'order_supplier_currency_id', 'currency_id')
     def _compute_estimated_cost(self):
         res = super(OfhPaymentRequest, self)._compute_estimated_cost()
         for rec in self:
             rec.estimated_cost_in_supplier_currency = 0.0
-            if not rec.supplier_currency_id:
+            if not rec.order_supplier_currency_id:
                 continue
             rec.estimated_cost_in_supplier_currency = \
                 rec.currency_id.compute(
-                    rec.estimated_cost, rec.supplier_currency_id)
+                    rec.estimated_cost, rec.order_supplier_currency_id)
         return res
 
     @api.model
@@ -91,7 +91,7 @@ class OfhPaymentRequest(models.Model):
     @api.depends('supplier_invoice_ids.gds_net_amount',
                  'supplier_invoice_ids.total', 'total_amount',
                  'request_type', 'order_type', 'order_amount', 'currency_id',
-                 'order_supplier_cost', 'order_supplier_currency',
+                 'order_supplier_cost', 'order_supplier_currency_id',
                  'reconciliation_status', 'fare_difference', 'insurance',
                  'penalty')
     def _compute_supplier_total_amount(self):
@@ -128,14 +128,14 @@ class OfhPaymentRequest(models.Model):
                         rec.supplier_total_amount = \
                             rec.fare_difference - rec.insurance - rec.penalty
                     rec.supplier_currency_id = \
-                        rec.order_supplier_currency or rec.currency_id
+                        rec.order_supplier_currency_id or rec.currency_id
                 continue
             if rec.request_type == 'refund':
                 if rec.order_amount:
                     rec.supplier_total_amount = \
                         ((rec.total_amount / rec.order_amount) *
                          rec.order_supplier_cost)
-                    rec.supplier_currency_id = rec.order_supplier_currency
+                    rec.supplier_currency_id = rec.order_supplier_currency_id
             else:
                 # Case of amendment
                 rec.supplier_total_amount = rec.total_amount

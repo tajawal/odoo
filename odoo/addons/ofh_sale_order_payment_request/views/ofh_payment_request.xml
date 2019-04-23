@@ -28,7 +28,7 @@
                 </group>
             </page>
             <page name="cost_details" position="inside">
-                <field name="order_supplier_currency" invisible="1"/>
+                <field name="order_supplier_currency_id" invisible="1"/>
                 <group col="4" name="cost_order_details">
                     <field name="order_supplier_cost" widget="monetary"/>
                 </group>

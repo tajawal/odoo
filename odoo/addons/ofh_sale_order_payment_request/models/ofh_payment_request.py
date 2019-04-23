@@ -76,15 +76,15 @@ class OfhPaymentRequest(models.Model):
         related='order_id.currency_id',
         readonly=True,
     )
-    order_supplier_cost = fields.Monetary(
-        currency_field='order_supplier_currency',
-        related='order_id.total_supplier_cost',
-        readonly=True,
-    )
-    order_supplier_currency = fields.Many2one(
+    order_supplier_currency_id = fields.Many2one(
         string="Supplier Currency",
         related='order_id.supplier_currency_id',
         comodel_name='res.currency',
+    )
+    order_supplier_cost = fields.Monetary(
+        currency_field='order_supplier_currency_id',
+        related='order_id.total_supplier_cost',
+        readonly=True,
     )
     is_egypt = fields.Boolean(
         string='Is Egypt?',
