@@ -239,10 +239,7 @@ class HubSaleOrderLineImportMapper(Component):
                 return {}
             line_reference = str(record['segment'].get('line_reference'))
 
-        if '-' in line_reference:
-            return {'line_reference': line_reference.split('-')[1]}
-        else:
-            return {'line_reference': line_reference}
+        return {'line_reference': line_reference}
 
     @mapping
     def office_id(self, record):
