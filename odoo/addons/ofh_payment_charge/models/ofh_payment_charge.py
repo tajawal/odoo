@@ -17,7 +17,8 @@ class OfhPaymentCharge(models.Model):
             ("83026", "Refund In Progress"), ("83025", "Refund Failed"),
             ("00000", "Declined"), ("10000", "Authorized"),
             ("20118", "Pending"), ("83035", "Void"), ("99999", "Deleted"),
-            ("10100", "Flagged")
+            ("10100", "Flagged"), ("10100", "Flagged"), ('20068', 'Timeout'),
+            ("20009", "Progress"), ("20010", "Partial Paid"),
         ]
 
     currency_id = fields.Many2one(
