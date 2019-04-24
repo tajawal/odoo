@@ -52,17 +52,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-postgresqldb-name   
+              key: finance-hub-postgresqldb-name   
         - name: db_user
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-postgresqldb-user
+              key: finance-hub-postgresqldb-user
         - name: db_password
           valueFrom:
             secretKeyRef:
               name: finance-hub-secret
-              value: finance-hub-postgresqldb-password
+              key: finance-hub-postgresqldb-password
         - name: db_endpoint
           valueFrom:
             configMapKeyRef:
