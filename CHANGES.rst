@@ -1,5 +1,8 @@
 Changes
 -------
+1.5.6 (2019-04-24)
+------------------
+* Revert Transaction Type computation. Handeled in SAP-WEB-XML.
 
 1.5.3 (2019-04-08)
 ------------------
