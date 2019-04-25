@@ -108,6 +108,8 @@ class HubSaleOrderLineImportMapper(Component):
         ('product_id', 'name'),
         ('is_domestic_ksa', 'is_domestic_ksa'),
         ('ahs_group_name', 'ahs_group_name'),
+        ('line_id', 'external_id'),
+        ('product_id', 'product_id'),
     ]
 
     @mapping

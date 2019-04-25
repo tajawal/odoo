@@ -1,0 +1,96 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/payment_request/detail/pr-H81213648350-1544830818248
+  response:
+    body: {string: '{"id": "5c143f62e5b09a007a018864", "track_id": "pr-H81213648350-1544830818248",
+        "status": "Processed", "request_type": "refund", "reason": "Cancellation",
+        "remarks": "found anew booking in other website and asked to cancel via live
+        chat  called cst and informed with refund interval", "processed_by": "emad.mohamed@almosafer.com",
+        "order_reference": "H81213648350", "order_id": "5c128e2fe2fc46c9043c13ab",
+        "currency": "SAR", "fees": {"fareDifference": 2928.75, "total": 2928.75},
+        "created_at": "2018-12-14 23:40:18", "updated_at": "2018-12-14 23:40:46",
+        "store_id": 50, "total_amount": 2928.75, "payment_status": "83027", "auth_code":
+        "", "payment_mode": "", "card_type": "", "charges": [{"id": "5c143f7e6c95974bff37e526",
+        "charge_id": "charge_ACF9FD263P1C1A6E3183", "track_id": "72fde907-db0a-44be-806e-27e03b43168c",
+        "status": "83027", "auth_code": "", "currency": "SAR", "value": 2928.75, "provider":
+        "checkoutcom", "payment_mode": "", "card_type": "", "charge_type": "refund",
+        "mid": "", "last_four": "", "card_bin": "", "payment_method": "", "bank_name":
+        "", "source": "", "is_3d_secure": false, "created_at": "2018-12-14 23:40:46",
+        "updated_at": "2018-12-14 23:40:46"}]}'}
+    headers:
+      Content-Length: ['1176']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:08 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5c128e2fe2fc46c9043c13ab
+  response:
+    body: {string: '{"name": "H81213648350", "created_at": "2018-12-13 16:51:56",
+        "updated_at": "2019-01-02 12:24:29", "paid_at": "2018-12-13 16:51:59", "track_id":
+        "72fde907-db0a-44be-806e-27e03b43168c", "order_status": 95, "payment_status":
+        78, "store_id": 50, "group_id": 2, "currency": "SAR", "total_amount": 2928.7455,
+        "total_discount": -154.1445, "total_output_vat": 0, "total_service_fee": 0,
+        "total_insurance_amount": 0, "total_vendor_cost": 3082.89, "vendor_currency":
+        "SAR", "total_supplier_cost": 817.8099, "supplier_currency": "USD", "order_type":
+        "hotel", "entity": "almosafer", "is_egypt": false, "employee_discount_tag":
+        "", "customer_discount_tag": "hrdf", "point_of_sale": "almosafer.com", "line_items":
+        [{"product_id": "prod-f94fb9f0-0793-4453-b09d-406335400b43", "created_at":
+        "2018-12-13 16:48:57", "updated_at": "2018-12-13 16:51:59", "order_id": "5c128e2fe2fc46c9043c13ab",
+        "product_type": "hotel", "product_category": "hotel", "line_status": 95, "tax_code":
+        "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "ahs_group_name":
+        "almosafer web", "line_id": "seg-4263648-4301245", "vendor": {"name": "AHS",
+        "confirmation_number": "4263648"}, "supplier": {"name": "TotalStay", "confirmation_number":
+        "6806897/5171402"}, "price": {"sale": {"service_fee": 0.0, "untaxed_amount":
+        3082.89, "discount": -154.1445, "output_vat": 0.0, "subtotal_amount": 2928.7455,
+        "total_amount": 2928.7455, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        2612.39, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        693.0004668831306, "input_vat_amount": 0.0, "currency": "USD"}, "supplier_vendor_rate":
+        0.2652745060588697}}, "segment": {"line_reference": 4301245, "hotel": {"city":
+        "Kuwait City", "country": "KW", "hotel_id": 6421236, "contract": "TotalStay
+        Live Net Retail", "supplier_id": "29"}, "nb_passengers": 2, "check_in_date":
+        "2018-12-28 04:00:00", "checkout_date": "2019-01-01 00:00:00", "nb_nights":
+        4, "nb_rooms": 1, "segment_count": 1}}], "id": "5c128e2fe2fc46c9043c13ab",
+        "total_cost": 693.0004668831306, "total_tax_amount": 0, "payments": [{"id":
+        "charge_FDEAAD563I1C03764F4E", "payment_status": "11111", "auth_code": "235642",
+        "payment_mode": "Visa", "card_type": "", "track_id": "72fde907-db0a-44be-806e-27e03b43168c",
+        "amount": 2928.75, "currency": "SAR", "provider": "checkoutcom", "mid": "",
+        "card_name": "ABDULAZIZ ALISMAIL", "card_bin": "454683", "last_four": "4526",
+        "payment_method": "Visa", "bank_name": "", "source": "", "is_3d_secure": false,
+        "reference_id": "", "created_at": "2018-12-13 16:51:59", "updated_at": "2018-12-14
+        23:39:08", "charges": [{"id": "5c128e2f6c959725f326553b", "charge_id": "charge_FDEAAD563I1C03764F4E",
+        "track_id": "72fde907-db0a-44be-806e-27e03b43168c", "status": "10000", "auth_code":
+        "235642", "currency": "SAR", "value": 2928.75, "provider": "checkoutcom",
+        "payment_mode": "Visa", "card_type": "", "charge_type": "charge_by_card",
+        "mid": "", "last_four": "4526", "card_bin": "454683", "payment_method": "Visa",
+        "bank_name": "", "source": "", "is_3d_secure": false, "created_at": "2018-12-13
+        16:51:59", "updated_at": "2018-12-13 16:51:59"}, {"id": "5c143f1cd0ca694b53108769",
+        "charge_id": "charge_1DDB8D263X1C033E7AB3", "track_id": "72fde907-db0a-44be-806e-27e03b43168c",
+        "status": "11111", "auth_code": "235642", "currency": "SAR", "value": 2928.75,
+        "provider": "checkoutcom", "payment_mode": "Visa", "card_type": "", "charge_type":
+        "charge_update", "mid": "", "last_four": "4526", "card_bin": "", "payment_method":
+        "Visa", "bank_name": "", "source": "", "is_3d_secure": false, "created_at":
+        "2018-12-14 23:39:08", "updated_at": "2018-12-14 23:39:08"}]}]}'}
+    headers:
+      Content-Length: ['3630']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:11 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+version: 1

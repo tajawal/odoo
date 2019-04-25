@@ -1,0 +1,310 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5caa5fd82280adfa3978fb54
+  response:
+    body: {string: '{"name": "A90407478850", "created_at": "2019-04-07 20:38:44",
+        "updated_at": "2019-04-07 22:00:07", "paid_at": "2019-04-07 20:38:46", "track_id":
+        "be5cef82-2403-486a-9693-a402d85e0114", "order_status": 53, "payment_status":
+        78, "store_id": 50, "group_id": 2, "currency": "SAR", "total_amount": 9844.98,
+        "total_discount": -741.02, "total_output_vat": 0, "total_service_fee": 0,
+        "total_insurance_amount": 0, "total_vendor_cost": 10586, "vendor_currency":
+        "SAR", "total_supplier_cost": 10586, "supplier_currency": "SAR", "order_type":
+        "flight", "entity": "almosafer", "is_egypt": false, "line_items": [{"product_id":
+        "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at": "2019-04-07 20:04:14",
+        "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-c3280abb-5b72-4185-979a-f3a998195d28", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1920.0, "discount": -134.4,
+        "output_vat": 0.0, "subtotal_amount": 1785.6, "total_amount": 1785.6, "currency":
+        "SAR"}, "cost": {"vendor": {"untaxed_amount": 1920, "input_vat_amount": 0,
+        "currency": "SAR"}, "supplier": {"untaxed_amount": 1920.0, "input_vat_amount":
+        0.0, "currency": "SAR"}, "supplier_vendor_rate": 1.0}}, "traveller": {"line_reference":
+        "235-3613507336", "name": "Mr YAHYA ABDULLAH ALMEHMADI", "type": "ADT", "booking_class":
+        "Economy", "last_leg_flying_date": "", "segment_count": 3, "destination_city":
+        "MED", "nb_passengers": 7, "departure_date": "2019-04-18T07:00:00", "route":
+        "MED-TZX-IST-MED", "office": {"office_id": "RUHAA28WH", "ticketing_office_id":
+        "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}}, {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b",
+        "created_at": "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49",
+        "order_id": "5caa5fd82280adfa3978fb54", "product_type": "flight", "product_category":
+        "flight", "line_status": 53, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "line_id": "trav-638c0c36-4191-46a2-85a8-a98379e243a9", "vendor": {"name":
+        "amd", "confirmation_number": "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number":
+        "UPNCWH"}, "price": {"sale": {"service_fee": 0.0, "untaxed_amount": 1920.0,
+        "discount": -134.4, "output_vat": 0.0, "subtotal_amount": 1785.6, "total_amount":
+        1785.6, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount": 1920, "input_vat_amount":
+        0, "currency": "SAR"}, "supplier": {"untaxed_amount": 1920.0, "input_vat_amount":
+        0.0, "currency": "SAR"}, "supplier_vendor_rate": 1.0}}, "traveller": {"line_reference":
+        "235-3613507331", "name": "Ms MAYMUNAH FAWAZ ALMEHMADI", "type": "ADT", "booking_class":
+        "Economy", "last_leg_flying_date": "", "segment_count": 3, "destination_city":
+        "MED", "nb_passengers": 7, "departure_date": "2019-04-18T07:00:00", "route":
+        "MED-TZX-IST-MED", "office": {"office_id": "RUHAA28WH", "ticketing_office_id":
+        "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}}, {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b",
+        "created_at": "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49",
+        "order_id": "5caa5fd82280adfa3978fb54", "product_type": "flight", "product_category":
+        "flight", "line_status": 53, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "line_id": "trav-5c15dad2-485c-4e0a-a3eb-eef9955f83ce", "vendor": {"name":
+        "amd", "confirmation_number": "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number":
+        "UPNCWH"}, "price": {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002,
+        "discount": -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002,
+        "total_amount": 1540.0800000000002, "currency": "SAR"}, "cost": {"vendor":
+        {"untaxed_amount": 1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier":
+        {"untaxed_amount": 1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507335", "name": "Ms RANA
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-27030d47-544d-4bd3-a5b3-cb8745e6e3cd", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002, "discount":
+        -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002, "total_amount":
+        1540.0800000000002, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507330", "name": "Ms JANA
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-210f370c-892c-4f26-8698-044e4c459607", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002, "discount":
+        -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002, "total_amount":
+        1540.0800000000002, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507329", "name": "Mr AMMAR
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-3d5b4043-a38d-48da-8acb-7fb3809e1db2", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002, "discount":
+        -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002, "total_amount":
+        1540.0800000000002, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507332", "name": "Mr MAZEN
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-683297c6-c360-4e36-95ea-c8fd12a612b6", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 122.0, "discount": -8.54,
+        "output_vat": 0.0, "subtotal_amount": 113.46, "total_amount": 113.46, "currency":
+        "SAR"}, "cost": {"vendor": {"untaxed_amount": 122, "input_vat_amount": 0,
+        "currency": "SAR"}, "supplier": {"untaxed_amount": 122.0, "input_vat_amount":
+        0.0, "currency": "SAR"}, "supplier_vendor_rate": 1.0}}, "traveller": {"line_reference":
+        "235-3613507337", "name": "Mr ABDULLAH YAHYA ALMEHMADI", "type": "INF", "booking_class":
+        "Economy", "last_leg_flying_date": "", "segment_count": 3, "destination_city":
+        "MED", "nb_passengers": 7, "departure_date": "2019-04-18T07:00:00", "route":
+        "MED-TZX-IST-MED", "office": {"office_id": "RUHAA28WH", "ticketing_office_id":
+        "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}}], "id": "5caa5fd82280adfa3978fb54",
+        "total_cost": 10586.0, "total_tax_amount": 0, "payments": [{"id": "charge_FB79CC175T1B627E2A8D",
+        "payment_status": "11111", "auth_code": "044240", "payment_mode": "Visa",
+        "card_type": "", "track_id": "be5cef82-2403-486a-9693-a402d85e0114", "amount":
+        9844.98, "currency": "SAR", "provider": "checkoutcom", "mid": "80000455",
+        "card_name": "YAHEYH", "card_bin": "405433", "last_four": "3837", "payment_method":
+        "Visa", "bank_name": "", "source": "", "reference_id": "", "created_at": "2019-04-07
+        20:38:48", "updated_at": "2019-04-09 12:01:50", "charges": [{"id": "5caa5fd8382a84337f71f207",
+        "charge_id": "charge_FB79CC175T1B627E2A8D", "track_id": "be5cef82-2403-486a-9693-a402d85e0114",
+        "status": "10100", "auth_code": "044240", "currency": "SAR", "value": 9844.98,
+        "provider": "checkoutcom", "payment_mode": "Visa", "card_type": "", "charge_type":
+        "charge_by_card", "mid": "80000455", "last_four": "3837", "card_bin": "405433",
+        "payment_method": "Visa", "bank_name": "", "source": "", "created_at": "2019-04-07
+        20:38:48", "updated_at": "2019-04-07 20:38:48"}, {"id": "5cac89ae382a8452d84d849f",
+        "charge_id": "charge_18EAECF75P1B630A1FA3", "track_id": "be5cef82-2403-486a-9693-a402d85e0114",
+        "status": "11111", "auth_code": "", "currency": "SAR", "value": 9844.98, "provider":
+        "checkoutcom", "payment_mode": "", "card_type": "", "charge_type": "capture",
+        "mid": "80000455", "last_four": "", "card_bin": "", "payment_method": "",
+        "bank_name": "", "source": "", "created_at": "2019-04-09 12:01:50", "updated_at":
+        "2019-04-09 12:01:50"}]}]}'}
+    headers:
+      Content-Length: ['11260']
+      Content-Type: [application/json]
+      Date: ['Sat, 27 Apr 2019 15:00:00 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5caa5fd82280adfa3978fb54
+  response:
+    body: {string: '{"name": "A90407478850", "created_at": "2019-04-07 20:38:44",
+        "updated_at": "2019-04-07 22:00:07", "paid_at": "2019-04-07 20:38:46", "track_id":
+        "be5cef82-2403-486a-9693-a402d85e0114", "order_status": 53, "payment_status":
+        78, "store_id": 50, "group_id": 2, "currency": "SAR", "total_amount": 9844.98,
+        "total_discount": -741.02, "total_output_vat": 0, "total_service_fee": 0,
+        "total_insurance_amount": 0, "total_vendor_cost": 10586, "vendor_currency":
+        "SAR", "total_supplier_cost": 10586, "supplier_currency": "SAR", "order_type":
+        "flight", "entity": "almosafer", "is_egypt": false, "line_items": [{"product_id":
+        "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at": "2019-04-07 20:04:14",
+        "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-c3280abb-5b72-4185-979a-f3a998195d28", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1920.0, "discount": -134.4,
+        "output_vat": 0.0, "subtotal_amount": 1785.6, "total_amount": 1785.6, "currency":
+        "SAR"}, "cost": {"vendor": {"untaxed_amount": 1920, "input_vat_amount": 0,
+        "currency": "SAR"}, "supplier": {"untaxed_amount": 1920.0, "input_vat_amount":
+        0.0, "currency": "SAR"}, "supplier_vendor_rate": 1.0}}, "traveller": {"line_reference":
+        "235-3613507336", "name": "Mr YAHYA ABDULLAH ALMEHMADI", "type": "ADT", "booking_class":
+        "Economy", "last_leg_flying_date": "", "segment_count": 3, "destination_city":
+        "MED", "nb_passengers": 7, "departure_date": "2019-04-18T07:00:00", "route":
+        "MED-TZX-IST-MED", "office": {"office_id": "RUHAA28WH", "ticketing_office_id":
+        "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}}, {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b",
+        "created_at": "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49",
+        "order_id": "5caa5fd82280adfa3978fb54", "product_type": "flight", "product_category":
+        "flight", "line_status": 53, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "line_id": "trav-638c0c36-4191-46a2-85a8-a98379e243a9", "vendor": {"name":
+        "amd", "confirmation_number": "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number":
+        "UPNCWH"}, "price": {"sale": {"service_fee": 0.0, "untaxed_amount": 1920.0,
+        "discount": -134.4, "output_vat": 0.0, "subtotal_amount": 1785.6, "total_amount":
+        1785.6, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount": 1920, "input_vat_amount":
+        0, "currency": "SAR"}, "supplier": {"untaxed_amount": 1920.0, "input_vat_amount":
+        0.0, "currency": "SAR"}, "supplier_vendor_rate": 1.0}}, "traveller": {"line_reference":
+        "235-3613507331", "name": "Ms MAYMUNAH FAWAZ ALMEHMADI", "type": "ADT", "booking_class":
+        "Economy", "last_leg_flying_date": "", "segment_count": 3, "destination_city":
+        "MED", "nb_passengers": 7, "departure_date": "2019-04-18T07:00:00", "route":
+        "MED-TZX-IST-MED", "office": {"office_id": "RUHAA28WH", "ticketing_office_id":
+        "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}}, {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b",
+        "created_at": "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49",
+        "order_id": "5caa5fd82280adfa3978fb54", "product_type": "flight", "product_category":
+        "flight", "line_status": 53, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "line_id": "trav-5c15dad2-485c-4e0a-a3eb-eef9955f83ce", "vendor": {"name":
+        "amd", "confirmation_number": "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number":
+        "UPNCWH"}, "price": {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002,
+        "discount": -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002,
+        "total_amount": 1540.0800000000002, "currency": "SAR"}, "cost": {"vendor":
+        {"untaxed_amount": 1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier":
+        {"untaxed_amount": 1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507335", "name": "Ms RANA
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-27030d47-544d-4bd3-a5b3-cb8745e6e3cd", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002, "discount":
+        -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002, "total_amount":
+        1540.0800000000002, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507330", "name": "Ms JANA
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-210f370c-892c-4f26-8698-044e4c459607", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002, "discount":
+        -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002, "total_amount":
+        1540.0800000000002, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507329", "name": "Mr AMMAR
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-3d5b4043-a38d-48da-8acb-7fb3809e1db2", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 1656.0000000000002, "discount":
+        -115.92, "output_vat": 0.0, "subtotal_amount": 1540.0800000000002, "total_amount":
+        1540.0800000000002, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        1656, "input_vat_amount": 0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        1656.0, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "235-3613507332", "name": "Mr MAZEN
+        YAHYA ALMEHMADI", "type": "CH", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 3, "destination_city": "MED", "nb_passengers": 7, "departure_date":
+        "2019-04-18T07:00:00", "route": "MED-TZX-IST-MED", "office": {"office_id":
+        "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}},
+        {"product_id": "prod-3d9be5d4-caa3-437b-9379-505caddfe82b", "created_at":
+        "2019-04-07 20:04:14", "updated_at": "2019-04-07 20:38:49", "order_id": "5caa5fd82280adfa3978fb54",
+        "product_type": "flight", "product_category": "flight", "line_status": 53,
+        "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae": false, "line_id":
+        "trav-683297c6-c360-4e36-95ea-c8fd12a612b6", "vendor": {"name": "amd", "confirmation_number":
+        "KH2H8A"}, "supplier": {"name": "TK", "confirmation_number": "UPNCWH"}, "price":
+        {"sale": {"service_fee": 0.0, "untaxed_amount": 122.0, "discount": -8.54,
+        "output_vat": 0.0, "subtotal_amount": 113.46, "total_amount": 113.46, "currency":
+        "SAR"}, "cost": {"vendor": {"untaxed_amount": 122, "input_vat_amount": 0,
+        "currency": "SAR"}, "supplier": {"untaxed_amount": 122.0, "input_vat_amount":
+        0.0, "currency": "SAR"}, "supplier_vendor_rate": 1.0}}, "traveller": {"line_reference":
+        "235-3613507337", "name": "Mr ABDULLAH YAHYA ALMEHMADI", "type": "INF", "booking_class":
+        "Economy", "last_leg_flying_date": "", "segment_count": 3, "destination_city":
+        "MED", "nb_passengers": 7, "departure_date": "2019-04-18T07:00:00", "route":
+        "MED-TZX-IST-MED", "office": {"office_id": "RUHAA28WH", "ticketing_office_id":
+        "RUHAA28WH", "tour_code_office_id": "RUHAA2136"}}}], "id": "5caa5fd82280adfa3978fb54",
+        "total_cost": 10586.0, "total_tax_amount": 0, "payments": [{"id": "charge_FB79CC175T1B627E2A8D",
+        "payment_status": "11111", "auth_code": "044240", "payment_mode": "Visa",
+        "card_type": "", "track_id": "be5cef82-2403-486a-9693-a402d85e0114", "amount":
+        9844.98, "currency": "SAR", "provider": "checkoutcom", "mid": "80000455",
+        "card_name": "YAHEYH", "card_bin": "405433", "last_four": "3837", "payment_method":
+        "Visa", "bank_name": "", "source": "", "reference_id": "", "created_at": "2019-04-07
+        20:38:48", "updated_at": "2019-04-09 12:01:50", "charges": [{"id": "5caa5fd8382a84337f71f207",
+        "charge_id": "charge_FB79CC175T1B627E2A8D", "track_id": "be5cef82-2403-486a-9693-a402d85e0114",
+        "status": "10100", "auth_code": "044240", "currency": "SAR", "value": 9844.98,
+        "provider": "checkoutcom", "payment_mode": "Visa", "card_type": "", "charge_type":
+        "charge_by_card", "mid": "80000455", "last_four": "3837", "card_bin": "405433",
+        "payment_method": "Visa", "bank_name": "", "source": "", "created_at": "2019-04-07
+        20:38:48", "updated_at": "2019-04-07 20:38:48"}, {"id": "5cac89ae382a8452d84d849f",
+        "charge_id": "charge_18EAECF75P1B630A1FA3", "track_id": "be5cef82-2403-486a-9693-a402d85e0114",
+        "status": "11111", "auth_code": "", "currency": "SAR", "value": 9844.98, "provider":
+        "checkoutcom", "payment_mode": "", "card_type": "", "charge_type": "capture",
+        "mid": "80000455", "last_four": "", "card_bin": "", "payment_method": "",
+        "bank_name": "", "source": "", "created_at": "2019-04-09 12:01:50", "updated_at":
+        "2019-04-09 12:01:50"}]}]}'}
+    headers:
+      Content-Length: ['11260']
+      Content-Type: [application/json]
+      Date: ['Sat, 27 Apr 2019 15:16:48 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+version: 1

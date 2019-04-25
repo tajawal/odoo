@@ -51,6 +51,10 @@ class HubSaleOrderLine(models.Model):
         ondelete='cascade',
         index=True,
     )
+    _sql_constraints = [(
+        'unique_item',
+        'unique (external_id, product_id)',
+        'The Order line has been already synchronized')]
 
     @api.model
     def create(self, vals):

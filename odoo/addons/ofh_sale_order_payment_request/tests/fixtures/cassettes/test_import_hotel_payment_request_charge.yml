@@ -1,0 +1,94 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/payment_request/detail/pr-H81214239650-1544814522478
+  response:
+    body: {string: '{"id": "5c13ffbac69797e35f6c3edd", "track_id": "pr-H81214239650-1544814522478",
+        "status": "Processed", "request_type": "charge", "reason": "Fare Difference",
+        "remarks": ".", "processed_by": "mohamed.moniem@almosafer.com", "order_reference":
+        "H81214239650", "order_id": "5c13ff66415e9511833cff4a", "currency": "SAR",
+        "fees": {"fareDifference": 3600, "total": 3600}, "created_at": "2018-12-14
+        19:08:42", "updated_at": "2018-12-14 19:08:42", "store_id": 50, "total_amount":
+        3600, "payment_status": "20118", "auth_code": "", "payment_mode": "", "card_type":
+        "", "charges": [{"id": "5c13ffbad0ca69403f19df37", "charge_id": "charge-op-edbda396-cc29-4104-b6ba-f069a7bf08a9",
+        "track_id": "pr-H81214239650-1544814522478", "status": "20118", "auth_code":
+        "", "currency": "SAR", "value": 3600, "provider": "op", "payment_mode": "",
+        "card_type": "", "charge_type": "charge_by_card", "mid": "", "last_four":
+        "", "card_bin": "", "payment_method": "", "bank_name": "Al Ahly", "source":
+        "", "is_3d_secure": false, "created_at": "2018-12-14 19:08:42", "updated_at":
+        "2018-12-14 19:08:42"}]}'}
+    headers:
+      Content-Length: ['1073']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:02 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5c13ff66415e9511833cff4a
+  response:
+    body: {string: '{"name": "H81214239650", "created_at": "2018-12-14 19:07:18",
+        "updated_at": "2018-12-14 19:10:02", "paid_at": "2018-12-14 19:07:18", "track_id":
+        "mp-1544812551421", "order_status": 58, "payment_status": 78, "store_id":
+        50, "group_id": 2, "currency": "SAR", "total_amount": 3611.74, "total_discount":
+        0, "total_output_vat": 0, "total_service_fee": 0, "total_insurance_amount":
+        0, "total_vendor_cost": 3611.74, "vendor_currency": "SAR", "total_supplier_cost":
+        363, "supplier_currency": "BHD", "order_type": "hotel", "entity": "almosafer",
+        "is_egypt": false, "employee_discount_tag": "", "customer_discount_tag": "",
+        "point_of_sale": "almosafer.com", "line_items": [{"product_id": "prod-c53e6a1d-2656-46bc-b255-fbfaf5030d95",
+        "created_at": "2018-12-14 19:05:40", "updated_at": "2018-12-14 19:07:19",
+        "order_id": "5c13ff66415e9511833cff4a", "product_type": "hotel", "product_category":
+        "hotel", "line_status": 58, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "ahs_group_name": "Almosafer Call Centre", "line_id": "seg-4267453-4305202",
+        "vendor": {"name": "AHS", "confirmation_number": "4267453"}, "supplier": {"name":
+        "b2bdynamic", "confirmation_number": "HTL429431"}, "price": {"sale": {"service_fee":
+        0.0, "untaxed_amount": 3611.74, "discount": 0.0, "output_vat": 0.0, "subtotal_amount":
+        3611.74, "total_amount": 3611.74, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        3250.56, "input_vat_amount": 0.0, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        326.69995416938025, "input_vat_amount": 0.0, "currency": "BHD"}, "supplier_vendor_rate":
+        0.10050574490837895}}, "segment": {"line_reference": 4305202, "hotel": {"city":
+        "Manama", "country": "BH", "hotel_id": 6234493, "contract": "6258,B2Bdynamic
+        Mobile Live Net", "supplier_id": "1126"}, "nb_passengers": 4, "check_in_date":
+        "2018-12-31 04:00:00", "checkout_date": "2019-01-03 00:00:00", "nb_nights":
+        3, "nb_rooms": 1, "segment_count": 1}}], "id": "5c13ff66415e9511833cff4a",
+        "total_cost": 326.69995416938025, "total_tax_amount": 0, "payments": [{"id":
+        "pay_tok_ed8af13b-a331-4705-b4ad-ed3e37c25aff", "payment_status": "10000",
+        "auth_code": "244525", "payment_mode": "Visa", "card_type": "mada", "track_id":
+        "mp-1544812551421", "amount": 3680, "currency": "SAR", "provider": "checkoutcom",
+        "mid": "", "card_name": "manal algadoor", "card_bin": "484783", "last_four":
+        "8700", "payment_method": "Visa", "bank_name": "", "source": "", "is_3d_secure":
+        false, "reference_id": "", "created_at": "2018-12-14 18:37:01", "updated_at":
+        "2018-12-14 18:37:34", "charges": [{"id": "5c13f84dd0ca693d287089b4", "charge_id":
+        "pay_tok_ed8af13b-a331-4705-b4ad-ed3e37c25aff", "track_id": "mp-1544812551421",
+        "status": "20118", "auth_code": "", "currency": "SAR", "value": 3680, "provider":
+        "checkoutcom", "payment_mode": "", "card_type": "mada", "charge_type": "charge_by_card",
+        "mid": "", "last_four": "8700", "card_bin": "484783", "payment_method": "",
+        "bank_name": "", "source": "", "is_3d_secure": false, "created_at": "2018-12-14
+        18:37:01", "updated_at": "2018-12-14 18:37:01"}, {"id": "5c13f86e6c95973b243f4f3b",
+        "charge_id": "charge_9B8A4D263O1C03E808E8", "track_id": "mp-1544812551421",
+        "status": "10000", "auth_code": "244525", "currency": "SAR", "value": 3680,
+        "provider": "checkoutcom", "payment_mode": "Visa", "card_type": "mada", "charge_type":
+        "authorised", "mid": "", "last_four": "8700", "card_bin": "484783", "payment_method":
+        "Visa", "bank_name": "", "source": "", "is_3d_secure": false, "created_at":
+        "2018-12-14 18:37:34", "updated_at": "2018-12-14 18:37:34"}]}]}'}
+    headers:
+      Content-Length: ['3552']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:05 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+version: 1

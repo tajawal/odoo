@@ -1,0 +1,93 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/payment_request/detail/pr-A90126251060-1548660909033
+  response:
+    body: {string: '{"id": "5c4eb0adc69797f8a50bd92a", "track_id": "pr-A90126251060-1548660909033",
+        "status": "Processed", "request_type": "refund", "reason": "Fraud", "remarks":
+        "EGP-59097", "processed_by": "maged.magdy@almosafer.com", "order_reference":
+        "A90126251060", "order_id": "5c4ce358cc63931b490b3f25", "currency": "EGP",
+        "fees": {"fareDifference": 590.97, "total": 590.97}, "created_at": "2019-01-28
+        07:35:09", "updated_at": "2019-01-28 08:49:43", "store_id": 60, "total_amount":
+        590.97, "payment_status": "83027", "auth_code": "640753", "payment_mode":
+        "", "card_type": "", "charges": [{"id": "5c4ec227382a84089852e9c4", "charge_id":
+        "charge-fort-eab003dc-a4cf-422a-ba19-b862310bc619", "track_id": "bf498157-699f-46e0-b600-8af2fb055a8c",
+        "status": "83027", "auth_code": "640753", "currency": "EGP", "value": 590.97,
+        "provider": "fort", "payment_mode": "", "card_type": "", "charge_type": "refund",
+        "mid": "", "last_four": "", "card_bin": "", "payment_method": "", "bank_name":
+        "", "source": "", "is_3d_secure": false, "created_at": "2019-01-28 08:49:43",
+        "updated_at": "2019-01-28 08:49:43"}]}'}
+    headers:
+      Content-Length: ['1084']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:23 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5c4ce358cc63931b490b3f25
+  response:
+    body: {string: '{"name": "A90126251060", "created_at": "2019-01-26 22:46:44",
+        "updated_at": "2019-01-28 07:38:10", "paid_at": "2019-01-26 22:46:44", "track_id":
+        "bf498157-699f-46e0-b600-8af2fb055a8c", "order_status": 52, "payment_status":
+        80, "store_id": 60, "group_id": 2, "currency": "EGP", "total_amount": 590.9732,
+        "total_discount": 0, "total_output_vat": 1.5933, "total_service_fee": 20.380000000000003,
+        "total_insurance_amount": 0, "total_vendor_cost": 569, "vendor_currency":
+        "EGP", "total_supplier_cost": 0, "supplier_currency": "", "order_type": "flight",
+        "entity": "almosafer", "is_egypt": true, "employee_discount_tag": "", "customer_discount_tag":
+        "", "point_of_sale": "eg.almosafer.com", "line_items": [{"product_id": "prod-719ca257-eb15-4fa3-a264-62520e3bdb40",
+        "created_at": "2019-01-26 22:45:04", "updated_at": "2019-01-26 22:46:49",
+        "order_id": "5c4ce358cc63931b490b3f25", "product_type": "flight", "product_category":
+        "flight", "line_status": 52, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "ahs_group_name": "", "line_id": "trav-1bd05290-6dcd-4237-99cc-cf1f605c2c0b",
+        "vendor": {"name": "amd", "confirmation_number": "UD4O4G"}, "supplier": {"name":
+        "SL", "confirmation_number": "UGGVLG"}, "price": {"sale": {"service_fee":
+        0.0, "untaxed_amount": 569.0, "discount": 0.0, "output_vat": 0.0, "subtotal_amount":
+        0.0, "total_amount": 0.0, "currency": "EGP"}, "cost": {"vendor": {"untaxed_amount":
+        569, "input_vat_amount": 0, "currency": "EGP"}, "supplier": {"untaxed_amount":
+        569.0, "input_vat_amount": 0.0, "currency": "EGP"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "", "name": "Mr may mohamed ahssan",
+        "type": "ADT", "booking_class": "Economy", "last_leg_flying_date": "", "segment_count":
+        1, "origin_city": "DMK", "destination_city": "KBV", "nb_passengers": 1, "departure_date":
+        "2019-02-21T05:35:00", "route": "DMK-KBV", "office": {"office_id": "CAI3T38EH",
+        "ticketing_office_id": "CAI3T38EH"}}}], "id": "5c4ce358cc63931b490b3f25",
+        "total_cost": 569.0, "total_tax_amount": 1.5933, "payments": [{"id": "charge-fort-e9588674-a392-4a71-821d-e6ae98f4d554",
+        "payment_status": "11111", "auth_code": "640753", "payment_mode": "", "card_type":
+        "", "track_id": "bf498157-699f-46e0-b600-8af2fb055a8c", "amount": 590.97,
+        "currency": "EGP", "provider": "fort", "mid": "", "card_name": "may mohamed
+        hassan", "card_bin": "520378", "last_four": "7011", "payment_method": "",
+        "bank_name": "", "source": "", "is_3d_secure": false, "reference_id": "",
+        "created_at": "2019-01-26 22:46:48", "updated_at": "2019-01-27 10:46:51",
+        "charges": [{"id": "5c4ce358382a845ef06f2f9a", "charge_id": "charge-fort-e9588674-a392-4a71-821d-e6ae98f4d554",
+        "track_id": "bf498157-699f-46e0-b600-8af2fb055a8c", "status": "10000", "auth_code":
+        "640753", "currency": "EGP", "value": 590.97, "provider": "fort", "payment_mode":
+        "", "card_type": "", "charge_type": "charge_by_card", "mid": "", "last_four":
+        "7011", "card_bin": "520378", "payment_method": "", "bank_name": "", "source":
+        "", "is_3d_secure": false, "created_at": "2019-01-26 22:46:48", "updated_at":
+        "2019-01-26 22:46:48"}, {"id": "5c4d8c1b382a847ba13621a8", "charge_id": "charge-fort-414934c8-71c1-4abe-86a7-8b56c262aa9c",
+        "track_id": "bf498157-699f-46e0-b600-8af2fb055a8c", "status": "11111", "auth_code":
+        "640753", "currency": "EGP", "value": 590.97, "provider": "fort", "payment_mode":
+        "", "card_type": "", "charge_type": "capture", "mid": "", "last_four": "",
+        "card_bin": "", "payment_method": "", "bank_name": "", "source": "", "is_3d_secure":
+        false, "created_at": "2019-01-27 10:46:51", "updated_at": "2019-01-27 10:46:51"}]}]}'}
+    headers:
+      Content-Length: ['3607']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:26 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+version: 1

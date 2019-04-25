@@ -26,6 +26,7 @@ class HubPaymentChargeImportMapper(Component):
         ('mid', 'mid'),
         ('last_four', 'last_four'),
         ('card_bin', 'card_bin'),
+        ('charge_id', 'external_id'),
     ]
 
     @mapping

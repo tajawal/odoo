@@ -1,0 +1,88 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/payment_request/detail/pr-A8122509254-1548669730206
+  response:
+    body: {string: '{"id": "5c4ed322c69797ba7d5b7e2a", "track_id": "pr-A8122509254-1548669730206",
+        "status": "Customer Processed", "request_type": "charge", "reason": "Amendment",
+        "remarks": "Date change fee", "processed_by": "lathif507@gmail.com", "order_reference":
+        "A8122509254", "order_id": "5c21fdafb30b1b43344adcf4", "currency": "AED",
+        "fees": {"fareDifference": 150, "changeFee": 40, "total": 190}, "created_at":
+        "2019-01-28 10:02:10", "updated_at": "2019-01-28 10:05:06", "store_id": 4,
+        "total_amount": 190, "payment_status": "10000", "auth_code": "T18960", "payment_mode":
+        "MasterCard", "card_type": "", "charges": [{"id": "5c4ed3d2d0ca692624202d03",
+        "charge_id": "charge_A8AACEE70J1C42EF0149", "track_id": "pr-A8122509254-1548669730206",
+        "status": "10000", "auth_code": "T18960", "currency": "AED", "value": 190,
+        "provider": "checkoutcom", "payment_mode": "MasterCard", "card_type": "",
+        "charge_type": "charge_by_card", "mid": "", "last_four": "2022", "card_bin":
+        "521314", "payment_method": "MasterCard", "bank_name": "", "source": "", "is_3d_secure":
+        false, "created_at": "2019-01-28 10:05:06", "updated_at": "2019-01-28 10:05:06"}]}'}
+    headers:
+      Content-Length: ['1125']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:13 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5c21fdafb30b1b43344adcf4
+  response:
+    body: {string: '{"name": "A8122509254", "created_at": "2018-12-25 09:51:38", "updated_at":
+        "2019-04-09 17:38:33", "paid_at": "2018-12-25 09:51:40", "track_id": "01ea0567-0f27-4afa-8be6-3df0b992557b",
+        "order_status": 58, "payment_status": 78, "store_id": 4, "group_id": 1, "currency":
+        "AED", "total_amount": 760, "total_discount": -500, "total_output_vat": 0,
+        "total_service_fee": 15, "total_insurance_amount": 0, "total_vendor_cost":
+        1245, "vendor_currency": "AED", "total_supplier_cost": 1245, "supplier_currency":
+        "AED", "order_type": "flight", "entity": "tajawal", "is_egypt": false, "employee_discount_tag":
+        "", "customer_discount_tag": "emax-nn2l3", "point_of_sale": "tajawal.ae",
+        "line_items": [{"product_id": "prod-d995879d-ffe8-4318-8cbd-e7fbd8ea619c",
+        "created_at": "2018-12-25 09:43:55", "updated_at": "2018-12-25 09:51:43",
+        "order_id": "5c21fdafb30b1b43344adcf4", "product_type": "flight", "product_category":
+        "flight", "line_status": 58, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "ahs_group_name": "", "line_id": "trav-aa5da8e6-8d87-4e57-9de0-aad827adb049",
+        "vendor": {"name": "amd", "confirmation_number": "UKXJIQ"}, "supplier": {"name":
+        "EK", "confirmation_number": "C5MZZF"}, "price": {"sale": {"service_fee":
+        15.0, "untaxed_amount": 1245.0, "discount": -500.0, "output_vat": 0.0, "subtotal_amount":
+        760.0, "total_amount": 760.0, "currency": "AED"}, "cost": {"vendor": {"untaxed_amount":
+        1245, "input_vat_amount": 0, "currency": "AED"}, "supplier": {"untaxed_amount":
+        1245.0, "input_vat_amount": 0.0, "currency": "AED"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "176-3583456906", "name": "Mr ABDUL
+        LATHIF BOMRESPET", "type": "ADT", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 2, "origin_city": "DXB", "destination_city": "DXB", "nb_passengers":
+        1, "departure_date": "2019-01-30T03:30:00", "route": "DXB-HYD-DXB", "office":
+        {"office_id": "DXBAD38TJ", "ticketing_office_id": "DXBAD38TJ"}}}], "id": "5c21fdafb30b1b43344adcf4",
+        "total_cost": 1245.0, "total_tax_amount": 0, "payments": [{"id": "charge_8DEB5E363W1C127F60BA",
+        "payment_status": "10000", "auth_code": "T19868", "payment_mode": "MasterCard",
+        "card_type": "", "track_id": "01ea0567-0f27-4afa-8be6-3df0b992557b", "amount":
+        760, "currency": "AED", "provider": "checkoutcom", "mid": "", "card_name":
+        "ABDUL LATHIF", "card_bin": "521314", "last_four": "2022", "payment_method":
+        "MasterCard", "bank_name": "", "source": "", "is_3d_secure": false, "reference_id":
+        "", "created_at": "2018-12-25 09:51:43", "updated_at": "2018-12-25 09:51:43",
+        "charges": [{"id": "5c21fdaf6c95975069294f1c", "charge_id": "charge_8DEB5E363W1C127F60BA",
+        "track_id": "01ea0567-0f27-4afa-8be6-3df0b992557b", "status": "10000", "auth_code":
+        "T19868", "currency": "AED", "value": 760, "provider": "checkoutcom", "payment_mode":
+        "MasterCard", "card_type": "", "charge_type": "charge_by_card", "mid": "",
+        "last_four": "2022", "card_bin": "521314", "payment_method": "MasterCard",
+        "bank_name": "", "source": "", "is_3d_secure": false, "created_at": "2018-12-25
+        09:51:43", "updated_at": "2018-12-25 09:51:43"}]}]}'}
+    headers:
+      Content-Length: ['3113']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:16 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+version: 1

@@ -15,6 +15,16 @@ class OfhSaleOrderLine(models.Model):
     def _get_order_status_selection(self):
         return self.env['ofh.sale.order']._get_order_status_selection()
 
+    product_id = fields.Char(
+        string="Product ID",
+        required=True,
+        readonly=True,
+    )
+    line_id = fields.Char(
+        string="Line ID",
+        required=True,
+        readonly=True,
+    )
     name = fields.Char(
         string="Product",
         required=True,

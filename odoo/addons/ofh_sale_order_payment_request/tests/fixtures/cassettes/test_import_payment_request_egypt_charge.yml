@@ -1,0 +1,100 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/payment_request/detail/pr-A90126206860-1548533642417
+  response:
+    body: {string: '{"id": "5c4cbf8ac697970f4f1b7079", "track_id": "pr-A90126206860-1548533642417",
+        "status": "Customer Processed", "request_type": "charge", "reason": "Amendment",
+        "remarks": "upgrade", "processed_by": "bilal.fouad@almosafer.com", "order_reference":
+        "A90126206860", "order_id": "5c4cb7e68c98afe51d7f8712", "currency": "AED",
+        "fees": {"fareDifference": 180, "total": 180}, "created_at": "2019-01-26 20:14:02",
+        "updated_at": "2019-01-26 20:15:38", "store_id": 60, "total_amount": 180,
+        "payment_status": "11111", "auth_code": "759863", "payment_mode": "", "card_type":
+        "", "charges": [{"id": "5c4cbfea382a84468e1d2bb3", "charge_id": "charge-fort-c81b6c88-68f4-428e-a74f-f3e18829fec2",
+        "track_id": "pr-A90126206860-1548533642417", "status": "10000", "auth_code":
+        "759863", "currency": "AED", "value": 180, "provider": "fort", "payment_mode":
+        "", "card_type": "", "charge_type": "charge_by_card", "mid": "", "last_four":
+        "5127", "card_bin": "456835", "payment_method": "", "bank_name": "", "source":
+        "", "is_3d_secure": false, "created_at": "2019-01-26 20:15:38", "updated_at":
+        "2019-01-26 20:15:38"}, {"id": "5c4d68c5382a8462550d5ff4", "charge_id": "charge-fort-cba4b6d3-5c06-446f-b0bd-4f2d791f7b90",
+        "track_id": "pr-A90126206860-1548533642417", "status": "11111", "auth_code":
+        "759863", "currency": "AED", "value": 180, "provider": "fort", "payment_mode":
+        "", "card_type": "", "charge_type": "capture", "mid": "", "last_four": "",
+        "card_bin": "", "payment_method": "", "bank_name": "", "source": "", "is_3d_secure":
+        false, "created_at": "2019-01-27 08:16:05", "updated_at": "2019-01-27 08:16:05"}]}'}
+    headers:
+      Content-Length: ['1592']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:18 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5c4cb7e68c98afe51d7f8712
+  response:
+    body: {string: '{"name": "A90126206860", "created_at": "2019-01-26 19:41:22",
+        "updated_at": "2019-01-27 07:41:28", "paid_at": "2019-01-26 19:41:22", "track_id":
+        "a1b012eb-cfb2-4571-8ed4-3f9fa049e8bd", "order_status": 58, "payment_status":
+        80, "store_id": 60, "group_id": 2, "currency": "EGP", "total_amount": 5045.5696,
+        "total_discount": -554.2, "total_output_vat": -62.070299999999996, "total_service_fee":
+        119.84, "total_insurance_amount": 0, "total_vendor_cost": 5542, "vendor_currency":
+        "EGP", "total_supplier_cost": 5542, "supplier_currency": "EGP", "order_type":
+        "flight", "entity": "almosafer", "is_egypt": true, "employee_discount_tag":
+        "almosafer employee_egp", "customer_discount_tag": "", "point_of_sale": "eg.almosafer.com",
+        "line_items": [{"product_id": "prod-d0d91188-82fc-4aad-b136-ede4df2d05fa",
+        "created_at": "2019-01-26 19:36:10", "updated_at": "2019-01-26 19:41:26",
+        "order_id": "5c4cb7e68c98afe51d7f8712", "product_type": "flight", "product_category":
+        "flight", "line_status": 58, "tax_code": "SZ", "is_domestic_ksa": false, "is_domestic_uae":
+        false, "ahs_group_name": "", "line_id": "trav-4bd4e02f-9e4c-4b36-a480-6b62fbe76286",
+        "vendor": {"name": "amd", "confirmation_number": "TXUKQR"}, "supplier": {"name":
+        "MS", "confirmation_number": "TXUKQR"}, "price": {"sale": {"service_fee":
+        119.84, "untaxed_amount": 5542.0, "discount": -554.2, "output_vat": -62.070299999999996,
+        "subtotal_amount": 5107.6399, "total_amount": 5045.5696, "currency": "EGP"},
+        "cost": {"vendor": {"untaxed_amount": 5542, "input_vat_amount": 0, "currency":
+        "EGP"}, "supplier": {"untaxed_amount": 5542.0, "input_vat_amount": 0.0, "currency":
+        "EGP"}, "supplier_vendor_rate": 1.0}}, "traveller": {"line_reference": "077-3153935321",
+        "name": "Mr Basem Abdelrahman", "type": "ADT", "booking_class": "Economy",
+        "last_leg_flying_date": "", "segment_count": 2, "origin_city": "AUH", "destination_city":
+        "AUH", "nb_passengers": 1, "departure_date": "2019-02-20T05:05:00", "route":
+        "AUH-CAI-AUH", "office": {"office_id": "CAI3T38EH", "ticketing_office_id":
+        "CAI3T38EH"}}}], "id": "5c4cb7e68c98afe51d7f8712", "total_cost": 5542.0, "total_tax_amount":
+        -62.070299999999996, "payments": [{"id": "charge-fort-92f508b9-d439-492c-91e1-3b7d589b383b",
+        "payment_status": "11111", "auth_code": "758118", "payment_mode": "", "card_type":
+        "", "track_id": "a1b012eb-cfb2-4571-8ed4-3f9fa049e8bd", "amount": 5045.57,
+        "currency": "EGP", "provider": "fort", "mid": "", "card_name": "Bassem", "card_bin":
+        "456835", "last_four": "5127", "payment_method": "", "bank_name": "", "source":
+        "", "is_3d_secure": false, "reference_id": "", "created_at": "2019-01-26 19:41:26",
+        "updated_at": "2019-01-27 07:41:28", "charges": [{"id": "5c4cb7e66c9597330c518e54",
+        "charge_id": "charge-fort-92f508b9-d439-492c-91e1-3b7d589b383b", "track_id":
+        "a1b012eb-cfb2-4571-8ed4-3f9fa049e8bd", "status": "10000", "auth_code": "758118",
+        "currency": "EGP", "value": 5045.57, "provider": "fort", "payment_mode": "",
+        "card_type": "", "charge_type": "charge_by_card", "mid": "", "last_four":
+        "5127", "card_bin": "456835", "payment_method": "", "bank_name": "", "source":
+        "", "is_3d_secure": false, "created_at": "2019-01-26 19:41:26", "updated_at":
+        "2019-01-26 19:41:26"}, {"id": "5c4d60a8d0ca69078b7022ac", "charge_id": "charge-fort-4a6d7d3b-13b0-488c-abe8-5fe0d51dd1cc",
+        "track_id": "a1b012eb-cfb2-4571-8ed4-3f9fa049e8bd", "status": "11111", "auth_code":
+        "758118", "currency": "EGP", "value": 5045.57, "provider": "fort", "payment_mode":
+        "", "card_type": "", "charge_type": "capture", "mid": "", "last_four": "",
+        "card_bin": "", "payment_method": "", "bank_name": "", "source": "", "is_3d_secure":
+        false, "created_at": "2019-01-27 07:41:28", "updated_at": "2019-01-27 07:41:28"}]}]}'}
+    headers:
+      Content-Length: ['3702']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:21 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+version: 1

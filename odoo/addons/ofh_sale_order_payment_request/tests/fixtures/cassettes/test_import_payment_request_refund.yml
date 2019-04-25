@@ -1,0 +1,102 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/payment_request/detail/pr-A90126214952-1548581919557
+  response:
+    body: {string: '{"id": "5c4d7c1fe5b09a6bb43a0e76", "track_id": "pr-A90126214952-1548581919557",
+        "status": "Processed", "request_type": "refund", "reason": "Cancellation",
+        "remarks": "As per Flight", "processed_by": "mahmoud.magdy@almosafer.com",
+        "order_reference": "A90126214952", "order_id": "5c4cbf4c2280ad1a58087dcb",
+        "currency": "SAR", "fees": {"fareDifference": 676.52, "inputVat": 34, "total":
+        676.52}, "created_at": "2019-01-27 09:38:39", "updated_at": "2019-01-27 09:38:51",
+        "store_id": 52, "total_amount": 676.52, "payment_status": "83027", "auth_code":
+        "", "payment_mode": "", "card_type": "", "charges": [{"id": "5c4d7c2bd0ca696d117cb398",
+        "charge_id": "charge_0B7B5E170H1C427A41FA", "track_id": "a8b1cde0-0206-43d3-a214-4ea473f39bec",
+        "status": "83027", "auth_code": "", "currency": "SAR", "value": 676.52, "provider":
+        "checkoutcom", "payment_mode": "", "card_type": "", "charge_type": "refund",
+        "mid": "", "last_four": "", "card_bin": "", "payment_method": "", "bank_name":
+        "", "source": "", "is_3d_secure": false, "created_at": "2019-01-27 09:38:51",
+        "updated_at": "2019-01-27 09:38:51"}]}'}
+    headers:
+      Content-Length: ['1087']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:28 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: [application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-type: [application/json;charset=UTF-8]
+      user-agent: [finance_hub_api/0.1]
+    method: GET
+    uri: http://localhost:5000/sale_orders/detail/5c4cbf4c2280ad1a58087dcb
+  response:
+    body: {string: '{"name": "A90126214952", "created_at": "2019-01-26 20:12:57",
+        "updated_at": "2019-01-26 20:16:42", "paid_at": "2019-01-26 20:12:57", "track_id":
+        "a8b1cde0-0206-43d3-a214-4ea473f39bec", "order_status": 58, "payment_status":
+        78, "store_id": 52, "group_id": 2, "currency": "SAR", "total_amount": 676.515,
+        "total_discount": -35.7, "total_output_vat": 32.215, "total_service_fee":
+        0, "total_insurance_amount": 0, "total_vendor_cost": 714, "vendor_currency":
+        "SAR", "total_supplier_cost": 714, "supplier_currency": "SAR", "order_type":
+        "flight", "entity": "almosafer", "is_egypt": false, "employee_discount_tag":
+        "", "customer_discount_tag": "5alm_sar", "point_of_sale": "Almosafer iOS SA",
+        "line_items": [{"product_id": "prod-f832e65e-6b40-4e13-927f-868432a3816e",
+        "created_at": "2019-01-26 20:01:13", "updated_at": "2019-01-26 20:13:01",
+        "order_id": "5c4cbf4c2280ad1a58087dcb", "product_type": "flight", "product_category":
+        "flight", "line_status": 58, "tax_code": "SS", "is_domestic_ksa": true, "is_domestic_uae":
+        false, "ahs_group_name": "", "line_id": "trav-6ee1a7ed-d99d-4e10-ad47-15f9be72d5c5",
+        "vendor": {"name": "amd", "confirmation_number": "U2OSTB"}, "supplier": {"name":
+        "SV", "confirmation_number": "U2OSTB"}, "price": {"sale": {"service_fee":
+        0.0, "untaxed_amount": 714.0, "discount": -35.7, "output_vat": 32.215, "subtotal_amount":
+        644.3, "total_amount": 676.515, "currency": "SAR"}, "cost": {"vendor": {"untaxed_amount":
+        680, "input_vat_amount": 34, "currency": "SAR"}, "supplier": {"untaxed_amount":
+        680.0, "input_vat_amount": 34.0, "currency": "SAR"}, "supplier_vendor_rate":
+        1.0}}, "traveller": {"line_reference": "065-3185486874", "name": "Mr YAHYA
+        AIL ALBALAWI", "type": "ADT", "booking_class": "Economy", "last_leg_flying_date":
+        "", "segment_count": 1, "origin_city": "TUU", "destination_city": "DMM", "nb_passengers":
+        1, "departure_date": "2019-01-28T20:15:00", "route": "TUU-DMM", "office":
+        {"office_id": "RUHAA28WH", "ticketing_office_id": "RUHAA28WH", "tour_code_office_id":
+        "RUHAA2136"}}}], "id": "5c4cbf4c2280ad1a58087dcb", "total_cost": 680.0, "total_tax_amount":
+        32.215, "payments": [{"id": "charge_89F9CE070S1C4D160C9B", "payment_status":
+        "11111", "auth_code": "00000", "payment_mode": "Visa", "card_type": "", "track_id":
+        "a8b1cde0-0206-43d3-a214-4ea473f39bec", "amount": 676.52, "currency": "SAR",
+        "provider": "checkoutcom", "mid": "", "card_name": "KHALED AIL ALBALAWI",
+        "card_bin": "405433", "last_four": "1344", "payment_method": "Visa", "bank_name":
+        "", "source": "", "is_3d_secure": false, "reference_id": "", "created_at":
+        "2019-01-26 20:10:34", "updated_at": "2019-01-27 09:38:29", "charges": [{"id":
+        "5c4cbebad0ca690c8d730a2a", "charge_id": "charge_89F9CE070S1C4D160C9B", "track_id":
+        "a8b1cde0-0206-43d3-a214-4ea473f39bec", "status": "00000", "auth_code": "00000",
+        "currency": "SAR", "value": 676.52, "provider": "checkoutcom", "payment_mode":
+        "Visa", "card_type": "", "charge_type": "charge_by_card", "mid": "", "last_four":
+        "1344", "card_bin": "405433", "payment_method": "Visa", "bank_name": "", "source":
+        "", "is_3d_secure": false, "created_at": "2019-01-26 20:10:34", "updated_at":
+        "2019-01-26 20:10:34"}, {"id": "5c4cbf4c6c9597661c63d1ff", "charge_id": "charge_19D9CE070O1C4D1628B8",
+        "track_id": "a8b1cde0-0206-43d3-a214-4ea473f39bec", "status": "10000", "auth_code":
+        "027568", "currency": "SAR", "value": 676.52, "provider": "checkoutcom", "payment_mode":
+        "Visa", "card_type": "", "charge_type": "charge_by_card", "mid": "", "last_four":
+        "1344", "card_bin": "405433", "payment_method": "Visa", "bank_name": "", "source":
+        "", "is_3d_secure": false, "created_at": "2019-01-26 20:13:00", "updated_at":
+        "2019-01-26 20:13:00"}, {"id": "5c4d7c15d0ca6913457a4262", "charge_id": "charge_C9CB4E170I1C4DE689E2",
+        "track_id": "a8b1cde0-0206-43d3-a214-4ea473f39bec", "status": "11111", "auth_code":
+        "027568", "currency": "SAR", "value": 676.52, "provider": "checkoutcom", "payment_mode":
+        "Visa", "card_type": "", "charge_type": "charge_update", "mid": "", "last_four":
+        "1344", "card_bin": "", "payment_method": "Visa", "bank_name": "", "source":
+        "", "is_3d_secure": false, "created_at": "2019-01-27 09:38:29", "updated_at":
+        "2019-01-27 09:38:29"}]}]}'}
+    headers:
+      Content-Length: ['4179']
+      Content-Type: [application/json]
+      Date: ['Sun, 28 Apr 2019 07:20:31 GMT']
+      Server: [Werkzeug/0.15.2 Python/3.7.2]
+    status: {code: 200, message: OK}
+version: 1
