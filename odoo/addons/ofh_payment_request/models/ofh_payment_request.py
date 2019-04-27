@@ -260,19 +260,8 @@ class OfhPaymentRequest(models.Model):
         default=False,
     )
     # manual fields
-    manual_supplier_reference = fields.Char(
-        string="Manual Supplier Reference",
-        index=True,
-    )
     manual_payment_reference = fields.Char(
         string="Manual Payment Reference",
-    )
-    supplier_reference = fields.Char(
-        string="Supplier Reference",
-        readonly=True,
-        track_visibility='always',
-        compute='_compute_supplier_reference',
-        store=False,
     )
     payment_reference = fields.Char(
         string="Payment Reference",

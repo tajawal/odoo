@@ -300,18 +300,3 @@ class TestOfhPaymentRequest(TransactionCase):
         self.assertEquals(
             self.payment_request_1.charge_id,
             self.payment_request_1.payment_reference)
-
-    def test_compute_supplier_reference(self):
-        self.assertEquals(
-            self.payment_request_1.hub_supplier_reference,
-            self.payment_request_1.supplier_reference)
-
-        self.payment_request_1.manual_supplier_reference = 'manual_reference'
-        self.assertEquals(
-            self.payment_request_1.manual_supplier_reference,
-            self.payment_request_1.supplier_reference)
-
-        self.payment_request_1.manual_supplier_reference = False
-        self.assertEquals(
-            self.payment_request_1.hub_supplier_reference,
-            self.payment_request_1.supplier_reference)

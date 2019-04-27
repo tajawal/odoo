@@ -33,6 +33,12 @@
                     <field name="order_supplier_cost" widget="monetary"/>
                 </group>
             </page>
+            <group name="vendor_details" position="inside">
+                <group>
+                    <field name="supplier_reference"/>
+                    <field name="vendor_reference"/>
+                </group>
+            </group>
         </field>
     </record>
 

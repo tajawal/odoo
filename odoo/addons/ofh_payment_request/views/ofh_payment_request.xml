@@ -33,10 +33,6 @@
                             <field name="vendor_id"/>
                             <field name="plan_code"/>
                         </group>
-                        <group>
-                            <field name="supplier_reference"/>
-                            <field name="manual_supplier_reference"/>
-                        </group>
                     </group>
                     <group col="4" name="status_details" string="Statuses">
                         <field name="created_at"/>
@@ -118,7 +114,6 @@
             <search>
                 <field name="order_reference"/>
                 <field name="track_id"/>
-                <field name="supplier_reference"/>
                 <field name="vendor_id"/>
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
@@ -164,7 +159,6 @@
                 <field name="created_at"/>
                 <field name="updated_at"/>
                 <field name="request_type"/>
-                <field name="supplier_reference"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="payment_request_status"/>

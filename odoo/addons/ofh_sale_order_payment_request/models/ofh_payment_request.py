@@ -98,15 +98,18 @@ class OfhPaymentRequest(models.Model):
         related='order_id.entity',
         store=True,
     )
-    manual_supplier_reference = fields.Char(
-        string="Manual Supplier Reference",
-        index=True,
+    vendor_reference = fields.Char(
+        string="Vendor Reference",
+        readonly=True,
+        track_visibility='always',
+        compute='order_id.vendor_reference',
+        store=False,
     )
     supplier_reference = fields.Char(
         string="Supplier Reference",
         readonly=True,
         track_visibility='always',
-        compute='_compute_supplier_reference',
+        compute='order_id.supplier_reference',
         store=False,
     )
     need_to_investigate = fields.Boolean(
@@ -140,16 +143,6 @@ class OfhPaymentRequest(models.Model):
                 from_str(rec.order_created_at) -
                 from_str(rec.created_at)).days)
             rec.need_to_investigate = diff <= 2
-
-    @api.multi
-    @api.depends(
-        'hub_supplier_reference', 'manual_supplier_reference')
-    def _compute_supplier_reference(self):
-        for rec in self:
-            if rec.manual_supplier_reference:
-                rec.supplier_reference = rec.manual_supplier_reference
-            else:
-                rec.supplier_reference = rec.hub_supplier_reference
 
     def _search_need_to_investigate(self, operator, operand):
         self.env.cr.execute(
