@@ -67,7 +67,6 @@ class OfhPaymentRequest(models.Model):
     vendor_id = fields.Char(
         string="Airline",
         readonly=True,
-        # TODO: should be reference to comodel_name='ofh.vendor.contract',
     )
     # Amounts field
     currency_id = fields.Many2one(
@@ -210,19 +209,8 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
     )
     # SAP related statuses
-    payment_request_status = fields.Selection(
-        string="Payment Request Status",
-        selection=[
-            ('incomplete', 'Incomplete Data'),
-            ('ready', 'Ready for matching')],
-        compute='_compute_payment_request_status',
-        store=True,
-        index=True,
-        readonly=True,
-        track_visibility='always',
-    )
-    reconciliation_status = fields.Selection(
-        string="Supplier Status",
+    matching_status = fields.Selection(
+        string="Matching Status",
         selection=[
             ('unmatched', 'Unmatched'),
             ('matched', 'Matched'),
@@ -400,15 +388,6 @@ class OfhPaymentRequest(models.Model):
                 rec.tax_code = 'sz'
 
     @api.multi
-    @api.depends('order_reference')
-    def _compute_payment_request_status(self):
-        for rec in self:
-            # TODO: not sure what to use here,
-            # either order_id or order reference
-            rec.payment_request_status = \
-                'ready' if rec.order_reference else 'incomplete'
-
-    @api.multi
     def open_order_in_hub(self):
         """Open the order link to the payment request in hub using URL
         Returns:
@@ -430,18 +409,7 @@ class OfhPaymentRequest(models.Model):
         }
 
     @api.multi
-    def action_supplier_status_not_appilicable(self):
+    def action_matching_status_not_appilicable(self):
         records = self.filtered(
-            lambda r: r.reconciliation_status in ('investigate', 'pending'))
-        return records.write({'reconciliation_status': 'not_applicable'})
-
-    @api.multi
-    def action_mark_as_investigated(self):
-        """Mark Selected Records as investigated, so they will not have the
-        red color.
-        """
-
-        records = self.filtered(lambda r: r.need_to_investigate)
-        if records:
-            return records.write({'is_investigated': True})
-        return True
+            lambda r: r.matching_status == 'unmatched')
+        return records.write({'matching_status': 'not_applicable'})

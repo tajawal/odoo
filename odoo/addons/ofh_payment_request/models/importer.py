@@ -72,11 +72,10 @@ class HubPaymentRequestImportMapper(Component):
         return {'backend_id': self.backend_record.id}
 
     @mapping
-    def reconciliation_status(self, record):
-        order_type = record.get('order_type')
-        locator = record.get('hub_supplier_reference')
-        if order_type == 'hotel' or not locator:
-            return {'reconciliation_status': 'not_applicable'}
+    def matching_status(self, record):
+        order_reference = record.get('order_reference')
+        if order_reference.startswith('H'):
+            return {'matching_status': 'not_applicable'}
         return {}
 
 
