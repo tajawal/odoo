@@ -28,7 +28,7 @@ class OfhSaleOrder(models.Model):
     )
 
     @api.multi
-    @api.depends('payment_request_ids.reconciliation_status')
+    @api.depends('payment_request_ids.matching_status')
     def _compute_payment_request_matching_status(self):
         for rec in self:
             pass

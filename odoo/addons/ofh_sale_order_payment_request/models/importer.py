@@ -18,6 +18,14 @@ class HubPaymentRequestImportMapper(Component):
 
         return {'order_id': order.id}
 
+    @mapping
+    def matching_status(self, record):
+        order_id = record.get('order_id')
+        if not order_id:
+            return {'matching_status': 'not_applicable'}
+        return super(
+            HubPaymentRequestImportMapper, self).matching_status(record)
+
 
 class HubPaymentRequestImporter(Component):
 

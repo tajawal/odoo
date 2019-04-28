@@ -5,7 +5,7 @@
 <odoo>
 
     <record model="ir.ui.view" id="ofh_payment_request_form_view">
-        <field name="name">ofh.payment.request.form (in ofh_payment_request)</field>
+        <field name="name">ofh.payment.request.form (in ofh_sale_order_payment_request)</field>
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
@@ -16,7 +16,7 @@
                 <field name="order_id"/>
             </group>
             <group name="status_details" position="inside">
-                <field name="need_to_investigate"/>
+                <field name="payment_request_status"/>
             </group>
             <page name="order_details" position="inside">
                 <group col="4" name="sale_order_details" string="Order Details">
@@ -43,33 +43,46 @@
     </record>
 
     <record model="ir.ui.view" id="ofh_payment_request_search_view">
-        <field name="name">ofh.payment.request.search (in ofh_payment_request)</field>
+        <field name="name">ofh.payment.request.search (in ofh_sale_order_payment_request)</field>
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_search_view"/>
         <field name="arch" type="xml">
-            <field name="vendor_id" position="after">
+            <filter name="almosafer" position="after">
                 <separator/>
-                <filter name="need_to_investigate" string="Need to Investigate" domain="[('need_to_investigate', '=', True)]"/>
-            </field>
+                <filter name="incomplete_pr" string="Incomplete Data"
+                        domain="[('payment_request_status', '=', 'incomplete')]"/>
+                <filter name="ready_pr" string="Ready for matching"
+                        domain="[('payment_request_status', '=', 'ready')]"/>
+            </filter>
         </field>
     </record>
 
-
     <record model="ir.ui.view" id="ofh_payment_request_tree_view">
-        <field name="name">ofh.payment.request.tree (in ofh_payment_request)</field>
+        <field name="name">ofh.payment.request.tree (in ofh_sale_order_payment_request)</field>
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
         <field name="arch" type="xml">
             <tree position="attributes">
-                <attribute name="decoration-bf">reconciliation_status=='matched' and need_to_investigate==False</attribute>
-                <attribute name="decoration-danger">need_to_investigate==True</attribute>
+                <attribute name="decoration-bf">matching_status=='matched'</attribute>
+                <attribute name="decoration-muted">payment_request_status=='incomplete'</attribute>
             </tree>
-            <tree position="inside">
-                <field name="need_to_investigate" invisible="1"/>
-            </tree>
-             <field name="entity" position="after">
+            <field name="matching_status" position="after">
+                <field name="payment_request_status"/>
+            </field>
+            <field name="entity" position="after">
                 <field name="request_type"/>
             </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_pivot_view">
+        <field name="name">ofh.payment.reques.pivot (in ofh_sale_order_payment_request)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="payment_request_status" type="row"/>
+                <field name="request_type" type="row"/>
+            </pivot>
         </field>
     </record>
 
