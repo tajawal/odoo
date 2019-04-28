@@ -93,6 +93,16 @@ class OfhSaleOrderLine(models.Model):
         currency_field='vendor_currency_id',
         readonly=True,
     )
+    vendor_base_fare_amount = fields.Monetary(
+        string="Vendor Base Fare",
+        currency_field='vendor_currency_id',
+        readonly=True,
+    )
+    vendor_input_tax_amount = fields.Monetary(
+        string="Vendor Input Tax",
+        currency_field='vendor_currency_id',
+        readonly=True,
+    )
 
     # Supplier data
     supplier_confirmation_number = fields.Char(
@@ -115,6 +125,16 @@ class OfhSaleOrderLine(models.Model):
     )
     supplier_cost_amount = fields.Monetary(
         string="Supplier Cost",
+        currency_field='supplier_currency_id',
+        readonly=True,
+    )
+    supplier_base_fare_amount = fields.Monetary(
+        string="Supplier Base Fare",
+        currency_field='supplier_currency_id',
+        readonly=True,
+    )
+    supplier_input_tax_amount = fields.Monetary(
+        string="Supplier Input Tax",
         currency_field='supplier_currency_id',
         readonly=True,
     )

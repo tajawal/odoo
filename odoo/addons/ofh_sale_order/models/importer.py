@@ -169,6 +169,30 @@ class HubSaleOrderLineImportMapper(Component):
         return {'vendor_cost_amount': cost}
 
     @mapping
+    def vendor_base_fare_amount(self, record):
+        if 'price' not in record:
+            return {}
+        if 'cost' not in record['price']:
+            return {}
+        if 'vendor' not in record['price']['cost']:
+            return {}
+        vendor = record['price']['cost'].get('vendor')
+        base_fare = vendor.get('untaxed_amount', 0.0)
+        return {'vendor_base_fare_amount': base_fare}
+
+    @mapping
+    def vendor_input_tax_amount(self, record):
+        if 'price' not in record:
+            return {}
+        if 'cost' not in record['price']:
+            return {}
+        if 'vendor' not in record['price']['cost']:
+            return {}
+        vendor = record['price']['cost'].get('vendor')
+        input_tax = vendor.get('input_vat_amount', 0.0)
+        return {'vendor_input_tax_amount': input_tax}
+
+    @mapping
     def supplier_name(self, record):
         if 'supplier' in record:
             return {'supplier_name': record['supplier'].get('name')}
@@ -205,6 +229,30 @@ class HubSaleOrderLineImportMapper(Component):
         cost = supplier.get('untaxed_amount', 0.0) + \
             supplier.get('input_vat_amount', 0.0)
         return {'supplier_cost_amount': cost}
+
+    @mapping
+    def supplier_base_fare_amount(self, record):
+        if 'price' not in record:
+            return {}
+        if 'cost' not in record['price']:
+            return {}
+        if 'supplier' not in record['price']['cost']:
+            return {}
+        supplier = record['price']['cost'].get('supplier')
+        base_fare = supplier.get('untaxed_amount', 0.0)
+        return {'supplier_base_fare_amount': base_fare}
+
+    @mapping
+    def supplier_input_tax_amount(self, record):
+        if 'price' not in record:
+            return {}
+        if 'cost' not in record['price']:
+            return {}
+        if 'supplier' not in record['price']['cost']:
+            return {}
+        supplier = record['price']['cost'].get('supplier')
+        input_tax = supplier.get('input_vat_amount', 0.0)
+        return {'supplier_input_tax_amount': input_tax}
 
     @mapping
     def exchange_rate(self, record):
