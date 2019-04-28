@@ -30,6 +30,7 @@ class HubPaymentImportMapper(Component):
         ('bank_name', 'bank_name'),
         ('source', 'source'),
         ('reference_id', 'reference_id'),
+        ('is_3d_secure', 'is_3d_secure'),
     ]
 
     children = [
