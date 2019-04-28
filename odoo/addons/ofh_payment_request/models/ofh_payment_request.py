@@ -392,10 +392,9 @@ class OfhPaymentRequest(models.Model):
             rec.booking_fee_vat_amount = fees_dict.get('bookingFeeVat')
             rec.deals_vat_amount = fees_dict.get('dealsVat')
             rec.discount_vat_amount = fees_dict.get('discountVat')
-
             if float_compare(
                     rec.output_vat_amount, 0.0,
-                    precision_digits=rec.currency_id.rounding) > 0:
+                    precision_rounding=rec.currency_id.rounding) > 0:
                 rec.tax_code = 'ss'
             else:
                 rec.tax_code = 'sz'
