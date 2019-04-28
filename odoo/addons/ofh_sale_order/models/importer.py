@@ -452,57 +452,55 @@ class HubSaleOrderLineImportMapper(Component):
 
     @mapping
     def passengers_count(self, record):
-        if 'nb_passengers' in record.get('traveller', {}):
-            return {
-                'passengers_count': record['traveller'].get('nb_passengers')}
+        if 'traveller' in record:
+            return {'passengers_count': record['traveller'].get('nb_passengers')}
         return {}
 
     @mapping
     def last_leg_flying_date(self, record):
-        if 'last_leg_flying_date' in record.get('traveller', {}):
-            return {
-                'last_leg_flying_date': record['traveller'].get(
-                    'last_leg_flying_date', '')}
+        if 'traveller' in record:
+            return {'last_leg_flying_date': record['traveller'].get('last_leg_flying_date', '')}
+        return {}
 
     @mapping
     def segment_count(self, record):
-        if 'segment_count' in record.get('traveller', {}):
-            return {
-                'segment_count': record['traveller'].get('segment_count', '')}
+        if 'traveller' in record:
+            return {'segment_count': record['traveller'].get('segment_count', '')}
+        return {}
 
     @mapping
     def destination_city(self, record):
-        if 'destination_city' in record.get('traveller', {}):
-            return {
-                'destination_city': record['traveller'].get(
-                    'destination_city', '')}
+        if 'traveller' in record:
+            return {'destination_city': record['traveller'].get('destination_city', '')}
 
     @mapping
     def origin_city(self, record):
-        if 'origin_city' in record.get('traveller', {}):
-            return {
-                'origin_city': record['traveller'].get(
-                    'origin_city', '')}
+        if 'traveller' in record:
+            return {'origin_city': record['traveller'].get('origin_city', '')}
+        return {}
 
     @mapping
     def booking_class(self, record):
-        if 'booking_class' in record.get('traveller', {}):
+        if 'traveller' in record:
             return {
                 'booking_class': record['traveller'].get(
                     'booking_class', '')}
+        return {}
 
     @mapping
     def departure_date(self, record):
-        if 'departure_date' in record.get('traveller', {}):
+        if 'traveller' in record:
             return {
                 'departure_date': record['traveller'].get(
                     'departure_date', '')}
+        return {}
 
     @mapping
     def route(self, record):
-        if 'route' in record.get('traveller', {}):
+        if 'traveller' in record:
             return {
                 'route': record['traveller'].get('route', '')}
+        return {}
 
 
 class HubSaleOrderBatchImporter(Component):
