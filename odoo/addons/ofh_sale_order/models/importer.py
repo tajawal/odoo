@@ -453,30 +453,40 @@ class HubSaleOrderLineImportMapper(Component):
     @mapping
     def passengers_count(self, record):
         if 'traveller' in record:
-            return {'passengers_count': record['traveller'].get('nb_passengers')}
+            return {
+                'passengers_count': record['traveller'].get(
+                    'nb_passengers')}
         return {}
 
     @mapping
     def last_leg_flying_date(self, record):
         if 'traveller' in record:
-            return {'last_leg_flying_date': record['traveller'].get('last_leg_flying_date', '')}
+            return {
+                'last_leg_flying_date': record['traveller'].get(
+                    'last_leg_flying_date', '')}
         return {}
 
     @mapping
     def segment_count(self, record):
         if 'traveller' in record:
-            return {'segment_count': record['traveller'].get('segment_count', '')}
+            return {
+                'segment_count': record['traveller'].get(
+                    'segment_count', '')}
         return {}
 
     @mapping
     def destination_city(self, record):
         if 'traveller' in record:
-            return {'destination_city': record['traveller'].get('destination_city', '')}
+            return {
+                'destination_city': record['traveller'].get(
+                    'destination_city', '')}
 
     @mapping
     def origin_city(self, record):
         if 'traveller' in record:
-            return {'origin_city': record['traveller'].get('origin_city', '')}
+            return {
+                'origin_city': record['traveller'].get(
+                    'origin_city', '')}
         return {}
 
     @mapping
