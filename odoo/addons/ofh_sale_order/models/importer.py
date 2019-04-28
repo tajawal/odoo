@@ -437,6 +437,13 @@ class HubSaleOrderLineImportMapper(Component):
                     'origin_city', '')}
 
     @mapping
+    def booking_class(self, record):
+        if 'booking_class' in record.get('traveller', {}):
+            return {
+                'booking_class': record['traveller'].get(
+                    'booking_class', '')}
+
+    @mapping
     def departure_date(self, record):
         if 'departure_date' in record.get('traveller', {}):
             return {
