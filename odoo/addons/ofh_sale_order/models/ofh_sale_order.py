@@ -102,6 +102,21 @@ class OfhSaleOrder(models.Model):
         default=False,
         index=True,
     )
+    employee_discount_tag = fields.Char(
+        string="Employee Discount Tag",
+        readonly=True,
+        default=False,
+    )
+    customer_discount_tag = fields.Char(
+        string="Customer Discount Tag",
+        readonly=True,
+        default=False,
+    )
+    point_of_sale = fields.Char(
+        string="Point Of Sale",
+        readonly=True,
+        default=False,
+    )
     payment_status = fields.Selection(
         string="payment Status",
         selection=_get_payment_status_selection,

@@ -17,6 +17,9 @@ class HubSaleOrderImportMapper(Component):
         ('order_type', 'order_type'),
         ('entity', 'entity'),
         ('is_egypt', 'is_egypt'),
+        ('employee_discount_tag', 'employee_discount_tag'),
+        ('customer_discount_tag', 'customer_discount_tag'),
+        ('point_of_sale', 'point_of_sale'),
         ('store_id', 'store_id'),
         ('group_id', 'group_id'),
         ('total_amount', 'total_amount'),
@@ -104,6 +107,7 @@ class HubSaleOrderLineImportMapper(Component):
         ('sequence', 'sequence'),
         ('product_id', 'name'),
         ('is_domestic_ksa', 'is_domestic_ksa'),
+        ('ahs_group_name', 'ahs_group_name'),
     ]
 
     @mapping
@@ -424,6 +428,13 @@ class HubSaleOrderLineImportMapper(Component):
             return {
                 'destination_city': record['traveller'].get(
                     'destination_city', '')}
+
+    @mapping
+    def origin_city(self, record):
+        if 'origin_city' in record.get('traveller', {}):
+            return {
+                'origin_city': record['traveller'].get(
+                    'origin_city', '')}
 
     @mapping
     def departure_date(self, record):

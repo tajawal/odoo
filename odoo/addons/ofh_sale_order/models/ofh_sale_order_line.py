@@ -186,6 +186,14 @@ class OfhSaleOrderLine(models.Model):
         string="Route",
         readonly=True,
     )
+    origin_city = fields.Char(
+        string="Origin City",
+        readonly=True,
+    )
+    ahs_group_name = fields.Char(
+        string="AHS Group Name",
+        readonly=True,
+    )
     # Segment details
     contract = fields.Char(
         string="Contract",

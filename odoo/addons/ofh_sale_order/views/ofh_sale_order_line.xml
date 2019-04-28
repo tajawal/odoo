@@ -21,6 +21,7 @@
                         <field name="line_category"/>
                         <field name="state"/>
                         <field name="is_domestic_ksa"/>
+                        <field name="ahs_group_name"/>
                     </group>
                     <group name="traveller_info" col="4" string="Traveller Details"
                            attrs="{'invisible': [('line_type', '!=', 'flight')]}">
@@ -34,6 +35,7 @@
                         <field name="segment_count"/>
                         <field name="passengers_count"/>
                         <field name="destination_city"/>
+                        <field name="origin_city"/>
                         <field name="route"/>
                         <field name="departure_date"/>
                         <field name="last_leg_flying_date"/>

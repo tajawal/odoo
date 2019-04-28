@@ -30,6 +30,9 @@
                         <field name="currency_id"/>
                         <field name="total_amount" widget="monetary"/>
                         <field name="is_egypt"/>
+                        <field name="employee_discount_tag"/>
+                        <field name="customer_discount_tag"/>
+                        <field name="point_of_sale"/>
                     </group>
                     <notebook>
                         <page name="sale_lines" string="Lines">
