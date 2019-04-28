@@ -123,6 +123,28 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         track_visibility='always',
     )
+    estimated_cost_in_supplier_currency = fields.Monetary(
+        string="Estimated Cost in Supplier Currency",
+        currency_field='order_supplier_currency_id',
+        readonly=True,
+        compute='_compute_estimated_cost',
+        store=False,
+    )
+
+    @api.multi
+    @api.depends(
+        'insurance', 'fare_difference', 'penalty',
+        'order_supplier_currency_id', 'currency_id')
+    def _compute_estimated_cost(self):
+        res = super(OfhPaymentRequest, self)._compute_estimated_cost()
+        for rec in self:
+            rec.estimated_cost_in_supplier_currency = 0.0
+            if not rec.order_supplier_currency_id:
+                continue
+            rec.estimated_cost_in_supplier_currency = \
+                rec.currency_id.compute(
+                    rec.estimated_cost, rec.order_supplier_currency_id)
+        return res
 
     @api.multi
     @api.depends('order_id')

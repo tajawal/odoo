@@ -20,7 +20,7 @@ class OfhSaleOrder(models.Model):
             ('matched', 'Matched'),
             ('not_applicable', 'Not Applicable')],
         compute='_compute_payment_request_matching_status',
-        store=True,
+        store=False,
         index=True,
         readonly=True,
         default='unmatched',
@@ -31,4 +31,12 @@ class OfhSaleOrder(models.Model):
     @api.depends('payment_request_ids.matching_status')
     def _compute_payment_request_matching_status(self):
         for rec in self:
-            pass
+            if all([l.matching_status == 'not_applicable'
+                    for l in rec.line_ids]):
+                rec.payment_request_matching_status = 'not_applicable'
+                continue
+            if all([l.matching_status in ('matched', 'not_applicable')
+                    for l in rec.line_ids]):
+                rec.payment_request_matching_status = 'matched'
+                continue
+            rec.payment_request_matching_status = 'unmatched'

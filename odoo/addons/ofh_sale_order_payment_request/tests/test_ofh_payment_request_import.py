@@ -43,7 +43,7 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
         self.assertEquals(binding.track_id, 'pr-A90126214952-1548581919557')
         self.assertEquals(binding.vendor_id, 'SV')
         self.assertEquals(binding.provider, 'checkoutcom')
-
+        self.assertEquals(binding.order_type, 'flight')
         self.assertEquals(binding.estimated_cost, 676.52)
 
     @recorder.use_cassette
@@ -64,6 +64,7 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
         self.assertEquals(binding.provider, 'checkoutcom')
         self.assertEquals(binding.vendor_id, 'EK')
         self.assertEquals(binding.estimated_cost, 150)
+        self.assertEquals(binding.order_type, 'flight')
 
     @recorder.use_cassette
     def test_import_hotel_payment_request_refund(self):
@@ -82,6 +83,7 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
         self.assertEquals(binding.track_id, 'pr-H81213648350-1544830818248')
         self.assertEquals(binding.vendor_id, 'TotalStay')
         self.assertEquals(binding.provider, 'checkoutcom')
+        self.assertEquals(binding.order_type, 'hotel')
 
     @recorder.use_cassette
     def test_import_hotel_payment_request_charge(self):
@@ -100,6 +102,7 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
         self.assertEquals(binding.track_id, 'pr-H81214239650-1544814522478')
         self.assertEquals(binding.vendor_id, 'b2bdynamic')
         self.assertEquals(binding.provider, 'op')
+        self.assertEquals(binding.order_type, 'hotel')
 
     @recorder.use_cassette
     def test_import_payment_request_egypt_refund(self):
