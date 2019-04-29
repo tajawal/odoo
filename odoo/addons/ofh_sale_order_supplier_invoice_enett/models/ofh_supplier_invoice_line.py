@@ -85,7 +85,7 @@ class OfhSupplierInvoiceLine(models.Model):
 
             payment_request.write({
                 'supplier_invoice_ids': [(4, self.id)],
-                'reconciliation_status': 'matched',
+                'matching_status': 'matched',
             })
         return
 

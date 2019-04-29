@@ -54,6 +54,8 @@ class OfhSupplierInvoiceLine(models.Model):
             return
 
         for line in self.order_id.line_ids:
+            if line.matching_status in ('matched', 'not_applicable'):
+                continue
             if self.ticket_number in line.line_reference:
                 line.write({
                     'invoice_line_ids': [(4, self.id)],
@@ -102,7 +104,7 @@ class OfhSupplierInvoiceLine(models.Model):
 
             payment_request.write({
                 'supplier_invoice_ids': [(4, self.id)],
-                'reconciliation_status': 'matched',
+                'matching_status': 'matched',
             })
 
         return
