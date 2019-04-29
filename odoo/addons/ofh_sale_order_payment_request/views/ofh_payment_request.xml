@@ -10,11 +10,9 @@
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
             <field name="entity" position="after">
+                <field name="order_id"/>
                 <field name="ticketing_office_id"/>
             </field>
-            <group name="general_details" position="inside">
-                <field name="order_id"/>
-            </group>
             <group name="status_details" position="inside">
                 <field name="payment_request_status"/>
             </group>

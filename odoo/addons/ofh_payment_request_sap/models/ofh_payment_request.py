@@ -24,15 +24,6 @@ SAP_XML_USERNAME = 'sap_xml_api_username'
 SAP_XML_PASSWORD = 'sap_xml_api_password'
 SOURCE = 'hub_source'
 
-CREDIT_CARD_PAYMENT_PROVIDERS = [
-    'checkoutcom',
-    'fort',
-    'payfort',
-    'sadad',
-    'hyperpay',
-    'tp',
-]
-
 
 class OfhPaymentRequest(models.Model):
 
@@ -194,7 +185,7 @@ class OfhPaymentRequest(models.Model):
         for rec in self:
             rec.sap_zsel = rec.sap_zdis = rec.sap_payment_amount1 = \
                 rec.sap_payment_amount2 = 0.0
-            if rec.reconciliation_status not in ('matched', 'not_applicable'):
+            if rec.matching_status not in ('matched', 'not_applicable'):
                 continue
             if rec.payment_request_status == 'incomplete':
                 continue
@@ -236,7 +227,7 @@ class OfhPaymentRequest(models.Model):
         """ Compute supplier cost to send to SAP."""
         for rec in self:
             rec.sap_zvd1 = 0.0
-            if rec.reconciliation_status not in ('matched', 'not_applicable'):
+            if rec.matching_status not in ('matched', 'not_applicable'):
                 continue
             if rec.payment_request_status == 'incomplete':
                 continue
@@ -265,7 +256,7 @@ class OfhPaymentRequest(models.Model):
         """ Compute output VAT to SAP."""
         for rec in self:
             rec.sap_zvt1 = 0.0
-            if rec.reconciliation_status not in ('matched', 'not_applicable'):
+            if rec.matching_status not in ('matched', 'not_applicable'):
                 continue
             if rec.payment_request_status == 'incomplete':
                 continue
@@ -429,7 +420,7 @@ class OfhPaymentRequest(models.Model):
             _logger.warn(f"PR# {self.track_id} already in SAP. Skipp it.")
             return False
 
-        if self.reconciliation_status not in ('matched', 'not_applicable'):
+        if self.matching_status not in ('matched', 'not_applicable'):
             _logger.warn(f"PR# {self.track_id} is not matched yet. Skipp it.")
             return False
 

@@ -23,6 +23,17 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_request_form_view_2">
+        <field name="name">ofh.payment.request.form.2 (in ofh_payment_request_invoice)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_sale_order_payment_request.ofh_payment_request_form_view"/>
+        <field name="arch" type="xml">
+            <field name="ticketing_office_id" position="after">
+                <field name="supplier_office_id"/>
+            </field>
+        </field>
+    </record>
+
     <record model="ir.ui.menu" id="ofh_supplier_invoice_main_menu">
         <field name="name">Vendor Invoices</field>
         <field name="parent_id" ref="ofh_payment_request.ofh_payment_request_main_menu"/>
