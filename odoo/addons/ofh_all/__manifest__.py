@@ -17,6 +17,7 @@
         'ofh_sale_order_supplier_invoice_gds',
         'ofh_sale_order_supplier_invoice_tf',
         'ofh_sale_order_supplier_invoice_enett',
+        'ofh_sale_order_supplier_invoice_nile',
 
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools

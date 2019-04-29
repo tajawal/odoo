@@ -35,7 +35,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_nile.nile_import_backend')
         if self.backend_record != nile_backend:
             return super(SupplierInvoiceLineMapper, self).locator(record)
-        return {'locator': record.get('GDS PNR')}
+        return {'locator': record.get('GDSPNR')}
 
     @mapping
     def vendor_id(self, record):
@@ -51,7 +51,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_nile.nile_import_backend')
         if self.backend_record != nile_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
-        dt = datetime.strptime(record.get('TKT Issue Date'), '%d-%b-%y')
+        dt = datetime.strptime(record.get('TKT Issue Date'), '%d-%b-%Y')
         if not dt:
             return {}
         return {'invoice_date': dt}
@@ -62,7 +62,10 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_nile.nile_import_backend')
         if self.backend_record != nile_backend:
             return super(SupplierInvoiceLineMapper, self).currency_id(record)
-        return {'currency_id': self.env.ref('base.SAR').id}
+        currency = record.get('Ticket Issued Currency')
+        if not currency:
+            return {'currency_id': self.env.ref('base.SAR').id}
+        return {'currency_id': self.env.ref(f'base.{currency}').id}
 
     @mapping
     def passenger(self, record):
@@ -85,18 +88,18 @@ class SupplierInvoiceLineMapper(Component):
         return {'invoice_status': "TKTT"}
 
     @mapping
-    def gds_net_amount(self, record):
+    def total(self, record):
         nile_backend = self.env.ref(
             'ofh_supplier_invoice_nile.nile_import_backend')
         if self.backend_record != nile_backend:
-            return {}
-        return {'gds_net_amount': record.get('Amount Due')}
+            return super(SupplierInvoiceLineMapper, self).total(record)
+        return {'total': record.get('Ticket Issued Amount')}
 
     @mapping
     def order_reference(self, record):
-        itl_backend = self.env.ref(
-            'ofh_supplier_invoice_itl.itl_import_backend')
-        if self.backend_record != itl_backend:
+        nile_backend = self.env.ref(
+            'ofh_supplier_invoice_nile.nile_import_backend')
+        if self.backend_record != nile_backend:
             return super(
                 SupplierInvoiceLineMapper, self).order_reference(record)
         return {'order_reference': record.get('Order ID')}

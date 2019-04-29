@@ -53,9 +53,15 @@ class OfhSupplierInvoiceLine(models.Model):
         if self.invoice_status in ('AMND', 'RFND'):
             return
 
+        from_str = fields.Date.from_string
+
         for line in self.order_id.line_ids:
-            if line.matching_status in ('matched', 'not_applicable'):
+            day_diff = abs((
+                from_str(line.created_at) - from_str(self.invoice_date)).days)
+
+            if day_diff > 2:
                 continue
+
             if self.ticket_number in line.line_reference:
                 line.write({
                     'invoice_line_ids': [(4, self.id)],

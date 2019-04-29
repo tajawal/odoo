@@ -11,6 +11,8 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
+        'ofh_sale_order_supplier_invoice',
+        'ofh_supplier_invoice_nile',
     ],
     'data': [
     ],
