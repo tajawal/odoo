@@ -127,7 +127,7 @@
                         domain="[('request_type', '=', 'void')]"/>
                 <separator/>
                 <!-- Supplier status -->
-                <filter name="supplier_unmatched_status" string="Pending"
+                <filter name="supplier_unmatched_status" string="Unmatched"
                         domain="[('matching_status', '=', 'unmatched')]"/>
                 <filter name="supplier_matched_status" string="matched"
                         domain="[('matching_status', '=', 'matched')]"/>
