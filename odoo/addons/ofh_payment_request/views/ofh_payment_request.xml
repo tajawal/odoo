@@ -163,7 +163,7 @@
         <field name="state">code</field>
         <field name="code">
 if records:
-    records.action_supplier_status_not_appilicable()
+    records.action_matching_status_not_appilicable()
         </field>
     </record>
 
