@@ -77,14 +77,14 @@ class HubPaymentChargeImportMapChild(Component):
         """
         items = []
         for values in items_values:
-            if 'charge_id' not in values:
+            if 'external_id' not in values:
                 continue
             binding = self.model.search(
-                [('external_id', '=', values.get('charge_id'))])
+                [('external_id', '=', values.get('external_id'))])
             if binding:
                 items.append((1, binding.id, values))
                 continue
             else:
-                items.append((1, 0, values))
+                items.append((0, 0, values))
 
         return items

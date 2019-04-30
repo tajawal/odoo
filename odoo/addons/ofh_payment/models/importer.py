@@ -60,3 +60,39 @@ class HubPaymentImportMapper(Component):
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
+
+
+class HubPaymentImportMapChild(Component):
+    _name = 'map.child.hub.payment.import'
+    _inherit = 'base.map.child.import'
+    _apply_on = 'hub.payment'
+
+    def format_items(self, items_values):
+        """
+        Format the values of the items mapped from the child Mappers.
+
+        It can be overridden for instance to add the Odoo
+        relationships commands ``(6, 0, [IDs])``, ...
+
+        As instance, it can be modified to handle update of existing
+        items: check if an 'id' has been defined by
+        :py:meth:`get_item_values` then use the ``(1, ID, {values}``)
+        command
+
+        :param items_values: list of values for the items to create
+        :type items_values: list
+
+        """
+        items = []
+        for values in items_values:
+            if 'external_id' not in values:
+                continue
+            binding = self.model.search(
+                [('external_id', '=', values.get('external_id'))])
+            if binding:
+                items.append((1, binding.id, values))
+                continue
+            else:
+                items.append((0, 0, values))
+
+        return items

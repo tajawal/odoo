@@ -14,6 +14,10 @@
                             string="Open in HUB"
                             class="btn-primary"
                             type="object"/>
+                    <button name="action_update_hub_data"
+                            string="Update from HUB"
+                            class="btn-warning"
+                            type="object"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -134,6 +138,19 @@
             </tree>
         </field>
     </record>
+
+    <!-- Force resync data from hub. -->
+    <record model="ir.actions.server" id="ofh_payment_request_import_records">
+        <field name="name">Update from HUB</field>
+        <field name="model_id" ref="model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref = "model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_update_orders_from_hub()
+        </field>
+    </record>
+
 
     <record model="ir.actions.act_window" id="ofh_sale_order_act_window">
         <field name="name">Sales Orders</field>

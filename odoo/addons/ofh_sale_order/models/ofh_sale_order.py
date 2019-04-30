@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.addons.queue_job.job import job
 
 
 class OfhSaleOrder(models.Model):
@@ -375,3 +376,17 @@ class OfhSaleOrder(models.Model):
             "url": hub_url,
             "target": "new",
         }
+
+    @api.multi
+    def action_update_orders_from_hub(self):
+        for rec in self:
+            rec.with_delay().action_update_hub_data()
+
+    @job(default_channel='root.hub')
+    @api.multi
+    def action_update_hub_data(self):
+        self.ensure_one()
+        return self.hub_bind_ids.import_record(
+            backend=self.hub_bind_ids.backend_id,
+            external_id=self.hub_bind_ids.external_id,
+            force=True)
