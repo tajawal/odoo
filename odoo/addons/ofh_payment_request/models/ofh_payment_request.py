@@ -220,6 +220,7 @@ class OfhPaymentRequest(models.Model):
         index=True,
         readonly=True,
         track_visibility='always',
+        oldname='reconciliation_status',
     )
     state = fields.Selection(
         string='Next Action',
