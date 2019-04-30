@@ -4,7 +4,8 @@
 import json
 
 from odoo import api, fields, models
-from odoo.tools import float_is_zero, float_compare
+from odoo.addons.queue_job.job import job
+from odoo.tools import float_compare, float_is_zero
 
 
 class OfhPaymentRequest(models.Model):
@@ -414,3 +415,17 @@ class OfhPaymentRequest(models.Model):
         records = self.filtered(
             lambda r: r.matching_status == 'unmatched')
         return records.write({'matching_status': 'not_applicable'})
+
+    @api.multi
+    def action_update_orders_from_hub(self):
+        for rec in self:
+            rec.with_delay().action_update_hub_data()
+
+    @job(default_channel='root.hub')
+    @api.multi
+    def action_update_hub_data(self):
+        self.ensure_one()
+        return self.hub_bind_ids.import_record(
+            backend=self.hub_bind_ids.backend_id,
+            external_id=self.hub_bind_ids.external_id,
+            force=True)

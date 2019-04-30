@@ -15,6 +15,11 @@
                             class="btn-primary"
                             attrs="{'invisible': [('order_reference', '=', False)]}"
                             type="object"/>
+                    <button name="action_update_hub_data"
+                            string="Update from HUB"
+                            class="btn-warning"
+                            attrs="{'invisible': [('order_reference', '=', False)]}"
+                            type="object"/>
                 </header>
                 <sheet>
                     <field name="currency_id" invisible="1"/>
@@ -164,6 +169,18 @@
         <field name="code">
 if records:
     records.action_matching_status_not_appilicable()
+        </field>
+    </record>
+
+    <!-- Force resync data from hub. -->
+    <record model="ir.actions.server" id="ofh_payment_request_import_records">
+        <field name="name">Update from HUB</field>
+        <field name="model_id" ref="model_ofh_payment_request"/>
+        <field name = "binding_model_id" ref = "model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_update_orders_from_hub()
         </field>
     </record>
 
