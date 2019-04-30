@@ -16,10 +16,10 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self).ticket_number(record)
-        segment_id = record.get('Ticket No.')
-        if not segment_id:
+        ticket_number = record.get('Ticket No.')
+        if not ticket_number:
             return {}
-        return {'ticket_number': segment_id}
+        return {'ticket_number': ticket_number}
 
     @mapping
     def invoice_type(self, record):
@@ -65,7 +65,7 @@ class SupplierInvoiceLineMapper(Component):
         passeng = record.get('PAX Name')
         if not passeng:
             return {}
-        return {'passenger': passeng}\
+        return {'passenger': passeng}
 
     @mapping
     def total(self, record):
@@ -104,31 +104,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_itl.itl_import_backend')
         if self.backend_record != itl_backend:
             return super(SupplierInvoiceLineMapper, self).locator(record)
-        return {'locator': "/"}
-
-    @mapping
-    def gds_fee_amount(self, record):
-        itl_backend = self.env.ref(
-            'ofh_supplier_invoice_itl.itl_import_backend')
-        if self.backend_record != itl_backend:
-            return {}
-        return {'gds_fee_amount': float(record.get('S/F'))}
-
-    @mapping
-    def gds_base_fare_amount(self, record):
-        itl_backend = self.env.ref(
-            'ofh_supplier_invoice_itl.itl_import_backend')
-        if self.backend_record != itl_backend:
-            return {}
-        return {'gds_base_fare_amount': float(record.get('Fare'))}
-
-    @mapping
-    def gds_tax_amount(self, record):
-        itl_backend = self.env.ref(
-            'ofh_supplier_invoice_itl.itl_import_backend')
-        if self.backend_record != itl_backend:
-            return {}
-        return {'gds_tax_amount': float(record.get('Tax'))}
+        return {'locator': record.get("Document No.")}
 
     @mapping
     def order_reference(self, record):
