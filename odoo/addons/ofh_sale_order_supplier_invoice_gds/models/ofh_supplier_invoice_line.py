@@ -1,7 +1,10 @@
 # Copyright 2019 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from datetime import datetime
+
 from odoo import api, fields, models
+from odoo.addons.queue_job.job import job
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -126,3 +129,31 @@ class OfhSupplierInvoiceLine(models.Model):
             '|',
             ('supplier_reference', 'like', self.locator),
             ('vendor_reference', 'like', self.locator)]
+
+    @api.multi
+    def action_gds_record_locator(self):
+        lines = self.filtered(
+            lambda l: l.invoice_type == 'gds'
+            and l.matching_status == 'unmatched')
+        return super(
+            OfhSupplierInvoiceLine, lines).action_gds_record_locator()
+
+    @job(default_channel='root.import')
+    @api.multi
+    def gds_retrieve_pnr(self):
+        self.ensure_one()
+        super(OfhSupplierInvoiceLine, self).gds_retrieve_pnr()
+        if not self.order_reference:
+            return
+
+        tajawal_date = datetime.strptime(
+            f'201{self.order_reference[1:6]}', '%Y%m%d')
+
+        # A Ticket will be unusable after one year of the purchase.
+        if (datetime.now() - tajawal_date).days > 363:
+            self.write({
+                'matching_status': 'unused_ticket',
+                'reconciliation_status': 'not_applicable',
+            })
+        else:
+            self.match_with_sale_order()

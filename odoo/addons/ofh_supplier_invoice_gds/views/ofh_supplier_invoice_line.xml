@@ -11,7 +11,7 @@
         <field name="arch" type="xml">
             <header position="inside">
                 <button name="gds_retrieve_pnr"
-                        string="Retrieve PNR"
+                        string="Retrieve Tajawal ID"
                         class="btn-primary"
                         type="object"
                         attrs="{'invisible': [('invoice_type', '!=', 'gds')]}"/>
@@ -65,7 +65,7 @@
     </record>
 
     <record model="ir.actions.server" id="ofh_supplier_invoice_gds_record_locator">
-        <field name="name">Retrieve PNR</field>
+        <field name="name">Retrieve Tajawal ID</field>
         <field name="model_id" ref="ofh_supplier_invoice.model_ofh_supplier_invoice_line"/>
         <field name = "binding_model_id" ref = "ofh_supplier_invoice.model_ofh_supplier_invoice_line"/>
         <field name="state">code</field>

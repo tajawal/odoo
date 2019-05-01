@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_form_view">
+        <field name="name">ofh.supplier.invoice.line.form (in ofh_sale_order_supplier_invoice_gds)</field>
+        <field name="model">ofh.supplier.invoice.line</field>
+        <field name="inherit_id" ref="ofh_supplier_invoice_gds.ofh_supplier_invoice_line_form_view"/>
+        <field name="arch" type="xml">
+            <button name="gds_retrieve_pnr" position="attributes">
+                <attribute name="attrs">
+                    {'invisible': [('invoice_type', '!=', 'gds'), ('matching_status', '!=', 'unmatched')]}
+                </attribute>
+            </button>
+        </field>
+    </record>
+
+</odoo>

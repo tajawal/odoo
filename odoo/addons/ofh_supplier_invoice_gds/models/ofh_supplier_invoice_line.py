@@ -123,7 +123,7 @@ class OfhSupplierInvoiceLine(models.Model):
             line.with_delay().gds_retrieve_pnr()
 
     @api.multi
-    @job(default_channel='root.hub')
+    @job(default_channel='root.import')
     def gds_retrieve_pnr(self):
         self.ensure_one()
         backend = self.env['hub.backend'].search([], limit=1)
