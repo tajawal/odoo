@@ -223,6 +223,12 @@ class OfhPaymentRequest(models.Model):
         track_visibility='always',
         oldname='reconciliation_status',
     )
+    not_applicable_flag = fields.Char(
+        string="Not applicable flag",
+        index=True,
+        readonly=True,
+        track_visibility='onchange',
+    )
     state = fields.Selection(
         string='Next Action',
         selection=[
@@ -409,12 +415,6 @@ class OfhPaymentRequest(models.Model):
             "url": hub_url,
             "target": "new",
         }
-
-    @api.multi
-    def action_matching_status_not_appilicable(self):
-        records = self.filtered(
-            lambda r: r.matching_status == 'unmatched')
-        return records.write({'matching_status': 'not_applicable'})
 
     @api.multi
     def action_update_orders_from_hub(self):

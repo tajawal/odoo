@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_form_view">
+        <field name="name">ofh.payment.request.form (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
+        <field name="arch" type="xml">
+            <field name="not_applicable_flag" position="after">
+                <field name="reconciliation_status"/>
+                <field name="reconciliation_tag"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_search_view">
+        <field name="name">ofh.payment.request.search (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_search_view"/>
+        <field name="arch" type="xml">
+            <filter name="supplier_not_applicable_status" position="after">
+                <separator/>
+                <filter name="reconciled_status" string="Reconciled"
+                        domain="[('reconciliation_status', '=', 'reconciled')]"/>
+                <filter name="unreconciled_status" string="Unreconciled"
+                        domain="[('reconciliation_status', '=', 'unreconciled')]"/>
+                <filter name="reconciliation_not_applicable_status" string="Not Applicable"
+                        domain="[('reconciliation_status', '=', 'not_applicable')]"/>
+            </filter>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_request_tree_view">
+        <field name="name">ofh.payment.request.tree (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="matching_status" position="after">
+                <field name="reconciliation_status"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

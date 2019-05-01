@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_not_applicable_form_view">
+        <field name="name">ofh.payment.request.not_applicable.form (in ofh_payment_request_supplier_invoice)</field>
+        <field name="model">ofh.payment.request.not_applicable</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="payment_request_ids" invisible="1"/>
+                    <field name="not_applicable_flag"/>
+                </group>
+                <footer>
+                    <button name="action_matching_status_not_applicable"
+                            string="Save"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_not_applicable_act_window">
+        <field name="name">Mark as Not Applicable</field>
+        <field name="res_model">ofh.payment.request.not_applicable</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="ofh_payment_request_not_applicable_form_view"/>
+        <field name="binding_model_id" ref="model_ofh_payment_request"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

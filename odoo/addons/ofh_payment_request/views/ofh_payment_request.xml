@@ -43,6 +43,7 @@
                         <field name="created_at"/>
                         <field name="updated_at"/>
                         <field name="matching_status"/>
+                        <field name="not_applicable_flag"/>
                     </group>
                     <notebook>
                         <page name="order_details" string="Sale Details">
@@ -157,18 +158,6 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="matching_status"/>
             </tree>
-        </field>
-    </record>
-
-    <!-- Mark Payment request as not applicable -->
-    <record model="ir.actions.server" id="ofh_payment_request_mark_not_applicable">
-        <field name="name">Mark as Not Applicable</field>
-        <field name="model_id" ref="model_ofh_payment_request"/>
-        <field name = "binding_model_id" ref = "model_ofh_payment_request"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_matching_status_not_appilicable()
         </field>
     </record>
 
