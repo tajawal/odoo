@@ -313,15 +313,9 @@ class OfhSaleOrderLine(models.Model):
         readonly=True,
         track_visibility='onchange',
     )
-    not_applicable_flag = fields.Selection(
+    not_applicable_flag = fields.Char(
         string="Not applicable flag",
-        selection=[
-            ('none', 'N/A'),
-            ('low_fare', 'Low Fare'),
-            ('tajawal_fee', 'Tajawal Fee')],
         index=True,
-        default='none',
-        required=True,
         readonly=True,
         track_visibility='onchange',
     )

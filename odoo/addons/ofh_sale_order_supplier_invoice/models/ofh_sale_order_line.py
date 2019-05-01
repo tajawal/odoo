@@ -1,7 +1,7 @@
 # Copyright 2019 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 
 class OfhSaleOrderLine(models.Model):
@@ -23,6 +23,7 @@ class OfhSaleOrderLine(models.Model):
         selection=[
             ('reconciled', 'Reconciled'),
             ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
         ],
         default='unreconciled',
         required=True,
@@ -30,20 +31,13 @@ class OfhSaleOrderLine(models.Model):
         readonly=True,
         track_visibility='onchange',
     )
-    reconciliation_tag = fields.Selection(
-        string="Deal/Loss",
-        selection=[
-            ('deal', 'DEAL'),
-            ('loss', 'LOSS'),
-            ('none', 'N/A')],
-        compute='_compute_reconciliation_tag',
-        default='none',
+    reconciliation_tag = fields.Char(
+        string="Reconciliation Tag",
         readonly=True,
-        store=False,
     )
     reconciliation_amount = fields.Monetary(
         string="Deal/Loss Amount",
-        compute='_compute_reconciliation_tag',
+        compute='_compute_reconciliation_amount',
         currency_field='supplier_currency_id',
         readonly=True,
         store=False,
@@ -63,6 +57,20 @@ class OfhSaleOrderLine(models.Model):
                     rec.supplier_currency_id.name)
 
     @api.multi
-    def _compute_reconciliation_tag(self):
+    def _compute_reconciliation_amount(self):
         for rec in self:
             pass
+
+    @api.multi
+    def action_matching_status_not_applicable(self, not_applicable_flag):
+        self.write({
+            'matching_status': 'not_applicable',
+            'reconciliation_status': 'not_applicable',
+            'not_applicable_flag': not_applicable_flag,
+        })
+        invoice_lines = self.mapped('invoice_line_ids')
+        if invoice_lines:
+            invoice_lines.write({
+                'matching_status': 'unmatched',
+                'order_line_id': False,
+            })

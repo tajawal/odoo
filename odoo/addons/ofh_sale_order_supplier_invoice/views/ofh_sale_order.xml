@@ -10,6 +10,10 @@
         <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
+                <button name="%(ofh_sale_order_not_applicable_act_window)d"
+                        string="Mark Initial Booking as Not Applicable"
+                        help="Mark sale order lines as not applicable."
+                        type="action"/>
                  <button name="action_open_invoice_lines_with_pnr"
                         string="Open Invoices"
                         help="Open invoices that match the same supplier references in the order."

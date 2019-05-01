@@ -77,3 +77,10 @@ class OfhSaleOrder(models.Model):
     def _compute_payment_request_reconciliation_status(self):
         for rec in self:
             pass
+
+    @api.multi
+    def action_initial_booking_not_applicable(self, not_applicable_flag):
+        for rec in self:
+            if rec.line_ids:
+                rec.line_ids.action_matching_status_not_applicable(
+                    not_applicable_flag=not_applicable_flag)
