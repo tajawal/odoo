@@ -12,4 +12,5 @@ class SupplierInvoiceLineHandler(Component):
         Match a new created record with existing
         sale order and sale order line.
         """
-        odoo_record.match_with_sale_order()
+        if odoo_record.active:
+            odoo_record.match_with_sale_order()

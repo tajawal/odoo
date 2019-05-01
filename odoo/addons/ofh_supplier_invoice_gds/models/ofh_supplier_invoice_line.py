@@ -1,10 +1,12 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
 from datetime import datetime, timedelta
-from odoo.addons.queue_job.job import job
+
+from odoo import api, fields, models
 from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
+from odoo.addons.queue_job.job import job
+from odoo.tools.float_utils import float_is_zero
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -134,3 +136,14 @@ class OfhSupplierInvoiceLine(models.Model):
 
         self.order_reference = hub_api.gds_retrieve_pnr(
             office_id=self.office_id, locator=self.locator)
+
+    @api.model
+    def create(self, vals):
+        record = super(OfhSupplierInvoiceLine, self).create(vals)
+        if record.invoice_type == 'gds':
+            if float_is_zero(
+                    record.total,
+                    precision_rounding=record.currency_id.rounding) or \
+                    not record.locator:
+                record.active = False
+        return record
