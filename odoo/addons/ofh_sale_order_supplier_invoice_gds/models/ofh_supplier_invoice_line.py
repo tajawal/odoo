@@ -65,7 +65,8 @@ class OfhSupplierInvoiceLine(models.Model):
             if day_diff > 2:
                 continue
 
-            if self.ticket_number in line.line_reference:
+            if self.ticket_number in line.line_reference or \
+                    self.ticket_number in line.manual_line_reference:
                 line.write({
                     'invoice_line_ids': [(4, self.id)],
                     'matching_status': 'matched',

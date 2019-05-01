@@ -196,7 +196,6 @@ class OfhSaleOrder(models.Model):
         string="Lines",
         comodel_name='ofh.sale.order.line',
         inverse_name='order_id',
-        readonly=True,
     )
     vendor_reference = fields.Char(
         string='Vendor Reference',
@@ -301,18 +300,39 @@ class OfhSaleOrder(models.Model):
     )
 
     @api.multi
-    @api.depends('line_ids.vendor_confirmation_number')
+    @api.depends(
+        'line_ids.vendor_confirmation_number',
+        'line_ids.manual_vendor_confirmation_number')
     def _compute_vendor_reference(self):
         for rec in self:
-            rec.vendor_reference = ', '.join(
-                set([r.vendor_confirmation_number for r in rec.line_ids]))
+            vendor_reference = []
+            rec.vendor_reference = ''
+            for line in rec.line_ids:
+                if line.manual_vendor_confirmation_number:
+                    vendor_reference.append(
+                        line.manual_vendor_confirmation_number)
+                else:
+                    vendor_reference.append(line.vendor_confirmation_number)
+            if vendor_reference:
+                rec.vendor_reference = ', '.join(set(vendor_reference))
 
     @api.multi
-    @api.depends('line_ids.supplier_confirmation_number')
+    @api.depends(
+        'line_ids.supplier_confirmation_number',
+        'line_ids.manual_supplier_confirmation_number')
     def _compute_supplier_reference(self):
         for rec in self:
-            rec.supplier_reference = ', '.join(
-                set([r.supplier_confirmation_number for r in rec.line_ids]))
+            supplier_reference = []
+            rec.supplier_reference = ''
+            for line in rec.line_ids:
+                if line.manual_supplier_confirmation_number:
+                    supplier_reference.append(
+                        line.manual_supplier_confirmation_number)
+                else:
+                    supplier_reference.append(
+                        line.supplier_confirmation_number)
+            if supplier_reference:
+                rec.supplier_reference = ', '.join(set(supplier_reference))
 
     @api.multi
     @api.depends('line_ids.office_id')

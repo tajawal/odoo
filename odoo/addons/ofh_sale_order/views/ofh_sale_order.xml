@@ -121,7 +121,7 @@
         <field name="name">ofh.sale.order.tree (in ofh_sale_order)</field>
         <field name="model">ofh.sale.order</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree delete="0">
                 <field name="entity"/>
                 <field name="name"/>
                 <field name="updated_at"/>

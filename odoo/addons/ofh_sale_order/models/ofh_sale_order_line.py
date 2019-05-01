@@ -74,6 +74,13 @@ class OfhSaleOrderLine(models.Model):
         string="Vendor Confirmation Number",
         required=True,
         readonly=True,
+        index=True,
+        track_visibility='onchange',
+    )
+    manual_vendor_confirmation_number = fields.Char(
+        string="Manual Vendor Confirmation Number",
+        index=True,
+        readonly=False,
         track_visibility='onchange',
     )
     vendor_name = fields.Char(
@@ -109,6 +116,13 @@ class OfhSaleOrderLine(models.Model):
         string="Supplier Confirmation Number",
         required=True,
         readonly=True,
+        index=True,
+        track_visibility='onchange',
+    )
+    manual_supplier_confirmation_number = fields.Char(
+        string="Manual Supplier Confirmation Number",
+        index=True,
+        readonly=False,
         track_visibility='onchange',
     )
     supplier_name = fields.Char(
@@ -170,6 +184,12 @@ class OfhSaleOrderLine(models.Model):
         string="Ticket/Segment",
         readonly=True,
         index=True,
+        track_visibility='onchange',
+    )
+    manual_line_reference = fields.Char(
+        string="Manual Ticket/Segment",
+        indext=True,
+        readonly=False,
         track_visibility='onchange',
     )
     tickets = fields.Char(

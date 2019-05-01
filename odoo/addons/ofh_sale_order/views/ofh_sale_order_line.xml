@@ -27,7 +27,8 @@
                            attrs="{'invisible': [('line_type', '!=', 'flight')]}">
                         <field name="traveller"/>
                         <field name="traveller_type"/>
-                        <field name="line_reference" string="Ticket"/>
+                        <field name="line_reference"/>
+                        <field name="manual_line_reference"/>
                         <field name="booking_class"/>
                         <field name="office_id"/>
                         <field name="ticketing_office_id"/>
@@ -68,16 +69,18 @@
                         </page>
                         <page name="cost_details" string="Cost Details">
                             <group name="vendor_detail" string="Vendor" col="4">
-                                <field name="vendor_name"/>
                                 <field name="vendor_confirmation_number"/>
+                                <field name="manual_vendor_confirmation_number"/>
+                                <field name="vendor_name"/>
                                 <field name="vendor_cost_amount" widget="monetary"/>
                                 <field name="vendor_base_fare_amount" widget="monetary"/>
                                 <field name="vendor_input_tax_amount" widget="monetary"/>
                                 <field name="vendor_currency_id"/>
                             </group>
                             <group name="supplier_detail" string="Supplier" col="4">
-                                <field name="supplier_name"/>
                                 <field name="supplier_confirmation_number"/>
+                                <field name="manual_supplier_confirmation_number"/>
+                                <field name="supplier_name"/>
                                 <field name="supplier_cost_amount" widget="monetary"/>
                                 <field name="supplier_base_fare_amount" widget="monetary"/>
                                 <field name="supplier_input_tax_amount" widget="monetary"/>
@@ -96,7 +99,7 @@
         <field name="name">ofh.sale.order.line.tree (in ofh_sale_order)</field>
         <field name="model">ofh.sale.order.line</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree delete="0">
                 <field name="name" invisible="1"/>
                 <field name="order_id" invisible="1"/>
                 <field name="currency_id" invisible="1"/>
