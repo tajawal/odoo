@@ -146,4 +146,17 @@
         <field name="sequence" eval="60"/>
     </record>
 
+    <record model="ir.ui.menu" id="ofh_action_sale_order_main_menu">
+        <field name="name">Actions</field>
+        <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_run_matching_menu">
+        <field name="name">Invoices Matching</field>
+        <field name="parent_id" ref="ofh_action_sale_order_main_menu"/>
+        <field name="action" ref="ofh_supplier_invoice_run_matching_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
 </odoo>

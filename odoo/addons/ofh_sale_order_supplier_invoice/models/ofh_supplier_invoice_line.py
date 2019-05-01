@@ -102,26 +102,6 @@ class OfhSupplierInvoiceLine(models.Model):
         else:
             raise MissingError(_("Method not implemented."))
 
-    @api.model
-    def _get_pending_invoice_lines(self, min_date=''):
-        """Return invoice lines record set that hasn't matched yet
-        :param min_date: minimum invoice line date to start a search from.
-        :param min_date: str, optional
-        :return: ofh.supplier.invoice.line record set
-        :rtype: ofh.supplier.invoice.line()
-        """
-        domain = [('state', 'in', ('ready', 'investigate'))]
-        if min_date:
-            domain.append(('invoice_date', '>=', min_date))
-        return self.search(domain)
-
-    @api.model
-    @job(default_channel='root')
-    def match_supplier_invoice_lines(self):
-        invoice_lines = self._get_pending_invoice_lines()
-        for line in invoice_lines:
-            line.with_delay().match_with_sale_order()
-
     @api.multi
     def action_unused_tickets_invoice_lines(self):
         # TODO: we need more control, if one of the lines is already matched.
@@ -139,3 +119,14 @@ class OfhSupplierInvoiceLine(models.Model):
             'matching_status': 'unused_ticket',
             'reconciliation_status': 'not_applicable',
         })
+
+    @api.model
+    def _get_unmatched_invoice_lines(self):
+        return self.search([('matching_status', '=', 'unmatched')])
+
+    @api.model
+    @job(default_channel='root')
+    def match_supplier_invoice_lines(self):
+        unmatched_lines = self._get_unmatched_invoice_lines()
+        for line in unmatched_lines:
+            line.with_delay().match_with_sale_order()
