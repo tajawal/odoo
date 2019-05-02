@@ -21,7 +21,27 @@
             </header>
             <page name="costs" position="inside">
                 <group name="invoice_lines" string="Invoices">
-                    <field name="invoice_line_ids" nolabel="1"/>
+                    <field name="invoice_line_ids" nolabel="1">
+                        <tree create="0" edit="0" delete="0">
+                            <field name="order_id" invisible="1"/>
+                            <field name="invoice_type"/>
+                            <field name="invoice_date"/>
+                            <field name="invoice_status"/>
+                            <field name="ticket_number"/>
+                            <field name="locator"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="total" widget="monetary"/>
+                            <field name="gds_net_amount"/>
+                            <button name="%(ofh_supplier_invoice_force_match_act_window)d"
+                                    type="action"
+                                    string="Force match"
+                                    class="btn-success"/>
+                            <button name="action_unlink_invoice"
+                                    type="object"
+                                    class="btn-danger"
+                                    string="Unlink"/>
+                        </tree>
+                    </field>
                 </group>
             </page>
         </field>

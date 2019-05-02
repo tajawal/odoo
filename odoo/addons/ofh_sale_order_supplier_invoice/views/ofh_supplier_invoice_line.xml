@@ -20,6 +20,14 @@
                         class="btn-primary"
                         type="object"
                         attrs="{'invisible': [('invoice_type', 'not in', ('gds', 'tf', 'galileo'))]}"/>
+                <button name="%(ofh_supplier_invoice_force_match_act_window)d"
+                        type="action"
+                        string="Force match"
+                        class="btn-primary"/>
+                <button name="action_unlink_invoice"
+                        type="object"
+                        attrs="{'invisible': [('order_id', '=', False)]}"
+                        string="Unlink"/>
             </header>
             <group name="main_group" position="inside">
                 <field name="order_id"/>

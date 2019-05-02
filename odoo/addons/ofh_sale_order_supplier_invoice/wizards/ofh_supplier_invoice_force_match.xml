@@ -5,14 +5,22 @@
 <odoo>
 
     <record model="ir.ui.view" id="ofh_supplier_invoice_force_match_form_view">
-        <field name="name">ofh.supplier.invoice.force.match.form (in ofh_payment_request_invoice)</field>
+        <field name="name">ofh.supplier.invoice.force.match.form (in ofh_sale_order_supplier_invoice)</field>
         <field name="model">ofh.supplier.invoice.force.match</field>
         <field name="arch" type="xml">
             <form>
-                <group>
-                    <field name="line_id"/>
-                    <field name="current_payment_request_id"/>
-                    <field name="new_payment_request_id"/>
+                <group name="main_group">
+                    <group name="current_values">
+                        <field name="current_order_id"/>
+                        <field name="current_order_line_id"/>
+                        <field name="current_payment_request_id"/>
+                        <field name="line_id"/>
+                    </group>
+                        <group name="new_values">
+                            <field name="new_order_id"/>
+                            <field name="new_order_line_id" options="{'no_create': True}"/>
+                            <field name="new_payment_request_id" options="{'no_create': True}"/>
+                        </group>
                 </group>
                 <footer>
                     <button name="force_match"

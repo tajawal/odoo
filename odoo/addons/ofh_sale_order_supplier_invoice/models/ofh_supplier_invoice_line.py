@@ -3,7 +3,7 @@
 
 from odoo import _, api, fields, models
 from odoo.addons.queue_job.job import job
-from odoo.exceptions import MissingError
+from odoo.exceptions import MissingError, ValidationError
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -130,3 +130,61 @@ class OfhSupplierInvoiceLine(models.Model):
         unmatched_lines = self._get_unmatched_invoice_lines()
         for line in unmatched_lines:
             line.with_delay().match_with_sale_order()
+
+    @api.multi
+    def action_unlink_invoice(self):
+        for rec in self:
+            rec._unlink_invoice_line()
+
+    @api.multi
+    def _unlink_invoice_line(self):
+        self.ensure_one()
+        old_order_line = self.order_line_id
+        old_payment_request = self.payment_request_id
+
+        self.write({
+            'order_line_id': False,
+            'order_id': False,
+            'payment_request_id': False,
+        })
+
+        if old_order_line:
+            if not old_order_line.invoice_line_ids:
+                old_order_line.matching_status = 'unmatched'
+        if old_payment_request:
+            if not old_payment_request.supplier_invoice_ids:
+                old_payment_request.matching_status = 'unmatched'
+
+    def _force_match_invoice_line(
+            self, order_id=False, pr_id=False, line_id=False):
+        self.ensure_one()
+        if not order_id and not pr_id and not line_id:
+            return
+        if not order_id:
+            order_id = self.order_id
+        if pr_id and pr_id not in order_id.payment_request_ids:
+            ValidationError(
+                f"Payment request {pr_id.name} must belong to "
+                f"{order_id.name}.")
+        if line_id and line_id not in order_id.line_ids:
+            ValidationError(
+                f"Order line {line_id.name} must belong to "
+                f"{order_id.name}.")
+
+        # Remove the current link in the invoice line.
+        if self.order_id:
+            self._unlink_invoice_line()
+
+        # Link the invoice line with the new record.
+        self.order_id = order_id
+
+        if pr_id:
+            return pr_id.write({
+                'supplier_invoice_ids': [(4, self.id)],
+                'matching_status': 'matched',
+            })
+        if line_id:
+            return line_id.write({
+                'invoice_line_ids': [(4, self.id)],
+                'matching_status': 'matched',
+            })

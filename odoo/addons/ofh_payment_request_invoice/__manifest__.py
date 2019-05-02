@@ -22,7 +22,6 @@
     'data': [
         'security/ofh_supplier_invoice.xml',
         'security/connector_importer.xml',
-        'wizards/ofh_supplier_invoice_force_match.xml',
         'views/ofh_payment_request.xml',
         'views/ofh_supplier_invoice_line.xml',
     ],

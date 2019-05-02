@@ -16,6 +16,35 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_request_form_view_2">
+        <field name="name">ofh.payment.request.form.2 (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request_invoice.ofh_payment_request_form_view"/>
+        <field name="arch" type="xml">
+            <field name="supplier_invoice_ids" position="inside">
+                <tree create="0" edit="0" delete="0">
+                    <field name="order_id" invisible="1"/>
+                    <field name="invoice_type"/>
+                    <field name="invoice_date"/>
+                    <field name="invoice_status"/>
+                    <field name="ticket_number"/>
+                    <field name="locator"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="total" widget="monetary"/>
+                    <field name="gds_net_amount"/>
+                    <button name="%(ofh_supplier_invoice_force_match_act_window)d"
+                            type="action"
+                            string="Force match"
+                            class="btn-success"/>
+                    <button name="action_unlink_invoice"
+                            type="object"
+                            class="btn-danger"
+                            string="Unlink"/>
+                </tree>
+            </field>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_payment_request_search_view">
         <field name="name">ofh.payment.request.search (in ofh_sale_order_supplier_invoice)</field>
         <field name="model">ofh.payment.request</field>
