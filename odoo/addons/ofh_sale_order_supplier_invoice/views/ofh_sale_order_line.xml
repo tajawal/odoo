@@ -10,6 +10,7 @@
         <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_line_form_view"/>
         <field name="arch" type="xml">
             <group name="line_statuses" position="inside">
+                <field name="investigation_tag"/>
                 <field name="reconciliation_status"/>
                 <field name="reconciliation_tag"/>
             </group>
@@ -45,6 +46,7 @@
         <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_line_tree_view"/>
         <field name="arch" type="xml">
             <tree position="inside">
+                <field name="investigation_tag"/>
                 <field name="reconciliation_status"/>
             </tree>
         </field>

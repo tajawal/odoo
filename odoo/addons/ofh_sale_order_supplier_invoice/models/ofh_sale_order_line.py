@@ -13,6 +13,11 @@ class OfhSaleOrderLine(models.Model):
         comodel_name='ofh.supplier.invoice.line',
         inverse_name='order_line_id',
     )
+    investigation_tag = fields.Char(
+        string="Unmatched Tag",
+        index=True,
+        track_visibility='onchange',
+    )
     air_india_commission = fields.Monetary(
         string="Air India Commission",
         currency_field='supplier_currency_id',
@@ -74,3 +79,8 @@ class OfhSaleOrderLine(models.Model):
                 'matching_status': 'unmatched',
                 'order_line_id': False,
             })
+
+    @api.multi
+    def action_update_investigation_tag(self, investigation_tag):
+        return self.write({
+            'investigation_tag': investigation_tag})

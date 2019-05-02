@@ -13,6 +13,8 @@
         'ofh_payment_request_invoice',
     ],
     'data': [
+        'wizards/ofh_sale_order_line_investigation_tag.xml',
+        'wizards/ofh_supplier_invoice_line_investigation_tag.xml',
         'wizards/ofh_payment_request_not_applicable.xml',
         'wizards/ofh_sale_order_not_applicable.xml',
         'wizards/ofh_sale_order_line_not_applicable.xml',

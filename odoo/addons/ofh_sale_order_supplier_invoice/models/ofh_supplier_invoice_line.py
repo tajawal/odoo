@@ -39,6 +39,12 @@ class OfhSupplierInvoiceLine(models.Model):
         readonly=True,
         track_visibility='always',
     )
+    investigation_tag = fields.Char(
+        string="Unmatched Tag",
+        index=True,
+        readonly=False,
+        track_visibility='onchange',
+    )
     reconciliation_status = fields.Selection(
         string="Reconciliation status",
         selection=[
@@ -188,3 +194,8 @@ class OfhSupplierInvoiceLine(models.Model):
                 'invoice_line_ids': [(4, self.id)],
                 'matching_status': 'matched',
             })
+
+    @api.multi
+    def action_update_investigation_tag(self, investigation_tag):
+        return self.write({
+            'investigation_tag': investigation_tag})

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_supplier_invoice_line_investigation_tag_form_view">
+        <field name="name">ofh.supplier.invoice.line.investigation.tag.form (in ofh_sale_order_supplier_invoice)</field>
+        <field name="model">ofh.supplier.invoice.line.investigation.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="invoice_line_ids" invisible="1"/>
+                    <field name="investigation_tag"/>
+                </group>
+                <footer>
+                    <button name="action_update_investigation_tag"
+                            string="Save"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_supplier_invoice_line_investigation_tag_act_window">
+        <field name="name">Unmatched Tag</field>
+        <field name="res_model">ofh.supplier.invoice.line.investigation.tag</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="ofh_supplier_invoice_line_investigation_tag_form_view"/>
+        <field name="binding_model_id" ref="model_ofh_supplier_invoice_line"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>
