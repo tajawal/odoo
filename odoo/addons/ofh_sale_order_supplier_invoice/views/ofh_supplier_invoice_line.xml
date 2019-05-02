@@ -50,6 +50,18 @@
             <field name="ticket_number" position="after">
                 <field name="order_id"/>
                 <field name="order_line_id"/>
+                <separator/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="created_this_month" string="Created this month" domain="[('invoice_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter name="matched_with_pnr" string="Matched Only with PNR/TajawalID"
+                        domain="[('order_id', '!=', False), ('matching_status', '=', 'unmatched')]"/>
+                <filter name="matched_with_ticket" string="Matched with Ticket"
+                        domain="[('order_line_id', '!=', False)]"/>
+                <filter name="matched_with_pr" string="Matched with Payemnt Request"
+                        domain="[('payment_request_id', '!=', False)]"/>
+                <separator/>
             </field>
         </field>
     </record>
