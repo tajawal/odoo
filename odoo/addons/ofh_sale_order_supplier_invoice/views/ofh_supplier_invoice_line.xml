@@ -57,6 +57,8 @@
                 <separator/>
                 <filter name="created_this_month" string="Created this month" domain="[('invoice_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
                 <separator/>
+                <filter name="unmatched_status" string="Unmatched Lines"
+                        domain="[('order_id', '=', False), ('matching_status', '=', 'unmatched')]"/>
                 <filter name="matched_with_pnr" string="Matched Only with PNR/TajawalID"
                         domain="[('order_id', '!=', False), ('matching_status', '=', 'unmatched')]"/>
                 <filter name="matched_with_ticket" string="Matched with Ticket"
