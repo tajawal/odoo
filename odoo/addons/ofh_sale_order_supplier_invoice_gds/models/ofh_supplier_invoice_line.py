@@ -40,6 +40,10 @@ class OfhSupplierInvoiceLine(models.Model):
         order_ids = self.env['ofh.sale.order'].search(
             self._get_gds_sale_order_domain())
 
+        if not order_ids:
+            self.message_post(f"No match found.")
+            return
+
         if len(order_ids) == 1:
             self.order_id = order_ids[0]
             return
@@ -59,14 +63,19 @@ class OfhSupplierInvoiceLine(models.Model):
         from_str = fields.Date.from_string
 
         for line in self.order_id.line_ids:
+            if line.matching_status in ('matched', 'not_applicable'):
+                continue
+
             day_diff = abs((
                 from_str(line.created_at) - from_str(self.invoice_date)).days)
 
             if day_diff > 2:
                 continue
 
-            if self.ticket_number in line.line_reference or \
-                    self.ticket_number in line.manual_line_reference:
+            if (line.line_reference and
+                    self.ticket_number in line.line_reference) or \
+                    (line.manual_line_reference and
+                     self.ticket_number in line.manual_line_reference):
                 line.write({
                     'invoice_line_ids': [(4, self.id)],
                     'matching_status': 'matched',
