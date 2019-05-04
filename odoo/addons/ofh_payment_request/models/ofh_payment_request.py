@@ -221,7 +221,6 @@ class OfhPaymentRequest(models.Model):
         index=True,
         readonly=True,
         track_visibility='always',
-        oldname='reconciliation_status',
     )
     not_applicable_flag = fields.Char(
         string="Not applicable flag",

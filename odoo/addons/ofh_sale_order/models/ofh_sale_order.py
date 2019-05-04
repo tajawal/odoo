@@ -287,7 +287,7 @@ class OfhSaleOrder(models.Model):
             ('not_applicable', 'Not Applicable')],
         default='unmatched',
         compute='_compute_order_matching_status',
-        store=False,
+        store=True,
         index=True,
         readonly=True,
         track_visibility='onchange',

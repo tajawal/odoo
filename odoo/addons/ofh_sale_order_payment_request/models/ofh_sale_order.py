@@ -20,7 +20,7 @@ class OfhSaleOrder(models.Model):
             ('matched', 'Matched'),
             ('not_applicable', 'Not Applicable')],
         compute='_compute_payment_request_matching_status',
-        store=False,
+        store=True,
         index=True,
         readonly=True,
         default='unmatched',
