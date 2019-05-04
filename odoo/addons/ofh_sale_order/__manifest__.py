@@ -14,6 +14,7 @@
         'ofh_payment',
     ],
     'data': [
+        'data/cron.xml',
         'security/ofh_sale_order_line.xml',
         'views/ofh_sale_order_line.xml',
         'security/ofh_sale_order.xml',
