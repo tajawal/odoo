@@ -4,15 +4,24 @@
 
 <odoo>
 
-    <record model="ir.model.access" id="ofh_sale_order_access_name"> <!-- TODO acl id -->
-        <field name="name">ofh.sale.order access name</field> <!-- TODO acl name -->
+    <record model="ir.model.access" id="ofh_sale_order_read_access">
+        <field name="name">ofh.sale.order.read.access</field>
         <field name="model_id" ref="model_ofh_sale_order"/>
-        <!-- TODO review and adapt -->
         <field name="group_id" ref="base.group_user"/>
         <field name="perm_read" eval="1"/>
         <field name="perm_create" eval="0"/>
         <field name="perm_write" eval="0"/>
         <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record model="ir.model.access" id="ofh_sale_order_line_manager_access">
+        <field name="name">ofh.sale.order.line.manager.access</field>
+        <field name="model_id" ref="model_ofh_sale_order_line"/>
+        <field name="group_id" ref="ofh_sale_order.ofh_sale_order_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
     </record>
 
 </odoo>

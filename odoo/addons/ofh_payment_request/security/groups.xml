@@ -13,6 +13,7 @@
         <field name="name">Payment Request Manager</field>
         <field name="category_id" ref="ofh_payment_request_module_category"/>
         <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
 </odoo>
