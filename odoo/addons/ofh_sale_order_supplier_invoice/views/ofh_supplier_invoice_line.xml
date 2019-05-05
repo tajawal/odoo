@@ -37,7 +37,6 @@
                 <group name="status_group" col="4">
                     <field name="matching_status"/>
                     <field name="investigation_tag"/>
-                    <field name="reconciliation_status"/>
                 </group>
             </group>
         </field>
@@ -81,7 +80,6 @@
             <tree position="inside">
                 <field name="matching_status"/>
                 <field name="investigation_tag"/>
-                <field name="reconciliation_status"/>
             </tree>
         </field>
     </record>

@@ -16,7 +16,8 @@ class OfhPaymentRequest(models.Model):
             ('not_applicable', 'Not Applicable'),
         ],
         default='unreconciled',
-        required=True,
+        compute='_compute_reconciliation_amount',
+        store=True,
         index=True,
         readonly=True,
         track_visibility='onchange',
@@ -24,9 +25,10 @@ class OfhPaymentRequest(models.Model):
     reconciliation_tag = fields.Char(
         string="Reconciliation Tag",
         readonly=True,
+        track_visibility='onchange',
     )
     reconciliation_amount = fields.Monetary(
-        string="Deal/Loss Amount",
+        string="Reconciliation Amount",
         compute='_compute_reconciliation_amount',
         currency_field='supplier_currency_id',
         readonly=True,
@@ -46,3 +48,30 @@ class OfhPaymentRequest(models.Model):
                 'matching_status': 'unmatched',
                 'payment_request_id': False,
             })
+
+    @api.multi
+    @api.depends(
+        'estimated_cost_in_supplier_currency',
+        'supplier_total_amount', 'matching_status')
+    def _compute_reconciliation_amount(self):
+        for rec in self:
+            rec.reconciliation_amount = 0
+
+            if rec.matching_status == 'unmatched':
+                rec.reconciliation_status = 'unreconciled'
+                continue
+
+            if rec.matching_status == 'not_applicable':
+                rec.reconciliation_status = 'not_applicable'
+                continue
+
+            total_invoice = sum(
+                [l.total - l.itl_cost for l in rec.invoice_line_ids])
+
+            rec.reconciliation_amount = \
+                abs(rec.estimated_cost_in_supplier_currency - total_invoice)
+
+            if rec.reconciliation_amount <= 1:
+                rec.reconciliation_status = 'reconciled'
+            else:
+                rec.reconciliation_status = 'unreconciled'

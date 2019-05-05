@@ -11,6 +11,8 @@
         <field name="arch" type="xml">
             <group name="line_statuses" position="inside">
                 <field name="investigation_tag"/>
+                <field name="reconciliation_amount"/>
+                <field name="air_india_commission"/>
                 <field name="reconciliation_status"/>
                 <field name="reconciliation_tag"/>
             </group>

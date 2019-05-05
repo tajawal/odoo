@@ -10,6 +10,7 @@
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
             <field name="not_applicable_flag" position="after">
+                <field name="reconciliation_amount"/>
                 <field name="reconciliation_status"/>
                 <field name="reconciliation_tag"/>
             </field>

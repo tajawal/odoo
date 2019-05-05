@@ -4,6 +4,9 @@
 from odoo import api, fields, models
 
 
+AIR_INDIA = 'AI'
+
+
 class OfhSaleOrderLine(models.Model):
 
     _inherit = 'ofh.sale.order.line'
@@ -31,40 +34,59 @@ class OfhSaleOrderLine(models.Model):
             ('not_applicable', 'Not Applicable'),
         ],
         default='unreconciled',
-        required=True,
+        compute='_compute_reconciliation_amount',
         index=True,
         readonly=True,
+        store=True,
         track_visibility='onchange',
     )
     reconciliation_tag = fields.Char(
         string="Reconciliation Tag",
         readonly=True,
+        track_visibility='onchange',
     )
     reconciliation_amount = fields.Monetary(
-        string="Deal/Loss Amount",
+        string="Reconciliation Amount",
         compute='_compute_reconciliation_amount',
         currency_field='supplier_currency_id',
         readonly=True,
         store=False,
     )
 
-    @api.depends('supplier_currency_id', 'segment_count')
+    @api.depends(
+        'supplier_name', 'supplier_currency_id', 'segment_count')
     @api.multi
     def _compute_air_india_commission(self):
         commissions = {'AED': 30, 'SAR': 30, 'KWD': 2.5}
         for rec in self:
             rec.air_india_commission = 0
-            if not rec.supplier_currency_id or \
-               rec.ticketing_office_id != 'TRAVEL FUSION':
+            if rec.supplier_name != AIR_INDIA:
                 continue
-            rec.air_india_commission = \
-                rec.segment_count * commissions.get(
-                    rec.supplier_currency_id.name)
+            comm = commissions.get(rec.supplier_currency_id.code)
+            rec.air_india_commission = rec.segment_count * comm
 
     @api.multi
+    @api.depends(
+        'invoice_line_ids.total', 'air_india_commission',
+        'supplier_cost_amount', 'matching_status')
     def _compute_reconciliation_amount(self):
         for rec in self:
-            pass
+            rec.reconciliation_amount = 0
+            if rec.matching_status == 'unmatched':
+                rec.reconciliation_status = 'unreconciled'
+                continue
+            if rec.matching_status == 'not_applicable':
+                rec.reconciliation_status = 'not_applicable'
+                continue
+
+            total_invoice = sum(
+                [l.total - l.itl_cost for l in rec.invoice_line_ids])
+            supplier_cost = rec.supplier_cost_amount + rec.air_india_commission
+            rec.reconciliation_amount = supplier_cost - total_invoice
+            if abs(rec.reconciliation_amount) <= 1:
+                rec.reconciliation_status = 'reconciled'
+            else:
+                rec.reconciliation_status = 'unreconciled'
 
     @api.multi
     def action_matching_status_not_applicable(self, not_applicable_flag):
