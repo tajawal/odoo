@@ -46,10 +46,12 @@ class OfhSaleOrderLine(models.Model):
         index=True,
         track_visibility='onchange',
     )
-    line_type = fields.Char(
-        string="type",
+    line_type = fields.Selection(
+        selection=[('hotel', 'Hotel'), ('flight', 'Flight')],
+        string="Product Type",
         required=True,
         readonly=True,
+        index=True,
     )
     line_category = fields.Char(
         string="Category",

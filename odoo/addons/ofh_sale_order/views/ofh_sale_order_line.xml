@@ -99,6 +99,47 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_sale_order_line_search_view">
+        <field name="name">ofh.sale.order.line.search (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="order_id"/>
+                <field name="line_reference"
+                       filter_domain="['|', ('line_reference','ilike', self), ('manual_line_reference','ilike', self)]" string="Ticket/segment"/>
+                <field name="vendor_confirmation_number"
+                       filter_domain="
+                            ['|', '|', '|', ('vendor_confirmation_number','ilike',self),
+                            ('manual_vendor_confirmation_number','ilike', self),
+                            ('supplier_confirmation_number','ilike', self),
+                            ('manual_supplier_confirmation_number','ilike', self)]"
+                       string="Locator"/>
+                <field name="ticketing_office_id"/>
+                <field name="office_id"/>
+                <field name="supplier_name"/>
+                <separator/>
+                <filter name="tajawal" string="Tajawal" domain="[('order_id.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('order_id.entity', '=', 'almosafer')]"/>
+                <filter name="egypt" string="Egypt" domain="[('order_id.is_egypt', '=', True)]"/>
+                <separator/>
+                <filter name="updated_this_month" string="Updated This month" domain="[('updated_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_this_month" string="Created this month" domain="[('created_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter name="hotel" string="Hotel" domain="[('line_type', '=', 'hotel')]"/>
+                <filter name="flight" string="Flight" domain="[('line_type', '=', 'flight')]"/>
+                <separator/>
+                <filter name="gds_order" string="GDS Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '!=', 'TRAVEL FUSION')]"/>
+                <filter name="gds_order" string="Travel Fusion Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '=', 'TRAVEL FUSION')]"/>
+                <separator/>
+                <filter name="order_matched_status" string="Matched" domain="[('matching_status', '=', 'matched')]"/>
+                <filter name="order_unmatched_status" string="Unmatched" domain="[('matching_status', '=', 'unmatched')]"/>
+                <filter name="order_not_applicable_status" string="Not Applicable" domain="[('matching_status', '=', 'not_applicable')]"/>
+            </search>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_sale_order_line_tree_view">
         <field name="name">ofh.sale.order.line.tree (in ofh_sale_order)</field>
         <field name="model">ofh.sale.order.line</field>
