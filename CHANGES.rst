@@ -1,5 +1,9 @@
 Changes
 -------
+2.0.0 (2019-05-05)
+------------------
+* Flight booking MVP Matching and Reconciliation for all suppliers.
+
 1.5.6 (2019-04-24)
 ------------------
 * Revert Transaction Type computation. Handeled in SAP-WEB-XML.
