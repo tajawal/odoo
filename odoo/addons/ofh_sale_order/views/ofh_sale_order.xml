@@ -237,11 +237,45 @@ if records:
         <field name="context">{}</field>
     </record>
 
-    <record model="ir.ui.menu" id="ofh_sale_order_line_menu">
+    <record model="ir.actions.act_window" id="ofh_sale_order_line_almosafer_act_window">
+        <field name="name">Almosafer Lines</field>
+        <field name="res_model">ofh.sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('order_id.entity', '=', 'almosafer')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_line_tajawal_act_window">
+        <field name="name">Tajawal Lines</field>
+        <field name="res_model">ofh.sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('order_id.entity', '=', 'tajawal')]</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_line_main_menu">
         <field name="name">Sales Order lines</field>
         <field name="parent_id" ref="ofh_sale_order_main_menu"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_line_all_menu">
+        <field name="name">All Lines</field>
+        <field name="parent_id" ref="ofh_sale_order_line_main_menu"/>
         <field name="action" ref="ofh_sale_order_line_act_window"/>
         <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_line_almosafer_menu">
+        <field name="name">Almosafer Lines</field>
+        <field name="parent_id" ref="ofh_sale_order_line_main_menu"/>
+        <field name="action" ref="ofh_sale_order_line_almosafer_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_line_tajawal_menu">
+        <field name="name">Tajawal Lines</field>
+        <field name="parent_id" ref="ofh_sale_order_line_main_menu"/>
+        <field name="action" ref="ofh_sale_order_line_tajawal_act_window"/>
+        <field name="sequence" eval="30"/>
     </record>
 
 </odoo>
