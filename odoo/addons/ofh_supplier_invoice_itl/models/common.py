@@ -115,6 +115,14 @@ class SupplierInvoiceLineMapper(Component):
                 .order_reference(record)
         return {'order_reference': record.get('LPO No.')}
 
+    @mapping
+    def itl_cost(self, record):
+        itl_backend = self.env.ref(
+            'ofh_supplier_invoice_itl.itl_import_backend')
+        if self.backend_record != itl_backend:
+            return {}
+        return {'itl_cost': record.get('S/F')}
+
 
 class SupplierInvoiceLineHandler(Component):
     _inherit = 'supplier.invoice.line.handler'

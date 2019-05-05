@@ -11,6 +11,11 @@ class OfhSupplierInvoiceLine(models.Model):
     invoice_type = fields.Selection(
         selection_add=[('itl', 'ITL')],
     )
+    itl_cost = fields.Monetary(
+        string="ITL Cost",
+        currency_field='currency_id',
+        readonly=True,
+    )
 
     @api.multi
     def _itl_compute_name(self):
