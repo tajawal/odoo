@@ -47,7 +47,26 @@
                                 <field name="supplier_reference"/>
                             </group>
                             <group name="sale_lines">
-                                <field name="line_ids" nolabel="1"/>
+                                <field name="line_ids" nolabel="1">
+                                    <tree delete="0" create="0">
+                                        <field name="name" invisible="1"/>
+                                        <field name="order_id" invisible="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="supplier_currency_id" invisible="1"/>
+                                        <field name="vendor_currency_id" invisible="1"/>
+                                        <field name="line_type"/>
+                                        <field name="line_reference"/>
+                                        <field name="vendor_name"/>
+                                        <field name="supplier_name"/>
+                                        <field name="vendor_cost_amount" widget="monetary" sum="Total"/>
+                                        <field name="supplier_cost_amount" widget="monetary" sum="Total"/>
+                                        <field name="service_fee_amount" widget="monetary" sum="Total"/>
+                                        <field name="discount_amount" widget="monetary" sum="Total"/>
+                                        <field name="tax_amount" widget="monetary" sum="Total"/>
+                                        <field name="total_amount" widget="monetary" sum="Total"/>
+                                        <field name="matching_status"/>
+                                    </tree>
+                                </field>
                             </group>
                             <group col="4" name="sale_totals" string="Sales Totals">
                                 <field name="lines_total_service_fee" widget="monetary"/>

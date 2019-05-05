@@ -13,8 +13,8 @@
                 </header>
                 <sheet>
                     <group name="general_info" col="4">
+                        <field name="order_id"/>
                         <field name="name"/>
-                        <field name="sequence"/>
                         <field name="created_at"/>
                         <field name="updated_at"/>
                         <field name="line_type"/>
@@ -105,7 +105,7 @@
         <field name="arch" type="xml">
             <tree delete="0">
                 <field name="name" invisible="1"/>
-                <field name="order_id" invisible="1"/>
+                <field name="order_id"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="supplier_currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>
