@@ -22,6 +22,7 @@ hub_api_password=$hub_api_password
 config_api_url=$config_api_url
 config_api_username=$config_api_username
 config_api_password=$config_api_password
+oms_finance_api_url=http://finance-oms-api:5000/
 
 [sap_xml_api]
 sap_xml_api_url=$sap_xml_api_url
