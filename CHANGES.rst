@@ -1,5 +1,13 @@
 Changes
 -------
+2.0.2 (2019-05-05)
+------------------
+* Remove readonly from sale order sync date.
+
+2.0.1 (2019-05-05)
+------------------
+* OMS-FINANCE-API URL for live server.
+
 2.0.0 (2019-05-05)
 ------------------
 * Flight booking MVP Matching and Reconciliation for all suppliers.
