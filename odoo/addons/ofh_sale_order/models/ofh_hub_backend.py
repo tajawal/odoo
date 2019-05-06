@@ -9,7 +9,6 @@ class HubBackend(models.Model):
 
     import_sale_order_from_date = fields.Datetime(
         string="Import Sale order from date",
-        readonly=True,
     )
 
     @api.model
