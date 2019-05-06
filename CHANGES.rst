@@ -1,5 +1,9 @@
 Changes
 -------
+2.0.5 (2019-05-06)
+------------------
+* Bug fixes.
+
 2.0.2 (2019-05-05)
 ------------------
 * Remove readonly from sale order sync date.
