@@ -144,4 +144,31 @@
         <field name="sequence" eval="10"/>
     </record>
 
+    <record id="action_invoice_supplier_queue_job" model="ir.actions.act_window">
+        <field name="name">Jobs</field>
+        <field name="res_model">queue.job</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending': 1, 'search_default_enqueued': 1, 'search_default_started': 1, 'search_default_failed': 1}
+        </field>
+        <field name="domain">['|', ('model_name', '=', 'import.record'), ('model_name', '=', 'import.recordset')]</field>
+        <field name="view_id" ref="queue_job.view_queue_job_tree"/>
+        <field name="search_view_id" ref="queue_job.view_queue_job_search"/>
+    </record>
+
+    <record model="ir.ui.menu" id="queue_job_main_menu">
+        <field name="name">Background Jobs</field>
+        <field name="parent_id" ref="ofh_supplier_invoice_main_menu"/>
+        <field name="sequence" eval="90"/>
+    </record>
+
+    <record model="ir.ui.menu" id="sale_order_queue_job_menu">
+        <field name="name">Import Jobs</field>
+        <field name="parent_id" ref="queue_job_main_menu"/>
+        <field name="action" ref="action_invoice_supplier_queue_job"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+
 </odoo>
