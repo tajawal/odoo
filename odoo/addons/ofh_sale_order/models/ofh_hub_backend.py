@@ -13,7 +13,6 @@ class HubBackend(models.Model):
 
     @api.model
     def import_sale_orders(self):
-        self.ensure_one()
         backend = self.search([], limit=1)
         backend._import_from_date(
             'hub.sale.order', 'import_sale_order_from_date')
