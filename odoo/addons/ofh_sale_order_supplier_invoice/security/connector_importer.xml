@@ -14,6 +14,16 @@
         <field name="perm_unlink" eval="1"/>
     </record>
 
+    <record model="ir.model.access" id="ofh_sale_order_manager_import_source_command_cryptic_access">
+        <field name="name">ofh.sale.order.manager.import.source.command_cryptic.access</field>
+        <field name="model_id" ref="ofh_supplier_invoice_gds.model_import_source_command_cryptic"/>
+        <field name="group_id" ref="ofh_sale_order.ofh_sale_order_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
     <record model="ir.model.access" id="ofh_sale_order_manager_import_recordset_access">
         <field name="name">ofh.sale.order.manager.import.recordset.access</field>
         <field name="model_id" ref="connector_importer.model_import_recordset"/>
