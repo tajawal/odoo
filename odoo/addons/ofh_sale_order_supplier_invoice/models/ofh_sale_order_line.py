@@ -67,8 +67,8 @@ class OfhSaleOrderLine(models.Model):
 
     @api.multi
     @api.depends(
-        'invoice_line_ids.total', 'air_india_commission',
-        'supplier_cost_amount', 'matching_status')
+        'invoice_line_ids.total', 'invoice_line_ids.itl_cost',
+        'air_india_commission', 'supplier_cost_amount', 'matching_status')
     def _compute_reconciliation_amount(self):
         for rec in self:
             rec.reconciliation_amount = 0

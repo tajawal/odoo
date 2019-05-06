@@ -51,8 +51,8 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     @api.depends(
-        'estimated_cost_in_supplier_currency',
-        'supplier_total_amount', 'matching_status')
+        'estimated_cost_in_supplier_currency', 'matching_status',
+        'supplier_invoice_ids.total', 'supplier_invoice_ids.itl_cost')
     def _compute_reconciliation_amount(self):
         for rec in self:
             rec.reconciliation_amount = 0
@@ -66,7 +66,7 @@ class OfhPaymentRequest(models.Model):
                 continue
 
             total_invoice = sum(
-                [l.total - l.itl_cost for l in rec.invoice_line_ids])
+                [l.total - l.itl_cost for l in rec.supplier_invoice_ids])
 
             rec.reconciliation_amount = \
                 abs(rec.estimated_cost_in_supplier_currency - total_invoice)
