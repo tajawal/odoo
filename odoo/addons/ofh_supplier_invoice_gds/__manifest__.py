@@ -15,6 +15,7 @@
         'ofh_hub_connector',
     ],
     'data': [
+        'data/cron.xml',
         'wizards/ofh_gds_daily_report.xml',
         'data/backend.xml',
         'data/ofh_gds_office.xml',
