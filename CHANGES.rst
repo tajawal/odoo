@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.1 (2019-05-07)
+------------------
+* Reconciliation Tag for unreconciled entries.
+
 2.1.0 (2019-05-07)
 ------------------
 * Report Generator for GDS daily report.
