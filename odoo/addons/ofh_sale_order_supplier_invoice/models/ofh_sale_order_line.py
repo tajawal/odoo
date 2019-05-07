@@ -106,3 +106,10 @@ class OfhSaleOrderLine(models.Model):
     def action_update_investigation_tag(self, investigation_tag):
         return self.write({
             'investigation_tag': investigation_tag})
+
+    @api.multi
+    def action_update_reconciliation_tag(self, reconciliation_tag):
+        return self.write({
+            'reconciliation_tag': reconciliation_tag,
+            'reconciliation_status': 'reconciled',
+        })
