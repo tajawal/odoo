@@ -1,5 +1,9 @@
 Changes
 -------
+2.0.7 (2019-05-07)
+------------------
+* Add cron job for GDS daily report.
+
 2.0.6 (2019-05-06)
 ------------------
 * Queue Jobs menus.
