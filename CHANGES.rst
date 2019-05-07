@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.0 (2019-05-07)
+------------------
+* Report Generator for GDS daily report.
+
 2.0.7 (2019-05-07)
 ------------------
 * Add cron job for GDS daily report.
