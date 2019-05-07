@@ -10,6 +10,7 @@ class SourceCommandCryptic(models.Model):
     _inherit = 'import.source'
     _description = 'Command Cryptic import source'
     _source_type = 'command_cryptic'
+    _reporter_model = 'reporter.command_cryptic'
 
     office_id = fields.Char(
         string="Office ID",
