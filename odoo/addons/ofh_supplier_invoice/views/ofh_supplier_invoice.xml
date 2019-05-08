@@ -73,7 +73,6 @@
         <field name="arch" type="xml">
             <pivot>
                 <field name="invoice_status" type="row"/>
-                <field name="locator" type="row"/>
                 <field name="total" type="measure"/>
             </pivot>
         </field>
