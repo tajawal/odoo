@@ -42,6 +42,20 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_sale_order_line_search_view">
+        <field name="name">ofh.sale.order.line.search (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order.line</field>
+        <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_line_search_view"/>
+        <field name="arch" type="xml">
+            <filter name="order_not_applicable_status" position="after">
+                <separator/>
+                <filter name="order_reconciled_status" string="Reconciled" domain="[('reconciliation_status', '=', 'reconciled')]"/>
+                <filter name="order_unreconciled_status" string="Unreconciled" domain="[('reconciliation_status', '=', 'unreconciled')]"/>
+                <filter name="order_na_reconciliation_status" string="Not Applicable" domain="[('reconciliation_status', '=', 'not_applicable')]"/>
+            </filter>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_sale_order_line_tree_view">
         <field name="name">ofh.sale.order.line.tree (in ofh_sale_order_supplier_invoice)</field>
         <field name="model">ofh.sale.order.line</field>

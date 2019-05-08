@@ -232,7 +232,7 @@ if records:
     <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">
         <field name="name">Sales Order Lines</field>
         <field name="res_model">ofh.sale.order.line</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>

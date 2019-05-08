@@ -56,9 +56,11 @@
                 <separator/>
                 <filter name="order_reconciled_status" string="Order Reconciled" domain="[('order_reconciliation_status', '=', 'reconciled')]"/>
                 <filter name="order_unreconciled_status" string="Order Unreconciled" domain="[('order_reconciliation_status', '=', 'unreconciled')]"/>
+                <filter name="order_na_reco_status" string="Order Not Applicable" domain="[('order_reconciliation_status', '=', 'not_applicable')]"/>
                 <separator/>
                 <filter name="payment_request_reconciled_status" string="Payment Request Reconciled" domain="[('payment_request_reconciliation_status', '=', 'reconciled')]"/>
                 <filter name="payment_request_unreconciled_status" string="Payment Request Unreconciled" domain="[('payment_request_reconciliation_status', '=', 'unreconciled')]"/>
+                <filter name="pr_na_reco_status" string="Payment Request N/A" domain="[('payment_request_reconciliation_status', '=', 'not_applicable')]"/>
             </search>
         </field>
     </record>

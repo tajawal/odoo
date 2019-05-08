@@ -140,6 +140,17 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_sale_order_line_pivot_view">
+        <field name="name">ofh.sale.order.line.pivot (in ofh_sale_order)</field>
+        <field name="model">ofh.sale.order.line</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="matching_status" type="row"/>
+                <field name="total_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_sale_order_line_tree_view">
         <field name="name">ofh.sale.order.line.tree (in ofh_sale_order)</field>
         <field name="model">ofh.sale.order.line</field>
