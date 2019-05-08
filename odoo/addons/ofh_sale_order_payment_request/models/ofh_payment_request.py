@@ -64,7 +64,7 @@ class OfhPaymentRequest(models.Model):
     )
     order_supplier_currency_id = fields.Many2one(
         string="Supplier Currency",
-        related='order_id.supplier_currency_id',
+        compute='_compute_estimated_cost',
         comodel_name='res.currency',
     )
     order_supplier_cost = fields.Monetary(
@@ -134,11 +134,20 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @api.depends(
         'insurance', 'fare_difference', 'penalty',
-        'order_supplier_currency_id', 'currency_id')
+        'order_id.supplier_currency_id', 'order_id.vendor_currency_id',
+        'currency_id')
     def _compute_estimated_cost(self):
         res = super(OfhPaymentRequest, self)._compute_estimated_cost()
         for rec in self:
             rec.estimated_cost_in_supplier_currency = 0.0
+            if not rec.order_id:
+                continue
+            if rec.order_id.supplier_currency_id:
+                rec.order_supplier_currency_id = \
+                    rec.order_id.supplier_currency_id
+            else:
+                rec.order_supplier_currency_id = \
+                    rec.order_id.vendor_currency_id
             if not rec.order_supplier_currency_id:
                 continue
             rec.estimated_cost_in_supplier_currency = \
