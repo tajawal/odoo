@@ -2,6 +2,11 @@ Changes
 -------
 2.1.1 (2019-05-07)
 ------------------
+* Fix Estimated cost in supplier currency calculation in Payment Request.
+* Reconciliation Filter for Order Lines and pivot view.
+
+2.1.1 (2019-05-07)
+------------------
 * Reconciliation Tag for unreconciled entries.
 
 2.1.0 (2019-05-07)
