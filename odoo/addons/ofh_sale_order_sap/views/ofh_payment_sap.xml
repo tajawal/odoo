@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record model="ir.ui.view" id="ofh_payment_sap_form_view">
+        <field name="name">ofh.payment.sap.form (in ofh_payment_sap)</field>
+        <field name="model">ofh.payment.sap</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="header_text"/>
+                        </h1>
+                    </div>
+                    <group name="header" col="4" string="SAP Payment Details">
+                        <field name="system"/>
+                        <field name="transaction"/>
+                        <field name="company_code"/>
+                        <field name="document_date"/>
+                        <field name="header_text"/>
+                        <field name="reference"/>
+                        <field name="currency"/>
+                        <field name="account1"/>
+                        <field name="account2"/>
+                        <field name="amount1"/>
+                        <field name="amount2"/>
+                        <field name="bank_charge"/>
+                        <field name="splgl"/>
+                        <field name="sales_office"/>
+                        <field name="material"/>
+                        <field name="reference_key1"/>
+                        <field name="reference_key2"/>
+                        <field name="reference_key3"/>
+                        <field name="assignment"/>
+                        <field name="line_item_text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_sap_tree_view">
+        <field name="name">ofh.payment.sap.tree (in ofh_payment_sap)</field>
+        <field name="model">ofh.payment.sap</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="system"/>
+                <field name="transaction"/>
+                <field name="company_code"/>
+                <field name="header_text"/>
+                <field name="reference"/>
+                <field name="currency"/>
+                <field name="reference_key1"/>
+                <field name="reference_key2"/>
+                <field name="reference_key3"/>
+                <field name="assignment"/>
+                <field name="line_item_text"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

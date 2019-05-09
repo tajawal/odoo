@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo noupdate="1">
+    <record id="ofh_payment_sap_2" model="ofh.payment.sap">
+        <field name="send_date">2019-01-06</field>
+        <field name="sap_sale_order_id">1</field>
+        <field name="sap_payment_detail">{
+            "system": "ONLINE",
+            "transaction": "RV_CARD",
+            "company_code": "2003",
+            "document_date": "20180705",
+            "header_text": "A8070519384_5260620",
+            "reference": "0064",
+            "currency": "AED",
+            "account1": "7001622",
+            "account2": "",
+            "amount1": "-1735.00",
+            "amount2": "1700.30",
+            "bank_charge": "34.70",
+            "splgl": "",
+            "sales_office": "TUU1",
+            "material": "10",
+            "reference_key1": "800957",
+            "reference_key2": "GF-",
+            "reference_key3": "301805",
+            "assignment": "23bc37b05260620",
+            "line_item_text": "Avgoula Panagi"
+            }
+        </field>
+        <field name="payment_detail">{
+            "provider": "checkoutcom"
+            }
+        </field>
+    </record>
+
+</odoo>

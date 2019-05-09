@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo noupdate="1">
+    <record id="ofh_sale_order_sap_1" model="ofh.sale.order.sap">
+        <field name="send_date">2019-01-06</field>
+        <field name="sap_status">pending</field>
+        <field name="integration_status">not_sent</field>
+        <field name="update">Insert</field>
+        <field name="sale_order_id">1</field>
+        <field name="order_detail">{
+            "name": "SaleOrder1",
+            "track_id": "pr-A90212009052-1551261525547",
+            "order_type": "flight",
+            "entity": "almosafer",
+            "order_status": "58",
+            "point_of_sale": "almosfer.ae",
+            "payment_status": "79",
+            "paid_at": "2019-01-08",
+            "store_id": "1",
+            "group_id": "2",
+            "currency_id": 154,
+            "supplier_currency_id": 154,
+            "total_supplier_cost": 789,
+            "vendor_reference": "AQWKLE",
+            "supplier_reference": "QSSEFD"
+            }
+        </field>
+        <field name="sap_header_detail">{
+            "system_id": "ONLINE",
+            "sales_type": "ZOR",
+            "collection_mode": "2",
+            "booking_entity": "1009",
+            "booking_number": "A90212009052",
+            "sales_office": "TUU1",
+            "channel": "20",
+            "customer": "7001622",
+            "file_id": "23bc37b05260620",
+            "booking_date": "20180705",
+            "fe_indicator": "ONL",
+            "invoice_currency": "AED",
+            "tapro_invoice_number": "A90212009052"
+            }
+        </field>
+    </record>
+
+    <record id="ofh_sale_order_sap_2" model="ofh.sale.order.sap">
+        <field name="send_date">2018-01-06</field>
+        <field name="sap_status">pending</field>
+        <field name="integration_status">not_sent</field>
+        <field name="update">Update</field>
+        <field name="sale_order_id">2</field>
+        <field name="order_detail">{
+            "name": "SaleOrder1",
+            "track_id": "pr-A8938293283-32454545",
+            "order_type": "flight",
+            "entity": "tajawal",
+            "order_status": "58",
+            "point_of_sale": "tajawal.ae",
+            "payment_status": "79",
+            "paid_at": "2018-01-08",
+            "store_id": "1",
+            "group_id": "2",
+            "currency_id": 154,
+            "supplier_currency_id": 154,
+            "total_supplier_cost": 2132,
+            "vendor_reference": "DSDEE",
+            "supplier_reference": "EFECX"
+            }
+        </field>
+        <field name="sap_header_detail">{
+            "system_id": "ONLINE",
+            "sales_type": "ZOR",
+            "collection_mode": "2",
+            "booking_entity": "2003",
+            "booking_number": "A8938293283",
+            "sales_office": "TUU1",
+            "channel": "20",
+            "customer": "7001622",
+            "file_id": "23bc37b05260620",
+            "booking_date": "20180719",
+            "fe_indicator": "ONL",
+            "invoice_currency": "AED",
+            "tapro_invoice_number": "A8938293283"
+            }
+        </field>
+    </record>
+</odoo>

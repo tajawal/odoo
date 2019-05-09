@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record model="ir.ui.view" id="ofh_sale_order_sap_form_view">
+        <field name="name">ofh.sale.order.sap.form (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.sale.order.sap</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group name="header" col="4" string="SAP Header">
+                        <field name="system_id"/>
+                        <field name="sales_type"/>
+                        <field name="collection_mode"/>
+                        <field name="booking_entity"/>
+                        <field name="booking_number"/>
+                        <field name="sales_office"/>
+                        <field name="channel"/>
+                        <field name="customer"/>
+                        <field name="file_id"/>
+                        <field name="booking_date"/>
+                        <field name="fe_indicator"/>
+                        <field name="invoice_currency"/>
+                        <field name="tapro_invoice_number"/>
+                    </group>
+                    <notebook>
+                        <page name="sale_lines" string="SAP Lines">
+                            <group name="sale_lines">
+                                <field name="sap_sale_order_line_ids" nolabel="1">
+                                    <tree delete="0" create="0">
+                                        <field name="booking_line_item_number"/>
+                                        <field name="booking_line_item_flag"/>
+                                        <field name="line_type"/>
+                                        <field name="line_reference"/>
+                                        <field name="plant"/>
+                                        <field name="vendor"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page name="sale_payments" string="SAP Payments">
+                            <group name="sale_payments">
+                                <field name="sap_payment_ids" nolabel="1">
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_sale_order_sap_tree_view">
+        <field name="name">ofh.sale.order.sap.tree (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.sale.order.sap</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="entity"/>
+                <field name="name"/>
+                <field name="order_type"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="supplier_currency_id" invisible="1"/>
+                <field name="order_status"/>
+                <field name="payment_status"/>
+                <field name="sap_status"/>
+                <field name="integration_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_sap_act_window">
+        <field name="name">Sales Orders SAP</field>
+        <field name="res_model">ofh.sale.order.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_sap_almosafer_act_window">
+        <field name="name">Sales Orders SAP</field>
+        <field name="res_model">ofh.sale.order.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('entity', '=', 'almosafer')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_sap_tajawal_act_window">
+        <field name="name">Sales Orders SAP</field>
+        <field name="res_model">ofh.sale.order.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('entity', '=', 'tajawal')]</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_main_menu">
+        <field name="name">Sales Orders SAP</field>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_menu">
+        <field name="name">Sales Orders SAP</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_main_menu"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_all_menu">
+        <field name="name">All Sales Orders SAP</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="ofh_sale_order_sap_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_almosafer_menu">
+        <field name="name">Almosafer Sales Orders SAP</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="ofh_sale_order_sap_almosafer_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_tajawal_menu">
+        <field name="name">Tajawal Sales Orders SAP</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="ofh_sale_order_sap_tajawal_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_sap_line_act_window">
+        <field name="name">Sales Order Lines SAP</field>
+        <field name="res_model">ofh.sale.order.line.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_line_menu">
+        <field name="name">Sales Order lines SAP</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_main_menu"/>
+        <field name="action" ref="ofh_sale_order_sap_line_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+</odoo>

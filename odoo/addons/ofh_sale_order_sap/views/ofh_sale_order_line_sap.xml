@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record model="ir.ui.view" id="ofh_sale_order_line_sap_form_view">
+        <field name="name">ofh.sale.order.line.sap.form (in ofh_sale_order_line_sap)</field>
+        <field name="model">ofh.sale.order.line.sap</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                     <group name="item_general" string="Item General" col="4">
+                                <field name="booking_line_item_flag"/>
+                                <field name="booking_line_item_number"/>
+                                <field name="line_item_billing_block"/>
+                                <field name="segment"/>
+                                <field name="service_item"/>
+                                <field name="qty"/>
+                                <field name="billing_date"/>
+                                <field name="plant"/>
+                                <field name="vat_tax_code"/>
+                                <field name="airline_code"/>
+                                <field name="iata_number"/>
+                                <field name="domestic_international"/>
+                                <field name="vendor"/>
+                                <field name="vendor2"/>
+                                <field name="travel_order_number"/>
+                                <field name="ticket_number"/>
+                                <field name="pnr"/>
+                                <field name="gds_code"/>
+                                <field name="lcc_ind"/>
+                                <field name="vendor_confirmation"/>
+                                <field name="segment_count"/>
+                                <field name="custom1"/>
+                                <field name="pax_name"/>
+                            </group>
+                    <notebook>
+                        <page name="item_characteristics" string="Item Characteristics">
+                            <group name="item_characteristics" col="4">
+                                <field name="z_airline_code"/>
+                                <field name="z_fare_class"/>
+                                <field name="z_booking_type"/>
+                                <field name="z_booking_class"/>
+                                <field name="z_last_leg_flying_date"/>
+                                <field name="z_paxname"/>
+                                <field name="z_vendor"/>
+                                <field name="z_destination_city"/>
+                                <field name="z_locator"/>
+                                <field name="z_tkt_status"/>
+                                <field name="z_owner_id"/>
+                                <field name="z_departure_date"/>
+                                <field name="z_route"/>
+                                <field name="z_iata"/>
+                                <field name="z_number_of_pax"/>
+                            </group>
+                        </page>
+                         <page name="item_conditions" string="Item Conditions">
+                            <group name="item_conditions" col="4">
+                                <field name="zsel"/>
+                                <field name="zvd1"/>
+                                <field name="zvnr"/>
+                                <field name="zvt1"/>
+                                <field name="zgds"/>
+                                <field name="zdis"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>
