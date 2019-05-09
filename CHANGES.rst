@@ -1,10 +1,14 @@
 Changes
 -------
-2.1.2 (2019-05-08)
+2.1.4 (2019-05-08)
+------------------
+* Revert migration script.
+
+2.1.3 (2019-05-08)
 ------------------
 * Fix reconciliation statuses in sale order.
 
-2.1.1 (2019-05-07)
+2.1.2 (2019-05-07)
 ------------------
 * Fix Estimated cost in supplier currency calculation in Payment Request.
 * Reconciliation Filter for Order Lines and pivot view.
