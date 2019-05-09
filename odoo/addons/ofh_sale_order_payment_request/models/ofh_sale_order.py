@@ -32,11 +32,11 @@ class OfhSaleOrder(models.Model):
     def _compute_payment_request_matching_status(self):
         for rec in self:
             if all([l.matching_status == 'not_applicable'
-                    for l in rec.line_ids]):
+                    for l in rec.payment_request_ids]):
                 rec.payment_request_matching_status = 'not_applicable'
                 continue
             if all([l.matching_status in ('matched', 'not_applicable')
-                    for l in rec.line_ids]):
+                    for l in rec.payment_request_ids]):
                 rec.payment_request_matching_status = 'matched'
                 continue
             rec.payment_request_matching_status = 'unmatched'

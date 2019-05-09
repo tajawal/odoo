@@ -23,6 +23,7 @@ class OfhSaleOrder(models.Model):
         selection=[
             ('reconciled', 'Reconciled'),
             ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
         ],
         compute='_compute_order_reconciliation_status',
         default='unreconciled',
@@ -31,10 +32,11 @@ class OfhSaleOrder(models.Model):
         index=True,
     )
     payment_request_reconciliation_status = fields.Selection(
-        string="Payment Request Reconciliation Status",
+        string="PR Reconciliation Status",
         selection=[
             ('reconciled', 'Reconciled'),
             ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
         ],
         compute='_compute_payment_request_reconciliation_status',
         default='unreconciled',
@@ -69,14 +71,32 @@ class OfhSaleOrder(models.Model):
         }
 
     @api.multi
+    @api.depends('line_ids.reconciliation_status')
     def _compute_order_reconciliation_status(self):
         for rec in self:
-            pass
+            if all([l.reconciliation_status == 'not_applicable'
+                    for l in rec.line_ids]):
+                rec.order_reconciliation_status = 'not_applicable'
+                continue
+            if all([l.reconciliation_status in ('reconciled', 'not_applicable')
+                    for l in rec.line_ids]):
+                rec.order_reconciliation_status = 'reconciled'
+                continue
+            rec.order_reconciliation_status = 'unreconciled'
 
     @api.multi
+    @api.depends('payment_request_ids.reconciliation_status')
     def _compute_payment_request_reconciliation_status(self):
         for rec in self:
-            pass
+            if all([l.reconciliation_status == 'not_applicable'
+                    for l in rec.payment_request_ids]):
+                rec.payment_request_reconciliation_status = 'not_applicable'
+                continue
+            if all([l.reconciliation_status in ('reconciled', 'not_applicable')
+                    for l in rec.payment_request_ids]):
+                rec.payment_request_reconciliation_status = 'reconciled'
+                continue
+            rec.payment_request_reconciliation_status = 'unreconciled'
 
     @api.multi
     def action_initial_booking_not_applicable(self, not_applicable_flag):
