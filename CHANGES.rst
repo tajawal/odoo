@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.2 (2019-05-08)
+------------------
+* Fix reconciliation statuses in sale order.
+
 2.1.1 (2019-05-07)
 ------------------
 * Fix Estimated cost in supplier currency calculation in Payment Request.
