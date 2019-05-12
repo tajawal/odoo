@@ -37,6 +37,9 @@
                         <field name="employee_discount_tag"/>
                         <field name="customer_discount_tag"/>
                         <field name="point_of_sale"/>
+                        <field name="ahs_group_name"/>
+                        <field name="country_code"/>
+                        <field name="booking_method"/>
                     </group>
                     <notebook>
                         <page name="sale_lines" string="Lines">

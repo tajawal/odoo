@@ -4,6 +4,7 @@ from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 
 from odoo import fields
+import json
 
 
 class HubSaleOrderImportMapper(Component):
@@ -19,6 +20,9 @@ class HubSaleOrderImportMapper(Component):
         ('is_egypt', 'is_egypt'),
         ('employee_discount_tag', 'employee_discount_tag'),
         ('customer_discount_tag', 'customer_discount_tag'),
+        ('ahs_group_name', 'ahs_group_name'),
+        ('country_code', 'country_code'),
+        ('booking_method', 'booking_method'),
         ('point_of_sale', 'point_of_sale'),
         ('store_id', 'store_id'),
         ('group_id', 'group_id'),
@@ -511,6 +515,13 @@ class HubSaleOrderLineImportMapper(Component):
         if 'traveller' in record:
             return {
                 'route': record['traveller'].get('route', '')}
+        return {}
+
+    @mapping
+    def segments(self, record):
+        if 'traveller' in record:
+            return {
+                'segments': json.dumps(record['traveller'].get('segments', ''))}
         return {}
 
 

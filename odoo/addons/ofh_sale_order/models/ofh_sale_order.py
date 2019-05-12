@@ -113,6 +113,18 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         default=False,
     )
+    ahs_group_name = fields.Char(
+        string="AHS Group Name",
+        readonly=True,
+    )
+    country_code = fields.Char(
+        string="Country Code",
+        readonly=True,
+    )
+    booking_method = fields.Char(
+        string="Booking Method",
+        readonly=True,
+    )
     point_of_sale = fields.Char(
         string="Point Of Sale",
         readonly=True,
