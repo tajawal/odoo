@@ -1,4 +1,5 @@
 FROM vaibhavjain882/odoo-base:1
+RUN apt-get update -y
 RUN apt-get install -y postgresql-client
 RUN mkdir -p /opt/finance_hub/src
 RUN mv /tmp/odoo /opt/finance_hub/src/odoo
