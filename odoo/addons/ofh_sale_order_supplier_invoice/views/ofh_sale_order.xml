@@ -32,6 +32,8 @@
                             <field name="currency_id" invisible="1"/>
                             <field name="total" widget="monetary"/>
                             <field name="gds_net_amount"/>
+                            <field name="matching_status"/>
+                            <field name="reconciliation_status"/>
                             <button name="%(ofh_supplier_invoice_force_match_act_window)d"
                                     type="action"
                                     string="Force match"

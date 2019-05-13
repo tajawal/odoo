@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.osv import expression
 
 
 class OfhSaleOrderLine(models.Model):
@@ -9,7 +10,6 @@ class OfhSaleOrderLine(models.Model):
     _name = 'ofh.sale.order.line'
     _description = 'Ofh Sale Order Line'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _rec_name = 'line_reference'
 
     @api.model
     def _get_order_status_selection(self):
@@ -347,3 +347,31 @@ class OfhSaleOrderLine(models.Model):
     def _compute_tickets(self):
         for rec in self:
             pass
+
+    @api.multi
+    @api.depends('line_reference', 'traveller', 'name')
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.line_reference:
+                result.append((rec.id, rec.line_reference))
+                continue
+            if rec.traveller:
+                result.append((rec.id, rec.traveller))
+                continue
+            if rec.name:
+                result.append((rec.id, rec.name))
+                continue
+        return result
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        args = args or []
+        connector = '|'
+        if operator in expression.NEGATIVE_TERM_OPERATORS:
+            connector = '&'
+        recs = self.search([connector, connector,
+                            ('line_reference', operator, name),
+                            ('traveller', operator, name),
+                            ('name', operator, name)] + args, limit=limit)
+        return recs.name_get()
