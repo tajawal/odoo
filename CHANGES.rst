@@ -1,5 +1,12 @@
 Changes
 -------
+2.1.7 (2019-05-13)
+------------------
+* Fix sale order line name for TF and GDS without tickets.
+* Fix sending payment request to SAP.
+* Display matching and reconciliation statuses for invoice lines in Sale and
+Payment request objects.
+
 2.1.5 (2019-05-13)
 ------------------
 * Constraint on Invoice Lines Dates.
