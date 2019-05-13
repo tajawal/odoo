@@ -491,7 +491,7 @@ class OfhPaymentRequest(models.Model):
             fields.Datetime.from_string(
                 self.updated_at), '%Y%m%d')
         payload = {
-            'orderId': self.order_id,
+            'orderId': self.order_id.hub_bind_ids[0].external_id,
             'trackId': self.track_id,
             'source': source,
             'requestType': 'refund_order' if
@@ -589,7 +589,7 @@ class OfhPaymentRequest(models.Model):
         """Return the payment payload to send to SAP-XML-API."""
         self.ensure_one()
         payload = {
-            'orderId': self.order_id,
+            'orderId': self.order_id.hub_bind_ids[0].external_id,
             'trackId': self.track_id,
             'source': source,
             'requestType': 'refund_doc' if
