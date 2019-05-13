@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
+from odoo.exceptions import ValidationError
 
 
 class TestSupplierInvoiceLineGds(TransactionCase):
@@ -41,3 +42,38 @@ class TestSupplierInvoiceLineGds(TransactionCase):
 
         # Invoice line 3
         self.assertEquals(self.invoice_line_3.name, 'gds_2678745993RFND')
+
+    def test_gds_invoice_date_constraint_fail(self):
+
+        with self.assertRaises(ValidationError):
+            self.env['ofh.supplier.invoice.line'].create({
+                'name': 'test_gds_invoice_date_constraint_fail',
+                'ticket_number': "dshkdhsdsk",
+                'invoice_date': "9/8/2019",
+                'fees': "",
+                'invoice_status': "TKTT",
+                'passenger': "Mr Junaid",
+                'office_id': "RUHAA2136",
+                'locator': "1234354",
+                'vendor_id': "098",
+                'total': "3000",
+                'invoice_type': "gds",
+                'currency_id': self.env.ref('base.SAR').id,
+            })
+
+    def test_gds_invoice_date_constraint_success(self):
+
+        self.env['ofh.supplier.invoice.line'].create({
+            'name': 'test_gds_invoice_date_constraint_success',
+            'ticket_number': "324534676765",
+            'invoice_date': "3/11/2019",
+            'fees': "",
+            'invoice_status': "TKTT",
+            'passenger': "Mr Azam",
+            'office_id': "RUHAA4345",
+            'locator': "56787654",
+            'vendor_id': "090",
+            'total': "230",
+            'invoice_type': "gds",
+            'currency_id': self.env.ref('base.AED').id,
+        })

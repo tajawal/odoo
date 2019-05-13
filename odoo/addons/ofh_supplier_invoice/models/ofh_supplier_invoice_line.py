@@ -4,6 +4,7 @@
 
 from odoo import api, fields, models, _
 import json
+from odoo.exceptions import ValidationError
 
 
 class OfhSupplierInvoiceLine(models.Model):
@@ -98,6 +99,13 @@ class OfhSupplierInvoiceLine(models.Model):
         ('unique_invoice_line', 'unique(name)',
          _("This line has been uploaded"))
     ]
+
+    @api.multi
+    @api.constrains('invoice_date')
+    def _check_invoice_date(self):
+        for rec in self:
+            if rec.invoice_date >= fields.Datetime.now():
+                raise ValidationError(_("Invalid date. Please provide date lesser than today."))
 
     @api.multi
     @api.depends('ticket_number', 'invoice_status', 'passenger',
