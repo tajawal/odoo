@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.5 (2019-05-13)
+------------------
+* Constraint on Invoice Lines Dates.
+
 2.1.4 (2019-05-08)
 ------------------
 * Revert migration script.
