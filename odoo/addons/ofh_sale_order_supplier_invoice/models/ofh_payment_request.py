@@ -75,3 +75,10 @@ class OfhPaymentRequest(models.Model):
                 rec.reconciliation_status = 'reconciled'
             else:
                 rec.reconciliation_status = 'unreconciled'
+
+    @api.multi
+    def action_update_reconciliation_tag(self, reconciliation_tag):
+        return self.write({
+            'reconciliation_tag': reconciliation_tag,
+            'reconciliation_status': 'reconciled',
+        })
