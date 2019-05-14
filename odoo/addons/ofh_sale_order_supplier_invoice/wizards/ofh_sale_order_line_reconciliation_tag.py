@@ -25,7 +25,7 @@ class OfhSaleOrderLineReconciliationTag(models.TransientModel):
 
     line_ids = fields.Many2many(
         comodel_name='ofh.sale.order.line',
-        relation='ofh_sale_order_line_investigation_rel',
+        relation='ofh_sale_order_line_reconciliation_rel',
         column1='wizard_id',
         column2='line_id',
         default=_get_default_line_ids,
