@@ -1,5 +1,10 @@
 Changes
 -------
+2.1.8 (2019-05-14)
+------------------
+* Fix reconciliation tag for sale order.
+* Add reconciliation tag for payment request.
+
 2.1.7 (2019-05-13)
 ------------------
 * Fix sale order line name for TF and GDS without tickets.
