@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.9 (2019-05-15)
+------------------
+* Fix Order/Payment Request reconciliation statuses.
+
 2.1.8 (2019-05-14)
 ------------------
 * Fix reconciliation tag for sale order.
