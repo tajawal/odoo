@@ -24,7 +24,6 @@ class OfhPaymentRequest(models.Model):
     )
     reconciliation_tag = fields.Char(
         string="Reconciliation Tag",
-        readonly=False,
         track_visibility='onchange',
     )
     reconciliation_amount = fields.Monetary(

@@ -42,7 +42,6 @@ class OfhSaleOrderLine(models.Model):
     )
     reconciliation_tag = fields.Char(
         string="Reconciliation Tag",
-        readonly=True,
         track_visibility='onchange',
     )
     reconciliation_amount = fields.Monetary(
