@@ -68,7 +68,8 @@ class OfhSaleOrderLine(models.Model):
     @api.multi
     @api.depends(
         'invoice_line_ids.total', 'invoice_line_ids.itl_cost',
-        'air_india_commission', 'supplier_cost_amount', 'matching_status')
+        'air_india_commission', 'supplier_cost_amount', 'matching_status',
+        'reconciliation_tag')
     def _compute_reconciliation_amount(self):
         for rec in self:
             rec.reconciliation_amount = 0
@@ -83,6 +84,11 @@ class OfhSaleOrderLine(models.Model):
                 [l.total - l.itl_cost for l in rec.invoice_line_ids])
             supplier_cost = rec.supplier_cost_amount + rec.air_india_commission
             rec.reconciliation_amount = supplier_cost - total_invoice
+
+            if rec.reconciliation_tag:
+                rec.reconciliation_status = 'reconciled'
+                continue
+
             if abs(rec.reconciliation_amount) <= 1:
                 rec.reconciliation_status = 'reconciled'
             else:

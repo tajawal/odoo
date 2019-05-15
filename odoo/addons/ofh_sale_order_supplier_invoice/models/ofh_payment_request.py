@@ -24,7 +24,7 @@ class OfhPaymentRequest(models.Model):
     )
     reconciliation_tag = fields.Char(
         string="Reconciliation Tag",
-        readonly=True,
+        readonly=False,
         track_visibility='onchange',
     )
     reconciliation_amount = fields.Monetary(
@@ -52,7 +52,8 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @api.depends(
         'estimated_cost_in_supplier_currency', 'matching_status',
-        'supplier_invoice_ids.total', 'supplier_invoice_ids.itl_cost')
+        'supplier_invoice_ids.total', 'supplier_invoice_ids.itl_cost',
+        'reconciliation_tag')
     def _compute_reconciliation_amount(self):
         for rec in self:
             rec.reconciliation_amount = 0
@@ -65,11 +66,15 @@ class OfhPaymentRequest(models.Model):
                 rec.reconciliation_status = 'not_applicable'
                 continue
 
-            total_invoice = sum(
-                [l.total - l.itl_cost for l in rec.supplier_invoice_ids])
+            total_invoice = abs(sum(
+                [l.total - l.itl_cost for l in rec.supplier_invoice_ids]))
 
             rec.reconciliation_amount = \
                 abs(rec.estimated_cost_in_supplier_currency - total_invoice)
+
+            if rec.reconciliation_tag:
+                rec.reconciliation_status = 'reconciled'
+                continue
 
             if rec.reconciliation_amount <= 1:
                 rec.reconciliation_status = 'reconciled'

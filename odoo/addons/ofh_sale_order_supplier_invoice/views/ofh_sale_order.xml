@@ -19,6 +19,9 @@
                         help="Open invoices that match the same supplier references in the order."
                         type="object"/>
             </header>
+            <xpath expr="//field[@name='line_ids']/tree" position="inside">
+                <field name="reconciliation_status"/>
+            </xpath>
             <page name="costs" position="inside">
                 <group name="invoice_lines" string="Invoices">
                     <field name="invoice_line_ids" nolabel="1">
@@ -56,7 +59,6 @@
         <field name="arch" type="xml">
             <tree position="inside">
                 <field name="order_reconciliation_status"/>
-                <field name="payment_request_reconciliation_status"/>
             </tree>
         </field>
     </record>
