@@ -31,6 +31,7 @@ class HubPaymentImportMapper(Component):
         ('source', 'source'),
         ('reference_id', 'reference_id'),
         ('is_3d_secure', 'is_3d_secure'),
+        ('is_installment', 'is_installment'),
         ('id', 'external_id'),
     ]
 

@@ -103,6 +103,10 @@ class OfhPayment(models.Model):
         string="Is 3d Secure",
         readonly=True,
     )
+    is_installment = fields.Boolean(
+        string="Is Installment",
+        readonly=True,
+    )
     hub_bind_ids = fields.One2many(
         comodel_name='hub.payment',
         inverse_name='odoo_id',

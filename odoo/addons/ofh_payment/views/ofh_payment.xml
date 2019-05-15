@@ -31,6 +31,7 @@
                         <field name="mid"/>
                         <field name="reference_id"/>
                         <field name="is_3d_secure"/>
+                        <field name="is_installment"/>
                         <field name="bank_name"/>
                         <field name="source"/>
                         <field name="total_amount" widget="monetary"/>
