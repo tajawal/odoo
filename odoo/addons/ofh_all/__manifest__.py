@@ -32,6 +32,8 @@
         # Infra modules
         'logging_json',
         'monitoring_status',
+        # OCA/Connector
+        'base_import_async',
     ],
     'data': [
     ],
