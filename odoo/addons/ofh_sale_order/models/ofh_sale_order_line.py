@@ -238,6 +238,10 @@ class OfhSaleOrderLine(models.Model):
         string="AHS Group Name",
         readonly=True,
     )
+    validating_carrier = fields.Char(
+        string="Validating Carrier",
+        readonly=True,
+    )
     # Segment details
     contract = fields.Char(
         string="Contract",

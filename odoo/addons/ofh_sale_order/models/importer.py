@@ -112,6 +112,7 @@ class HubSaleOrderLineImportMapper(Component):
         ('product_id', 'name'),
         ('is_domestic_ksa', 'is_domestic_ksa'),
         ('ahs_group_name', 'ahs_group_name'),
+        ('validating_carrier', 'validating_carrier'),
         ('line_id', 'external_id'),
     ]
 
