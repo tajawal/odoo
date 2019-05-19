@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.13(2019-05-19)
+------------------
+* Allow users to select invoices by date and supplier to rerun the mathcing.
+
 2.1.12(2019-05-19)
 ------------------
 * Mass Edit using background jobs.
