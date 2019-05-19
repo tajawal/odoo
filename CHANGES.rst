@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.12(2019-05-19)
+------------------
+* Mass Edit using background jobs.
+
 2.1.9 (2019-05-15)
 ------------------
 * Fix Order/Payment Request reconciliation statuses.

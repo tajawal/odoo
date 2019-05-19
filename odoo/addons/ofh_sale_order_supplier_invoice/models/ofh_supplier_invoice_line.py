@@ -127,13 +127,22 @@ class OfhSupplierInvoiceLine(models.Model):
         })
 
     @api.model
-    def _get_unmatched_invoice_lines(self):
-        return self.search([('matching_status', '=', 'unmatched')])
+    def _get_unmatched_invoice_lines(
+            self, date_from=False, date_to=False, invoice_type=False):
+        domain = [('matching_status', '=', 'unmatched')]
+        if invoice_type:
+            domain.append(('invoice_type', '=', invoice_type))
+        if date_from:
+            domain.append(('invoice_date', '>=', date_from))
+        if date_to:
+            domain.append(('invoice_date', '<=', date_to))
+        return self.search(domain)
 
     @api.model
     @job(default_channel='root')
-    def match_supplier_invoice_lines(self):
-        unmatched_lines = self._get_unmatched_invoice_lines()
+    def match_supplier_invoice_lines(self, date_from, date_to, invoice_type):
+        unmatched_lines = self._get_unmatched_invoice_lines(
+            date_from, date_to, invoice_type)
         for line in unmatched_lines:
             line.with_delay().match_with_sale_order()
 
