@@ -9,13 +9,16 @@ class OfhSupplierInvoiceRunMatching(models.TransientModel):
     _name = 'ofh.supplier.invoice.run.matching'
 
     date_from = fields.Date(
-        string="Date From"
+        string="Date From",
+        required=True,
     )
     date_to = fields.Date(
-        string="Date To"
+        string="Date To",
+        required=True,
     )
     invoice_type = fields.Selection(
         string="Invoice Type",
+        required=True,
         selection=[
             ('gds', 'Gds'),
             ('nile', 'Nile'),
