@@ -1,6 +1,6 @@
 Changes
 -------
-2.1.13(2019-05-19)
+2.1.14(2019-05-19)
 ------------------
 * Allow users to select invoices by date and supplier to rerun the mathcing.
 
