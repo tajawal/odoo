@@ -1,5 +1,9 @@
 Changes
 -------
+2.1.15 (2019-05-22)
+-------------------
+* Allow users to mass edit tajwal ID in supplier invoice lines.
+
 2.1.14(2019-05-19)
 ------------------
 * Allow users to select invoices by date and supplier to rerun the mathcing.
