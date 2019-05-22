@@ -92,7 +92,6 @@ class OfhSupplierInvoiceLine(models.Model):
 
     order_reference = fields.Char(
         string="Tajawal ID",
-        readonly=True,
     )
 
     _sql_constraints = [

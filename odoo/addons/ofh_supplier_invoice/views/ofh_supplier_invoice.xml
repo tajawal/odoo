@@ -8,7 +8,7 @@
         <field name="name">ofh.supplier.invoice.line.form (in ofh_supplier_invoice_line)</field>
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="arch" type="xml">
-            <form create="0" edit="0" delete="0">
+            <form create="0" delete="0">
                 <header>
                 </header>
                 <sheet>
@@ -53,7 +53,7 @@
         <field name="name">ofh.supplier.invoice.line.tree (in ofh_supplier_invoice_line)</field>
         <field name="model">ofh.supplier.invoice.line</field>
         <field name="arch" type="xml">
-            <tree create="0" edit="0" delete="0">
+            <tree delete="0">
                 <field name="name"/>
                 <field name="office_id"/>
                 <field name="invoice_type"/>

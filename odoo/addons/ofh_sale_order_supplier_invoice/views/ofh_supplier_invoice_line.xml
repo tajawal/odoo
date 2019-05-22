@@ -35,7 +35,7 @@
             </group>
             <group name="main_group" position="after">
                 <group name="status_group" col="4">
-                    <field name="matching_status"/>
+                    <field name="matching_status" readonly="1"/>
                     <field name="investigation_tag"/>
                 </group>
             </group>

@@ -14,15 +14,18 @@ class OfhSupplierInvoiceLine(models.Model):
         string='Order',
         comodel_name='ofh.sale.order',
         track_visibility='always',
+        readonly=True,
     )
     order_line_id = fields.Many2one(
         string='Order Line',
         comodel_name='ofh.sale.order.line',
         track_visibility='always',
         inverse='_update_matching_status',
+        readonly=True,
     )
     payment_request_id = fields.Many2one(
         inverse='_update_matching_status',
+        readonly=True,
     )
     matching_status = fields.Selection(
         string="Matching Status",
@@ -36,7 +39,6 @@ class OfhSupplierInvoiceLine(models.Model):
         required=True,
         default='unmatched',
         index=True,
-        readonly=True,
         track_visibility='always',
     )
     investigation_tag = fields.Char(
