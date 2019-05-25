@@ -35,7 +35,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
             return super(SupplierInvoiceLineMapper, self).locator(record)
-        return {'locator': record.get('SupplierConfirmation')}
+        return {'locator': record.get('OrderId')}
 
     @mapping
     def vendor_id(self, record):
@@ -82,15 +82,15 @@ class SupplierInvoiceLineMapper(Component):
         return {'supplier_reference': supplier_ref}
 
     @mapping
-    def supplier_currency(self, record):
+    def currency_id(self, record):
         tv_backend = self.env.ref(
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
-            return {}
-        supplier_curr = record.get('SupplierCurrency')
-        if not supplier_curr:
-            return {}
-        return {'supplier_currency': supplier_curr}
+            return super(SupplierInvoiceLineMapper, self).currency_id(record)
+        currency = record.get("SupplierCurrency")
+        if not currency:
+            return {'currency_id': self.env.ref('base.SAR').id}
+        return {'currency_id': self.env.ref(f'base.{currency}').id}
 
     @mapping
     def passenger(self, record):
@@ -121,10 +121,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
             return super(SupplierInvoiceLineMapper, self).office_id(record)
-        offc_id = record.get('ServiceType')
-        if not offc_id:
-            return {}
-        return {'office_id': offc_id}
+        return {'office_id': "Hotel"}
 
     @mapping
     def index(self, record):
@@ -133,6 +130,22 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != tv_backend:
             return super(SupplierInvoiceLineMapper, self).index(record)
         return {'index': record.get('OrderId')}
+
+    @mapping
+    def booked_by_branch(self, record):
+        tv_backend = self.env.ref(
+            'ofh_supplier_invoice_tv.tv_import_backend')
+        if self.backend_record != tv_backend:
+            return {}
+        return {'booked_by_branch': record.get('BookedByBranch')}
+
+    @mapping
+    def booked_by_user(self, record):
+        tv_backend = self.env.ref(
+            'ofh_supplier_invoice_tv.tv_import_backend')
+        if self.backend_record != tv_backend:
+            return {}
+        return {'booked_by_user': record.get('BookedByUser')}
 
 
 class SupplierInvoiceLineHandler(Component):

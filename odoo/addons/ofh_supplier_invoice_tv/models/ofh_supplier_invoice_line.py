@@ -9,14 +9,16 @@ class OfhSupplierInvoiceLine(models.Model):
     invoice_type = fields.Selection(
         selection_add=[('tv', 'Travel Port')],
     )
-
-    supplier_currency = fields.Char(
-        string="Supplier Currency",
-        readonly=True,
-    )
-
     supplier_reference = fields.Char(
         string="Supplier Reference",
+        readonly=True,
+    )
+    booked_by_branch = fields.Char(
+        string="Booked By Branch",
+        readonly=True,
+    )
+    booked_by_user = fields.Char(
+        string="Booked By User",
         readonly=True,
     )
 
@@ -24,4 +26,4 @@ class OfhSupplierInvoiceLine(models.Model):
     def _tv_compute_name(self):
         self.ensure_one()
         self.name = '{}_{}_{}'.format(
-            self.invoice_type, self.index, self.ticket_number)
+            self.invoice_type, self.locator, self.ticket_number)

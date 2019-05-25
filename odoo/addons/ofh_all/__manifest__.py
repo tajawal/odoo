@@ -19,6 +19,7 @@
         'ofh_sale_order_supplier_invoice_enett',
         'ofh_sale_order_supplier_invoice_nile',
         'ofh_sale_order_supplier_invoice_itl',
+        'ofh_sale_order_supplier_invoice_tv',
         'ofh_sale_order_sap',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools

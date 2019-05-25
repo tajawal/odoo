@@ -65,15 +65,58 @@ class TestSupplierInvoiceTVImport(common.TransactionComponentRegistryCase):
                 self.assertTrue(importer)
                 importer.run(self.record)
 
-        lines = self.invoice_line_model.search(
-            [('invoice_type', '=', 'tv')])
-
-        self.assertEquals(len(lines), 5)
-
+        # First Tv Invoice test
         first_line = self.invoice_line_model.search(
-            [('locator', '=', '8112705369999')])
+            [('locator', '=', '4875286')])
         self.assertTrue(first_line)
         self.assertEquals(len(first_line), 1)
-        self.assertEquals(first_line.index, '4468817')
-        self.assertEquals(first_line.passenger, 'Ms Shoug Alghamdi')
-        self.assertEquals(first_line.total, 485.68)
+        self.assertEquals(first_line.locator, '4875286')
+        self.assertEquals(first_line.passenger, 'Mr Bander Alsubaie')
+        self.assertEquals(first_line.total, 749.51)
+        self.assertEquals(first_line.ticket_number, "4917368")
+        self.assertEquals(
+            first_line.vendor_id,
+            "Renaissance Downtown Hotel Dubai")
+        self.assertEquals(first_line.supplier_reference, "193353762")
+        self.assertEquals(first_line.booked_by_user, "new_ios@almosafer.com")
+
+        # Second Tv Invoice test
+        second_line = self.invoice_line_model.search(
+            [('locator', '=', '4875287')])
+        self.assertTrue(second_line)
+        self.assertEquals(len(second_line), 1)
+        self.assertEquals(second_line.locator, '4875287')
+        self.assertEquals(second_line.passenger, 'Mr Deema Alrashed')
+        self.assertEquals(second_line.total, 1289.48)
+        self.assertEquals(first_line.ticket_number, "4917369")
+        self.assertEquals(first_line.vendor_id, "Vida Downtown")
+        self.assertEquals(first_line.supplier_reference, "191864600")
+        self.assertEquals(first_line.booked_by_user, "new_ios@almosafer.com")
+
+        # Third Tv Invoice test
+        second_line = self.invoice_line_model.search(
+            [('locator', '=', '4875559')])
+        self.assertTrue(second_line)
+        self.assertEquals(len(second_line), 1)
+        self.assertEquals(second_line.locator, '4875559')
+        self.assertEquals(second_line.passenger, 'Mr FAHAD ALMHENE')
+        self.assertEquals(second_line.total, 237.76)
+        self.assertEquals(first_line.ticket_number, "4917643")
+        self.assertEquals(first_line.vendor_id, "Riyadh,Boudl Al Qasr")
+        self.assertEquals(first_line.supplier_reference, "326822344")
+        self.assertEquals(first_line.booked_by_user, "new_ios@almosafer.com")
+
+        # Fourth Tv Invoice test
+        second_line = self.invoice_line_model.search(
+            [('locator', '=', '4875567')])
+        self.assertTrue(second_line)
+        self.assertEquals(len(second_line), 1)
+        self.assertEquals(second_line.locator, '4875567')
+        self.assertEquals(second_line.passenger, 'Mr Fahad Karam')
+        self.assertEquals(second_line.total, 518.69)
+        self.assertEquals(first_line.ticket_number, "4917651")
+        self.assertEquals(
+            first_line.vendor_id,
+            "DoubleTree by Hilton Hotel Orlando at SeaWorld")
+        self.assertEquals(first_line.supplier_reference, "32682376")
+        self.assertEquals(first_line.booked_by_user, "new_ios@almosafer.com")

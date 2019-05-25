@@ -5,13 +5,13 @@
 <odoo>
 
     <record id="tv_import_backend" model="import.backend">
-        <field name="name">TravelPort Report Importer</field>
+        <field name="name">Travolutionary Report Importer</field>
         <field name="version">1.0</field>
         <field name="cron_cleanup_keep">1</field>
     </record>
 
     <record id="tv_import_type" model="import.type">
-        <field name="name">TravelPort Report</field>
+        <field name="name">Travolutionary Report</field>
         <field name="key">tv</field>
         <field name="settings">
             ofh.supplier.invoice.line::supplier.invoice.line.record.importer
