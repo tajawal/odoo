@@ -3,9 +3,9 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo noupdate="1">
-    <record id="ofh_payment_sap_2" model="ofh.payment.sap">
+    <record id="ofh_payment_sap_1" model="ofh.payment.sap">
         <field name="send_date">2019-01-06</field>
-        <field name="sap_sale_order_id">1</field>
+        <field name="sap_sale_order_id">25</field>
         <field name="sap_payment_detail">{
             "system": "ONLINE",
             "transaction": "RV_CARD",
@@ -30,7 +30,31 @@
             }
         </field>
         <field name="payment_detail">{
-            "provider": "checkoutcom"
+            "order_id": "5cdb35a2d6f217fdf156e6b5",
+            "order_number": "A8070519384",
+            "order_type": "flight",
+            "order_status": "58",
+            "supplier_name": "EK",
+            "validating_carrier": "EK",
+            "order_owner": "Mr Testing",
+            "entity": "tajawal",
+            "ahs_group_name": "",
+            "country_code": "AE",
+            "payment_provider": "checkoutcom",
+            "payment_source": "",
+            "payment_method": "visa",
+            "payment_mode": "visa",
+            "reference_id": "12345",
+            "amount": "345.0",
+            "mid": "12343",
+            "bank_name": "Al Bank",
+            "card_type": "minaol peter",
+            "card_bin": "wwwwwww",
+            "card_owner": "minaol peter",
+            "card_last_four": "9987",
+            "auth_code": "34567",
+            "is_installment": "0",
+            "is_3d_secure": "1"
             }
         </field>
     </record>

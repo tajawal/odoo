@@ -8,9 +8,28 @@
         <field name="model">ofh.sale.order</field>
         <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+                <button name="send_order_to_sap"
+                        string="Send Order to SAP"
+                        class="btn-success"
+                        help="Send to Sap-xml-api and get and object in return."
+                        confirm="You are about to send this Sale Order to SAP. Are you sure?"
+                        type="object"/>
+                <button name="send_order_to_sap"
+                        string="Force Send Order to SAP"
+                        class="btn-danger"
+                        help="Send to Sap-xml-api and get and object in return."
+                        confirm="You are about to force send this sale order (ONLY SALE PART). Are you sure?"
+                        type="object"/>
+                <button name="visualize_sap_order"
+                        string="Visualize SAP Order"
+                        help="Simualate the sending of an order to SAP."
+                        class="btn-info"
+                        type="object"/>
+            </header>
             <notebook position="inside">
                 <page name="sap_details" string="SAP Details">
-                    <field name="sale_order_ids" nolabel="1"/>
+                    <field name="sap_order_ids" nolabel="1"/>
                 </page>
             </notebook>
         </field>

@@ -32,14 +32,18 @@
                     <notebook>
                         <page name="sale_lines" string="SAP Lines">
                             <group name="sale_lines">
-                                <field name="sap_sale_order_line_ids" nolabel="1">
-                                    <tree delete="0" create="0">
-                                        <field name="booking_line_item_number"/>
-                                        <field name="booking_line_item_flag"/>
-                                        <field name="line_type"/>
-                                        <field name="line_reference"/>
+                                <field name="sap_line_ids" nolabel="1">
+                                    <tree delete="0" create="0" edit="0">
+                                        <field name="pax_name"/>
+                                        <field name="pnr"/>
+                                        <field name="ticket_number"/>
+                                        <field name="iata_number"/>
                                         <field name="plant"/>
                                         <field name="vendor"/>
+                                        <field name="zsel"/>
+                                        <field name="zvd1"/>
+                                        <field name="zvt1"/>
+                                        <field name="zdis"/>
                                     </tree>
                                 </field>
                             </group>
@@ -50,7 +54,16 @@
                                 </field>
                             </group>
                         </page>
+                        <page name="sap_xml" string="SAP XML">
+                            <group name="sap_xml">
+                                <field name="sap_xml" widget="ace" options="{'mode': 'xml'}" nolabel="1"/>
+                            </group>
+                        </page>
                     </notebook>
+                    <group name="response" string="SAP Response">
+                        <field name="failing_reason"/>
+                        <field name="failing_text"/>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -61,15 +74,15 @@
         <field name="model">ofh.sale.order.sap</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="entity"/>
-                <field name="name"/>
-                <field name="order_type"/>
-                <field name="currency_id" invisible="1"/>
-                <field name="supplier_currency_id" invisible="1"/>
-                <field name="order_status"/>
-                <field name="payment_status"/>
+                <field name="sale_order_id"/>
+                <field name="send_date"/>
+                <field name="sales_type"/>
+                <field name="sales_office"/>
+                <field name="customer"/>
+                <field name="file_id"/>
+                <field name="booking_entity"/>
                 <field name="sap_status"/>
-                <field name="integration_status"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>

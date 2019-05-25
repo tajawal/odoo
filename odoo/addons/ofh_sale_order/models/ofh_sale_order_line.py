@@ -1,8 +1,6 @@
 # Copyright 2019 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import json
-
 from odoo import api, fields, models
 from odoo.osv import expression
 

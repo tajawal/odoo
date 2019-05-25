@@ -10,18 +10,21 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
-        'ofh_hub_connector',
-        'ofh_sale_order_supplier_invoice'
+        'connector',
+        'ofh_sale_order_supplier_invoice',
     ],
     'data': [
         'views/ofh_sale_order_sap.xml',
         'views/ofh_sale_order_line_sap.xml',
         'views/ofh_sale_order.xml',
         'views/ofh_payment_sap.xml',
+        'views/ofh_payment.xml',
+        'views/ofh_sap_backend.xml',
     ],
     'demo': [
-        'demo/ofh_payment_sap.xml',
-        'demo/ofh_sale_order_sap.xml',
-        'demo/ofh_sale_order_line_sap.xml',
+        # 'demo/sap_backend.xml',
+        # 'demo/ofh_sale_order_sap.xml',
+        # 'demo/ofh_sale_order_line_sap.xml',
+        # 'demo/ofh_payment_sap.xml',
     ],
 }

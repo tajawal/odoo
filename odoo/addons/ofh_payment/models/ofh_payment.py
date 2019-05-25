@@ -48,6 +48,11 @@ class OfhPayment(models.Model):
         readonly=True,
         index=True,
     )
+    source = fields.Char(
+        string="Source",
+        readonly=True,
+        index=True,
+    )
     charge_ids = fields.One2many(
         comodel_name="ofh.payment.charge",
         string="Charge IDs",

@@ -40,6 +40,7 @@
                         <field name="ahs_group_name"/>
                         <field name="country_code"/>
                         <field name="booking_method"/>
+                        <field name="order_owner"/>
                     </group>
                     <notebook>
                         <page name="sale_lines" string="Lines">
@@ -120,6 +121,8 @@
                 <field name="vendor_reference" filter_domain="['|', ('vendor_reference','ilike',self), ('supplier_reference','ilike', self)]" string="Locator"/>
                 <field name="ticketing_office_id"/>
                 <field name="office_id"/>
+                <separator/>
+                <filter name="domestic_ksa" string="Domestic KSA" domain="[('line_ids.is_domestic_ksa', '=', True)]"/>
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
                 <filter name="almosafer" string="Almosafer" domain="[('entity', '=', 'almosafer')]"/>

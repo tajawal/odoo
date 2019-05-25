@@ -11,20 +11,12 @@
         <field name="sale_order_id">1</field>
         <field name="order_detail">{
             "name": "SaleOrder1",
-            "track_id": "pr-A90212009052-1551261525547",
-            "order_type": "flight",
+            "order_id": "A90212009052",
             "entity": "almosafer",
-            "order_status": "58",
-            "point_of_sale": "almosfer.ae",
-            "payment_status": "79",
-            "paid_at": "2019-01-08",
-            "store_id": "1",
-            "group_id": "2",
-            "currency_id": 154,
-            "supplier_currency_id": 154,
-            "total_supplier_cost": 789,
-            "vendor_reference": "AQWKLE",
-            "supplier_reference": "QSSEFD"
+            "currency": "SAR",
+            "ahs_group_name": "ahs_group_name",
+            "country_code": "SA",
+            "is_egypt": "True"
             }
         </field>
         <field name="sap_header_detail">{
@@ -52,21 +44,13 @@
         <field name="update">Update</field>
         <field name="sale_order_id">2</field>
         <field name="order_detail">{
-            "name": "SaleOrder1",
-            "track_id": "pr-A8938293283-32454545",
-            "order_type": "flight",
+            "name": "SaleOrder2",
+            "order_id": "A92334567543",
             "entity": "tajawal",
-            "order_status": "58",
-            "point_of_sale": "tajawal.ae",
-            "payment_status": "79",
-            "paid_at": "2018-01-08",
-            "store_id": "1",
-            "group_id": "2",
-            "currency_id": 154,
-            "supplier_currency_id": 154,
-            "total_supplier_cost": 2132,
-            "vendor_reference": "DSDEE",
-            "supplier_reference": "EFECX"
+            "currency": "AED",
+            "ahs_group_name": "ahs_group_name_tj",
+            "country_code": "AE",
+            "is_egypt": "True"
             }
         </field>
         <field name="sap_header_detail">{

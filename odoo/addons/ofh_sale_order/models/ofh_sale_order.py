@@ -103,6 +103,10 @@ class OfhSaleOrder(models.Model):
         default=False,
         index=True,
     )
+    order_owner = fields.Char(
+        string="Order Owner",
+        readonly=True,
+    )
     employee_discount_tag = fields.Char(
         string="Employee Discount Tag",
         readonly=True,

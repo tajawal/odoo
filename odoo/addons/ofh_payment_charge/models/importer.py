@@ -21,6 +21,7 @@ class HubPaymentChargeImportMapper(Component):
         ('status', 'status'),
         ('value', 'total'),
         ('provider', 'provider'),
+        ('source', 'source'),
         ('payment_mode', 'payment_mode'),
         ('card_type', 'card_type'),
         ('mid', 'mid'),

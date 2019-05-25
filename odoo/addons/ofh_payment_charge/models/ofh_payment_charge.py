@@ -65,6 +65,10 @@ class OfhPaymentCharge(models.Model):
         string="Provider",
         readonly=True,
     )
+    source = fields.Char(
+        string="Source",
+        readonly=True,
+    )
     payment_mode = fields.Char(
         string="Payment Mode",
         readonly=True,

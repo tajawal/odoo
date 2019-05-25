@@ -37,7 +37,6 @@ class OfhGdsDailyReport(models.TransientModel):
         offices = self.env['ofh.gds.office'].search([])
         invoice_model = self.env['ofh.supplier.invoice.line']
         while current_date <= fields.Date.from_string(self.date_to):
-            print(fields.Date.to_string(current_date))
             for office in offices:
                 invoice_model.with_delay()._import_gds_daily_report(
                     office=office,

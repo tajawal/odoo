@@ -23,6 +23,7 @@ class HubSaleOrderImportMapper(Component):
         ('ahs_group_name', 'ahs_group_name'),
         ('country_code', 'country_code'),
         ('booking_method', 'booking_method'),
+        ('order_owner', 'order_owner'),
         ('point_of_sale', 'point_of_sale'),
         ('store_id', 'store_id'),
         ('group_id', 'group_id'),

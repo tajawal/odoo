@@ -37,21 +37,40 @@
                     <notebook>
                         <page name="item_characteristics" string="Item Characteristics">
                             <group name="item_characteristics" col="4">
-                                <field name="z_airline_code"/>
+                                <field name="z_airlinecode"/>
                                 <field name="z_fare_class"/>
                                 <field name="z_booking_type"/>
                                 <field name="z_booking_class"/>
-                                <field name="z_last_leg_flying_date"/>
+                                <field name="z_lastlegflyingdate"/>
                                 <field name="z_paxname"/>
                                 <field name="z_vendor"/>
-                                <field name="z_destination_city"/>
-                                <field name="z_locator"/>
-                                <field name="z_tkt_status"/>
-                                <field name="z_owner_id"/>
-                                <field name="z_departure_date"/>
+                                <field name="z_destinationcity"/>
+                                <field name="z_locater"/>
+                                <field name="z_tktstatus"/>
+                                <field name="z_owneroid"/>
+                                <field name="z_departuredate"/>
                                 <field name="z_route"/>
                                 <field name="z_iata"/>
-                                <field name="z_number_of_pax"/>
+                                <field name="z_numberofpax"/>
+                                <newline/>
+                                <field name="z_seg1origin"/>
+                                <field name="z_seg1destination"/>
+                                <field name="z_seg2origin"/>
+                                <field name="z_seg2destination"/>
+                                <field name="z_seg3origin"/>
+                                <field name="z_seg3destination"/>
+                                <field name="z_seg4origin"/>
+                                <field name="z_seg4destination"/>
+                                <field name="z_seg5origin"/>
+                                <field name="z_seg5destination"/>
+                                <field name="z_seg6origin"/>
+                                <field name="z_seg6destination"/>
+                                <field name="z_seg7origin"/>
+                                <field name="z_seg7destination"/>
+                                <field name="z_seg8origin"/>
+                                <field name="z_seg8destination"/>
+                                <field name="z_seg9origin"/>
+                                <field name="z_seg9destination"/>
                             </group>
                         </page>
                          <page name="item_conditions" string="Item Conditions">

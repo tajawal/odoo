@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo noupdate="1">=
+
+    <record id="sap_backend_dev_sap" model="sap.backend">
+        <field name="name">dev-sap</field>
+    </record>
+
+</odoo>

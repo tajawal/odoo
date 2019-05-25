@@ -36,6 +36,13 @@
                         <field name="assignment"/>
                         <field name="line_item_text"/>
                     </group>
+                    <notebook>
+                        <page name="sap_xml" string="SAP XML">
+                            <group name="sap_xml">
+                                <field name="sap_xml" widget="ace" options="{'mode': 'xml'}" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -46,17 +53,10 @@
         <field name="model">ofh.payment.sap</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="system"/>
-                <field name="transaction"/>
-                <field name="company_code"/>
-                <field name="header_text"/>
-                <field name="reference"/>
-                <field name="currency"/>
-                <field name="reference_key1"/>
-                <field name="reference_key2"/>
-                <field name="reference_key3"/>
-                <field name="assignment"/>
-                <field name="line_item_text"/>
+                <field name="payment_id"/>
+                <field name="send_date"/>
+                <field name="failing_reason"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
