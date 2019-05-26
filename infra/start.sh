@@ -24,6 +24,12 @@ config_api_username=$config_api_username
 config_api_password=$config_api_password
 oms_finance_api_url=http://finance-oms-api:5000/
 
+[sap_backend.dev-sap]
+sap_xml_api_url=http://finance-sap-xml-api:5000/
+
+[sap_backend.live-sap]
+sap_xml_api_url=http://finance-sap-xml-api:5000/
+
 [sap_xml_api]
 sap_xml_api_url=$sap_xml_api_url
 sap_xml_api_username=$sap_xml_api_username
