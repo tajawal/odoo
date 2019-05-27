@@ -3,7 +3,7 @@
 import json
 
 from odoo import api, fields, models
-
+from odoo.tools import float_round
 
 class OfhSaleOrderLine(models.Model):
     _inherit = 'ofh.sale.order.line'
@@ -49,20 +49,17 @@ class OfhSaleOrderLine(models.Model):
             "route": self.route,
             "segments": json.loads(self.segments),
             "last_leg": self.destination_city,
-            "sale_price": self.currency_id.round(
-                abs(self.total_amount)),
-            "output_vat": self.currency_id.round(
-                abs(self.tax_amount)),
-            "discount": self.currency_id.round(
-                abs(self.discount_amount)),
+            "sale_price": abs(round(self.total_amount, 2)),
+            "output_vat": abs(round(self.tax_amount, 2)),
+            "discount": abs(round(self.discount_amount, 2)),
         }
 
         if self.matching_status == 'not_applicable':
             pnr = self.vendor_confirmation_number if self.vendor_name == 'amd'\
                 else self.supplier_confirmation_number
             sale_line_dict['pnr'] = pnr
-            sale_line_dict['cost_price'] = self.supplier_currency_id.round(
-                abs(self.supplier_cost_amount))
+            sale_line_dict['cost_price'] = abs(
+                round(self.supplier_cost_amount), 2)
             sale_line_dict['cost_currency'] = self.supplier_currency_id.name
             sale_line_dict['ticket_number'] = self.line_reference
             return [sale_line_dict]
@@ -75,11 +72,10 @@ class OfhSaleOrderLine(models.Model):
                 cost_amount = line.gds_net_amount
             line_dict.update({
                 'pnr': line.locator,
-                'cost_price': line.currency_id.round(
-                    abs(cost_amount)),
+                'cost_price': abs(round(cost_amount, 2)),
                 'cost_currency': line.currency_id.name,
                 'ticket_number': line.ticket_number,
             })
             lines.append(line_dict)
-
+        print(lines)
         return lines
