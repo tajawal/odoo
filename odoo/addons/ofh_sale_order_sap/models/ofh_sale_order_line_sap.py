@@ -549,7 +549,7 @@ class OfhSaleOrderLineSap(models.Model):
             rec.segment = sap_line_detail.get('Segment')
             rec.service_item = sap_line_detail.get('ServiceItem')
             rec.qty = sap_line_detail.get('Qty')
-            rec.billing_date = sap_line_detail.get('billing_date')
+            rec.billing_date = sap_line_detail.get('BillingDate')
             rec.plant = sap_line_detail.get('Plant')
             rec.vat_tax_code = sap_line_detail.get('VATTaxCode')
             rec.airline_code = sap_line_detail.get('AirlineCode')
