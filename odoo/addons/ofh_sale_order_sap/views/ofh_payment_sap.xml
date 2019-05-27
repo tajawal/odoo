@@ -43,6 +43,10 @@
                             </group>
                         </page>
                     </notebook>
+                    <group name="response" string="SAP Response">
+                        <field name="failing_reason"/>
+                        <field name="failing_text"/>
+                    </group>
                 </sheet>
             </form>
         </field>
