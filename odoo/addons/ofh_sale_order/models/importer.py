@@ -450,7 +450,7 @@ class HubSaleOrderLineImportMapper(Component):
     @mapping
     def tax_code(self, record):
         if 'tax_code' in record:
-            {'tax_code': record.get('tax_code').lower()}
+            return {'tax_code': record.get('tax_code').lower()}
         return {}
 
     @mapping
