@@ -117,27 +117,5 @@ class OfhSaleOrder(models.Model):
             "entity": self.entity,
             "country_code": self.country_code,
             "is_egypt": self.is_egypt,
-        }
-
-    @api.multi
-    def sap_header_to_dict(self, response) -> dict:
-        """Return dict of Sap XML API response
-        Returns:
-            [dict] -- Sap XML API response
-        """
-        self.ensure_one()
-        return {
-            "system_id": response.Header.get('SystemID'),
-            "sales_type": response.Header.get('SalesType'),
-            "collection_mode": response.Header.get('CollectionMode'),
-            "booking_entity": response.Header.get('BookingEntity'),
-            "booking_number": response.Header.get('BookingNumber'),
-            "sales_office": response.Header.get('SalesOffice'),
-            "channel": response.Header.get('Channel'),
-            "customer": response.Header.get('Customer'),
-            "file_id": response.Header.get('FileID'),
-            "booking_date": response.Header.get('BookingDate'),
-            "fe_indicator": response.Header.get('FEIndicator'),
-            "invoice_currency": response.Header.get('InvoiceCurrency'),
-            "tapro_invoice_number": response.Header.get('TaproInvoiceNumber'),
+            "payment_provider": self.payment_ids[0].provider,
         }
