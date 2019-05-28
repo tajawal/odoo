@@ -104,7 +104,8 @@ class OfhSupplierInvoiceLine(models.Model):
     def _check_invoice_date(self):
         for rec in self:
             if rec.invoice_date >= fields.Datetime.now():
-                raise ValidationError(_("Invalid date. Please provide date lesser than today."))
+                raise ValidationError(
+                    _("Invalid date. Please provide date lesser than today."))
 
     @api.multi
     @api.depends('ticket_number', 'invoice_status', 'passenger',

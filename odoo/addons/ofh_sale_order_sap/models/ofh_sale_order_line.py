@@ -2,8 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import json
 
-from odoo import api, fields, models
-from odoo.tools import float_round
+from odoo import api, fields, models, _
+from odoo.exceptions import MissingError
+
 
 class OfhSaleOrderLine(models.Model):
     _inherit = 'ofh.sale.order.line'
@@ -16,13 +17,8 @@ class OfhSaleOrderLine(models.Model):
     )
 
     @api.multi
-    def to_dict(self) -> dict:
-        """Return dict of Sap Sale Order Line
-        Returns:
-            [dict] -- Sap Sale Order Line dictionary
-        """
-        self.ensure_one()
-        sale_line_dict = {
+    def _get_sale_line_dict(self) -> dict:
+        return {
             "entity": self.order_id.entity,
             "order_number": self.order_id.name,
             "item_type": self.line_type,
@@ -54,28 +50,28 @@ class OfhSaleOrderLine(models.Model):
             "discount": abs(round(self.discount_amount, 2)),
         }
 
-        if self.matching_status == 'not_applicable':
-            pnr = self.vendor_confirmation_number if self.vendor_name == 'amd'\
+    @api.multi
+    def to_dict(self) -> list:
+        """Return dict of Sap Sale Order Line
+        Returns:
+            [dict] -- Sap Sale Order Line dictionary
+        """
+        self.ensure_one()
+
+        if self.matching_status in ('unmatched', 'not_applicable'):
+            sale_line_dict = self._get_sale_line_dict()
+            sale_line_dict['pnr'] = \
+                self.vendor_confirmation_number if self.vendor_name == 'amd' \
                 else self.supplier_confirmation_number
-            sale_line_dict['pnr'] = pnr
-            sale_line_dict['cost_price'] = abs(
-                round(self.supplier_cost_amount, 2))
+            sale_line_dict['cost_price'] = abs(round(
+                self.supplier_cost_amount, 2))
             sale_line_dict['cost_currency'] = self.supplier_currency_id.name
             sale_line_dict['ticket_number'] = self.line_reference
             return [sale_line_dict]
 
-        lines = []
-        for line in self.invoice_line_ids:
-            line_dict = sale_line_dict
-            cost_amount = line.total
-            if line.invoice_type == 'gds':
-                cost_amount = line.gds_net_amount
-            line_dict.update({
-                'pnr': line.locator,
-                'cost_price': abs(round(cost_amount, 2)),
-                'cost_currency': line.currency_id.name,
-                'ticket_number': line.ticket_number,
-            })
-            lines.append(line_dict)
-        print(lines)
-        return lines
+        invoice_type = self.invoice_line_ids.mapped('invoice_type')[0]
+        compute_function = f'_get_{invoice_type}_sale_line_dict'
+        if hasattr(self, compute_function):
+            return getattr(self, compute_function)()
+        else:
+            raise MissingError(_("Method not implemented."))

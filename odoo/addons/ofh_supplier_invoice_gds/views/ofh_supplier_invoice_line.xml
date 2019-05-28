@@ -16,6 +16,9 @@
                         type="object"
                         attrs="{'invisible': [('invoice_type', '!=', 'gds')]}"/>
             </header>
+            <field name="vendor_id" position="after">
+                <field name="iata_code"/>
+            </field>
             <notebook position="inside">
                 <page name="gds_fees_details" string="GDS FEES DETAILS" attrs="{'invisible': [('invoice_type', '!=', 'gds')]}">
                     <group name="fees_details" col="4">
