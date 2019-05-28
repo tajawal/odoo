@@ -13,25 +13,29 @@ class OfhSaleOrderLine(models.Model):
         self.ensure_one()
         lines = []
 
-        total_cost = sum(
-            [abs(round(l.gds_net_amount, 2)) for l in self.invoice_line_ids])
+        total_cost = sum([l.total for l in self.invoice_line_ids])
 
         for line in self.invoice_line_ids:
             line_dict = self._get_sale_line_dict()
             line_dict['pnr'] = line.locator
-            line_dict['cost_price'] = line.currency_id.round(
-                line.gds_net_amount)
+            line_dict['cost_price'] = abs(line.currency_id.round(line.total))
+
             prorated_sale = \
-                (line.gds_net_amount * self.total_amount) / total_cost
-            line_dict['sale_price'] = line.currency_id.round(prorated_sale)
+                (line.total * self.total_amount) / total_cost
 
             prorated_discount = \
-                (line.gds_net_amount * self.discount_amount) / total_cost
-            line_dict['discount'] = line.currency_id.round(prorated_discount)
+                (line.total * self.discount_amount) / total_cost
+
+            line_dict['sale_price'] = abs(
+                line.currency_id.round(prorated_sale)) + abs(
+                    line.currency_id.round(prorated_discount))
+
+            line_dict['discount'] = abs(
+                line.currency_id.round(prorated_discount))
 
             prorated_tax = \
-                (line.gds_net_amount * self.tax_amount) / total_cost
-            line_dict['output_vat'] = line.currency_id.round(prorated_tax)
+                (line.total * self.tax_amount) / total_cost
+            line_dict['output_vat'] = abs(line.currency_id.round(prorated_tax))
             line_dict['cost_currency'] = line.currency_id.name
             line_dict['ticket_number'] = line.ticket_number
             lines.append(line_dict)
