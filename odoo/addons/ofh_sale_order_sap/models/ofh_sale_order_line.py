@@ -45,9 +45,9 @@ class OfhSaleOrderLine(models.Model):
             "route": self.route,
             "segments": json.loads(self.segments),
             "last_leg": self.destination_city,
-            "sale_price": abs(self.total_amount) + abs(self.discount_amount),
-            "output_vat": abs(self.tax_amount),
-            "discount": abs(self.discount_amount),
+            "sale_price": abs(round(self.total_amount, 2)),
+            "output_vat": abs(round(self.tax_amount, 2)),
+            "discount": abs(round(self.discount_amount, 2)),
         }
 
     @api.multi
