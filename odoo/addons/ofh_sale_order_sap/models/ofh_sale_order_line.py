@@ -59,7 +59,7 @@ class OfhSaleOrderLine(models.Model):
                 else self.supplier_confirmation_number
             sale_line_dict['pnr'] = pnr
             sale_line_dict['cost_price'] = abs(
-                round(self.supplier_cost_amount), 2)
+                round(self.supplier_cost_amount, 2))
             sale_line_dict['cost_currency'] = self.supplier_currency_id.name
             sale_line_dict['ticket_number'] = self.line_reference
             return [sale_line_dict]
