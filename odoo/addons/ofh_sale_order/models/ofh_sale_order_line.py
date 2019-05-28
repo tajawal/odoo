@@ -273,7 +273,8 @@ class OfhSaleOrderLine(models.Model):
     tax_code = fields.Selection(
         string="Tax Code",
         selection=[('ss', 'SS'), ('sz', 'SZ')],
-        readonly=True,
+        # TODO: mark readonly in live
+        readonly=False,
         default='sz',
         required=True,
         # TODO update the help for the other cases.
