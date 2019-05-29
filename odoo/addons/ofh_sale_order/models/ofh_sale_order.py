@@ -107,6 +107,11 @@ class OfhSaleOrder(models.Model):
         string="Order Owner",
         readonly=True,
     )
+    is_pay_later = fields.Boolean(
+        string="Is Pay Later?",
+        readonly=True,
+        default=False,
+    )
     employee_discount_tag = fields.Char(
         string="Employee Discount Tag",
         readonly=True,

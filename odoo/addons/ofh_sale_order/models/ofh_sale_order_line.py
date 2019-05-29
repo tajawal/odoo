@@ -240,6 +240,10 @@ class OfhSaleOrderLine(models.Model):
         string="Validating Carrier",
         readonly=True,
     )
+    hotel_name = fields.Char(
+        string="Hotel Name",
+        readonly=True,
+    )
     # Segment details
     contract = fields.Char(
         string="Contract",

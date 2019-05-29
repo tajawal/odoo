@@ -69,24 +69,55 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_sale_order_sap_search_view">
+        <field name="name">ofh.sale.order.sap.search (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.sale.order.sap</field>
+        <field name="arch" type="xml">
+            <search>
+                <separator/>
+                <filter name="domestic_ksa" string="Domestic KSA"
+                        domain="[('sap_line_ids.is_domestic_ksa', '=', True)]"/>
+                <separator/>
+                <filter name="tajawal" string="Tajawal" domain="[('sale_order_id.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('sale_order_id.entity', '=', 'almosafer')]"/>
+                <filter name="egypt" string="Egypt" domain="[('sale_order_id.is_egypt', '=', True)]"/>
+                <separator/>
+                <filter name="send_this_month" string="Send This month"
+                        domain="[('send_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="send_last_month" string="Send last month"
+                        domain="['&amp;', ('send_date', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('send_date', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter name="hotel" string="Hotel" domain="[('sale_order_id.order_type', '=', 'hotel')]"/>
+                <filter name="flight" string="Flight" domain="[('sale_order_id.order_type', '=', 'flight')]"/>
+                <separator/>
+                <filter name="order_matched_status" string="Order Matched"
+                        domain="[('sale_order_id.order_matching_status', '=', 'matched')]"/>
+                <filter name="order_not_applicable_status" string="Order Not Applicable"
+                        domain="[('sale_order_id.order_matching_status', '=', 'not_applicable')]"/>
+            </search>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_sale_order_sap_tree_view">
         <field name="name">ofh.sale.order.sap.tree (in ofh_sale_order_sap)</field>
         <field name="model">ofh.sale.order.sap</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="entity"/>
                 <field name="sale_order_id"/>
                 <field name="send_date"/>
-                <field name="sales_type"/>
-                <field name="sales_office"/>
-                <field name="customer"/>
-                <field name="file_id"/>
-                <field name="booking_entity"/>
+                <field name="order_reconciliation_status"/>
                 <field name="sap_status"/>
                 <field name="state"/>
             </tree>
         </field>
     </record>
-
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_menu">
+        <field name="name">Sales Orders SAP</field>
+        <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
+        <field name="action" ref="ofh_sale_order_sap_act_window"/>
+        <field name="sequence" eval="40"/>
+    </record>
     <record model="ir.actions.act_window" id="ofh_sale_order_sap_act_window">
         <field name="name">Sales Orders SAP</field>
         <field name="res_model">ofh.sale.order.sap</field>
@@ -94,30 +125,18 @@
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
-
     <record model="ir.actions.act_window" id="ofh_sale_order_sap_almosafer_act_window">
         <field name="name">Sales Orders SAP</field>
         <field name="res_model">ofh.sale.order.sap</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('entity', '=', 'almosafer')]</field>
+        <field name="domain">[('sale_order_id.entity', '=', 'almosafer')]</field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_sale_order_sap_tajawal_act_window">
         <field name="name">Sales Orders SAP</field>
         <field name="res_model">ofh.sale.order.sap</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('entity', '=', 'tajawal')]</field>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_sap_main_menu">
-        <field name="name">Sales Orders SAP</field>
-        <field name="sequence" eval="10"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_sap_menu">
-        <field name="name">Sales Orders SAP</field>
-        <field name="parent_id" ref="ofh_sale_order_sap_main_menu"/>
-        <field name="sequence" eval="10"/>
+        <field name="domain">[('sale_order_id.entity', '=', 'tajawal')]</field>
     </record>
 
     <record model="ir.ui.menu" id="ofh_sale_order_sap_all_menu">
@@ -132,6 +151,7 @@
         <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
         <field name="action" ref="ofh_sale_order_sap_almosafer_act_window"/>
         <field name="sequence" eval="20"/>
+        <field name="domain">[('sale_order_id.entity', '=', 'almosafer')]</field>
     </record>
 
     <record model="ir.ui.menu" id="ofh_sale_order_sap_tajawal_menu">
@@ -139,6 +159,7 @@
         <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
         <field name="action" ref="ofh_sale_order_sap_tajawal_act_window"/>
         <field name="sequence" eval="30"/>
+        <field name="domain">[('sale_order_id.entity', '=', 'tajawal')]</field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_sale_order_sap_line_act_window">
@@ -148,12 +169,4 @@
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_sap_line_menu">
-        <field name="name">Sales Order lines SAP</field>
-        <field name="parent_id" ref="ofh_sale_order_sap_main_menu"/>
-        <field name="action" ref="ofh_sale_order_sap_line_act_window"/>
-        <field name="sequence" eval="10"/>
-    </record>
-
 </odoo>

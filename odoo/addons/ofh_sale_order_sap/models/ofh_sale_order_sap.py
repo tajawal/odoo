@@ -85,6 +85,12 @@ class OfhSaleOrderSap(models.Model):
         inverse_name='sap_sale_order_id',
         readonly=True,
     )
+    order_reconciliation_status = fields.Selection(
+        string="Order Reconciliation Status",
+        related="sale_order_id.order_reconciliation_status",
+        readonly=True,
+        store=False,
+    )
     # SAP Header Fields
     system_id = fields.Char(
         string="System ID",

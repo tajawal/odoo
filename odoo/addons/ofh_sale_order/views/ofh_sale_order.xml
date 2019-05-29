@@ -41,6 +41,7 @@
                         <field name="country_code"/>
                         <field name="booking_method"/>
                         <field name="order_owner"/>
+                        <field name="is_pay_later"/>
                     </group>
                     <notebook>
                         <page name="sale_lines" string="Lines">

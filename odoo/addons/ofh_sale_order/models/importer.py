@@ -24,6 +24,7 @@ class HubSaleOrderImportMapper(Component):
         ('country_code', 'country_code'),
         ('booking_method', 'booking_method'),
         ('order_owner', 'order_owner'),
+        ('is_pay_later', 'is_pay_later'),
         ('point_of_sale', 'point_of_sale'),
         ('store_id', 'store_id'),
         ('group_id', 'group_id'),
@@ -114,6 +115,7 @@ class HubSaleOrderLineImportMapper(Component):
         ('is_domestic_ksa', 'is_domestic_ksa'),
         ('ahs_group_name', 'ahs_group_name'),
         ('validating_carrier', 'validating_carrier'),
+        ('hotel_name', 'hotel_name'),
         ('line_id', 'external_id'),
     ]
 

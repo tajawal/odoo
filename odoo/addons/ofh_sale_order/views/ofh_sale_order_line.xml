@@ -23,6 +23,7 @@
                         <field name="is_domestic_ksa"/>
                         <field name="ahs_group_name"/>
                         <field name="validating_carrier"/>
+                        <field name="hotel_name"/>
                     </group>
                     <group name="traveller_info" col="4" string="Traveller Details"
                            attrs="{'invisible': [('line_type', '!=', 'flight')]}">

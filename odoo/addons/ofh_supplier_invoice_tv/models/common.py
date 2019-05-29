@@ -54,7 +54,7 @@ class SupplierInvoiceLineMapper(Component):
             'ofh_supplier_invoice_tv.tv_import_backend')
         if self.backend_record != tv_backend:
             return super(SupplierInvoiceLineMapper, self).invoice_date(record)
-        dt = datetime.strptime(record.get('OrderDate'), '%Y-%m-%dT%H:%M:%S.%f')
+        dt = datetime.strptime(record.get('OrderDate'), '%Y-%m-%d')
         if not dt:
             return {}
         return {'invoice_date': dt}
