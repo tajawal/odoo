@@ -4,7 +4,8 @@
 {
     'name': 'Ofh Sale Order Sap Gds',
     'description': """
-        Generate SAP Order Lines for Orders matched with GDS invoicel lines.""",
+        Generate SAP Order Lines for Orders
+        matched with GDS invoicel lines.""",
     'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',

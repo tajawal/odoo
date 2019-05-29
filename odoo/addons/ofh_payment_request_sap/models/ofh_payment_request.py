@@ -409,6 +409,7 @@ class OfhPaymentRequest(models.Model):
     def send_payment_request_to_sap(self):
         """Send payment request to SAP through SAP-XML-API."""
         # All void payment request should be handleded by automation.
+        self.ensure_one()
         _logger.info(
             f"Check condition to send PR# {self.track_id} to SAP.")
         if self.request_type == 'void':

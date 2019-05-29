@@ -105,8 +105,15 @@
             <tree>
                 <field name="entity"/>
                 <field name="sale_order_id"/>
+                <field name="payment_request_id"/>
                 <field name="send_date"/>
                 <field name="order_reconciliation_status"/>
+                <field name="sales_type"/>
+                <field name="sales_office"/>
+                <field name="customer"/>
+                <field name="file_id"/>
+                <field name="booking_entity"/>
+                <field name="is_refund"/>
                 <field name="sap_status"/>
                 <field name="state"/>
             </tree>

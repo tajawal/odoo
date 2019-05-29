@@ -13,10 +13,16 @@ class OfhPaymentSap(models.Model):
     payment_id = fields.Many2one(
         string="Payment",
         comodel_name='ofh.payment',
-        required=True,
         index=True,
         readonly=True,
         ondelete='cascade',
+    )
+    payment_request_id = fields.Many2one(
+        string="Payment Request",
+        comodel_name='ofh.payment.request',
+        readonly=True,
+        ondelete='cascade',
+        index=True,
     )
     sap_payment_detail = fields.Text(
         string="SAP Payment Details",

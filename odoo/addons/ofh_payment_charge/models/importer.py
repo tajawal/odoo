@@ -28,6 +28,12 @@ class HubPaymentChargeImportMapper(Component):
         ('last_four', 'last_four'),
         ('card_bin', 'card_bin'),
         ('charge_id', 'external_id'),
+        ('payment_method', 'payment_method'),
+        ('reference_id', 'reference_id'),
+        ('bank_name', 'bank_name'),
+        ('card_owner', 'card_owner'),
+        ('is_3d_secure', 'is_3d_secure'),
+        ('is_installment', 'is_installment'),
     ]
 
     @mapping

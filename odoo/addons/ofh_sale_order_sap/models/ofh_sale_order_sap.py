@@ -69,9 +69,16 @@ class OfhSaleOrderSap(models.Model):
     sale_order_id = fields.Many2one(
         string="Sale Order",
         comodel_name='ofh.sale.order',
-        required=True,
         readonly=True,
         ondelete='cascade',
+        index=True,
+    )
+    payment_request_id = fields.Many2one(
+        string="Payment Request",
+        comodel_name='ofh.payment.request',
+        readonly=True,
+        ondelete='cascade',
+        index=True,
     )
     sap_line_ids = fields.One2many(
         string="SAP Lines",
@@ -201,6 +208,12 @@ class OfhSaleOrderSap(models.Model):
     sap_xml = fields.Text(
         string="SAP XML",
         readonly=True,
+    )
+    is_refund = fields.Boolean(
+        string='Is Refund?',
+        required=True,
+        default=False,
+        index=True,
     )
 
     @api.multi

@@ -20,15 +20,23 @@ class OfhSaleOrderLineSap(models.Model):
     sale_order_line_id = fields.Many2one(
         string="Sale Order Line",
         comodel_name='ofh.sale.order.line',
-        required=True,
         readonly=True,
         ondelete='cascade',
+        index=True,
+    )
+    payment_request_id = fields.Many2one(
+        string="Payment Request",
+        comodel_name='ofh.payment.request',
+        readonly=True,
+        ondelete='cascade',
+        index=True,
     )
     sap_sale_order_id = fields.Many2one(
         comodel_name='ofh.sale.order.sap',
         required=True,
         readonly=True,
         ondelete='cascade',
+        index=True,
     )
     line_detail = fields.Text(
         string="Line Detail",

@@ -27,6 +27,12 @@
                         <field name="auth_code"/>
                         <field name="card_bin"/>
                         <field name="mid"/>
+                        <field name="payment_method"/>
+                        <field name="reference_id"/>
+                        <field name="bank_name"/>
+                        <field name="card_owner"/>
+                        <field name="is_3d_secure"/>
+                        <field name="is_installment"/>
                     </group>
                 </sheet>
             </form>
@@ -43,6 +49,7 @@
                 <field name="created_at"/>
                 <field name="updated_at"/>
                 <field name="provider"/>
+                <field name="payment_method"/>
                 <field name="payment_mode"/>
                 <field name="mid"/>
                 <field name="auth_code"/>

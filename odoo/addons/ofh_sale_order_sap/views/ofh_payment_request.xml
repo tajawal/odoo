@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_request_form_view">
+        <field name="name">ofh.payment.request.form (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="visualize_sap_order"
+                        string="Visualize SAP Order"
+                        help="Simualate the sending of an order to SAP."
+                        class="btn-info"
+                        type="object"/>
+            </header>
+            <notebook position="inside">
+                <page name="sap_details" string="SAP Details">
+                    <field name="sap_order_ids" nolabel="1"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

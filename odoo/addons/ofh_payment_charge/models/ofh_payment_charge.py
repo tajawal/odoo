@@ -89,3 +89,29 @@ class OfhPaymentCharge(models.Model):
         string="Card Bin",
         readonly=True,
     )
+    payment_method = fields.Char(
+        string="Payment Method",
+        readonly=True,
+    )
+    reference_id = fields.Char(
+        string="Reference ID",
+        readonly=True,
+    )
+    bank_name = fields.Char(
+        string="Bank Name",
+        readonly=True,
+    )
+    card_owner = fields.Char(
+        string="Card Owner",
+        readonly=True,
+    )
+    is_3d_secure = fields.Boolean(
+        string="Is 3D Secure?",
+        readonly=True,
+        default=False,
+    )
+    is_installment = fields.Boolean(
+        string="Is Installment?",
+        readonly=True,
+        default=False,
+    )

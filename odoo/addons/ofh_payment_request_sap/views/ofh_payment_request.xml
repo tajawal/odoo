@@ -18,7 +18,7 @@
                         type="object"
                         confirm="You are about to send this Payment Request to SAP. Are you sure?"
                         string="Send Payment Request to SAP"
-                        class="button-danger"/>
+                        class="btn-success"/>
             </header>
             <group name="status_details" position="inside">
                 <field name="sap_status"/>

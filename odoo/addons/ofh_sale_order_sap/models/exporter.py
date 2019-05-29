@@ -12,7 +12,7 @@ class OfhSaleOrderSapExporter(Component):
     _inherit = 'sap.exporter'
     _apply_on = ['ofh.sale.order.sap']
 
-    def _must_skip(self, sale_order) -> str:
+    def _must_skip_order(self, sale_order) -> str:
 
         # If Item has already been sent successfully don't send to SAP.
         if sale_order.sap_order_ids.filtered(lambda o: o.state == 'success'):
@@ -29,13 +29,29 @@ class OfhSaleOrderSapExporter(Component):
 
         return ''
 
+    def _must_skip_payment_request(self, payment_request) -> str:
+
+        # If Item has already been sent successfully don't send to SAP.
+        if payment_request.sap_order_ids.filtered(
+                lambda o: o.state == 'success'):
+            return "Already sent."
+
+        # If the order has unreconciled lines don't send it to SAP.
+        if payment_request.filtered(
+                lambda p: p.reconciliation_status == 'unreconciled'):
+            return 'Unreconciled Lines'
+
     def run(self, sap_sale_order, force=False):
-        binding = sap_sale_order.sale_order_id
+        sale_order = sap_sale_order.sale_order_id
+        payment_request = sap_sale_order.payment_request_id
 
-        if not binding:
+        if not sale_order and not payment_request:
             raise MissingError("Missing binding.")
-
-        skip_reason = self._must_skip(sale_order=binding)
+        if sale_order:
+            skip_reason = self._must_skip_order(sale_order=sale_order)
+        else:
+            skip_reason = self._must_skip_payment_request(
+                payment_request=payment_request)
         if skip_reason and not force and sap_sale_order.state != 'visualize':
             return sap_sale_order.write({
                 'failing_reason': 'error',
@@ -134,9 +150,9 @@ class OfhPaymentSapExporter(Component):
     _inherit = 'sap.exporter'
     _apply_on = ['ofh.payment.sap']
 
-    def _must_skip(self, payment) -> str:
+    def _must_skip(self, binding) -> str:
         # if any successful sending to SAP skip the sending.
-        if payment.sap_payment_ids.filtered(lambda o: o.state == 'success'):
+        if binding.sap_payment_ids.filtered(lambda o: o.state == 'success'):
             return 'Already Sent'
 
         return ''
@@ -145,9 +161,12 @@ class OfhPaymentSapExporter(Component):
         binding = sap_payment.payment_id
 
         if not binding:
+            binding = sap_payment.payment_request_id
+
+        if not binding:
             raise MissingError("Missing binding.")
 
-        skip_reason = self._must_skip(payment=binding)
+        skip_reason = self._must_skip(binding=binding)
         if skip_reason and not force and sap_payment.state != 'visualize':
             return sap_payment.write({
                 'failing_reason': 'error',

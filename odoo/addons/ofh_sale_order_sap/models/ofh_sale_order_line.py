@@ -27,6 +27,7 @@ class OfhSaleOrderLine(models.Model):
             "billing_date": self.created_at,
             "vat_tax_code": self.tax_code,
             "airline_code": self.supplier_name,
+            "validating_carrier": self.validating_carrier,
             "segment_count": self.segment_count,
             "custom1": self.order_id.paid_at,
             "payment_status": self.order_id.payment_status,
@@ -48,6 +49,7 @@ class OfhSaleOrderLine(models.Model):
             "sale_price": abs(round(self.total_amount, 2)),
             "output_vat": abs(round(self.tax_amount, 2)),
             "discount": abs(round(self.discount_amount, 2)),
+            "ticket_number": '',
         }
 
     @api.multi
