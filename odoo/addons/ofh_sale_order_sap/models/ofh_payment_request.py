@@ -78,7 +78,7 @@ class OfhPaymentRequest(models.Model):
         if not float_is_zero(
                 self.change_fee,
                 precision_rounding=self.currency_id.rounding):
-            line_dict = list(lines)[0]
+            line_dict = dict(lines[0])
             line_dict['cost_price'] = 0.0
             line_dict['sale_price'] = abs(self.sap_change_fee_zsel)
             line_dict['discount'] = 0.0
@@ -229,6 +229,8 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     def visualize_sap_order(self):
         self.ensure_one()
+        if self.request_type == 'void':
+            raise UserError("Void Payment Request.")
         if self.matching_status not in ('matched', 'not_applicable'):
             raise UserError("Unmatched Payment Request.")
         values = self._prepare_sap_order_values(visualize=True)
@@ -237,6 +239,10 @@ class OfhPaymentRequest(models.Model):
 
     @api.multi
     def send_payment_request_to_sap(self):
+        if self.request_type == 'void':
+            _logger.warn(f"PR# {self.track_id} is `void`. Skipp it.")
+            return False
+
         if self.order_type != 'flight':
             return super(OfhPaymentRequest, self).send_payment_request_to_sap()
 
