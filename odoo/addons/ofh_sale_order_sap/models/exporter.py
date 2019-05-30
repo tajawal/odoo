@@ -112,6 +112,21 @@ class OfhSaleOrderSapExporter(Component):
             line = sap_line_model.browse(sap_line['external_id'])
             line.sap_line_detail = json.dumps(sap_line)
 
+        if 'enett_payments' not in response:
+            return
+
+        sap_payment_model = self.env['ofh.payment.sap']
+        enett_payments = response['enett_payments']
+
+        for enett in enett_payments:
+            sap_payment_model.with_context(connector_no_export=True).create({
+                'send_date': sap_sale_order.send_date,
+                'sap_sale_order_id': sap_sale_order.id,
+                'backend_id': sap_sale_order.backend_id.id,
+                'sap_payment_detail': json.dumps(enett.get('data')),
+                'sap_xml': enett.get('xml')
+            })
+
 
 class SAPBindingSaleOrderListener(Component):
     _name = 'sap.binding.sale.order.listener'
