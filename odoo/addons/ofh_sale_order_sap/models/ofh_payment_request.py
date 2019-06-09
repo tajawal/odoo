@@ -28,6 +28,16 @@ class OfhPaymentRequest(models.Model):
     )
 
     @api.multi
+    def _get_payment_request_suffix(self) -> str:
+        self.ensure_one()
+        payment_requests = self.order_id.payment_request_ids.filtered(
+            lambda r: r.request_type == self.request_type).sorted(
+                lambda r: r.created_at).mapped('id')
+        suffix = 'A' if self.request_type == 'charge' else 'R'
+        index = payment_requests.index(self.id)
+        return f"{suffix}{index}"
+
+    @api.multi
     def _get_payment_request_order(self):
         self.ensure_one()
         order_detail = self.order_id.to_dict()
@@ -35,6 +45,7 @@ class OfhPaymentRequest(models.Model):
         if self.request_type != 'charge':
             order_detail['is_refund'] = True
         order_detail['is_payment_request'] = True
+        order_detail['suffix'] = self._get_payment_request_suffix()
         return order_detail
 
     @api.multi
@@ -127,6 +138,7 @@ class OfhPaymentRequest(models.Model):
             "card_owner": '',
             "is_installment": False,
             "is_3d_secure": False,
+            "suffix": self._get_payment_request_suffix(),
         }
 
         if self.request_type != 'charge':
