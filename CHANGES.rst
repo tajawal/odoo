@@ -1,5 +1,8 @@
 Changes
 -------
+2.2.0 (Pending)
+---------------
+
 2.1.15 (2019-05-22)
 -------------------
 * Allow users to mass edit tajwal ID in supplier invoice lines.
