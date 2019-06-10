@@ -34,7 +34,7 @@ class OfhSaleOrderLine(models.Model):
             line_dict['output_vat'] = abs(line.currency_id.round(prorated_tax))
             line_dict['cost_currency'] = line.currency_id.name
             line_dict['ticket_number'] = line.ticket_number
-
+            line_dict['is_itl'] = True
             lines.append(line_dict)
 
         return lines
