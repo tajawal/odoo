@@ -222,12 +222,17 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @api.depends(
         'supplier_total_amount', 'supplier_shamel_total_amount',
-        'supplier_currency_id', 'fare_difference', 'penalty')
+        'supplier_currency_id', 'fare_difference', 'penalty',
+        'matching_status', 'order_type')
     def _compute_sap_zvd1(self):
         """ Compute supplier cost to send to SAP."""
         for rec in self:
             rec.sap_zvd1 = 0.0
-            if rec.matching_status not in ('matched', 'not_applicable'):
+            if rec.matching_status == 'unmatched':
+                continue
+            # if no supplier for flight payment request continue
+            if rec.matching_status == 'not_applicable' and \
+               rec.order_type == 'flight':
                 continue
             if rec.payment_request_status == 'incomplete':
                 continue
