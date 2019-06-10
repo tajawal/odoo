@@ -1,6 +1,7 @@
 # Copyright 2018 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
+from odoo.tools.float_utils import float_compare
 
 
 class OfhPaymentRequest(models.Model):
@@ -130,6 +131,12 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_estimated_cost',
         store=False,
     )
+    is_full_refund = fields.Boolean(
+        string='Is Full Refund?',
+        compute='_compute_is_full_refund',
+        store=True,
+        readonly=True,
+    )
 
     @api.multi
     @api.depends(
@@ -179,6 +186,19 @@ class OfhPaymentRequest(models.Model):
             if rec.charge_ids:
                 rec.provider = ', '.join(
                     set([c.provider for c in rec.charge_ids]))
+
+    @api.multi
+    @api.depends('order_id.payment_request_ids')
+    def _compute_is_full_refund(self):
+        for rec in self:
+            rec.is_full_refund = False
+            if len(rec.order_id.payment_request_ids) != 1:
+                continue
+            if rec.request_type != 'refund':
+                continue
+            rec.is_full_refund = float_compare(
+                rec.order_amount, rec.total_amount,
+                precision_rounding=rec.currency_id.rounding) == 0
 
     @api.multi
     def _search_ticketing_office_id(self, operator, value):

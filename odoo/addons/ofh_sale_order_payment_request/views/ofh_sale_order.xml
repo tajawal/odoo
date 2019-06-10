@@ -9,6 +9,9 @@
         <field name="model">ofh.sale.order</field>
         <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_form_view"/>
         <field name="arch" type="xml">
+            <group name="header" position="inside">
+                <field name="is_full_refund"/>
+            </group>
             <notebook position="inside">
                 <page name="payment_requests" string="Payment Requests">
                     <field name="payment_request_ids" nolabel="1"/>

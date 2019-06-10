@@ -54,7 +54,7 @@ class OfhPaymentRequest(models.Model):
         # Case no matching required for payment request.
         if self.matching_status == 'not_applicable':
             sap_zsel = abs(self.sap_zsel) + abs(self.sap_zdis)
-            line_dict = self.order_id.line_ids[0]._get_sale_line_dict()
+            line_dict = self.order_id.line_ids[0].to_dict()[0]
 
             line_dict['billing_date'] = self.updated_at
             line_dict["vat_tax_code"] = self.tax_code
@@ -235,7 +235,6 @@ class OfhPaymentRequest(models.Model):
         if visualize:
             values['state'] = 'visualize'
 
-        print(values)
         return values
 
     @api.multi

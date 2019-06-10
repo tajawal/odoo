@@ -9,6 +9,9 @@
         <field name="model">ofh.payment.request</field>
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
+            <group name="general_details" position="inside">
+                <field name="is_full_refund"/>
+            </group>
             <field name="entity" position="after">
                 <field name="order_id"/>
                 <field name="ticketing_office_id"/>
