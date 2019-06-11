@@ -3,7 +3,9 @@
 
 import json
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
+from odoo.osv import expression
 
 
 class OfhSaleOrderSap(models.Model):
@@ -71,6 +73,7 @@ class OfhSaleOrderSap(models.Model):
     sap_status = fields.Selection(
         string='Sale SAP status',
         selection=[
+            ('not_applicable', 'Not Applicable'),
             ('not_in_sap', "Not In SAP"),
             ('in_sap', "Sale In SAP")],
         default='not_in_sap',
@@ -78,6 +81,17 @@ class OfhSaleOrderSap(models.Model):
         index=True,
         readonly=True,
         track_visibility='always',
+    )
+    payment_sap_status = fields.Selection(
+        string="Payment SAP Status",
+        selection=[
+            ('not_applicable', 'Not Applicable'),
+            ('not_in_sap', "Not In SAP"),
+            ('in_sap', "Sale In SAP")],
+        default='not_in_sap',
+        readonly=True,
+        store=True,
+        compute='_compute_payment_sap_status',
     )
     failing_reason = fields.Selection(
         string="Failing Reason",
@@ -90,10 +104,12 @@ class OfhSaleOrderSap(models.Model):
         default='not_applicable',
         required=True,
         index=True,
+        readonly=True,
         track_visibility='onchange',
     )
     failing_text = fields.Char(
         string="Response Text",
+        readonly=True,
     )
     sale_order_id = fields.Many2one(
         string="Sale Order",
@@ -116,7 +132,7 @@ class OfhSaleOrderSap(models.Model):
         readonly=True,
     )
     sap_payment_ids = fields.One2many(
-        string="Sap Payment Ids",
+        string="SAP Payments",
         comodel_name="ofh.payment.sap",
         inverse_name='sap_sale_order_id',
         readonly=True,
@@ -299,6 +315,18 @@ class OfhSaleOrderSap(models.Model):
             rec.invoice_currency = sap_header_detail.get("InvoiceCurrency")
             rec.tapro_invoice_number = sap_header_detail.get(
                 "TaproInvoiceNumber")
+
+    @api.multi
+    @api.depends('sap_payment_ids.state')
+    def _compute_payment_sap_status(self):
+        for rec in self:
+            rec.payment_sap_status = 'not_in_sap'
+            if all([p.state == 'visualize' for p in rec.sap_payment_ids]):
+                rec.payment_sap_status = 'not_applicable'
+            elif all(
+                    [p.state == 'success' and p.sap_status == 'in_sap'
+                     for p in rec.sap_payment_ids]):
+                rec.payment_sap_status = 'in_sap'
 
     @api.multi
     def _get_sale_payload(self):

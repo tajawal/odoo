@@ -55,9 +55,10 @@ class OfhPaymentSap(models.Model):
     sap_status = fields.Selection(
         string='SAP status',
         selection=[
+            ('not_applicable', 'Not Applicable'),
             ('not_in_sap', "Not In SAP"),
             ('in_sap', "Sale In SAP")],
-        default='not_in_sap',
+        default='not_applicable',
         required=True,
         index=True,
         readonly=True,
