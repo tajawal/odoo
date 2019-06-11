@@ -11,6 +11,34 @@ class OfhSaleOrderSap(models.Model):
     _inherit = 'sap.binding'
     _description = 'Ofh Sale Order SAP'
 
+    @api.multi
+    @api.depends('sale_order_id', 'payment_request_id')
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.sale_order_id:
+                name = rec.sale_order_id.name
+            else:
+                name = rec.payment_request_id.track_id
+            result.append((rec.id, name))
+        return result
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        args = args or []
+        domain = []
+        if name:
+            domain = [
+                ('sale_order_id.name', operator, name),
+                ('payment_request_id.track_id', operator, name)]
+            if operator in expression.NEGATIVE_TERM_OPERATORS:
+                domain = ['&'] + domain
+            else:
+                domain = ['|'] + domain
+
+        records = self.search(domain + args, limit=limit)
+        return records.name_get()
+
     order_detail = fields.Text(
         string="Order Details",
         readonly=True,
@@ -26,7 +54,7 @@ class OfhSaleOrderSap(models.Model):
         index=True,
     )
     state = fields.Selection(
-        string="Status",
+        string="Integration Status",
         selection=[
             ('draft', 'Draft'),
             ('visualize', 'Simulation'),
@@ -38,9 +66,10 @@ class OfhSaleOrderSap(models.Model):
         default='draft',
         required=True,
         track_visibility='always',
+        readonly=True,
     )
     sap_status = fields.Selection(
-        string='SAP status',
+        string='Sale SAP status',
         selection=[
             ('not_in_sap', "Not In SAP"),
             ('in_sap', "Sale In SAP")],
@@ -215,6 +244,20 @@ class OfhSaleOrderSap(models.Model):
         default=False,
         index=True,
     )
+    active = fields.Boolean(
+        string="Active",
+        default=True,
+    )
+
+    @api.multi
+    @api.depends('payment_request_id', 'sale_order_id')
+    def _check_sale_order_pr(self):
+        for rec in self:
+            if rec.payment_request_id or rec.sale_order_id:
+                continue
+
+            raise ValidationError(
+                _("You've to specify a Sale Order or a Payment request."))
 
     @api.multi
     @api.depends('order_detail')
