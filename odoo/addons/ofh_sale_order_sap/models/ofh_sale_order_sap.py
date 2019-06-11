@@ -94,11 +94,10 @@ class OfhSaleOrderSap(models.Model):
         compute='_compute_payment_sap_status',
     )
     failing_reason = fields.Selection(
-        string="Failing Reason",
+        string="Integration Reason",
         selection=[
             ('not_applicable', 'N/A'),
-            ('skipped_no_vendor', "Skipped - No Vendor Code"),
-            ('skipped_no_lines', "Skipped - No Line Items"),
+            ('skipped', "Skipped"),
             ('error', "Error"),
             ('investigate', 'Investigate')],
         default='not_applicable',

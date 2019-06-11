@@ -6,6 +6,10 @@ from odoo.addons.component.core import Component
 from odoo.exceptions import MissingError
 from requests.exceptions import HTTPError
 
+RESOURCE_ERROR = 'ResourceError'
+PARAMETERS_ERROR = 'ParametersError'
+SYSTEM_ERROR = 'SystemError'
+
 
 class OfhSaleOrderSapExporter(Component):
     _name = 'sap.sale.order.exporter'
@@ -57,6 +61,7 @@ class OfhSaleOrderSapExporter(Component):
                 'failing_reason': 'error',
                 'failing_text': skip_reason,
                 'state': 'failed',
+                'sap_status': 'not_applicable',
             })
 
         payload = sap_sale_order._get_sale_payload()
@@ -68,10 +73,16 @@ class OfhSaleOrderSapExporter(Component):
                 result = self.backend_adapter.create(data=payload)
 
         except HTTPError as e:
+            if e.response.json().get('type', '') == RESOURCE_ERROR:
+                failing_reason = 'skipped'
+            else:
+                failing_reason = 'error'
+
             return sap_sale_order.write({
-                'failing_reason': 'error',
+                'failing_reason': failing_reason,
                 'failing_text': e.response.json().get('message', ''),
                 'state': 'failed',
+                'sap_status': 'not_applicable',
             })
 
         self._after_export(sap_sale_order, response=result.json())
@@ -92,6 +103,8 @@ class OfhSaleOrderSapExporter(Component):
 
         if sap_sale_order.state != 'visualize':
             update_values['state'] = 'success'
+        else:
+            update_values['sap_status'] = 'not_applicable'
 
         sap_sale_order.write(update_values)
 
@@ -134,6 +147,7 @@ class OfhSaleOrderSapExporter(Component):
                     'failing_reason': 'error',
                     'failing_text': enett['error'],
                     'state': 'failed',
+                    'sap_status': 'not_applicable',
                 })
                 continue
 
@@ -199,6 +213,7 @@ class OfhPaymentSapExporter(Component):
                 'failing_reason': 'error',
                 'failing_text': skip_reason,
                 'state': 'failed',
+                'sap_status': 'not_applicable',
             })
 
         payload = sap_payment._get_payment_payload()
@@ -210,10 +225,16 @@ class OfhPaymentSapExporter(Component):
                 result = self.backend_adapter.create(data=payload)
 
         except HTTPError as e:
+            if e.response.json().get('type', '') == RESOURCE_ERROR:
+                failing_reason = 'skipped'
+            else:
+                failing_reason = 'error'
+
             return sap_payment.write({
-                'failing_reason': 'error',
+                'failing_reason': failing_reason,
                 'failing_text': e.response.json().get('message', ''),
                 'state': 'failed',
+                'sap_status': 'not_applicable',
             })
 
         self._after_export(sap_payment, response=result.json())
@@ -227,11 +248,13 @@ class OfhPaymentSapExporter(Component):
         update_values = {
             'failing_reason': 'not_applicable',
             'sap_xml': response.get('xml'),
-            'sap_payment_detail': json.dumps(response.get('data'))
+            'sap_payment_detail': json.dumps(response.get('data')),
         }
 
         if sap_payment.state != 'visualize':
             update_values['state'] = 'success'
+        else:
+            update_values['sap_status'] = 'not_applicable'
 
         return sap_payment.write(update_values)
 

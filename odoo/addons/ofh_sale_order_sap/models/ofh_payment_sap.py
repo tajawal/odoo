@@ -39,7 +39,7 @@ class OfhPaymentSap(models.Model):
         index=True,
     )
     state = fields.Selection(
-        string="Status",
+        string="Integration Status",
         selection=[
             ('draft', 'Draft'),
             ('visualize', 'Simulation'),
@@ -65,11 +65,10 @@ class OfhPaymentSap(models.Model):
         track_visibility='always',
     )
     failing_reason = fields.Selection(
-        string="Failing Reason",
+        string="Integration Reason",
         selection=[
             ('not_applicable', 'N/A'),
-            ('skipped_no_transaction', "Skipped - No Transaction"),
-            ('skipped_no_ref', "Skipped - No Reference Key 1"),
+            ('skipped', "Skipped"),
             ('error', "Error"),
             ('investigate', 'Investigate')],
         default='not_applicable',
