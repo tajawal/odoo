@@ -14,12 +14,14 @@
                         class="btn-success"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to send this Sale Order to SAP. Are you sure?"
+                        invisible="1"
                         type="object"/>
                 <button name="send_order_to_sap"
                         string="Force Send Order to SAP"
                         class="btn-danger"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to force send this sale order (ONLY SALE PART). Are you sure?"
+                        invisible="1"
                         type="object"/>
                 <button name="visualize_sap_order"
                         string="Visualize SAP Order"
@@ -27,11 +29,42 @@
                         class="btn-info"
                         type="object"/>
             </header>
+            <group name="statuses" position="inside">
+                <field name="order_integration_status"/>
+                <field name="payment_integration_status"/>
+                <field name="order_sap_status"/>
+                <field name="payment_sap_status"/>
+            </group>
             <notebook position="inside">
                 <page name="sap_details" string="SAP Details">
                     <field name="sap_order_ids" nolabel="1"/>
                 </page>
             </notebook>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_sale_order_tree_view">
+        <field name="name">ofh.sale.order.tree (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.sale.order</field>
+        <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="order_integration_status"/>
+                <field name="payment_integration_status"/>
+                <field name="order_sap_status"/>
+                <field name="payment_sap_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_sale_order_sap_not_applicable">
+        <field name="name">Sending to SAP not Applicable</field>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_send_to_sap_not_applicable()
         </field>
     </record>
 

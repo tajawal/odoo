@@ -16,6 +16,46 @@ class OfhSaleOrder(models.Model):
         inverse_name='sale_order_id',
         readonly=True,
     )
+    order_integration_status = fields.Selection(
+        string="Sale Integration Status",
+        selection=[
+            ('sent', 'Sent to SAP'),
+            ('not_sent', 'Not Sent to SAP'),
+            ('not_applicable', 'Not Applicable')],
+        readonly=True,
+        index=True,
+        default='not_sent',
+    )
+    payment_integration_status = fields.Selection(
+        string="Payment Integration Status",
+        selection=[
+            ('sent', 'Sent to SAP'),
+            ('not_sent', 'Not Sent to SAP'),
+            ('not_applicable', 'Not Applicable')],
+        readonly=True,
+        index=True,
+        default='not_sent',
+    )
+    order_sap_status = fields.Selection(
+        string="Sale Integration Status",
+        selection=[
+            ('in_sap', 'In SAP'),
+            ('not_in_sap', 'Not in SAP'),
+            ('not_applicable', 'Not Applicable')],
+        readonly=True,
+        index=True,
+        default='not_in_sap',
+    )
+    payment_sap_status = fields.Selection(
+        string="Payment SAP Status",
+        selection=[
+            ('in_sap', 'In SAP'),
+            ('not_in_sap', 'Not in SAP'),
+            ('not_applicable', 'Not Applicable')],
+        readonly=True,
+        index=True,
+        default='not_in_sap',
+    )
 
     @api.multi
     def action_send_order_to_sap(self):
@@ -119,3 +159,12 @@ class OfhSaleOrder(models.Model):
             "is_egypt": self.is_egypt,
             "payment_provider": self.payment_ids[0].provider,
         }
+
+    @api.multi
+    def action_send_to_sap_not_applicable(self):
+        return self.write({
+            'order_integration_status': 'not_applicable',
+            'payment_integration_status': 'not_applicable',
+            'order_sap_status': 'not_applicable',
+            'payment_sap_status': 'not_applicable',
+        })

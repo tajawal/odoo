@@ -43,6 +43,9 @@
                         <field name="order_owner"/>
                         <field name="is_pay_later"/>
                     </group>
+                    <group name="statuses" col="4" string="Statuses">
+                        <field name="order_matching_status"/>
+                    </group>
                     <notebook>
                         <page name="sale_lines" string="Lines">
                             <group name="line_details" col="4">
@@ -160,8 +163,6 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>
                 <field name="supplier_currency_id" invisible="1"/>
-                <field name="total_amount"/>
-                <field name="total_vendor_cost"/>
                 <field name="order_status"/>
                 <field name="payment_status"/>
                 <field name="order_matching_status"/>
@@ -170,7 +171,7 @@
     </record>
 
     <!-- Force resync data from hub. -->
-    <record model="ir.actions.server" id="ofh_payment_request_import_records">
+    <record model="ir.actions.server" id="ofh_sale_order_import_records">
         <field name="name">Update from HUB</field>
         <field name="model_id" ref="model_ofh_sale_order"/>
         <field name = "binding_model_id" ref = "model_ofh_sale_order"/>

@@ -18,6 +18,9 @@
             <xpath expr="//field[@name='line_ids']/tree" position="inside">
                 <field name="reconciliation_status"/>
             </xpath>
+            <group name="statuses" position="inside">
+                <field name="order_reconciliation_status"/>
+            </group>
             <page name="costs" position="inside">
                 <group name="invoice_lines" string="Invoices">
                     <field name="invoice_line_ids" nolabel="1">

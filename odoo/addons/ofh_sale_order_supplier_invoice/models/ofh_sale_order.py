@@ -19,7 +19,7 @@ class OfhSaleOrder(models.Model):
         readonly=True,
     )
     order_reconciliation_status = fields.Selection(
-        string="Order Reconciliation Status",
+        string="Reconciliation Status",
         selection=[
             ('reconciled', 'Reconciled'),
             ('unreconciled', 'Unreconciled'),
