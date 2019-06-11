@@ -14,6 +14,10 @@
                             <field name="name"/>
                         </h1>
                     </div>
+                    <group name="main_group" col="4">
+                        <field name="sale_order_id"/>
+                        <field name="payment_request_id"/>
+                    </group>
                     <group name="header" col="4" string="SAP Header">
                         <field name="system_id"/>
                         <field name="sales_type"/>
@@ -81,9 +85,9 @@
                 <filter name="domestic_ksa" string="Domestic KSA"
                         domain="[('sap_line_ids.is_domestic_ksa', '=', True)]"/>
                 <separator/>
-                <filter name="tajawal" string="Tajawal" domain="[('sale_order_id.entity', '=', 'tajawal')]"/>
-                <filter name="almosafer" string="Almosafer" domain="[('sale_order_id.entity', '=', 'almosafer')]"/>
-                <filter name="egypt" string="Egypt" domain="[('sale_order_id.is_egypt', '=', True)]"/>
+                <filter name="tajawal" string="Tajawal" domain="['|', ('sale_order_id.entity', '=', 'tajawal'), ('payment_request_id.order_id.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="['|', ('sale_order_id.entity', '=', 'almosafer'), ('payment_request_id.order_id.entity', '=', 'almosafer')]"/>
+                <filter name="egypt" string="Egypt" domain="['|', ('sale_order_id.is_egypt', '=', True), ('payment_request_id.order_id.is_egypt', '=', True)]"/>
                 <separator/>
                 <filter name="success_state" string="Success" domain="[('state', '=', 'success')]"/>
                 <filter name="failed_state" string="Failed" domain="[('state', '=', 'failed')]"/>
@@ -94,13 +98,9 @@
                 <filter name="sent_this_week" string="Sent this week"
                         domain="['&amp;', ('send_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d')), ('send_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
                 <separator/>
-                <filter name="hotel" string="Hotel" domain="[('sale_order_id.order_type', '=', 'hotel')]"/>
-                <filter name="flight" string="Flight" domain="[('sale_order_id.order_type', '=', 'flight')]"/>
+                <filter name="hotel" string="Hotel" domain="['|', ('sale_order_id.order_type', '=', 'hotel'), ('payment_request_id.order_id.order_type', '=', 'hotel')]"/>
+                <filter name="flight" string="Flight" domain="['|', ('sale_order_id.order_type', '=', 'flight'), ('payment_request_id.order_id.order_type', '=', 'flight')]"/>
                 <separator/>
-                <filter name="order_matched_status" string="Order Matched"
-                        domain="[('sale_order_id.order_matching_status', '=', 'matched')]"/>
-                <filter name="order_not_applicable_status" string="Order Not Applicable"
-                        domain="[('sale_order_id.order_matching_status', '=', 'not_applicable')]"/>
             </search>
         </field>
     </record>
