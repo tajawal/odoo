@@ -145,21 +145,18 @@ class OfhSaleOrderSapExporter(Component):
                 'sap_sale_order_id': sap_sale_order.id,
                 'backend_id': sap_sale_order.backend_id.id,
                 'sap_payment_detail': json.dumps(enett.get('data')),
-                'sap_xml': enett.get('xml')
+                'sap_xml': enett.get('xml'),
+                'state': sap_sale_order.state,
             }
-            payment = sap_payment_model.with_context(
-                connector_no_export=True).create(values)
-
             if 'error' in enett:
-                payment.write({
-                    'failing_reason': 'error',
-                    'failing_text': enett['error'],
-                    'state': 'failed',
-                    'sap_status': 'not_applicable',
-                })
-                continue
-
-            payment.state = sap_sale_order.state
+                values['failing_reason'] = 'error',
+                values['failing_text'] = enett['error']
+                values['state'] = 'failed'
+                values['sap_status'] = 'not_applicable'
+            else:
+                values['state'] = sap_sale_order.state
+            sap_payment_model.with_context(
+                connector_no_export=True).create(values)
 
 
 class SAPBindingSaleOrderListener(Component):

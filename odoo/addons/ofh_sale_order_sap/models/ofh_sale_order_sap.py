@@ -90,7 +90,7 @@ class OfhSaleOrderSap(models.Model):
             ('in_sap', "Sale In SAP")],
         default='not_in_sap',
         readonly=True,
-        store=True,
+        store=False,
         compute='_compute_payment_sap_status',
     )
     failing_reason = fields.Selection(
