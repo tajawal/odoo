@@ -408,8 +408,7 @@ class HubSaleOrderLineImportMapper(Component):
         if 'segment' not in record:
             return {}
         checkout_date = record['segment'].get('checkout_date')
-        return {'checkout_date': fields.Datetime.from_string(
-                    checkout_date)}
+        return {'checkout_date': fields.Datetime.from_string(checkout_date)}
 
     @mapping
     def nb_nights(self, record):
