@@ -398,8 +398,7 @@ class HubSaleOrderLineImportMapper(Component):
         if 'segment' not in record:
             return {}
         check_in_date = record['segment'].get('check_in_date')
-        return {'check_in_date': fields.Datetime.from_string(
-                    check_in_date)}
+        return {'check_in_date': check_in_date}
 
     @mapping
     def checkout_date(self, record):
@@ -408,7 +407,11 @@ class HubSaleOrderLineImportMapper(Component):
         if 'segment' not in record:
             return {}
         checkout_date = record['segment'].get('checkout_date')
+<<<<<<< HEAD
         return {'checkout_date': fields.Datetime.from_string(checkout_date)}
+=======
+        return {'checkout_date': checkout_date}
+>>>>>>> Added few missing fields in hotel
 
     @mapping
     def nb_nights(self, record):
@@ -513,8 +516,8 @@ class HubSaleOrderLineImportMapper(Component):
                     'last_leg_flying_date', '')}
         return {}
 
-    @mapping
     def segment_count(self, record):
+<<<<<<< HEAD
         if 'traveller' in record:
             return {
                 'segment_count': record['traveller'].get(
@@ -523,6 +526,14 @@ class HubSaleOrderLineImportMapper(Component):
             return {'segment_count': record['segment'].get(
                 'segment_count')}
         return {}
+=======
+        if record.get('product_type').lower() != 'hotel':
+            return {}
+        if 'segment' not in record:
+            return {}
+        segment_count = record['segment'].get('segment_count')
+        return {'segment_count': segment_count}
+>>>>>>> Added few missing fields in hotel
 
     @mapping
     def destination_city(self, record):
