@@ -129,7 +129,6 @@
     <record model="ir.ui.menu" id="ofh_sale_order_sap_menu">
         <field name="name">Sales Orders SAP</field>
         <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
-        <field name="action" ref="ofh_sale_order_sap_act_window"/>
         <field name="sequence" eval="40"/>
     </record>
 
