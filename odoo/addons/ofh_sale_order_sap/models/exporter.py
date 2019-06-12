@@ -204,7 +204,7 @@ class OfhPaymentSapExporter(Component):
         if binding.sap_payment_ids.filtered(lambda o: o.state == 'success'):
             return 'Already Sent'
 
-        if binding._model == 'ofh.payment' and \
+        if binding._name == 'ofh.payment' and \
                 binding.integration_status == 'not_applicable':
             return "Not Applicable for Sending"
 

@@ -255,7 +255,6 @@ class OfhSaleOrderSap(models.Model):
     )
     is_refund = fields.Boolean(
         string='Is Refund?',
-        required=True,
         default=False,
         index=True,
     )
