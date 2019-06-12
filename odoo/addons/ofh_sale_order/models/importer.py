@@ -522,30 +522,17 @@ class HubSaleOrderLineImportMapper(Component):
                     'last_leg_flying_date', '')}
         return {}
 
+    @mapping
     def segment_count(self, record):
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Updated segment_count
         if 'traveller' in record:
             return {
-                'segment_count': record['traveller'].get(
-                    'segment_count', '')}
-<<<<<<< HEAD
+                'segment_count': record['traveller'].get('segment_count', '')
+            }
         if 'segment' in record:
-            return {'segment_count': record['segment'].get(
-                'segment_count')}
+            return {
+                'segment_count': record['segment'].get('segment_count', '')
+            }
         return {}
-=======
-        if record.get('product_type').lower() != 'hotel':
-            return {}
-=======
->>>>>>> Updated segment_count
-        if 'segment' not in record:
-            return {}
-        segment_count = record['segment'].get('segment_count')
-        return {'segment_count': segment_count}
->>>>>>> Added few missing fields in hotel
 
     @mapping
     def destination_city(self, record):
