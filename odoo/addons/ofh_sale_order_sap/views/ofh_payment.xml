@@ -15,13 +15,13 @@
                         class="btn-success"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to send this Payemnt to SAP. Are you sure?"
-                        type="object"/>
+                        type="object" invisible="1"/>
                 <button name="send_payment_to_sap"
                         string="Force Send Payment to SAP"
                         class="btn-danger"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to force send this payment (ONLY PAYMENT PART). Are you sure?"
-                        type="object"/>
+                        type="object" invisible="1"/>
                 <button name="visualize_sap_payment"
                         string="Visualize SAP Payment"
                         help="Simualate the sending of an Payment to SAP."
@@ -48,13 +48,13 @@
                         class="btn-success"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to send this Payemnt to SAP. Are you sure?"
-                        type="object"/>
+                        type="object" invisible="1"/>
                 <button name="send_payment_to_sap"
                         string="Force Send Payment to SAP"
                         class="btn-danger"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to force send this payment (ONLY PAYMENT PART). Are you sure?"
-                        type="object"/>
+                        type="object" invisible="1"/>
                 <button name="visualize_sap_payment"
                         string="Visualize SAP Payment"
                         help="Simualate the sending of an Payment to SAP."
