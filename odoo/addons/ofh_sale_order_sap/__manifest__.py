@@ -15,6 +15,10 @@
         'ofh_payment_request_sap',
     ],
     'data': [
+        'security/ofh_payment_sap.xml',
+        'security/ofh_sale_order_sap.xml',
+        'security/ofh_sap_backend.xml',
+        'security/ofh_sap_binding.xml',
         'views/ofh_sale_order_sap.xml',
         'views/ofh_sale_order_line_sap.xml',
         'views/ofh_sale_order.xml',
