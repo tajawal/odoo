@@ -1,5 +1,9 @@
 Changes
 -------
+2.2.5 (2019-06-12)
+------------------
+* SAP-XML-API integration fix.
+
 2.2.0 (2019-06-12)
 ------------------
 * SAP-XML-API Integration for flight Intial Bookings and Payment Request.
