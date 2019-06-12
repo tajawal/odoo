@@ -93,6 +93,9 @@
                 <filter name="failed_state" string="Failed" domain="[('state', '=', 'failed')]"/>
                 <filter name="visualize_state" string="Simulation" domain="[('state', '=', 'visualize')]"/>
                 <separator/>
+                <filter name="skipped" string="Skipped" domain="[('failing_reason', '=', 'skipped')]"/>
+                <filter name="error" string="Error" domain="[('failing_reason', '=', 'error')]"/>
+                <separator/>
                 <filter name="sent_this_month" string="Sent This month"
                         domain="[('send_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
                 <filter name="sent_this_week" string="Sent this week"

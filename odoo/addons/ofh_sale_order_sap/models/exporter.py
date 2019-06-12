@@ -18,6 +18,10 @@ class OfhSaleOrderSapExporter(Component):
 
     def _must_skip_order(self, sale_order) -> str:
 
+        # If Sale order not applicable for sending
+        if sale_order.order_integration_status == 'not_applicable':
+            return "Not Applicable for Sending"
+
         # If Item has already been sent successfully don't send to SAP.
         if sale_order.sap_order_ids.filtered(lambda o: o.state == 'success'):
             return "Already sent."
@@ -125,6 +129,10 @@ class OfhSaleOrderSapExporter(Component):
             line = sap_line_model.browse(sap_line['external_id'])
             line.sap_line_detail = json.dumps(sap_line)
 
+        if sap_sale_order.sale_order_id and \
+                sap_sale_order.state != 'visualize':
+            sap_sale_order.sale_order_id.order_integration_status = 'sent'
+
         if 'enett_payments' not in response:
             return
 
@@ -196,6 +204,10 @@ class OfhPaymentSapExporter(Component):
         if binding.sap_payment_ids.filtered(lambda o: o.state == 'success'):
             return 'Already Sent'
 
+        if binding._model == 'ofh.payment' and \
+                binding.integration_status == 'not_applicable':
+            return "Not Applicable for Sending"
+
         return ''
 
     def run(self, sap_payment, force=False):
@@ -256,7 +268,10 @@ class OfhPaymentSapExporter(Component):
         else:
             update_values['sap_status'] = 'not_applicable'
 
-        return sap_payment.write(update_values)
+        sap_payment.write(update_values)
+
+        if sap_payment.payment_id and sap_payment.state != 'visualize':
+            sap_payment.payment_id.integration_status = 'sent'
 
 
 class SAPBindingPaymentListener(Component):
