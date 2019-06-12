@@ -524,10 +524,14 @@ class HubSaleOrderLineImportMapper(Component):
 
     def segment_count(self, record):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Updated segment_count
         if 'traveller' in record:
             return {
                 'segment_count': record['traveller'].get(
                     'segment_count', '')}
+<<<<<<< HEAD
         if 'segment' in record:
             return {'segment_count': record['segment'].get(
                 'segment_count')}
@@ -535,6 +539,8 @@ class HubSaleOrderLineImportMapper(Component):
 =======
         if record.get('product_type').lower() != 'hotel':
             return {}
+=======
+>>>>>>> Updated segment_count
         if 'segment' not in record:
             return {}
         segment_count = record['segment'].get('segment_count')

@@ -283,7 +283,7 @@ class OfhSaleOrderLine(models.Model):
     )
     checkout_date = fields.Datetime(
         string="Check Out Date",
-        track_visibility='onchange',
+        readonly=True,
     )
     nb_nights = fields.Integer(
         string="No. of Nights",
