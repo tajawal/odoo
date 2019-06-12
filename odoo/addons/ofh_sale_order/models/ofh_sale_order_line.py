@@ -208,7 +208,7 @@ class OfhSaleOrderLine(models.Model):
         string="Last LEG Flying date",
         readonly=True,
     )
-    segment_count = fields.Char(
+    segment_count = fields.Integer(
         string="Number of Segments",
         readonly=True,
     )
@@ -277,13 +277,13 @@ class OfhSaleOrderLine(models.Model):
         string="Hotel Supplier ID",
         readonly=True,
     )
-    check_in_date = fields.Char(
+    check_in_date = fields.Datetime(
         string="Check In Date",
         readonly=True,
     )
     checkout_date = fields.Datetime(
         string="Check Out Date",
-        readonly=True,
+        track_visibility='onchange',
     )
     nb_nights = fields.Integer(
         string="No. of Nights",
