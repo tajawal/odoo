@@ -1,7 +1,10 @@
 Changes
 -------
-2.2.0 (Pending)
----------------
+2.2.0 (2019-06-12)
+------------------
+* SAP-XML-API Integration for flight Intial Bookings and Payment Request.
+* Hotel matching and reconciliation.
+* Missing fields on Payment and Hotels.
 
 2.1.15 (2019-05-22)
 -------------------
