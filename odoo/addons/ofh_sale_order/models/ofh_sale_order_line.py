@@ -244,6 +244,11 @@ class OfhSaleOrderLine(models.Model):
         string="Hotel Name",
         readonly=True,
     )
+    total_supplier_price = fields.Monetary(
+        string="Total Supplier Price",
+        currency_field='supplier_currency_id',
+        readonly=True,
+    )
     # Segment details
     contract = fields.Char(
         string="Contract",

@@ -88,6 +88,7 @@
                                 <field name="supplier_input_tax_amount" widget="monetary"/>
                                 <field name="supplier_currency_id"/>
                                 <field name="exchange_rate"/>
+                                <field name="total_supplier_price"/>
                             </group>
                         </page>
                     </notebook>

@@ -35,6 +35,7 @@ class HubSaleOrderImportMapper(Component):
         ('total_insurance_amount', 'total_insurance_amount'),
         ('total_vendor_cost', 'total_vendor_cost'),
         ('total_supplier_cost', 'total_supplier_cost'),
+        ('total_supplier_price', 'total_supplier_price'),
     ]
     children = [
         ('line_items', 'hub_line_ids', 'hub.sale.order.line'),
