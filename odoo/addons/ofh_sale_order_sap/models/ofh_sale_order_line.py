@@ -65,8 +65,14 @@ class OfhSaleOrderLine(models.Model):
             sale_line_dict['pnr'] = \
                 self.vendor_confirmation_number if self.vendor_name == 'amd' \
                 else self.supplier_confirmation_number
-            sale_line_dict['cost_price'] = abs(round(
-                self.supplier_cost_amount, 2))
+
+            # Not Applicable matching status cost should be 0.
+            if self.matching_status == 'unmatched':
+                sale_line_dict['cost_price'] = abs(round(
+                    self.supplier_cost_amount, 2))
+            else:
+                sale_line_dict['cost_price'] = 0.00
+
             sale_line_dict['cost_currency'] = self.supplier_currency_id.name
             sale_line_dict['ticket_number'] = self.line_reference
             return [sale_line_dict]
