@@ -1,5 +1,10 @@
 Changes
 -------
+2.2.8 (2019-06-12)
+------------------
+* SAP-XML-API wrong Office ID for GDS invoice lines.
+* Is Egypt Flag for payment.
+
 2.2.5 (2019-06-12)
 ------------------
 * SAP-XML-API integration fix.
