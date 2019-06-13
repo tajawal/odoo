@@ -117,4 +117,5 @@ class OfhPayment(models.Model):
             "auth_code": self.auth_code,
             "is_installment": self.is_installment,
             "is_3d_secure": self.is_3d_secure,
+            "is_egypt": self.order_id.is_egypt,
         }

@@ -120,6 +120,7 @@ class OfhPaymentRequest(models.Model):
             "entity": self.order_id.entity,
             "ahs_group_name": self.order_id.ahs_group_name,
             "country_code": self.order_id.country_code,
+            "is_egypt": self.order_id.is_egypt,
             "amount": abs(self.total_amount),
             "currency": self.currency_id.name,
             "document_date": self.updated_at,
