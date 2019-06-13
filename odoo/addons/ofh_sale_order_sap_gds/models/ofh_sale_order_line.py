@@ -38,6 +38,7 @@ class OfhSaleOrderLine(models.Model):
 
             line_dict['cost_currency'] = line.currency_id.name
             line_dict['ticket_number'] = line.ticket_number
+            line_dict['office_id'] = line.office_id
             lines.append(line_dict)
 
         return lines
