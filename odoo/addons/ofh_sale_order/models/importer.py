@@ -392,6 +392,44 @@ class HubSaleOrderLineImportMapper(Component):
         return {'hotel_supplier_id': hotel.get('supplier_id')}
 
     @mapping
+    def check_in_date(self, record):
+        if record.get('product_type').lower() != 'hotel':
+            return {}
+        if 'segment' not in record:
+            return {}
+        check_in_date = record['segment'].get('check_in_date')
+        return {'check_in_date': fields.Datetime.from_string(
+                    check_in_date)}
+
+    @mapping
+    def checkout_date(self, record):
+        if record.get('product_type').lower() != 'hotel':
+            return {}
+        if 'segment' not in record:
+            return {}
+        checkout_date = record['segment'].get('checkout_date')
+        return {'checkout_date': fields.Datetime.from_string(
+                    checkout_date)}
+
+    @mapping
+    def nb_nights(self, record):
+        if record.get('product_type').lower() != 'hotel':
+            return {}
+        if 'segment' not in record:
+            return {}
+        nb_nights = record['segment'].get('nb_nights')
+        return {'nb_nights': nb_nights}
+
+    @mapping
+    def nb_rooms(self, record):
+        if record.get('product_type').lower() != 'hotel':
+            return {}
+        if 'segment' not in record:
+            return {}
+        nb_rooms = record['segment'].get('nb_rooms')
+        return {'nb_rooms': nb_rooms}
+
+    @mapping
     def currency_id(self, record):
         if 'price' not in record:
             return {}
@@ -482,6 +520,9 @@ class HubSaleOrderLineImportMapper(Component):
             return {
                 'segment_count': record['traveller'].get(
                     'segment_count', '')}
+        if 'segment' in record:
+            return {'segment_count': record['segment'].get(
+                'segment_count')}
         return {}
 
     @mapping

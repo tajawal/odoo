@@ -51,6 +51,12 @@
                         <field name="hotel_id"/>
                         <field name="hotel_city"/>
                         <field name="hotel_country"/>
+                        <field name="check_in_date"/>
+                        <field name="segment_count"/>
+                        <field name="checkout_date"/>
+                        <field name="manual_checkout_date"/>
+                        <field name="nb_nights"/>
+                        <field name="manual_nb_nights"/>
                     </group>
                     <group name="line_statuses" col="4" string="Statuses">
                         <field name="matching_status"/>

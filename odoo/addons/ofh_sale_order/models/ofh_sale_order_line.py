@@ -277,6 +277,30 @@ class OfhSaleOrderLine(models.Model):
         string="Hotel Supplier ID",
         readonly=True,
     )
+    check_in_date = fields.Datetime(
+        string="Check In Date",
+        readonly=True,
+    )
+    checkout_date = fields.Datetime(
+        string="Check Out Date",
+        readonly=True,
+    )
+    nb_nights = fields.Integer(
+        string="No. of Nights",
+        readonly=True,
+    )
+    nb_rooms = fields.Integer(
+        string="No. of Rooms",
+        readonly=True,
+    )
+    manual_checkout_date = fields.Datetime(
+        string="Manual CheckOut Date",
+        track_visibility='onchange',
+    )
+    manual_nb_nights = fields.Integer(
+        string="Manual No. of Nights",
+        track_visibility='onchange',
+    )
 
     # Sale price data
     tax_code = fields.Selection(

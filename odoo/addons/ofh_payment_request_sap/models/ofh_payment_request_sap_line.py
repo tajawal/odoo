@@ -55,6 +55,11 @@ class OfhPaymentRequestSapLine(models.Model):
         readonly=True,
         store=False,
     )
+    manual_sap_zvd1 = fields.Monetary(
+        string="Manual ZVD1",
+        currency_field='supplier_currency_id',
+        track_visibility='onchange',
+    )
     sap_zdis = fields.Monetary(
         string="ZDIS",
         currency_field='currency_id',
