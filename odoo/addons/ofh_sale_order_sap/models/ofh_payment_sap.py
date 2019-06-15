@@ -1,14 +1,46 @@
 # Copyright 2019 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
 import json
+
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
+from odoo.osv import expression
 
 
 class OfhPaymentSap(models.Model):
     _name = 'ofh.payment.sap'
     _description = 'Ofh Payment SAP'
     _inherit = 'sap.binding'
+    _order = 'send_date desc'
+
+    @api.multi
+    @api.depends('sale_order_id', 'payment_request_id')
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.sale_order_id:
+                name = rec.sale_order_id.name
+            else:
+                name = rec.payment_request_id.track_id
+            result.append((rec.id, name))
+        return result
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        args = args or []
+        domain = []
+        if name:
+            domain = [
+                ('sale_order_id.name', operator, name),
+                ('payment_request_id.track_id', operator, name)]
+            if operator in expression.NEGATIVE_TERM_OPERATORS:
+                domain = ['&'] + domain
+            else:
+                domain = ['|'] + domain
+
+        records = self.search(domain + args, limit=limit)
+        return records.name_get()
 
     payment_id = fields.Many2one(
         string="Payment",
@@ -83,6 +115,21 @@ class OfhPaymentSap(models.Model):
         comodel_name='ofh.sale.order.sap',
         readonly=True,
         ondelete='cascade',
+        index=True,
+    )
+    sale_order_id = fields.Many2one(
+        string="Sale Order",
+        comodel_name='ofh.sale.order',
+        readonly=True,
+        ondelete='cascade',
+        index=True,
+        compute='_compute_sale_order_id',
+        store=True,
+    )
+    is_enett = fields.Boolean(
+        string="Is Enett?",
+        compute='_compute_is_enett',
+        readonly=True,
     )
     # SAP Payment Fields
     system = fields.Char(
@@ -200,7 +247,8 @@ class OfhPaymentSap(models.Model):
     order_type = fields.Char(
         string="order_type",
         readonly=True,
-        compute="_compute_payment_detail"
+        compute="_compute_payment_detail",
+        store=True,
     )
     order_status = fields.Char(
         string="order_status",
@@ -322,6 +370,25 @@ class OfhPaymentSap(models.Model):
     )
 
     @api.multi
+    @api.depends('payment_request_id', 'payment_id')
+    def _check_sale_order_pr(self):
+        for rec in self:
+            if rec.payment_request_id or rec.payment_id:
+                continue
+
+            raise ValidationError(
+                _("You've to specify a Payment or a Payment request."))
+
+    @api.multi
+    @api.depends('payment_id', 'sap_sale_order_id')
+    def _compute_sale_order_id(self):
+        for rec in self:
+            if rec.payment_id:
+                rec.sale_order_id = rec.payment_id.order_id
+            else:
+                rec.sale_order_id = rec.sap_sale_order_id.sale_order_id
+
+    @api.multi
     @api.depends('sap_payment_detail')
     def _compute_sap_payment_detail(self):
         for rec in self:
@@ -392,3 +459,9 @@ class OfhPaymentSap(models.Model):
         payload = json.loads(self.payment_detail)
         payload['external_id'] = self.id
         return payload
+
+    @api.multi
+    @api.depends('payment_id', 'payment_request_id')
+    def _compute_is_enett(self):
+        for rec in self:
+            rec.is_enett = not rec.payment_id and not rec.payment_request_id

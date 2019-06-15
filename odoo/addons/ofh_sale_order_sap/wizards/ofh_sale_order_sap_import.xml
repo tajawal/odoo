@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright LLC Tajawal
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_sale_order_sap_import_form_view">
+        <field name="name">ofh.sale.order.sap.import.form (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.sale.order.sap.import</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="report_type"/>
+                    <field name="upload_file" options="{'max_file_size': '100m'}" filename="file_name"/>
+                    <field name="file_name" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="import_report"
+                            string="Run Matching"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_sap_import_act_window">
+        <field name="name">Import SAP Reports</field>
+        <field name="res_model">ofh.sale.order.sap.import</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_sap_import_menu">
+        <field name="name">Import SAP Reports</field>
+        <field name="parent_id" ref="ofh_sale_order_sap.ofh_action_sale_order_main_menu"/>
+        <field name="action" ref="ofh_sale_order_sap_import_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+</odoo>

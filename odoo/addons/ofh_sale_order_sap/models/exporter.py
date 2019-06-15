@@ -3,6 +3,7 @@
 import json
 
 from odoo.addons.component.core import Component
+from odoo.addons.component_event import skip_if
 from odoo.exceptions import MissingError
 from requests.exceptions import HTTPError
 
@@ -19,7 +20,7 @@ class OfhSaleOrderSapExporter(Component):
     def _must_skip_order(self, sale_order) -> str:
 
         # If Sale order not applicable for sending
-        if sale_order.order_integration_status == 'not_applicable':
+        if not sale_order.is_sale_applicable:
             return "Not Applicable for Sending"
 
         # If Item has already been sent successfully don't send to SAP.
@@ -114,6 +115,7 @@ class OfhSaleOrderSapExporter(Component):
 
         # Update SAP lines with SAP details
         sap_lines = response.get('data', {}).get('LineItem')
+
         sap_line_model = self.env['ofh.sale.order.line.sap']
         for sap_line in sap_lines:
             if sap_line['Pax_Name'] == 'TF COST ITEM':
@@ -128,10 +130,6 @@ class OfhSaleOrderSapExporter(Component):
                 continue
             line = sap_line_model.browse(sap_line['external_id'])
             line.sap_line_detail = json.dumps(sap_line)
-
-        if sap_sale_order.sale_order_id and \
-                sap_sale_order.state != 'visualize':
-            sap_sale_order.sale_order_id.order_integration_status = 'sent'
 
         if 'enett_payments' not in response:
             return
@@ -164,6 +162,8 @@ class SAPBindingSaleOrderListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['ofh.sale.order.sap']
 
+    @skip_if(lambda self, *args, **kwargs:
+             self.env.context.get('connector_no_export'))
     def on_record_create(self, record, fields=None):
         force = False
         if 'force_send' in self.env.context and self.env.context['force_send']:
@@ -202,7 +202,7 @@ class OfhPaymentSapExporter(Component):
             return 'Already Sent'
 
         if binding._name == 'ofh.payment' and \
-                binding.integration_status == 'not_applicable':
+                not binding.order_id.is_payment_applicable:
             return "Not Applicable for Sending"
 
         return ''
@@ -267,15 +267,14 @@ class OfhPaymentSapExporter(Component):
 
         sap_payment.write(update_values)
 
-        if sap_payment.payment_id and sap_payment.state != 'visualize':
-            sap_payment.payment_id.integration_status = 'sent'
-
 
 class SAPBindingPaymentListener(Component):
     _name = 'sap.binding.payment.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['ofh.payment.sap']
 
+    @skip_if(lambda self, *args, **kwargs:
+             self.env.context.get('connector_no_export'))
     def on_record_create(self, record, fields=None):
         force = False
         if 'force_send' in self.env.context and self.env.context['force_send']:

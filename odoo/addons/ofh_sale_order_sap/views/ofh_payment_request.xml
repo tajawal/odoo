@@ -16,6 +16,12 @@
                         class="btn-info"
                         type="object"/>
             </header>
+            <group name="status_details" position="inside">
+                <field name="new_integration_status"/>
+                <field name="new_payment_integration_status"/>
+                <field name="new_sap_status"/>
+                <field name="new_payment_sap_status"/>
+            </group>
             <notebook position="inside">
                 <page name="sap_details" string="SAP Details">
                     <field name="sap_order_ids" nolabel="1"/>
@@ -23,4 +29,19 @@
             </notebook>
         </field>
     </record>
+
+     <record model="ir.ui.view" id="ofh_payment_request_tree_view">
+        <field name="name">ofh.payment.request.tree (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.payment.request</field>
+        <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="new_integration_status"/>
+                <field name="new_payment_integration_status"/>
+                <field name="new_sap_status"/>
+                <field name="new_payment_sap_status"/>
+            </tree>
+        </field>
+    </record>
+
 </odoo>

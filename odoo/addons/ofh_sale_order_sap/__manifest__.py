@@ -26,6 +26,8 @@
         'views/ofh_payment.xml',
         'views/ofh_sap_backend.xml',
         'views/ofh_payment_request.xml',
+        'wizards/ofh_sale_order_sap_import.xml',
+        'data/backend.xml',
     ],
     'demo': [
         # 'demo/sap_backend.xml',

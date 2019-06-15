@@ -1,5 +1,11 @@
 Changes
 -------
+2.3.0 (2019-06-15)
+------------------
+* SAP SAP/Integration Statuses for Sale/Payment Request.
+* Missing fields for hotels.
+* SAP Exporter bug fixes.
+
 2.2.8 (2019-06-12)
 ------------------
 * SAP-XML-API wrong Office ID for GDS invoice lines.

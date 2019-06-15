@@ -26,6 +26,124 @@ class OfhPaymentRequest(models.Model):
         inverse_name='payment_request_id',
         readonly=True,
     )
+    new_integration_status = fields.Boolean(
+        string="Is Sent?",
+        readonly=True,
+        index=True,
+        default=False,
+        store=False,
+        compute='_compute_integration_status',
+        search='_search_integration_status',
+    )
+    new_payment_integration_status = fields.Boolean(
+        string="Is Payment Sent?",
+        readonly=True,
+        index=True,
+        default=False,
+        store=False,
+        compute='_compute_payment_integration_status',
+        search='_search_payment_integration_status',
+    )
+    new_sap_status = fields.Boolean(
+        string="In SAP?",
+        readonly=True,
+        index=True,
+        default=False,
+        compute='_compute_sap_status',
+        search='_search_sap_status',
+    )
+    new_payment_sap_status = fields.Boolean(
+        string="Is Payment in SAP?",
+        readonly=True,
+        index=True,
+        default=False,
+        store=False,
+        compute='_compute_payment_sap_status',
+        search='_search_payment_sap_status',
+    )
+
+    @api.multi
+    @api.depends('sap_order_ids.state')
+    def _compute_integration_status(self):
+        for rec in self:
+            rec.new_integration_status = rec.sap_order_ids.filtered(
+                lambda s: s.state == 'success' and s.payment_request_id)
+
+    @api.model
+    def _search_integration_status(self, operator, value):
+        sap_orders = self.env['ofh.sale.order.sap'].search(
+            [('state', '=', 'success'), ('payment_request_id', '!=', False)])
+        if not sap_orders:
+            return [('id', '=', False)]
+        if operator == '!=':
+            return [
+                ('id', 'not in', sap_orders.mapped('payment_request_id.id'))]
+        return [('id', 'in', sap_orders.mapped('payment_request_id.id'))]
+
+    @api.multi
+    @api.depends('sap_payment_ids.state')
+    def _compute_payment_integration_status(self):
+        for rec in self:
+            rec.new_payment_integration_status = rec.sap_payment_ids.filtered(
+                lambda p: p.state == 'success' and p.payment_request_id)
+
+    @api.model
+    def _search_payment_integration_status(self, operator, value):
+        payment_orders = self.env['ofh.payment.sap'].search(
+            [('state', '=', 'success'), ('payment_request_id', '!=', False)])
+        if not payment_orders:
+            return [('id', '=', False)]
+
+        if operator == '!=':
+            return [
+                ('id', 'not in',
+                 payment_orders.mapped('payment_request_id.id'))]
+        return [('id', 'in', payment_orders.mapped('payment_request_id.id'))]
+
+    @api.multi
+    @api.depends('sap_order_ids.state')
+    def _compute_sap_status(self):
+        for rec in self:
+            rec.new_sap_status = rec.sap_order_ids.filtered(
+                lambda s: s.state == 'success' and s.payment_request_id and
+                s.sap_status == 'in_sap') and rec.is_sale_applicable
+
+    @api.model
+    def _search_sap_status(self, operator, value):
+        sap_orders = self.env['ofh.sale.order.sap'].search([
+            ('state', '=', 'success'),
+            ('payment_request_id', '!=', False),
+            ('sap_status', '=', 'in_sap')])
+        if not sap_orders:
+            return [('id', '=', False)]
+        if operator == '!=':
+            return [
+                ('id', 'not in',
+                 sap_orders.mapped('payment_request_id.id'))]
+        return [('id', 'in', sap_orders.mapped('sale_order_id.id'))]
+
+    @api.multi
+    @api.depends('sap_payment_ids.state')
+    def _compute_payment_sap_status(self):
+        for rec in self:
+            rec.new_payment_sap_status = rec.sap_payment_ids.filtered(
+                lambda p: p.state == 'success' and p.payment_request_id and
+                p.sap_status == 'in_sap')
+
+    @api.model
+    def _search_payment_sap_status(self, operator, value):
+        payment_orders = self.env['ofh.payment.sap'].search([
+            ('state', '=', 'success'),
+            ('payment_request_id', '!=', False),
+            ('sap_status', '=', 'in_sap')])
+        if not payment_orders:
+            return [('id', '=', False)]
+
+        if operator == '!=':
+            return [
+                ('id', 'not in',
+                 payment_orders.mapped('payment_request_id.id'))]
+        return [('id', 'in', payment_orders.mapped('payment_request_id.id'))]
 
     @api.multi
     def _get_payment_request_suffix(self) -> str:

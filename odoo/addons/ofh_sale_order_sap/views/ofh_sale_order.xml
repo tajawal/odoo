@@ -14,14 +14,12 @@
                         class="btn-success"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to send this Sale Order to SAP. Are you sure?"
-                        invisible="1"
                         type="object"/>
-                <button name="send_order_to_sap"
+                <button name="force_send_order_to_sap"
                         string="Force Send Order to SAP"
                         class="btn-danger"
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to force send this sale order (ONLY SALE PART). Are you sure?"
-                        invisible="1"
                         type="object"/>
                 <button name="visualize_sap_order"
                         string="Visualize SAP Order"
@@ -30,9 +28,11 @@
                         type="object"/>
             </header>
             <group name="statuses" position="inside">
-                <field name="order_integration_status"/>
+                <field name="is_sale_applicable"/>
+                <field name="is_payment_applicable"/>
+                <field name="integration_status"/>
                 <field name="payment_integration_status"/>
-                <field name="order_sap_status"/>
+                <field name="sap_status"/>
                 <field name="payment_sap_status"/>
             </group>
             <notebook position="inside">
@@ -49,22 +49,57 @@
         <field name="inherit_id" ref="ofh_sale_order.ofh_sale_order_tree_view"/>
         <field name="arch" type="xml">
             <tree position="inside">
-                <field name="order_integration_status"/>
+                <field name="is_sale_applicable"/>
+                <field name="is_payment_applicable"/>
+                <field name="integration_status"/>
                 <field name="payment_integration_status"/>
-                <field name="order_sap_status"/>
+                <field name="sap_status"/>
                 <field name="payment_sap_status"/>
             </tree>
         </field>
     </record>
 
-    <record model="ir.actions.server" id="ofh_sale_order_sap_not_applicable">
+    <record model="ir.actions.server" id="ofh_sap_not_applicable">
         <field name="name">Sending to SAP not Applicable</field>
         <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
         <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
         <field name="state">code</field>
         <field name="code">
 if records:
-    records.action_send_to_sap_not_applicable()
+    records.action_not_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_sale_sap_not_applicable">
+        <field name="name">Sending Sale to SAP not Applicable</field>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_sale_not_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_payment_sap_not_applicable">
+        <field name="name">Sending Payment to SAP not Applicable</field>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_payment_not_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_sale_order_action_send_order_to_sap">
+        <field name="name">Send Order to SAP</field>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_send_order_to_sap()
         </field>
     </record>
 

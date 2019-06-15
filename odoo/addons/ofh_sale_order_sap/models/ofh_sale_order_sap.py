@@ -12,6 +12,7 @@ class OfhSaleOrderSap(models.Model):
     _name = 'ofh.sale.order.sap'
     _inherit = 'sap.binding'
     _description = 'Ofh Sale Order SAP'
+    _order = 'send_date desc'
 
     @api.multi
     @api.depends('sale_order_id', 'payment_request_id')
@@ -70,6 +71,19 @@ class OfhSaleOrderSap(models.Model):
         track_visibility='always',
         readonly=True,
     )
+    payment_state = fields.Selection(
+        string="Payment Integration Status",
+        sselection=[
+            ('draft', 'Draft'),
+            ('visualize', 'Simulation'),
+            ('cancel_visualize', 'Simulation Cancelled'),
+            ('success', 'Success'),
+            ('failed', 'Failed'),
+        ],
+        readonly=True,
+        store=False,
+        related='sap_payment_ids.state',
+    )
     sap_status = fields.Selection(
         string='Sale SAP status',
         selection=[
@@ -88,10 +102,9 @@ class OfhSaleOrderSap(models.Model):
             ('not_applicable', 'Not Applicable'),
             ('not_in_sap', "Not In SAP"),
             ('in_sap', "Sale In SAP")],
-        default='not_in_sap',
         readonly=True,
         store=False,
-        compute='_compute_payment_sap_status',
+        related='sap_payment_ids.sap_status',
     )
     failing_reason = fields.Selection(
         string="Integration Reason",
@@ -136,12 +149,6 @@ class OfhSaleOrderSap(models.Model):
         inverse_name='sap_sale_order_id',
         readonly=True,
     )
-    order_reconciliation_status = fields.Selection(
-        string="Order Reconciliation Status",
-        related="sale_order_id.order_reconciliation_status",
-        readonly=True,
-        store=False,
-    )
     # SAP Header Fields
     system_id = fields.Char(
         string="System ID",
@@ -166,6 +173,7 @@ class OfhSaleOrderSap(models.Model):
     booking_number = fields.Char(
         string="Booking Number",
         readonly=True,
+        store=True,
         compute="_compute_sap_header_detail"
     )
     sales_office = fields.Char(
@@ -187,7 +195,6 @@ class OfhSaleOrderSap(models.Model):
         string="File ID",
         readonly=True,
         compute="_compute_sap_header_detail",
-        store=True,
         help="File ID must be stored bc it will be used to check if the order "
              "is in SAP or not.",
     )
@@ -313,18 +320,6 @@ class OfhSaleOrderSap(models.Model):
             rec.invoice_currency = sap_header_detail.get("InvoiceCurrency")
             rec.tapro_invoice_number = sap_header_detail.get(
                 "TaproInvoiceNumber")
-
-    @api.multi
-    @api.depends('sap_payment_ids.state')
-    def _compute_payment_sap_status(self):
-        for rec in self:
-            rec.payment_sap_status = 'not_in_sap'
-            if all([p.state == 'visualize' for p in rec.sap_payment_ids]):
-                rec.payment_sap_status = 'not_applicable'
-            elif all(
-                    [p.state == 'success' and p.sap_status == 'in_sap'
-                     for p in rec.sap_payment_ids]):
-                rec.payment_sap_status = 'in_sap'
 
     @api.multi
     def _get_sale_payload(self):

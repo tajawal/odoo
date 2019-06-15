@@ -52,15 +52,71 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_sap_search_view">
+        <field name="name">ofh.payment.sap.search (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.payment.sap</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="display_name"
+                       filter_domain="['|', ('sale_order_id.name','ilike', self), ('payment_request_id.track_id','ilike', self)]"
+                       string="Order/Payment Request"/>
+                <separator/>
+                <filter name="domestic_ksa" string="Domestic KSA"
+                        domain="[('sap_line_ids.is_domestic_ksa', '=', True)]"/>
+                <separator/>
+                <filter name="tajawal" string="Tajawal" domain="['|', ('sale_order_id.entity', '=', 'tajawal'), ('payment_request_id.order_id.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="['|', ('sale_order_id.entity', '=', 'almosafer'), ('payment_request_id.order_id.entity', '=', 'almosafer')]"/>
+                <filter name="egypt" string="Egypt" domain="['|', ('sale_order_id.is_egypt', '=', True), ('payment_request_id.order_id.is_egypt', '=', True)]"/>
+                <separator/>
+                <filter name="success_state" string="Success" domain="[('state', '=', 'success')]"/>
+                <filter name="failed_state" string="Failed" domain="[('state', '=', 'failed')]"/>
+                <filter name="visualize_state" string="Simulation" domain="[('state', '=', 'visualize')]"/>
+                <separator/>
+                <filter name="skipped" string="Skipped" domain="[('failing_reason', '=', 'skipped')]"/>
+                <filter name="error" string="Error" domain="[('failing_reason', '=', 'error')]"/>
+                <separator/>
+                <filter name="sent_this_month" string="Sent This month"
+                        domain="[('send_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="sent_this_week" string="Sent this week"
+                        domain="['&amp;', ('send_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d')), ('send_date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="hotel" string="Hotel" domain="['|', ('order_type', '=', 'hotel'), ('payment_request_id.order_id.order_type', '=', 'hotel')]"/>
+                <filter name="flight" string="Flight" domain="['|', ('order_type', '=', 'flight'), ('payment_request_id.order_id.order_type', '=', 'flight')]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_sap_act_window">
+        <field name="name">SAP Payments</field>
+        <field name="res_model">ofh.payment.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_failed_state': 1, 'search_default_sent_this_week': 1}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_sap_all_menu">
+        <field name="name">SAP Payments</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="ofh_payment_sap_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
     <record model="ir.ui.view" id="ofh_payment_sap_tree_view">
         <field name="name">ofh.payment.sap.tree (in ofh_payment_sap)</field>
         <field name="model">ofh.payment.sap</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="payment_id"/>
+                <field name="entity"/>
+                <field name="display_name" string="Order/Payment Request"/>
                 <field name="send_date"/>
-                <field name="failing_reason"/>
+                <field name="payment_method"/>
+                <field name="payment_provider"/>
+                <field name="auth_code"/>
                 <field name="state"/>
+                <field name="failing_reason"/>
+                <field name="sap_status"/>
+                <field name="is_enett"/>
             </tree>
         </field>
     </record>

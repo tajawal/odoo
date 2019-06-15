@@ -13,32 +13,38 @@ class OfhPayment(models.Model):
         inverse_name='payment_id',
         readonly=True,
     )
-    integration_status = fields.Selection(
-        string="Integration Status",
-        selection=[
-            ('sent', 'Sent to SAP'),
-            ('not_sent', 'Not Sent to SAP'),
-            ('not_applicable', 'Not Applicable')],
-        default='not_sent',
-        index=True,
+    integration_status = fields.Boolean(
+        string="Is Sent?",
         readonly=True,
-        required=True,
-        inverse='_inverse_integration_status',
+        index=True,
+        default=False,
+        store=False,
+        compute='_compute_integration_status',
+    )
+    sap_status = fields.Boolean(
+        string="In SAP?",
+        readonly=True,
+        index=True,
+        default=False,
+        compute='_compute_sap_status',
     )
 
     @api.multi
-    def _inverse_integration_status(self):
-        sale_orders = self.mapped('order_id')
-        for order in sale_orders:
-            if all([p.integration_status == 'sent'
-                    for p in order.payment_ids]):
-                order.payment_integration_status = 'sent'
-                continue
-            if all([p.integration_status == 'not_applicable'
-                    for p in order.payment_ids]):
-                order.payment_integration_status = 'not_applicable'
-                continue
-            order.payment_integration_status = 'not_sent'
+    @api.depends('sap_payment_ids.state', 'order_id.is_payment_applicable')
+    def _compute_integration_status(self):
+        for rec in self:
+            rec.integration_status = rec.sap_payment_ids.filtered(
+                lambda p: p.state == 'success') and \
+                rec.order_id.is_payment_applicable
+
+    @api.multi
+    @api.depends('sap_payment_ids.state', 'order_id.is_payment_applicable')
+    def _compute_sap_status(self):
+        for rec in self:
+            rec.sap_status = rec.sap_payment_ids.filtered(
+                lambda p: p.state == 'success' and
+                p.sap_status == 'in_sap') and \
+                rec.order_id.is_payment_applicable
 
     @api.multi
     def _prepare_payment_values(self, visualize=False):

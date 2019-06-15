@@ -16,46 +16,133 @@ class OfhSaleOrder(models.Model):
         inverse_name='sale_order_id',
         readonly=True,
     )
-    order_integration_status = fields.Selection(
-        string="Sale Integration Status",
-        selection=[
-            ('sent', 'Sent to SAP'),
-            ('not_sent', 'Not Sent to SAP'),
-            ('not_applicable', 'Not Applicable')],
+    is_sale_applicable = fields.Boolean(
+        string="Is Sale Applicable?",
+        default=True,
         readonly=True,
         index=True,
-        default='not_sent',
     )
-    payment_integration_status = fields.Selection(
-        string="Payment Integration Status",
-        selection=[
-            ('sent', 'Sent to SAP'),
-            ('not_sent', 'Not Sent to SAP'),
-            ('not_applicable', 'Not Applicable')],
+    is_payment_applicable = fields.Boolean(
+        string="Is Payment Applicable?",
+        default=True,
         readonly=True,
         index=True,
-        default='not_sent',
     )
-    order_sap_status = fields.Selection(
-        string="Sale Integration Status",
-        selection=[
-            ('in_sap', 'In SAP'),
-            ('not_in_sap', 'Not in SAP'),
-            ('not_applicable', 'Not Applicable')],
+    integration_status = fields.Boolean(
+        string="Is Sent?",
         readonly=True,
         index=True,
-        default='not_in_sap',
+        default=False,
+        store=False,
+        compute='_compute_integration_status',
+        search='_search_integration_status',
     )
-    payment_sap_status = fields.Selection(
-        string="Payment SAP Status",
-        selection=[
-            ('in_sap', 'In SAP'),
-            ('not_in_sap', 'Not in SAP'),
-            ('not_applicable', 'Not Applicable')],
+    payment_integration_status = fields.Boolean(
+        string="Is Payment Sent?",
         readonly=True,
         index=True,
-        default='not_in_sap',
+        default=False,
+        store=False,
+        compute='_compute_payment_integration_status',
+        search='_search_payment_integration_status',
     )
+    sap_status = fields.Boolean(
+        string="In SAP?",
+        readonly=True,
+        index=True,
+        default=False,
+        compute='_compute_sap_status',
+        search='_search_sap_status',
+    )
+    payment_sap_status = fields.Boolean(
+        string="Is Payment in SAP?",
+        readonly=True,
+        index=True,
+        default=False,
+        store=False,
+        compute='_compute_payment_sap_status',
+        search='_search_payment_sap_status',
+    )
+
+    @api.multi
+    @api.depends('sap_order_ids.state', 'is_sale_applicable')
+    def _compute_integration_status(self):
+        for rec in self:
+            rec.integration_status = rec.sap_order_ids.filtered(
+                lambda s: s.state == 'success' and s.sale_order_id) and \
+                rec.is_sale_applicable
+
+    @api.model
+    def _search_integration_status(self, operator, value):
+        sap_orders = self.env['ofh.sale.order.sap'].search(
+            [('state', '=', 'success'), ('sale_order_id', '!=', False)])
+        if not sap_orders:
+            return [('id', '=', False)]
+        if operator == '!=':
+            return [('id', 'not in', sap_orders.mapped('sale_order_id.id'))]
+        return [('id', 'in', sap_orders.mapped('sale_order_id.id'))]
+
+    @api.multi
+    @api.depends('payment_ids.sap_payment_ids', 'is_payment_applicable')
+    def _compute_payment_integration_status(self):
+        for rec in self:
+            sap_payments = rec.payment_ids.mapped('sap_payment_ids')
+            rec.payment_integration_status = sap_payments.filtered(
+                lambda p: p.state == 'success' and p.payment_id) and \
+                rec.is_payment_applicable
+
+    @api.model
+    def _search_payment_integration_status(self, operator, value):
+        payment_orders = self.env['ofh.payment.sap'].search(
+            [('state', '=', 'success'), ('payment_id', '!=', False)])
+        if not payment_orders:
+            return [('id', '=', False)]
+        order_ids = payment_orders.mapped('payment_id.order_id')
+        if operator == '!=':
+            return [('id', 'not in', order_ids.ids)]
+        return [('id', 'in', order_ids.ids)]
+
+    @api.multi
+    @api.depends('sap_order_ids.state', 'is_sale_applicable')
+    def _compute_sap_status(self):
+        for rec in self:
+            rec.sap_status = rec.sap_order_ids.filtered(
+                lambda s: s.state == 'success' and s.sale_order_id and
+                s.sap_status == 'in_sap') and rec.is_sale_applicable
+
+    @api.model
+    def _search_sap_status(self, operator, value):
+        sap_orders = self.env['ofh.sale.order.sap'].search([
+            ('state', '=', 'success'),
+            ('sale_order_id', '!=', False),
+            ('sap_status', '=', 'in_sap')])
+        if not sap_orders:
+            return [('id', '=', False)]
+        if operator == '!=':
+            return [('id', 'not in', sap_orders.mapped('sale_order_id.id'))]
+        return [('id', 'in', sap_orders.mapped('sale_order_id.id'))]
+
+    @api.multi
+    @api.depends('payment_ids.sap_payment_ids', 'is_payment_applicable')
+    def _compute_payment_sap_status(self):
+        for rec in self:
+            sap_payments = rec.payment_ids.mapped('sap_payment_ids')
+            rec.payment_sap_status = sap_payments.filtered(
+                lambda p: p.state == 'success' and p.payment_id and
+                p.sap_status == 'in_sap') and rec.is_payment_applicable
+
+    @api.model
+    def _search_payment_sap_status(self, operator, value):
+        payment_orders = self.env['ofh.payment.sap'].search([
+            ('state', '=', 'success'),
+            ('payment_id', '!=', False),
+            ('sap_status', '=', 'in_sap')])
+        if not payment_orders:
+            return [('id', '=', False)]
+        order_ids = payment_orders.mapped('payment_id.order_id')
+        if operator == '!=':
+            return [('id', 'not in', order_ids.ids)]
+        return [('id', 'in', order_ids.ids)]
 
     @api.multi
     def action_send_order_to_sap(self):
@@ -161,10 +248,20 @@ class OfhSaleOrder(models.Model):
         }
 
     @api.multi
-    def action_send_to_sap_not_applicable(self):
+    def action_not_applicable(self):
         return self.write({
-            'order_integration_status': 'not_applicable',
-            'payment_integration_status': 'not_applicable',
-            'order_sap_status': 'not_applicable',
-            'payment_sap_status': 'not_applicable',
+            'is_sale_applicable': False,
+            'is_payment_applicable': False,
+        })
+
+    @api.multi
+    def action_sale_not_applicable(self):
+        return self.write({
+            'is_sale_applicable': False,
+        })
+
+    @api.multi
+    def action_payment_not_applicable(self):
+        return self.write({
+            'is_payment_applicable': False,
         })

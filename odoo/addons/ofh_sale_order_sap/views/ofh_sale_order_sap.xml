@@ -3,6 +3,7 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+
     <record model="ir.ui.view" id="ofh_sale_order_sap_form_view">
         <field name="name">ofh.sale.order.sap.form (in ofh_sale_order_sap)</field>
         <field name="model">ofh.sale.order.sap</field>
@@ -17,6 +18,10 @@
                     <group name="main_group" col="4">
                         <field name="sale_order_id"/>
                         <field name="payment_request_id"/>
+                        <field name="state"/>
+                        <field name="payment_state"/>
+                        <field name="sap_status"/>
+                        <field name="payment_sap_status"/>
                     </group>
                     <group name="header" col="4" string="SAP Header">
                         <field name="system_id"/>
@@ -140,49 +145,76 @@
         <field name="context">{'search_default_failed_state': 1, 'search_default_sent_this_week': 1}</field>
     </record>
 
-    <record model="ir.actions.act_window" id="ofh_sale_order_sap_almosafer_act_window">
-        <field name="name">Sales Orders SAP</field>
-        <field name="res_model">ofh.sale.order.sap</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('sale_order_id.entity', '=', 'almosafer')]</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_sap_tajawal_act_window">
-        <field name="name">Sales Orders SAP</field>
-        <field name="res_model">ofh.sale.order.sap</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('sale_order_id.entity', '=', 'tajawal')]</field>
-    </record>
-
     <record model="ir.ui.menu" id="ofh_sale_order_sap_all_menu">
-        <field name="name">All Sales Orders SAP</field>
+        <field name="name">SAP Sales Orders</field>
         <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
         <field name="action" ref="ofh_sale_order_sap_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
 
-    <record model="ir.ui.menu" id="ofh_sale_order_sap_almosafer_menu">
-        <field name="name">Almosafer Sales Orders SAP</field>
-        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
-        <field name="action" ref="ofh_sale_order_sap_almosafer_act_window"/>
-        <field name="sequence" eval="20"/>
-        <field name="domain">[('sale_order_id.entity', '=', 'almosafer')]</field>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_sap_tajawal_menu">
-        <field name="name">Tajawal Sales Orders SAP</field>
-        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
-        <field name="action" ref="ofh_sale_order_sap_tajawal_act_window"/>
-        <field name="sequence" eval="30"/>
-        <field name="domain">[('sale_order_id.entity', '=', 'tajawal')]</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_sap_line_act_window">
-        <field name="name">Sales Order Lines SAP</field>
-        <field name="res_model">ofh.sale.order.line.sap</field>
+    <!-- SAP Export JOBS -->
+    <record id="action_sap_sale_order_queue_job" model="ir.actions.act_window">
+        <field name="name">Jobs</field>
+        <field name="res_model">queue.job</field>
+        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
+        <field name="context">
+            {'search_default_pending': 1, 'search_default_enqueued': 1, 'search_default_started': 1, 'search_default_failed': 1}
+        </field>
+        <field name="domain">[('model_name', '=', 'ofh.sale.order.sap')]</field>
+        <field name="view_id" ref="queue_job.view_queue_job_tree"/>
+        <field name="search_view_id" ref="queue_job.view_queue_job_search"/>
+    </record>
+
+    <record id="action_sap_payment_queue_job" model="ir.actions.act_window">
+        <field name="name">Jobs</field>
+        <field name="res_model">queue.job</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending': 1, 'search_default_enqueued': 1, 'search_default_started': 1, 'search_default_failed': 1}
+        </field>
+        <field name="domain">[('model_name', '=', 'ofh.payment.sap')]</field>
+        <field name="view_id" ref="queue_job.view_queue_job_tree"/>
+        <field name="search_view_id" ref="queue_job.view_queue_job_search"/>
+    </record>
+
+    <record model="ir.ui.menu" id="sap_sale_order_queue_job_menu">
+        <field name="name">SAP Sale Order Jobs</field>
+        <field name="parent_id" ref="ofh_sale_order.queue_job_main_menu"/>
+        <field name="action" ref="action_sap_sale_order_queue_job"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="sap_payment_queue_job_menu">
+        <field name="name">SAP Payment Jobs</field>
+        <field name="parent_id" ref="ofh_sale_order.queue_job_main_menu"/>
+        <field name="action" ref="action_sap_payment_queue_job"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_action_sale_order_main_menu">
+        <field name="name">Actions</field>
+        <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <!-- Importer Menu -->
+    <record id="sap_import_backend_act_window" model="ir.actions.act_window">
+        <field name="name">SAP Importers</field>
+        <field name="res_model">import.backend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <!-- TODO: Not strong enough we should find a better way -->
+        <field name="domain">[('name', 'in', ['New SAP Payment Report Importer', 'New SAP Sale Report Importer'])]</field>
         <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="import_backend_menu">
+        <field name="name">SAP Importers</field>
+        <field name="parent_id" ref="ofh_action_sale_order_main_menu"/>
+        <field name="action" ref="sap_import_backend_act_window"/>
+        <field name="sequence" eval="20"/>
     </record>
 
 </odoo>
