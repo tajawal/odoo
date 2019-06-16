@@ -74,3 +74,12 @@ class TestOfhSaleOrderImport(SavepointComponentCase):
             'charge_FB79CC175T1B627E2A8D' in charges.mapped('external_id'))
         self.assertTrue(
             'charge_18EAECF75P1B630A1FA3' in charges.mapped('external_id'))
+
+        # Added unit test to check supplier currency is selected
+        binding = self.binding_order_model.search([
+            ('backend_id', '=', self.backend.id),
+            ('external_id', '=', '5d050d2f0877b6089a40c903')])
+
+        self.assertEquals(len(binding), 1)
+        self.assertEquals(
+            binding.supplier_currency_id, self.env.ref(f'base.AED').id)
