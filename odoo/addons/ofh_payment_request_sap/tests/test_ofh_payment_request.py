@@ -72,7 +72,8 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
             'sap_status': 'in_sap',
             'integration_status': 'sale_payment_sent',
             'sap_xml_file_ref': 'f8e5859f4606827R0',
-            'sap_xml_sale_ref': '{}_148993R0'.format(self.pr_5.order_reference)
+            'sap_xml_sale_ref': '{}_148993R0'.format(self.pr_5.order_reference),
+            'manual_sap_zvd1': 22.39
         })
 
     def _setup_sap_sales_records(self):
@@ -245,4 +246,4 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
                 importer.run(self.record)
 
         # Check the result of the import
-        self.assertEquals(self.pr_5.manual_sap_zvd1, 22.3)
+        self.assertEquals(self.pr_5.manual_sap_zvd1, 22.39)
