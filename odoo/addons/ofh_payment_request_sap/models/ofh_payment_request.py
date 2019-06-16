@@ -95,6 +95,11 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
+    manual_sap_zvd1 = fields.Monetary(
+        string="Manual SAP ZVD1",
+        currency_field='supplier_currency_id',
+        track_visibility='onchange',
+    )
     sap_zdis = fields.Monetary(
         string="SAP ZDIS",
         currency_field='currency_id',
@@ -228,6 +233,10 @@ class OfhPaymentRequest(models.Model):
         """ Compute supplier cost to send to SAP."""
         for rec in self:
             rec.sap_zvd1 = 0.0
+            # Check if manual_sap_zvd1 zvd1 is set assign it to sap_zvd1
+            if not float_is_zero(
+                    rec.manual_sap_zvd1, precision_rounding=rec.currency_id.rounding):
+                rec.sap_zvd1 = abs(rec.manual_sap_zvd1)
             if rec.matching_status == 'unmatched':
                 continue
             # if no supplier for flight payment request continue
