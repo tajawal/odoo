@@ -27,7 +27,7 @@ class OfhSupplierInvoiceRunMatching(models.TransientModel):
             ('enett', 'Enett'),
             ('galileo', 'Galileo'),
             ('tf', 'Travel Fusion'),
-            ('tv', 'Travel Port')
+            ('tv', 'Travelutionary')
         ],
     )
 

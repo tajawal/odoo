@@ -7,7 +7,7 @@ class OfhSupplierInvoiceLine(models.Model):
     _inherit = 'ofh.supplier.invoice.line'
 
     invoice_type = fields.Selection(
-        selection_add=[('tv', 'Travel Port')],
+        selection_add=[('tv', 'Travelutionary')],
     )
     supplier_reference = fields.Char(
         string="Supplier Reference",
