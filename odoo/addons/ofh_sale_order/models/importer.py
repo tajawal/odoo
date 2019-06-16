@@ -98,6 +98,9 @@ class HubSaleOrderImportMapper(Component):
         currency = record.get('supplier_currency')
         if not currency:
             return {}
+        if "," in currency:
+            split_curr = currency.split(",")
+            currency = split_curr[0]
         return {
             'supplier_currency_id': self.env.ref(f'base.{currency}').id}
 
