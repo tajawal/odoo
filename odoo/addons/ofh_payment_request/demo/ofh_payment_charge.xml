@@ -60,48 +60,48 @@
          <field name="status">10000</field>
         <field name="total">796</field>
     </record>
-
+    
     <record id='ofh_payment_charge.ofh_payment_charge_6' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_4"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_4"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_7' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_5"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_gds_5"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_8' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_1"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_1"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_9' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_2"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_2"/>
     </record>
     <record id='ofh_payment_charge.ofh_payment_charge_10' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_3"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_3"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_11' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_4"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_4"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_12' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_5"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_tf_5"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_13' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_1"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_1"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_14' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_2"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_2"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_15' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_3"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_aig_3"/>
     </record>
 
     <record id='ofh_payment_charge.ofh_payment_charge_16' model="ofh.payment.charge">
-    <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_generic_1"/>
+        <field name="payment_request_id" ref="ofh_payment_request.ofh_payment_request_generic_1"/>
     </record>
 
 </odoo>
