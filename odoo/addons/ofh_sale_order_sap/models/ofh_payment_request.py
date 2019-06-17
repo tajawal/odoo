@@ -6,6 +6,8 @@ import logging
 from odoo import _, api, fields, models
 from odoo.exceptions import MissingError, UserError
 from odoo.tools import float_is_zero
+from odoo.addons.queue_job.job import job
+
 
 _logger = logging.getLogger(__name__)
 
@@ -368,6 +370,7 @@ class OfhPaymentRequest(models.Model):
         return self.env['ofh.sale.order.sap'].create(values)
 
     @api.multi
+    @job(default_channel='root')
     def send_payment_request_to_sap(self):
         if self.request_type == 'void':
             _logger.warn(f"PR# {self.track_id} is `void`. Skipp it.")
