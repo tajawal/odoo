@@ -237,6 +237,7 @@ class OfhPaymentRequest(models.Model):
             if not float_is_zero(
                     rec.manual_sap_zvd1, precision_rounding=rec.currency_id.rounding):
                 rec.sap_zvd1 = abs(rec.manual_sap_zvd1)
+                continue
             if rec.matching_status == 'unmatched':
                 continue
             # if no supplier for flight payment request continue
