@@ -247,3 +247,19 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
 
         # Check the result of the import
         self.assertEquals(self.pr_5.manual_sap_zvd1, 22.39)
+
+    def test_manual_sap_zvd1_value_is_zero(self):
+        for chunk in self.source.get_lines():
+            self.record.set_data(chunk)
+            with self.backend.work_on(
+                'import.record',
+                components_registry=self.comp_registry
+            ) as work:
+                importer = work.component_by_name(
+                    'payment.request.sap.record.importer',
+                    'ofh.payment.request')
+                self.assertTrue(importer)
+                importer.run(self.record)
+
+        # Check the result of the import
+        self.assertEquals(self.pr_4.manual_sap_zvd1, 0.0)
