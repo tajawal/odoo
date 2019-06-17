@@ -26,7 +26,7 @@ class TestOfhPaymentRequest(common.TransactionComponentRegistryCase):
 
         # Payment Requests
         self.pr_1 = self.env.ref(
-            'ofh_payment_request_sap.ofh_payment_request_gds_1')
+            'ofh_payment_request.ofh_payment_request_gds_1')
         self.pr_2 = self.env.ref(
             'ofh_payment_request.ofh_payment_request_gds_2')
         self.pr_3 = self.env.ref(
