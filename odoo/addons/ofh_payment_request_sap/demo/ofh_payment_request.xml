@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_payment_request_gds_1" model="ofh.payment.request">
+        <field name="track_id">pr-A8092211814-1539070315235</field>
+        <field name="order_reference">A8092211814</field>
+        <field name="created_at">2018-10-09</field>
+        <field name="updated_at">2018-10-09</field>
+        <field name="request_type">charge</field>
+        <field name="request_reason">Amendment</field>
+        <field name="request_status">Customer Processed</field>
+        <field name="order_id">89816</field>
+        <field name="hub_supplier_reference">YRNJ1,KZQNEE</field>
+        <field name="auth_code">588555</field>
+        <field name="office_id">DXBAD38TJ</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            {"fareDifference": 280,"changeFee": 80,"penalty": 300}
+        </field>
+        <field name="total_amount">660</field>
+        <field name="vendor_id">AI</field>
+
+        <field name="sap_status">not_in_sap</field>
+        <field name="integration_status">sale_sent</field>
+        <field name="sap_xml_sale_ref">A8092211814</field>
+        <field name="sap_xml_file_ref">A809221181432</field>
+        <field name="sap_zsel">2.3</field>
+        <field name="sap_payment_amount1">23</field>
+        <field name="sap_payment_amount2">-23</field>
+        <field name="sap_zdis">0.0</field>
+        <field name="sap_zvt1">1.2</field>
+        <field name="sap_pnr">PDSPSI</field>
+        <field name="sap_line_ids"></field>
+        <field name="sap_change_fee_zsel">2.3</field>
+        <field name="sap_change_fee_zvt1">1.2</field>
+        <field name="sap_change_fee_service_item">1299994</field>
+        <field name="sap_change_fee_tax_code">SS</field>
+        <field name="sap_tax_code">SS</field>
+    </record>
+
+</odoo>

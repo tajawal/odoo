@@ -16,6 +16,7 @@
         'web_notify',
     ],
     'data': [
+        'demo/ofh_payment_request.xml',
         'security/ofh_payment_request_sap_line.xml',
         'views/ofh_payment_request_sap_line.xml',
         'wizards/ofh_payment_request_integration_update.xml',
