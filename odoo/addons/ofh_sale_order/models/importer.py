@@ -35,7 +35,6 @@ class HubSaleOrderImportMapper(Component):
         ('total_insurance_amount', 'total_insurance_amount'),
         ('total_vendor_cost', 'total_vendor_cost'),
         ('total_supplier_cost', 'total_supplier_cost'),
-        ('total_supplier_price', 'total_supplier_price'),
     ]
     children = [
         ('line_items', 'hub_line_ids', 'hub.sale.order.line'),
@@ -121,6 +120,7 @@ class HubSaleOrderLineImportMapper(Component):
         ('validating_carrier', 'validating_carrier'),
         ('hotel_name', 'hotel_name'),
         ('line_id', 'external_id'),
+        ('total_supplier_price', 'total_supplier_price')
     ]
 
     @mapping
