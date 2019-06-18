@@ -1,5 +1,12 @@
 Changes
 -------
+2.3.3 (2019-06-18)
+------------------
+* Fix SAP-XML-API bugs.
+* Add missing fields for Hotel.
+* Add Manual ZVD1 for hotel Payment request.
+* Fix APG IATA Code.
+
 2.3.0 (2019-06-15)
 ------------------
 * SAP SAP/Integration Statuses for Sale/Payment Request.
