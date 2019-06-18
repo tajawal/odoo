@@ -65,7 +65,7 @@ class OfhPaymentRequest(models.Model):
     )
 
     @api.multi
-    @api.depends('sap_order_ids.state')
+    @api.depends('sap_order_ids.state', 'sap_order_ids.payment_request_id')
     def _compute_integration_status(self):
         for rec in self:
             rec.new_integration_status = rec.sap_order_ids.filtered(
@@ -83,7 +83,7 @@ class OfhPaymentRequest(models.Model):
         return [('id', 'in', sap_orders.mapped('payment_request_id.id'))]
 
     @api.multi
-    @api.depends('sap_payment_ids.state')
+    @api.depends('sap_payment_ids.state', 'sap_payment_ids.payment_request_id')
     def _compute_payment_integration_status(self):
         for rec in self:
             rec.new_payment_integration_status = rec.sap_payment_ids.filtered(
@@ -103,12 +103,14 @@ class OfhPaymentRequest(models.Model):
         return [('id', 'in', payment_orders.mapped('payment_request_id.id'))]
 
     @api.multi
-    @api.depends('sap_order_ids.state')
+    @api.depends(
+        'sap_order_ids.state',
+        'sap_order_ids.sap_status', 'sap_order_ids.payment_request_id')
     def _compute_sap_status(self):
         for rec in self:
             rec.new_sap_status = rec.sap_order_ids.filtered(
                 lambda s: s.state == 'success' and s.payment_request_id and
-                s.sap_status == 'in_sap') and rec.is_sale_applicable
+                s.sap_status == 'in_sap')
 
     @api.model
     def _search_sap_status(self, operator, value):
@@ -125,7 +127,9 @@ class OfhPaymentRequest(models.Model):
         return [('id', 'in', sap_orders.mapped('sale_order_id.id'))]
 
     @api.multi
-    @api.depends('sap_payment_ids.state')
+    @api.depends(
+        'sap_payment_ids.state', 'sap_payment_ids.sap_status',
+        'sap_payment_ids.payment_request_id')
     def _compute_payment_sap_status(self):
         for rec in self:
             rec.new_payment_sap_status = rec.sap_payment_ids.filtered(
