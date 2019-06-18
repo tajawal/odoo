@@ -411,16 +411,7 @@ class HubSaleOrderLineImportMapper(Component):
         if 'segment' not in record:
             return {}
         checkout_date = record['segment'].get('checkout_date')
-<<<<<<< HEAD
-<<<<<<< HEAD
         return {'checkout_date': fields.Datetime.from_string(checkout_date)}
-=======
-        return {'checkout_date': checkout_date}
->>>>>>> Added few missing fields in hotel
-=======
-        return {'checkout_date': fields.Datetime.from_string(
-                    checkout_date)}
->>>>>>> Updated fields to be EditAble
 
     @mapping
     def nb_nights(self, record):
