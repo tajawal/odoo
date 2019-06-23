@@ -139,6 +139,11 @@
                         domain="[('matching_status', '=', 'matched')]"/>
                 <filter name="supplier_not_applicable_status" string="Not Applicable"
                         domain="[('matching_status', '=', 'not_applicable')]"/>
+                <separator/>
+                <filter name="flight_prs" string="Flight PRs"
+                        domain="[('order_id.order_type', '=', 'flight')]"/>
+                <filter name="hotel_prs" string="Hotel PRs"
+                        domain="[('order_id.order_type', '=', 'hotel')]"/>
             </search>
         </field>
     </record>
