@@ -137,6 +137,12 @@ class OfhPaymentRequest(models.Model):
         store=True,
         readonly=True,
     )
+    is_voided = fields.Boolean(
+        string='Is Voided?',
+        compute='_compute_is_voided',
+        store=True,
+        readonly=True,
+    )
 
     @api.multi
     @api.depends(
@@ -199,6 +205,17 @@ class OfhPaymentRequest(models.Model):
             rec.is_full_refund = float_compare(
                 rec.order_amount, rec.total_amount,
                 precision_rounding=rec.currency_id.rounding) == 0
+
+    @api.multi
+    @api.depends('order_id.payment_request_ids')
+    def _compute_is_voided(self):
+        for rec in self:
+            rec.is_voided = False
+            if len(rec.order_id.payment_request_ids) != 1:
+                continue
+            if rec.request_type != 'void':
+                continue
+            rec.is_voided = True
 
     @api.multi
     def _search_ticketing_office_id(self, operator, value):

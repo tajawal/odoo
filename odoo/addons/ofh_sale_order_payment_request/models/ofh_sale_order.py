@@ -33,6 +33,12 @@ class OfhSaleOrder(models.Model):
         store=True,
         readonly=True,
     )
+    is_voided = fields.Boolean(
+        string='Is Voided?',
+        compute='_compute_is_voided',
+        store=True,
+        readonly=True,
+    )
 
     @api.multi
     @api.depends('payment_request_ids.matching_status')
@@ -61,3 +67,14 @@ class OfhSaleOrder(models.Model):
                 rec.payment_request_ids[0].order_amount,
                 rec.payment_request_ids[0].total_amount,
                 precision_rounding=rec.currency_id.rounding) == 0
+
+    @api.multi
+    @api.depends('payment_request_ids')
+    def _compute_is_voided(self):
+        for rec in self:
+            rec.is_voided = False
+            if len(rec.payment_request_ids) != 1:
+                continue
+            if rec.payment_request_ids[0].request_type != 'void':
+                continue
+            rec.is_voided = True
