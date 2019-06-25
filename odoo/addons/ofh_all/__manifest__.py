@@ -25,6 +25,7 @@
         'ofh_sale_order_sap_tf',
         'ofh_sale_order_sap_enett',
         'ofh_sale_order_sap_itl',
+        'ofh_sale_order_sap_tv',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
         'base_optional_quick_create',

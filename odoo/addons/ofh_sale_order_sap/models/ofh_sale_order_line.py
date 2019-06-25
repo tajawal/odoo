@@ -44,12 +44,23 @@ class OfhSaleOrderLine(models.Model):
             "destination_city": self.destination_city,
             "departure_date": self.departure_date,
             "route": self.route,
-            "segments": json.loads(self.segments),
+            "segments": json.loads(self.segments or '{}'),
             "last_leg": self.destination_city,
             "sale_price": abs(round(self.total_amount, 2)),
             "output_vat": abs(round(self.tax_amount, 2)),
             "discount": abs(round(self.discount_amount, 2)),
             "ticket_number": '',
+            "hotel_country": self.hotel_country,
+            "hotel_city": self.hotel_city,
+            "hotel_id": self.hotel_id,
+            "hotel_supplier_id": self.hotel_supplier_id,
+            "hotel_contract_name": self.contract,
+            "checkout_date": self.manual_checkout_date
+            if self.manual_checkout_date else self.checkout_date,
+            "check_in_date": self.check_in_date,
+            "number_of_nights": self.manual_nb_nights
+            if self.manual_nb_nights else self.nb_nights,
+            "number_of_rooms": self.nb_rooms
         }
 
     @api.multi
@@ -62,9 +73,16 @@ class OfhSaleOrderLine(models.Model):
 
         if self.matching_status in ('unmatched', 'not_applicable'):
             sale_line_dict = self._get_sale_line_dict()
-            sale_line_dict['pnr'] = \
-                self.vendor_confirmation_number if self.vendor_name == 'amd' \
-                else self.supplier_confirmation_number
+            if self.line_type == 'flight':
+                if self.vendor_name == 'amd':
+                    sale_line_dict['pnr'] = self.vendor_confirmation_number
+                else:
+                    sale_line_dict['pnr'] = self.supplier_confirmation_number
+            else:
+                sale_line_dict['pnr'] = \
+                    f"{self.line_reference}.{self.vendor_confirmation_number}"
+                sale_line_dict['supplier_ref'] = \
+                    self.supplier_confirmation_number
 
             # Not Applicable matching status cost should be 0.
             if self.matching_status == 'unmatched':

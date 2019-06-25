@@ -9,33 +9,37 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                     <group name="item_general" string="Item General" col="4">
-                                <field name="booking_line_item_flag"/>
-                                <field name="booking_line_item_number"/>
-                                <field name="line_item_billing_block"/>
-                                <field name="segment"/>
-                                <field name="service_item"/>
-                                <field name="qty"/>
-                                <field name="billing_date"/>
-                                <field name="plant"/>
-                                <field name="vat_tax_code"/>
-                                <field name="airline_code"/>
-                                <field name="iata_number"/>
-                                <field name="domestic_international"/>
-                                <field name="vendor"/>
-                                <field name="vendor2"/>
-                                <field name="travel_order_number"/>
-                                <field name="ticket_number"/>
-                                <field name="pnr"/>
-                                <field name="gds_code"/>
-                                <field name="lcc_ind"/>
-                                <field name="vendor_confirmation"/>
-                                <field name="segment_count"/>
-                                <field name="custom1"/>
-                                <field name="pax_name"/>
-                            </group>
+                    <group name="general" col="4">
+                        <field name="sap_sale_order_id" invisible="1"/>
+                        <field name="payment_request_id" invisible="1"/>
+                    </group>
+                    <group name="item_general" string="Item General" col="4">
+                        <field name="booking_line_item_flag"/>
+                        <field name="booking_line_item_number"/>
+                        <field name="line_item_billing_block"/>
+                        <field name="segment"/>
+                        <field name="service_item"/>
+                        <field name="qty"/>
+                        <field name="billing_date"/>
+                        <field name="plant"/>
+                        <field name="vat_tax_code"/>
+                        <field name="airline_code"/>
+                        <field name="iata_number"/>
+                        <field name="domestic_international"/>
+                        <field name="vendor"/>
+                        <field name="vendor2"/>
+                        <field name="travel_order_number"/>
+                        <field name="ticket_number"/>
+                        <field name="pnr"/>
+                        <field name="gds_code"/>
+                        <field name="lcc_ind"/>
+                        <field name="vendor_confirmation"/>
+                        <field name="segment_count"/>
+                        <field name="custom1"/>
+                        <field name="pax_name"/>
+                    </group>
                     <notebook>
-                        <page name="item_characteristics" string="Item Characteristics">
+                        <page name="flight_item_characteristics" string="Item Characteristics">
                             <group name="item_characteristics" col="4">
                                 <field name="z_airlinecode"/>
                                 <field name="z_fare_class"/>
@@ -52,6 +56,12 @@
                                 <field name="z_route"/>
                                 <field name="z_iata"/>
                                 <field name="z_numberofpax"/>
+                                <field name="z_suppliername_h"/>
+                                <field name="z_numberofnights"/>
+                                <field name="z_numberofrooms"/>
+                                <field name="z_startdate"/>
+                                <field name="z_checkout"/>
+                                <field name="z_provider_h"/>
                                 <newline/>
                                 <field name="z_seg1origin"/>
                                 <field name="z_seg1destination"/>

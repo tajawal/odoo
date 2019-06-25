@@ -99,62 +99,66 @@ class OfhSaleOrderSapExporter(Component):
             return
 
         # Update SAP Order with SAP details.
-        update_values = {
-            'failing_reason': 'not_applicable',
-            'sap_xml': response.get('xml'),
-            'sap_header_detail': json.dumps(
-                response.get('data', {}).get('Header')),
-        }
+        for detail in response:
+            update_values = {
+                'failing_reason': 'not_applicable',
+                'sap_xml': detail.get('xml'),
+                'sap_header_detail': json.dumps(
+                    detail.get('data', {}).get('Header')),
+            }
 
-        if sap_sale_order.state != 'visualize':
-            update_values['state'] = 'success'
-        else:
-            update_values['sap_status'] = 'not_applicable'
+            if sap_sale_order.state != 'visualize':
+                update_values['state'] = 'success'
+            else:
+                update_values['sap_status'] = 'not_applicable'
 
-        sap_sale_order.write(update_values)
+            sap_sale_order.write(update_values)
 
-        # Update SAP lines with SAP details
-        sap_lines = response.get('data', {}).get('LineItem')
+            # Update SAP lines with SAP details
+            sap_lines = detail.get('data', {}).get('LineItem')
 
-        sap_line_model = self.env['ofh.sale.order.line.sap']
-        for sap_line in sap_lines:
-            if sap_line['Pax_Name'] == 'TF COST ITEM':
-                sap_line_model.with_context(connector_no_export=True).create({
+            sap_line_model = self.env['ofh.sale.order.line.sap']
+
+            for sap_line in sap_lines:
+                if sap_line['Pax_Name'] == 'TF COST ITEM':
+                    sap_line_model.with_context(
+                        connector_no_export=True).create({
+                            'send_date': sap_sale_order.send_date,
+                            'sap_sale_order_id': sap_sale_order.id,
+                            'sale_order_line_id':
+                            sap_sale_order.sap_line_ids[0].
+                            sale_order_line_id.id,
+                            'backend_id': sap_sale_order.backend_id.id,
+                            'sap_line_detail': json.dumps(sap_line),
+                        })
+                    continue
+                line = sap_line_model.browse(sap_line['external_id'])
+                line.sap_line_detail = json.dumps(sap_line)
+
+            if 'enett_payments' not in detail:
+                return
+
+            sap_payment_model = self.env['ofh.payment.sap']
+            enett_payments = detail['enett_payments']
+
+            for enett in enett_payments:
+                values = {
                     'send_date': sap_sale_order.send_date,
                     'sap_sale_order_id': sap_sale_order.id,
-                    'sale_order_line_id':
-                    sap_sale_order.sap_line_ids[0].sale_order_line_id.id,
                     'backend_id': sap_sale_order.backend_id.id,
-                    'sap_line_detail': json.dumps(sap_line),
-                })
-                continue
-            line = sap_line_model.browse(sap_line['external_id'])
-            line.sap_line_detail = json.dumps(sap_line)
-
-        if 'enett_payments' not in response:
-            return
-
-        sap_payment_model = self.env['ofh.payment.sap']
-        enett_payments = response['enett_payments']
-
-        for enett in enett_payments:
-            values = {
-                'send_date': sap_sale_order.send_date,
-                'sap_sale_order_id': sap_sale_order.id,
-                'backend_id': sap_sale_order.backend_id.id,
-                'sap_payment_detail': json.dumps(enett.get('data')),
-                'sap_xml': enett.get('xml'),
-                'state': sap_sale_order.state,
-            }
-            if 'error' in enett:
-                values['failing_reason'] = 'error',
-                values['failing_text'] = enett['error']
-                values['state'] = 'failed'
-                values['sap_status'] = 'not_applicable'
-            else:
-                values['state'] = sap_sale_order.state
-            sap_payment_model.with_context(
-                connector_no_export=True).create(values)
+                    'sap_payment_detail': json.dumps(enett.get('data')),
+                    'sap_xml': enett.get('xml'),
+                    'state': sap_sale_order.state,
+                }
+                if 'error' in enett:
+                    values['failing_reason'] = 'error',
+                    values['failing_text'] = enett['error']
+                    values['state'] = 'failed'
+                    values['sap_status'] = 'not_applicable'
+                else:
+                    values['state'] = sap_sale_order.state
+                sap_payment_model.with_context(
+                    connector_no_export=True).create(values)
 
 
 class SAPBindingSaleOrderListener(Component):

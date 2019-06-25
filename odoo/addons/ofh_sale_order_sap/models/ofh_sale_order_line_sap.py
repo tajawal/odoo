@@ -328,6 +328,36 @@ class OfhSaleOrderLineSap(models.Model):
         readonly=True,
         compute="_compute_sap_line_fields",
     )
+    z_suppliername_h = fields.Char(
+        string="Z_SUPPLIERNAME_H",
+        readonly=True,
+        compute="_compute_sap_line_fields",
+    )
+    z_numberofnights = fields.Char(
+        string="Z_NUMBEROFNIGHTS",
+        readonly=True,
+        compute="_compute_sap_line_fields",
+    )
+    z_numberofrooms = fields.Char(
+        string="Z_NUMBEROFROOMS",
+        readonly=True,
+        compute="_compute_sap_line_fields",
+    )
+    z_startdate = fields.Char(
+        string="Z_STARTDATE",
+        readonly=True,
+        compute="_compute_sap_line_fields",
+    )
+    z_checkout = fields.Char(
+        string="Z_CHECKOUT",
+        readonly=True,
+        compute="_compute_sap_line_fields",
+    )
+    z_provider_h = fields.Char(
+        string="Z_CHECKOUT",
+        readonly=True,
+        compute="_compute_sap_line_fields",
+    )
     # SAP Sale Order Line Item fields (Item Conditions)
     zsel = fields.Char(
         string="ZSEL",
