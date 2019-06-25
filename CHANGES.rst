@@ -1,5 +1,15 @@
 Changes
 -------
+2.3.4 (2019-06-25)
+------------------
+* SAP XML for hotels booking.
+* Fix IATA Code for airline 275.
+* Is voided booking filter.
+* AMD vendor code for TF lines matched with GDS lines.
+* Hotel/Flight filter for payment request.
+* Avoid matching Flight invoice line with Hotel booking.
+* Number of Passengers (Guests) for hotels.
+
 2.3.3 (2019-06-18)
 ------------------
 * Fix SAP-XML-API bugs.
