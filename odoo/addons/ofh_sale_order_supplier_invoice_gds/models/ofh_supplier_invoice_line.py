@@ -136,6 +136,7 @@ class OfhSupplierInvoiceLine(models.Model):
             return [('name', '=', self.order_reference)]
 
         return [
+            ('order_type', '=', 'flight'),
             '|',
             ('supplier_reference', 'like', self.locator),
             ('vendor_reference', 'like', self.locator)]

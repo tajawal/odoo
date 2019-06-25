@@ -101,6 +101,7 @@ class OfhSupplierInvoiceLine(models.Model):
         office_ids = self.env['ofh.gds.office'].search([])
         offices = [o.name for o in office_ids]
         return [
+            ('order_type', '=', 'flight'),
             ('ticketing_office_id', 'not in', offices),
             '|',
             ('supplier_reference', 'like', self.locator),
