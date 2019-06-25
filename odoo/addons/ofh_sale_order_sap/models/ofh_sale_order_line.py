@@ -80,7 +80,7 @@ class OfhSaleOrderLine(models.Model):
                     sale_line_dict['pnr'] = self.supplier_confirmation_number
             else:
                 sale_line_dict['pnr'] = \
-                    f"{self.line_reference}.{self.vendor_confirmation_number}"
+                    f"{self.vendor_confirmation_number}.{self.line_reference}"
                 sale_line_dict['supplier_ref'] = \
                     self.supplier_confirmation_number
 

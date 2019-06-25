@@ -13,7 +13,7 @@ class OfhSaleOrderLine(models.Model):
         self.ensure_one()
         sale_line_dict = self._get_sale_line_dict()
         sale_line_dict['pnr'] = \
-            f"{self.line_reference}.{self.vendor_confirmation_number}"
+            f"{self.vendor_confirmation_number}.{self.line_reference}"
         sale_line_dict['supplier_ref'] = \
             self.supplier_confirmation_number
         sale_line_dict['cost_price'] = sum([
