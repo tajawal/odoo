@@ -506,6 +506,11 @@ class HubSaleOrderLineImportMapper(Component):
             return {
                 'passengers_count': record['traveller'].get(
                     'nb_passengers')}
+        if 'segment' in record:
+            return {
+                'passengers_count': record['segment'].get('nb_passengers')
+            }
+
         return {}
 
     @mapping
@@ -570,7 +575,8 @@ class HubSaleOrderLineImportMapper(Component):
     def segments(self, record):
         if 'traveller' in record:
             return {
-                'segments': json.dumps(record['traveller'].get('segments', ''))}
+                'segments': json.dumps(record['traveller'].get('segments', ''))
+            }
         return {}
 
 

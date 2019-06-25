@@ -19,6 +19,7 @@ class OfhSaleOrderLine(models.Model):
             line_dict['pnr'] = line.locator
             line_dict['airline_code'] = line.iata_code
             line_dict['supplier_name'] = line.iata_code
+            line_dict['vendor_name'] = 'amd'
             line_dict['cost_price'] = abs(line.currency_id.round(
                 line.gds_net_amount))
 
@@ -40,5 +41,4 @@ class OfhSaleOrderLine(models.Model):
             line_dict['ticket_number'] = line.ticket_number
             line_dict['office_id'] = line.office_id
             lines.append(line_dict)
-
         return lines
