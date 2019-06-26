@@ -244,7 +244,8 @@ class OfhSaleOrder(models.Model):
             "entity": self.entity,
             "country_code": self.country_code,
             "is_egypt": self.is_egypt,
-            "payment_provider": self.payment_ids[0].provider,
+            "payment_provider":
+            self.payment_ids[0].provider if self.payment_ids else '',
         }
 
     @api.multi
