@@ -36,6 +36,7 @@ class OfhSaleOrderLine(models.Model):
             "supplier_name": self.supplier_name,
             "item_currency": self.currency_id.name,
             "is_domestic_ksa": self.is_domestic_ksa,
+            "is_domestic_uae": self.is_domestic_uae,
             "ahs_group_name": self.ahs_group_name,
             "number_of_pax": self.passengers_count,
             "pax_name": self.traveller,

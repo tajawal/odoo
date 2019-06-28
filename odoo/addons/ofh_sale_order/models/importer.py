@@ -116,6 +116,7 @@ class HubSaleOrderLineImportMapper(Component):
         ('sequence', 'sequence'),
         ('product_id', 'name'),
         ('is_domestic_ksa', 'is_domestic_ksa'),
+        ('is_domestic_uae', 'is_domestic_uae'),
         ('ahs_group_name', 'ahs_group_name'),
         ('validating_carrier', 'validating_carrier'),
         ('hotel_name', 'hotel_name'),
@@ -401,8 +402,9 @@ class HubSaleOrderLineImportMapper(Component):
         if 'segment' not in record:
             return {}
         check_in_date = record['segment'].get('check_in_date')
-        return {'check_in_date': fields.Datetime.from_string(
-                    check_in_date)}
+        return {
+            'check_in_date': fields.Datetime.from_string(check_in_date)
+        }
 
     @mapping
     def checkout_date(self, record):

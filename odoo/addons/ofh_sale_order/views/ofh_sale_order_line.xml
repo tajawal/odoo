@@ -20,10 +20,11 @@
                         <field name="line_type"/>
                         <field name="line_category"/>
                         <field name="state"/>
-                        <field name="is_domestic_ksa"/>
+                        <field name="hotel_name"/>
                         <field name="ahs_group_name"/>
                         <field name="validating_carrier"/>
-                        <field name="hotel_name"/>
+                        <field name="is_domestic_ksa"/>
+                        <field name="is_domestic_uae"/>
                     </group>
                     <group name="traveller_info" col="4" string="Traveller Details"
                            attrs="{'invisible': [('line_type', '!=', 'flight')]}">

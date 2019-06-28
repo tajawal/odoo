@@ -71,6 +71,11 @@ class OfhSaleOrderLine(models.Model):
         default=False,
         help="True if the order is a domestic KSA, else False",
     )
+    is_domestic_uae = fields.Boolean(
+        string="Is Domestic UAE",
+        readonly=True,
+        default=False,
+    )
     # Vendor data
     vendor_confirmation_number = fields.Char(
         string="Vendor Confirmation Number",
