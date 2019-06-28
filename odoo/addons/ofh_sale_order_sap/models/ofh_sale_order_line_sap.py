@@ -354,7 +354,7 @@ class OfhSaleOrderLineSap(models.Model):
         compute="_compute_sap_line_fields",
     )
     z_provider_h = fields.Char(
-        string="Z_CHECKOUT",
+        string="Z_PROVIDER_H",
         readonly=True,
         compute="_compute_sap_line_fields",
     )
