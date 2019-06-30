@@ -149,6 +149,11 @@ class OfhSaleOrderSap(models.Model):
         inverse_name='sap_sale_order_id',
         readonly=True,
     )
+    is_double_hoop = fields.Boolean(
+        string="Is Double Hoop?",
+        default=False,
+        index=True,
+    )
     # SAP Header Fields
     system_id = fields.Char(
         string="System ID",

@@ -10,6 +10,7 @@
             <form>
                 <sheet>
                     <group name="general" col="4">
+                        <field name="is_double_hoop"/>
                         <field name="sap_sale_order_id" invisible="1"/>
                         <field name="payment_request_id" invisible="1"/>
                     </group>

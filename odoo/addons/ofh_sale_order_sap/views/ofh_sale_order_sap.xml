@@ -37,6 +37,7 @@
                         <field name="fe_indicator"/>
                         <field name="invoice_currency"/>
                         <field name="tapro_invoice_number"/>
+                        <field name="is_double_hoop"/>
                     </group>
                     <notebook>
                         <page name="sale_lines" string="SAP Lines">
@@ -127,6 +128,7 @@
                 <field name="failing_reason"/>
                 <field name="sap_status"/>
                 <field name="payment_sap_status"/>
+                <field name="is_double_hoop"/>
             </tree>
         </field>
     </record>

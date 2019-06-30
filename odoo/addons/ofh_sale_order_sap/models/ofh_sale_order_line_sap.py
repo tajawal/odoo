@@ -46,6 +46,11 @@ class OfhSaleOrderLineSap(models.Model):
         string="SAP Line Detail",
         readonly=True,
     )
+    is_double_hoop = fields.Boolean(
+        string="Is Double Hoop?",
+        default=False,
+        index=True,
+    )
     # SAP Line Item Fields (Item General)
     booking_line_item_flag = fields.Char(  # sap_details
         string="Booking Line Item Flag",

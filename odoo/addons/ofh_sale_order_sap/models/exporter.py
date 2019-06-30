@@ -100,6 +100,10 @@ class OfhSaleOrderSapExporter(Component):
 
         # Update SAP Order with SAP details.
         for detail in response:
+            if 'is_double_hoop' in detail and detail['is_double_hoop']:
+                self._create_double_hoop_sap_order(sap_sale_order, detail)
+                continue
+
             update_values = {
                 'failing_reason': 'not_applicable',
                 'sap_xml': detail.get('xml'),
@@ -136,7 +140,7 @@ class OfhSaleOrderSapExporter(Component):
                 line.sap_line_detail = json.dumps(sap_line)
 
             if 'enett_payments' not in detail:
-                return
+                continue
 
             sap_payment_model = self.env['ofh.payment.sap']
             enett_payments = detail['enett_payments']
@@ -151,7 +155,7 @@ class OfhSaleOrderSapExporter(Component):
                     'state': sap_sale_order.state,
                 }
                 if 'error' in enett:
-                    values['failing_reason'] = 'error',
+                    values['failing_reason'] = 'error'
                     values['failing_text'] = enett['error']
                     values['state'] = 'failed'
                     values['sap_status'] = 'not_applicable'
@@ -159,6 +163,51 @@ class OfhSaleOrderSapExporter(Component):
                     values['state'] = sap_sale_order.state
                 sap_payment_model.with_context(
                     connector_no_export=True).create(values)
+
+    def _create_double_hoop_sap_order(self, sap_sale_order, detail):
+        values = {
+            'send_date': sap_sale_order.send_date,
+            'sale_order_id': sap_sale_order.sale_order_id.id,
+            'backend_id': sap_sale_order.backend_id.id,
+            'is_double_hoop': True,
+        }
+
+        sap_order_model = self.env['ofh.sale.order.sap']
+
+        if 'error' in detail:
+            values['failing_reason'] = 'error'
+            values['failing_text'] = detail['error']
+            values['state'] = 'failed'
+            values['sap_status'] = 'not_applicable'
+            return sap_order_model.with_context(
+                connector_no_export=True).create(values)
+
+        values['failing_reason'] = 'not_applicable'
+        values['sap_xml'] = detail.get('xml')
+        values['sap_header_detail'] = json.dumps(
+            detail.get('data', {}).get('Header'))
+
+        if sap_sale_order.state != 'visualize':
+            values['state'] = 'success'
+        else:
+            values['state'] = 'visualize'
+            values['sap_status'] = 'not_applicable'
+
+        sap_order = sap_order_model.with_context(
+            connector_no_export=True).create(values)
+
+        sap_line_model = self.env['ofh.sale.order.line.sap']
+
+        sap_lines = detail.get('data', {}).get('LineItem')
+
+        for sap_line in sap_lines:
+            sap_line_model.with_context(connector_no_export=True).create({
+                'send_date': sap_sale_order.send_date,
+                'sap_sale_order_id': sap_order.id,
+                'backend_id': sap_sale_order.backend_id.id,
+                'sap_line_detail': json.dumps(sap_line),
+                'is_double_hoop': True,
+            })
 
 
 class SAPBindingSaleOrderListener(Component):
