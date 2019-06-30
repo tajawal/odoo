@@ -177,7 +177,7 @@ class OfhPaymentRequest(models.Model):
         self.ensure_one()
         # Case no matching required for payment request.
         if self.matching_status == 'not_applicable':
-            sap_zsel = abs(self.sap_zsel) + abs(self.sap_zdis)
+            sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
             line_dict = self.order_id.line_ids[0].to_dict()[0]
 
             line_dict['billing_date'] = self.updated_at

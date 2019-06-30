@@ -11,7 +11,7 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     def _get_gds_payment_request_dict(self) -> list:
         self.ensure_one()
-        sap_zsel = abs(self.sap_zsel) + abs(self.sap_zdis)
+        sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
         total_cost = self.supplier_total_amount
         lines = []
         for line in self.supplier_invoice_ids:

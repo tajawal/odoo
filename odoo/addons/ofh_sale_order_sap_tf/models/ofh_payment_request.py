@@ -11,7 +11,7 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     def _get_tf_payment_request_dict(self) -> list:
         self.ensure_one()
-        sap_zsel = abs(self.sap_zsel) + abs(self.sap_zdis)
+        sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
         line_dict = self.order_id.line_ids[0]._get_sale_line_dict()
 
         line = self.supplier_invoice_ids[0]
