@@ -1,5 +1,10 @@
 Changes
 -------
+2.3.7 (2019-06-30)
+------------------
+- Double hoop Sale Order.
+- Missing domestic UAE Flag.
+
 2.3.4 (2019-06-25)
 ------------------
 * SAP XML for hotels booking.
