@@ -393,3 +393,45 @@ class OfhPaymentRequest(models.Model):
 
         values = self._prepare_sap_order_values()
         return self.env['ofh.sale.order.sap'].create(values)
+
+    @api.multi
+    def force_send_payment_request_order_to_sap(self):
+        self.ensure_one()
+        if self.request_type == 'void':
+            _logger.warn(f"PR# {self.track_id} is `void`. Skipp it.")
+            return False
+
+        if self.matching_status not in ('matched', 'not_applicable'):
+            _logger.warn(f"PR# {self.track_id} is not matched yet. Skipp it.")
+            return False
+
+        if self.payment_request_status == 'incomplete':
+            _logger.warn(f"PR# {self.track_id} is incomplete. Skipp it.")
+            return False
+
+        values = self._prepare_sap_order_values()
+        # When force sending, for send only the sale part.
+        values.pop('sap_payment_ids')
+
+        return self.env['ofh.sale.order.sap'].with_context(
+            force_send=True).create(values)
+
+    @api.multi
+    def force_send_payment_of_payment_request_to_sap(self):
+        self.ensure_one()
+        if self.request_type == 'void':
+            _logger.warn(f"PR# {self.track_id} is `void`. Skipp it.")
+            return False
+
+        if self.matching_status not in ('matched', 'not_applicable'):
+            _logger.warn(f"PR# {self.track_id} is not matched yet. Skipp it.")
+            return False
+
+        if self.payment_request_status == 'incomplete':
+            _logger.warn(f"PR# {self.track_id} is incomplete. Skipp it.")
+            return False
+
+        values = self._prepare_payment_values()
+        for value in values:
+            self.env['ofh.payment.sap'].with_context(
+                force_send=True).create(value[2])

@@ -15,6 +15,18 @@
                         help="Simualate the sending of an order to SAP."
                         class="btn-info"
                         type="object"/>
+                <button name="force_send_payment_request_order_to_sap"
+                        string="Force Send Order to SAP"
+                        class="btn-danger"
+                        help="Send to Sap-xml-api and get and object in return."
+                        confirm="You are about to force send this payment request (ONLY SALE PART). Are you sure?"
+                        type="object"/>
+                <button name="force_send_payment_of_payment_request_to_sap"
+                        string="Force Send Payment to SAP"
+                        class="btn-warning"
+                        help="Send to Sap-xml-api and get and object in return."
+                        confirm="You are about to force send this payment request (ONLY PAYMENT PART). Are you sure?"
+                        type="object"/>
             </header>
             <group name="status_details" position="inside">
                 <field name="new_integration_status"/>
