@@ -148,7 +148,7 @@
                 <filter name="order_not_applicable_status" string="Order Not Applicable" domain="[('order_matching_status', '=', 'not_applicable')]"/>
                 <separator/>
                 <filter name="paid_paylater" string="Paid Pay Later" domain="[('is_pay_later', '=', True),('payment_ids','!=',[]),('order_status','not in',['96','94'])]"/>
-                <filter name="pending_paylater" string="Pending Pay Later" domain="[('is_pay_later', '=', True),('payment_ids','=',[])]"/>
+                <filter name="pending_paylater" string="Pending Pay Later" domain="[('is_pay_later', '=', True),('payment_ids','=',False)]"/>
                 <filter name="cancelled_paylater" string="Cancelled Pay Later" domain="[('is_pay_later', '=', True),('order_status','in',['96','94'])]"/>
             </search>
         </field>
