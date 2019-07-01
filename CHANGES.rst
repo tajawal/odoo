@@ -1,5 +1,11 @@
 Changes
 -------
+2.3.8 (2019-07-01)
+------------------
+- Force Send payment request order and payment to SAP.
+- Fix ZSEL amount for refund PRs with discount.
+- Fix paylater filters.
+
 2.3.7 (2019-06-30)
 ------------------
 - Double hoop Sale Order.
