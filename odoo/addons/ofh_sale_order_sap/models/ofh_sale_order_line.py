@@ -80,17 +80,10 @@ class OfhSaleOrderLine(models.Model):
                 else:
                     sale_line_dict['pnr'] = self.supplier_confirmation_number
             else:
-                sale_line_dict['pnr'] = \
-                    f"{self.vendor_confirmation_number}.{self.line_reference}"
-                sale_line_dict['supplier_ref'] = \
-                    self.supplier_confirmation_number
-
-            # Not Applicable matching status cost should be 0.
-            if self.matching_status == 'unmatched':
-                sale_line_dict['cost_price'] = abs(round(
-                    self.supplier_cost_amount, 2))
-            else:
-                sale_line_dict['cost_price'] = 0.00
+                if hasattr(self, '_get_tv_sale_line_dict'):
+                    return getattr(self, '_get_tv_sale_line_dict')()
+                else:
+                    raise MissingError(_("Method not implemented."))
 
             sale_line_dict['cost_currency'] = self.supplier_currency_id.name
             sale_line_dict['ticket_number'] = self.line_reference
