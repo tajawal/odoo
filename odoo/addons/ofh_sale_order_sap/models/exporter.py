@@ -174,6 +174,10 @@ class OfhSaleOrderSapExporter(Component):
             'backend_id': sap_sale_order.backend_id.id,
             'is_double_hoop': True,
         }
+        if sap_sale_order.sale_order_id:
+            values['sale_order_id'] = sap_sale_order.sale_order_id.id
+        else:
+            values['payment_request_id'] = sap_sale_order.payment_request_id.id
 
         sap_order_model = self.env['ofh.sale.order.sap']
 

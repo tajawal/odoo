@@ -376,12 +376,10 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     @job(default_channel='root')
     def send_payment_request_to_sap(self):
+        # TODO: remove the method from ofh_payment_request_sap.
         if self.request_type == 'void':
             _logger.warn(f"PR# {self.track_id} is `void`. Skipp it.")
             return False
-
-        if self.order_type != 'flight':
-            return super(OfhPaymentRequest, self).send_payment_request_to_sap()
 
         if self.matching_status not in ('matched', 'not_applicable'):
             _logger.warn(f"PR# {self.track_id} is not matched yet. Skipp it.")
