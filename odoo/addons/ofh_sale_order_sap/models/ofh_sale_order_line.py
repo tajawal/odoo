@@ -85,6 +85,13 @@ class OfhSaleOrderLine(models.Model):
                 else:
                     raise MissingError(_("Method not implemented."))
 
+            # Not Applicable matching status cost should be 0.
+            if self.matching_status == 'unmatched':
+                sale_line_dict['cost_price'] = abs(round(
+                    self.supplier_cost_amount, 2))
+            else:
+                sale_line_dict['cost_price'] = 0.00
+
             sale_line_dict['cost_currency'] = self.supplier_currency_id.name
             sale_line_dict['ticket_number'] = self.line_reference
             return [sale_line_dict]
