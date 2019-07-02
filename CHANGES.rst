@@ -1,5 +1,13 @@
 Changes
 -------
+
+2.4.0 (2019-07-02)
+------------------
+- Block Unpaid Paylater Hotels from being sent.
+- send hotel PRs from Ayesha.
+- Query optimisation (Add auto join flag for Many2one fields).
+- Fix lines with ZSEL = 0.
+
 2.3.8 (2019-07-01)
 ------------------
 - Force Send payment request order and payment to SAP.
