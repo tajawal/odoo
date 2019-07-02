@@ -94,7 +94,11 @@ class OfhPayment(models.Model):
             [dict] -- Sap Sale Order dictionary
         """
         self.ensure_one()
-        validating_carrier = self.order_id.line_ids[0].validating_carrier
+        if self.order_id.line_ids:
+            validating_carrier = self.order_id.line_ids[0].validating_carrier
+        else:
+            validating_carrier = ''
+
         return {
             "id": self.order_id.hub_bind_ids.external_id,
             "name": self.order_id.name,
