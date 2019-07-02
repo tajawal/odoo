@@ -36,6 +36,9 @@ class OfhSaleOrderSapExporter(Component):
                 lambda l: l.reconciliation_status == 'unreconciled'):
             return 'Unreconciled Lines'
 
+        if sale_order.is_pay_later and not sale_order.payment_ids:
+            return 'Unpaid Paylater Hotel Booking'
+
         return ''
 
     def _must_skip_payment_request(self, payment_request) -> str:
