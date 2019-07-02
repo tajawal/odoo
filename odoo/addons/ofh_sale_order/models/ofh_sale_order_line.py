@@ -31,6 +31,7 @@ class OfhSaleOrderLine(models.Model):
         index=True,
         comodel_name='ofh.sale.order',
         ondelete='cascade',
+        auto_join=True,
     )
     created_at = fields.Datetime(
         string="Created At",

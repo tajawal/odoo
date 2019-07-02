@@ -13,6 +13,7 @@ class OfhPaymentRequest(models.Model):
         string="Order ID",
         readonly=True,
         ondelete="cascade",
+        auto_join=True,
     )
     order_reference = fields.Char(
         related="order_id.name",

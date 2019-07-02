@@ -48,6 +48,7 @@ class OfhPaymentSap(models.Model):
         index=True,
         readonly=True,
         ondelete='cascade',
+        auto_join=True
     )
     payment_request_id = fields.Many2one(
         string="Payment Request",
@@ -55,6 +56,7 @@ class OfhPaymentSap(models.Model):
         readonly=True,
         ondelete='cascade',
         index=True,
+        auto_join=True
     )
     sap_payment_detail = fields.Text(
         string="SAP Payment Details",
@@ -116,6 +118,7 @@ class OfhPaymentSap(models.Model):
         readonly=True,
         ondelete='cascade',
         index=True,
+        auto_join=True
     )
     sale_order_id = fields.Many2one(
         string="Sale Order",

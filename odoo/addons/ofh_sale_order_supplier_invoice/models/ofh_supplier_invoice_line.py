@@ -15,6 +15,7 @@ class OfhSupplierInvoiceLine(models.Model):
         comodel_name='ofh.sale.order',
         track_visibility='always',
         readonly=True,
+        auto_join=True
     )
     order_line_id = fields.Many2one(
         string='Order Line',
@@ -22,6 +23,7 @@ class OfhSupplierInvoiceLine(models.Model):
         track_visibility='always',
         inverse='_update_matching_status',
         readonly=True,
+        auto_join=True
     )
     payment_request_id = fields.Many2one(
         inverse='_update_matching_status',

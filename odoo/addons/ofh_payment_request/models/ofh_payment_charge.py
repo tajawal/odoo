@@ -13,4 +13,5 @@ class OfhPaymentCharge(models.Model):
         readonly=True,
         ondelete="cascade",
         index=True,
+        auto_join=True,
     )

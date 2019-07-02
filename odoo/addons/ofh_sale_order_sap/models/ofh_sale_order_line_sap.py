@@ -23,6 +23,7 @@ class OfhSaleOrderLineSap(models.Model):
         readonly=True,
         ondelete='cascade',
         index=True,
+        auto_join=True
     )
     payment_request_id = fields.Many2one(
         string="Payment Request",
@@ -30,6 +31,7 @@ class OfhSaleOrderLineSap(models.Model):
         readonly=True,
         ondelete='cascade',
         index=True,
+        auto_join=True
     )
     sap_sale_order_id = fields.Many2one(
         comodel_name='ofh.sale.order.sap',
@@ -37,6 +39,7 @@ class OfhSaleOrderLineSap(models.Model):
         readonly=True,
         ondelete='cascade',
         index=True,
+        auto_join=True
     )
     line_detail = fields.Text(
         string="Line Detail",

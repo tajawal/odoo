@@ -13,6 +13,7 @@ class OfhSupplierInvoiceLine(models.Model):
         readonly=True,
         index=True,
         track_visibility='always',
+        auto_join=True
     )
 
     @api.multi

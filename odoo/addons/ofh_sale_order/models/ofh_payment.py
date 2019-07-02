@@ -12,4 +12,5 @@ class OfhPayment(models.Model):
         index=True,
         comodel_name='ofh.sale.order',
         ondelete='cascade',
+        auto_join=True,
     )
