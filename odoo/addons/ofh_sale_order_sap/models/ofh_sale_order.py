@@ -74,13 +74,25 @@ class OfhSaleOrder(models.Model):
 
     @api.model
     def _search_integration_status(self, operator, value):
-        sap_orders = self.env['ofh.sale.order.sap'].search(
-            [('state', '=', 'success'), ('sale_order_id', '!=', False)])
-        if not sap_orders:
-            return [('id', '=', False)]
         if operator == '!=':
-            return [('id', 'not in', sap_orders.mapped('sale_order_id.id'))]
-        return [('id', 'in', sap_orders.mapped('sale_order_id.id'))]
+            self.env.cr.execute("""
+                select id as sale_order_id from ofh_sale_order
+                except
+                select sale_order_id
+                FROM ofh_sale_order_sap WHERE state = 'succes';
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+        else:
+            self.env.cr.execute("""
+                SELECT sale_order_id FROM ofh_sale_order_sap WHERE
+                state = 'success' AND sale_order_id > 0
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
 
     @api.multi
     @api.depends('payment_ids.sap_payment_ids', 'is_payment_applicable')
@@ -93,14 +105,25 @@ class OfhSaleOrder(models.Model):
 
     @api.model
     def _search_payment_integration_status(self, operator, value):
-        payment_orders = self.env['ofh.payment.sap'].search(
-            [('state', '=', 'success'), ('payment_id', '!=', False)])
-        if not payment_orders:
-            return [('id', '=', False)]
-        order_ids = payment_orders.mapped('payment_id.order_id')
         if operator == '!=':
-            return [('id', 'not in', order_ids.ids)]
-        return [('id', 'in', order_ids.ids)]
+            self.env.cr.execute("""
+                select id as sale_order_id from ofh_sale_order
+                except
+                select sale_order_id
+                FROM ofh_payment_sap WHERE state = 'succes';
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+        else:
+            self.env.cr.execute("""
+                SELECT sale_order_id FROM ofh_payment_sap WHERE
+                state = 'success' AND sale_order_id > 0
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
 
     @api.multi
     @api.depends('sap_order_ids.state', 'is_sale_applicable')
