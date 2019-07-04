@@ -79,7 +79,8 @@ class OfhSaleOrder(models.Model):
                 select id as sale_order_id from ofh_sale_order
                 except
                 select sale_order_id
-                FROM ofh_sale_order_sap WHERE state = 'succes';
+                FROM ofh_sale_order_sap WHERE
+                state = 'success' AND sale_order_id > 0;
             """)
             order_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
@@ -110,7 +111,8 @@ class OfhSaleOrder(models.Model):
                 select id as sale_order_id from ofh_sale_order
                 except
                 select sale_order_id
-                FROM ofh_payment_sap WHERE state = 'succes';
+                FROM ofh_payment_sap WHERE
+                state = 'success' AND sale_order_id > 0;
             """)
             order_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
