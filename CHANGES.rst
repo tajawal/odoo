@@ -1,5 +1,11 @@
 Changes
 -------
+2.4.8 (2019-07-04)
+------------------
+- Fix is sent?, is Payment Sent? filter on sale order.
+- Fix sending PRs without charges (only sale part will go to SAP.)
+- fix payment request SAP record.
+- Tune some infra parameters.
 
 2.4.0 (2019-07-02)
 ------------------
