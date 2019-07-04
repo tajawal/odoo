@@ -258,7 +258,7 @@ class OfhPaymentRequest(models.Model):
             "payment_provider": '',
             "payment_source": '',
             "payment_mode": '',
-            "payment_status": charges[0].status,
+            "payment_status": charges[0].status if charges else '',
             "mid": '',
             "card_bin": '',
             "card_last_four": '',
