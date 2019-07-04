@@ -176,6 +176,8 @@ class OfhPaymentRequest(models.Model):
     def _get_payment_request_lines(self) -> list:
         self.ensure_one()
         # Case no matching required for payment request.
+        if not self.order_id.line_ids:
+            return []
         if self.matching_status == 'not_applicable':
             sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
             line_dict = self.order_id.line_ids[0].to_dict()[0]
@@ -232,7 +234,11 @@ class OfhPaymentRequest(models.Model):
     @api.multi
     def _get_payment_request_payment(self):
         self.ensure_one()
-        validating_carrier = self.order_id.line_ids[0].validating_carrier
+        if self.order_id.line_ids:
+            validating_carrier = self.order_id.line_ids[0].validating_carrier
+        else:
+            validating_carrier = ''
+
         charges = self.charge_ids.sorted(lambda c: c.created_at, reverse=True)
         payment_dict = {
             "id": self.order_id.hub_bind_ids.external_id,
