@@ -11,9 +11,10 @@ limit_request = 8192
 limit_time_cpu = 600
 limit_time_real = 1200
 max_cron_threads = 1
+log_level=debug_rpc
 
 [queue_job]
-channels = root:2,root.hub:2,root.import:1:throttle=2
+channels = root:4,root.hub:4,root.sap:4,root.import:1:throttle=2
 
 [hub_backend.$myenv-hub]
 hub_api_location=$hub_api_location
