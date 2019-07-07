@@ -1,5 +1,17 @@
 Changes
 -------
+2.4.10 (2019-07-07)
+-------------------
+- Optimise SAP status and integration status in sale order and payment request.
+- Add Sale sent not payment, and payment not sale.
+.. image:: images/sale_payment_in_sap_filter.png
+
+- Add Special view for skippe hotel orders.
+.. image:: images/hotel_skipped_orders.png
+
+- Manual SAP ZVD1 and Manual SAP ZVD1 currency
+.. image:: images/manual_zvd1.png
+
 2.4.8 (2019-07-04)
 ------------------
 - Fix is sent?, is Payment Sent? filter on sale order.
