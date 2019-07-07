@@ -63,6 +63,22 @@ class OfhSaleOrder(models.Model):
         compute='_compute_payment_sap_status',
         search='_search_payment_sap_status',
     )
+    sale_not_payment_sap_status = fields.Boolean(
+        string="Sale not Payment in SAP?",
+        readonly=True,
+        store=False,
+        help="Technical field to search Sale Order which the Sale part is "
+             "in SAP and the payment is not in SAP.",
+        search='_search_sale_not_payment_sap_status',
+    )
+    payment_not_sale_sap_status = fields.Boolean(
+        string="Payment not Sale in SAP?",
+        readonly=True,
+        store=False,
+        search='_search_payment_not_sale_sap_status',
+        help="Technical field to search Sale Order which the Sale part is "
+             "not in SAP and the payment is in SAP.",
+    )
 
     @api.multi
     @api.depends('sap_order_ids.state', 'is_sale_applicable')
@@ -137,15 +153,29 @@ class OfhSaleOrder(models.Model):
 
     @api.model
     def _search_sap_status(self, operator, value):
-        sap_orders = self.env['ofh.sale.order.sap'].search([
-            ('state', '=', 'success'),
-            ('sale_order_id', '!=', False),
-            ('sap_status', '=', 'in_sap')])
-        if not sap_orders:
-            return [('id', '=', False)]
         if operator == '!=':
-            return [('id', 'not in', sap_orders.mapped('sale_order_id.id'))]
-        return [('id', 'in', sap_orders.mapped('sale_order_id.id'))]
+            self.env.cr.execute("""
+                SELECT sale_order_id
+                FROM ofh_sale_order_sap WHERE
+                    state = 'success' AND
+                    sale_order_id > 0 AND
+                    sap_status != 'in_sap';
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+        else:
+            self.env.cr.execute("""
+                SELECT sale_order_id
+                FROM ofh_sale_order_sap WHERE
+                    state = 'success' AND
+                    sale_order_id > 0 AND
+                    sap_status = 'in_sap';
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
 
     @api.multi
     @api.depends('payment_ids.sap_payment_ids', 'is_payment_applicable')
@@ -158,16 +188,77 @@ class OfhSaleOrder(models.Model):
 
     @api.model
     def _search_payment_sap_status(self, operator, value):
-        payment_orders = self.env['ofh.payment.sap'].search([
-            ('state', '=', 'success'),
-            ('payment_id', '!=', False),
-            ('sap_status', '=', 'in_sap')])
-        if not payment_orders:
-            return [('id', '=', False)]
-        order_ids = payment_orders.mapped('payment_id.order_id')
         if operator == '!=':
-            return [('id', 'not in', order_ids.ids)]
-        return [('id', 'in', order_ids.ids)]
+            self.env.cr.execute("""
+                SELECT sale_order_id
+                FROM ofh_payment_sap WHERE
+                    state = 'success' AND
+                    sale_order_id > 0 AND
+                    sap_status != 'in_sap';
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+        else:
+            self.env.cr.execute("""
+                SELECT sale_order_id
+                FROM ofh_payment_sap WHERE
+                    state = 'success' AND
+                    sale_order_id > 0 AND
+                    sap_status = 'in_sap';
+            """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
+
+    @api.model
+    def _search_sale_not_payment_sap_status(self, operator, value):
+        if operator == '!=':
+            return [('id', '=', 0)]
+
+        self.env.cr.execute("""
+            SELECT sale_order_id
+            FROM ofh_payment_sap WHERE
+                state = 'success' AND
+                sale_order_id > 0 AND
+                sap_status != 'in_sap'
+            INTERSECT
+            SELECT sale_order_id
+            FROM ofh_sale_order_sap WHERE
+                state = 'success' AND
+                sale_order_id > 0 AND
+                sap_status = 'in_sap';
+            """)
+        order_ids = [x[0] for x in self.env.cr.fetchall()]
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
+
+    @api.model
+    def _search_payment_not_sale_sap_status(self, operator, value):
+        if operator == '!=':
+            return [('id', '=', 0)]
+
+        self.env.cr.execute("""
+            SELECT sale_order_id
+            FROM ofh_sale_order_sap WHERE
+                state = 'success' AND
+                sale_order_id > 0 AND
+                sap_status != 'in_sap'
+            INTERSECT
+            SELECT sale_order_id
+            FROM ofh_payment_sap WHERE
+                state = 'success' AND
+                sale_order_id > 0 AND
+                sap_status = 'in_sap';
+        """)
+        order_ids = [x[0] for x in self.env.cr.fetchall()]
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
 
     @api.multi
     def action_send_order_to_sap(self):
