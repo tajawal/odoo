@@ -97,7 +97,12 @@ class OfhPaymentRequest(models.Model):
     )
     manual_sap_zvd1 = fields.Monetary(
         string="Manual SAP ZVD1",
-        currency_field='supplier_currency_id',
+        currency_field='manual_sap_zvd1_currency',
+        track_visibility='onchange',
+    )
+    manual_sap_zvd1_currency = fields.Many2one(
+        string="Manual SAP ZVD1 Currency",
+        comodel_name='res.currency',
         track_visibility='onchange',
     )
     sap_zdis = fields.Monetary(
@@ -559,6 +564,13 @@ class OfhPaymentRequest(models.Model):
             fields.Datetime.from_string(
                 self.updated_at), '%Y%m%d')
 
+        if self.manual_sap_zvd1_currency:
+            zvd1_currency = self.manual_sap_zvd1_currency.name
+        elif self.supplier_currency_id.name:
+            zvd1_currency = self.manual_sap_zvd1_currency.name
+        else:
+            zvd1_currency = self.currency_id.name
+
         line_item = {
             'item_general': {
                 'VATTaxCode': self.sap_change_fee_tax_code,
@@ -568,8 +580,7 @@ class OfhPaymentRequest(models.Model):
             },
             'item_condition': {
                 'ZVD1': 0.0,
-                'ZVD1_CURRENCY': self.supplier_currency_id.name if
-                self.supplier_currency_id else self.currency_id.name,
+                'ZVD1_CURRENCY': zvd1_currency,
                 'ZSEL': self.sap_change_fee_zsel,
                 'ZSEL_CURRENCY': self.currency_id.name,
                 'ZVT1': self.sap_change_fee_zvt1,

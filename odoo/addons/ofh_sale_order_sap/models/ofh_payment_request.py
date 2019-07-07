@@ -241,8 +241,14 @@ class OfhPaymentRequest(models.Model):
             line_dict['output_vat'] = abs(
                 self.currency_id.round(self.sap_zvt1))
 
-            line_dict['cost_currency'] = self.supplier_currency_id.name if \
-                self.supplier_currency_id else self.currency_id.name
+            if self.manual_sap_zvd1_currency:
+                line_dict['cost_currency'] = \
+                    self.manual_sap_zvd1_currency.name
+            elif self.supplier_currency_id:
+                line_dict['cost_currency'] = self.supplier_currency_id.name
+            else:
+                line_dict['cost_currency'] = self.currency_id.name
+
             lines = [line_dict]
 
         # Case matched with supplier add the line depending the supplier

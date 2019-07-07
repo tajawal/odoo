@@ -33,6 +33,7 @@
                         <field name="sap_zvt1"/>
                         <field name="sap_zvd1"/>
                         <field name="manual_sap_zvd1"/>
+                        <field name="manual_sap_zvd1_currency"/>
                     </group>
                     <group name="integration_details" string="SAP Item General" col="4">
                         <field name="sap_pnr"/>
