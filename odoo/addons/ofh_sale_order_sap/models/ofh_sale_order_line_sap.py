@@ -403,7 +403,7 @@ class OfhSaleOrderLineSap(models.Model):
             ('almosafer', 'Almosafer'),
             ('tajawal', 'Tajawal')],
         readonly=True,
-        compute="_compute_order_detail"
+        compute="_compute_line_fields"
     )
     order_number = fields.Char(
         string="Order Number",
@@ -539,6 +539,32 @@ class OfhSaleOrderLineSap(models.Model):
         readonly=True,
         compute="_compute_line_fields"
     )
+    # Hotel details
+    hotel_country = fields.Char(
+        string="hotel_country",
+        readonly=True,
+        compute="_compute_line_fields"
+    )
+    hotel_city = fields.Char(
+        string="hotel_city",
+        readonly=True,
+        compute="_compute_line_fields"
+    )
+    hotel_id = fields.Char(
+        string="hotel_id",
+        readonly=True,
+        compute="_compute_line_fields"
+    )
+    hotel_supplier_id = fields.Char(
+        string="hotel_supplier_id",
+        readonly=True,
+        compute="_compute_line_fields"
+    )
+    hotel_contract_name = fields.Char(
+        string="hotel_contract_name",
+        readonly=True,
+        compute="_compute_line_fields"
+    )
 
     @api.multi
     @api.depends('line_detail')
@@ -548,7 +574,6 @@ class OfhSaleOrderLineSap(models.Model):
                 line_detail = json.loads(rec.line_detail)
             else:
                 line_detail = {}
-
             rec.entity = line_detail.get('entity')
             rec.order_number = line_detail.get('order_number')
             rec.item_type = line_detail.get('item_type')
@@ -576,6 +601,11 @@ class OfhSaleOrderLineSap(models.Model):
             rec.cost_price = line_detail.get('cost_price')
             rec.output_vat = line_detail.get('output_vat')
             rec.discount = line_detail.get('discount')
+            rec.hotel_country = line_detail.get('hotel_country')
+            rec.hotel_city = line_detail.get('hotel_city')
+            rec.hotel_id = line_detail.get('hotel_id')
+            rec.hotel_supplier_id = line_detail.get('hotel_supplier_id')
+            rec.hotel_contract_name = line_detail.get('hotel_contract_name')
 
     @api.multi
     @api.depends('sap_line_detail')

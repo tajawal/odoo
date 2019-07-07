@@ -3,6 +3,50 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+    <record id="action_hotel_skipped_sap_sale_order_lines" model="ir.actions.act_window">
+        <field name="name">Hotel Skipped Lines SAP</field>
+        <field name="res_model">ofh.sale.order.line.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('sale_order_line_id.line_type', '=', 'hotel'), ('sap_sale_order_id.failing_reason', '=', 'skipped')]</field>
+        <field name="context">{'search_default_sent_this_week': 1}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="action_hotel_skipped_sap_sale_order_lines_line_menu">
+        <field name="name">Hotel Skipped Lines SAP</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="action_hotel_skipped_sap_sale_order_lines"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.view" id="hotel_skipped_sap_sale_order_lines_tree_view">
+        <field name="name">ofh.sale.order.line.sap.tree (in ofh_sale_order_line_sap)</field>
+        <field name="model">ofh.sale.order.line.sap</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" delete="0">
+                <field name="hotel_country" />
+                <field name="hotel_city" />
+                <field name="hotel_id" />
+                <field name="hotel_supplier_id" />
+                <field name="hotel_contract_name" />
+                <field name="send_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hotel_skipped_sap_sale_order_lines_search_view">
+        <field name="name">ofh.sale.order.line.sap.search (in ofh_sale_order_sap)</field>
+        <field name="model">ofh.sale.order.line.sap</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="sent_this_month" string="Sent This month"
+                        domain="[('send_date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="sent_this_week" string="Sent this week"
+                        domain="['&amp;', ('send_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d')), ('send_date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_sale_order_line_sap_form_view">
         <field name="name">ofh.sale.order.line.sap.form (in ofh_sale_order_line_sap)</field>
         <field name="model">ofh.sale.order.line.sap</field>
