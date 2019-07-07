@@ -276,6 +276,12 @@ class OfhSaleOrderSap(models.Model):
         string="Active",
         default=True,
     )
+    order_type = fields.Char(
+        string="Order Type",
+        readonly=True,
+        compute="_compute_order_type",
+        store=True,
+    )
 
     @api.multi
     @api.depends('payment_request_id', 'sale_order_id')
@@ -343,3 +349,12 @@ class OfhSaleOrderSap(models.Model):
             line_items.append(line_payload)
         payload['line_items'] = line_items
         return payload
+
+    @api.multi
+    @api.depends('payment_request_id', 'sale_order_id')
+    def _compute_order_type(self):
+        for rec in self:
+            if rec.payment_request_id:
+                rec.order_type = rec.payment_request_id.order_type
+            elif rec.sale_order_id:
+                rec.order_type = rec.sale_order_id.order_type

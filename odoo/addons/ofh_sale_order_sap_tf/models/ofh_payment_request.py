@@ -21,6 +21,7 @@ class OfhPaymentRequest(models.Model):
 
         line_dict['pnr'] = line.locator
         line_dict['billing_date'] = self.updated_at
+        line_dict['custom1'] = self.updated_at
         line_dict["vat_tax_code"] = self.tax_code
         line_dict["item_currency"] = self.currency_id.name
 

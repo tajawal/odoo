@@ -27,6 +27,7 @@ class OfhPaymentRequest(models.Model):
             line_dict['office_id'] = line.office_id
             line_dict['pax_name'] = line.passenger
             line_dict['billing_date'] = self.updated_at
+            line_dict['custom1'] = self.updated_at
             line_dict["vat_tax_code"] = self.tax_code
             line_dict["item_currency"] = self.currency_id.name
 

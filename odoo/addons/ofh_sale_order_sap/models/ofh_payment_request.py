@@ -227,6 +227,7 @@ class OfhPaymentRequest(models.Model):
             sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
             line_dict = self.order_id.line_ids[0].to_dict()[0]
 
+            line_dict['custom1'] = self.updated_at
             line_dict['billing_date'] = self.updated_at
             line_dict["vat_tax_code"] = self.tax_code
             line_dict["item_currency"] = self.currency_id.name

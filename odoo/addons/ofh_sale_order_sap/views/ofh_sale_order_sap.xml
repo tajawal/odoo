@@ -107,8 +107,8 @@
                 <filter name="sent_this_week" string="Sent this week"
                         domain="['&amp;', ('send_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d')), ('send_date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
                 <separator/>
-                <filter name="hotel" string="Hotel" domain="['|', ('sale_order_id.order_type', '=', 'hotel'), ('payment_request_id.order_id.order_type', '=', 'hotel')]"/>
-                <filter name="flight" string="Flight" domain="['|', ('sale_order_id.order_type', '=', 'flight'), ('payment_request_id.order_id.order_type', '=', 'flight')]"/>
+                <filter name="hotel" string="Hotel" domain="[('order_type', '=', 'hotel')]"/>
+                <filter name="flight" string="Flight" domain="[('order_type', '=', 'flight')]"/>
                 <separator/>
             </search>
         </field>
@@ -129,6 +129,7 @@
                 <field name="sap_status"/>
                 <field name="payment_sap_status"/>
                 <field name="is_double_hoop"/>
+                <field name="order_type"/>
             </tree>
         </field>
     </record>
