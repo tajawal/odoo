@@ -51,6 +51,20 @@ class OfhSaleOrderLine(models.Model):
         readonly=True,
         store=False,
     )
+    total_invoice_amount = fields.Monetary(
+        string="Total Invoice Amount",
+        compute='_compute_total_invoice_amount',
+        currency_field='invoice_currency_id',
+        readonly=True,
+        store=False,
+    )
+    invoice_currency_id = fields.Many2one(
+        string='Invoice Currency',
+        comodel_name='res.currency',
+        compute='_compute_total_invoice_amount',
+        store=False,
+        readonly=True,
+    )
 
     @api.depends(
         'supplier_name', 'supplier_currency_id', 'segment_count')
@@ -92,6 +106,18 @@ class OfhSaleOrderLine(models.Model):
                 rec.reconciliation_status = 'reconciled'
             else:
                 rec.reconciliation_status = 'unreconciled'
+
+    @api.multi
+    @api.depends('invoice_line_ids.total')
+    def _compute_total_invoice_amount(self):
+        for rec in self:
+            rec.total_invoice_amount = 0
+            rec.invoice_currency_id = False
+            if rec.invoice_line_ids:
+                rec.total_invoice_amount = sum(
+                    [l.total - l.itl_cost for l in rec.invoice_line_ids])
+                rec.invoice_currency_id = \
+                    rec.invoice_line_ids.mapped('currency_id')[0]
 
     @api.multi
     def action_matching_status_not_applicable(self, not_applicable_flag):

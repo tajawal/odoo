@@ -44,6 +44,12 @@ class OfhSaleOrder(models.Model):
         store=True,
         index=True,
     )
+    total_invoice_amount = fields.Monetary(
+        string="Total Invoice Amount",
+        compute='_compute_total_invoice_amount',
+        readonly=True,
+        store=False,
+    )
 
     @api.multi
     @api.depends('line_ids.air_india_commission')
@@ -97,6 +103,18 @@ class OfhSaleOrder(models.Model):
                 rec.payment_request_reconciliation_status = 'reconciled'
                 continue
             rec.payment_request_reconciliation_status = 'unreconciled'
+
+    @api.multi
+    @api.depends('invoice_line_ids.total', 'invoice_line_ids.currency_id')
+    def _compute_total_invoice_amount(self):
+        for rec in self:
+            rec.total_invoice_amount = 0
+            rec.invoice_currency_id = False
+            if rec.invoice_line_ids:
+                rec.total_invoice_amount = sum(
+                    [l.total - l.itl_cost for l in rec.invoice_line_ids])
+                rec.invoice_currency_id = \
+                    rec.invoice_line_ids.mapped('currency_id')[0]
 
     @api.multi
     def action_initial_booking_not_applicable(self, not_applicable_flag):
