@@ -162,6 +162,7 @@
                 <field name="entity"/>
                 <field name="name"/>
                 <field name="updated_at"/>
+                <field name="paid_at"/>
                 <field name="order_type"/>
                 <field name="ticketing_office_id"/>
                 <field name="currency_id" invisible="1"/>
@@ -192,7 +193,7 @@ if records:
         <field name="res_model">ofh.sale.order</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_sale_order_almosafer_act_window">
@@ -200,6 +201,7 @@ if records:
         <field name="res_model">ofh.sale.order</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('entity', '=', 'almosafer')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_sale_order_tajawal_act_window">
@@ -207,6 +209,7 @@ if records:
         <field name="res_model">ofh.sale.order</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('entity', '=', 'tajawal')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
     <record model="ir.ui.menu" id="ofh_sale_order_main_menu">
@@ -246,7 +249,7 @@ if records:
         <field name="res_model">ofh.sale.order.line</field>
         <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_sale_order_line_almosafer_act_window">
@@ -254,6 +257,7 @@ if records:
         <field name="res_model">ofh.sale.order.line</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('order_id.entity', '=', 'almosafer')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_sale_order_line_tajawal_act_window">
@@ -261,6 +265,7 @@ if records:
         <field name="res_model">ofh.sale.order.line</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('order_id.entity', '=', 'tajawal')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
     <record model="ir.ui.menu" id="ofh_sale_order_line_main_menu">
