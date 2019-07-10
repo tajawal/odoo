@@ -319,6 +319,13 @@ class OfhSaleOrder(models.Model):
         inverse_name='order_id',
         readonly=True
     )
+    is_payment_different = fields.Boolean(
+        string='Is payment different?',
+        store=False,
+        readonly=True,
+        search='_search_is_payment_different',
+        help="Technical field"
+    )
 
     @api.multi
     @api.depends(
@@ -398,6 +405,25 @@ class OfhSaleOrder(models.Model):
                 rec.order_matching_status = 'matched'
                 continue
             rec.order_matching_status = 'unmatched'
+
+    @api.model
+    def _search_is_payment_different(self, operator, value):
+        if operator == '!=':
+            return [('id', '=', 0)]
+        self.env.cr.execute("""
+            SELECT s.id
+            FROM ofh_sale_order as s,
+            (SELECT order_id, SUM(total_amount) as paid_amount
+             FROM ofh_payment
+             GROUP BY order_Id) as f
+            WHERE s.id = f.order_id AND
+            abs(round(s.total_amount, 2) - round(f.paid_amount, 2)) > 0.1
+        """)
+        order_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not order_ids:
+            return [('id', '=', 0)]
+        return [('id', 'in', order_ids)]
 
     @api.multi
     def open_order_in_hub(self):
