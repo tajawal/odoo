@@ -17,6 +17,15 @@ class OfhSupplierInvoiceLine(models.Model):
         readonly=True,
         auto_join=True
     )
+    entity = fields.Selection(
+        selection=[
+            ('almosafer', 'Almosafer'),
+            ('tajawal', 'Tajawal')],
+        related='order_id.entity',
+        search='_search_order_entity',
+        readonly=True,
+        store=False,
+    )
     order_line_id = fields.Many2one(
         string='Order Line',
         comodel_name='ofh.sale.order.line',
@@ -62,6 +71,10 @@ class OfhSupplierInvoiceLine(models.Model):
         readonly=True,
         track_visibility='always',
     )
+
+    @api.model
+    def _search_order_entity(self, operator, value):
+        return [('order_id.entity', operator, value)]
 
     @api.multi
     def _update_matching_status(self):

@@ -76,6 +76,7 @@
         <field name="arch" type="xml">
             <field name="locator" position="after">
                 <field name="order_id"/>
+                <field name="entity"/>
             </field>
             <tree position="inside">
                 <field name="matching_status"/>
