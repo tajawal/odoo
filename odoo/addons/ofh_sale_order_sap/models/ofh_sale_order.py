@@ -4,6 +4,7 @@
 import json
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 from odoo.addons.queue_job.job import job
 
 
@@ -366,19 +367,47 @@ class OfhSaleOrder(models.Model):
 
     @api.multi
     def action_not_applicable(self):
+        if self.filtered(
+                lambda o:
+                o.integration_status or o.payment_integration_status):
+            raise ValidationError(
+                "Sale Order or Payment already sent to SAP.")
         return self.write({
             'is_sale_applicable': False,
             'is_payment_applicable': False,
+        })
+
+    @api.multi
+    def action_applicable(self):
+        return self.write({
+            'is_sale_applicable': True,
+            'is_payment_applicable': True,
         })
 
     @api.multi
     def action_sale_not_applicable(self):
+        if self.filtered(lambda o: o.integration_status):
+            raise ValidationError("Sale Order already sent to SAP.")
         return self.write({
             'is_sale_applicable': False,
         })
 
     @api.multi
+    def action_sale_applicable(self):
+        return self.write({
+            'is_sale_applicable': True,
+        })
+
+    @api.multi
     def action_payment_not_applicable(self):
+        if self.filtered(lambda o: o.payment_integration_status):
+            raise ValidationError("Payment already sent to SAP.")
         return self.write({
             'is_payment_applicable': False,
+        })
+
+    @api.multi
+    def action_payment_applicable(self):
+        return self.write({
+            'is_payment_applicable': True,
         })

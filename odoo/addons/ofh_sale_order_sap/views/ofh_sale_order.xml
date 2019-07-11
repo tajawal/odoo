@@ -107,6 +107,39 @@ if records:
         </field>
     </record>
 
+    <record model="ir.actions.server" id="ofh_sap_applicable">
+        <field name="name">Sending to SAP Applicable</field>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_sale_sap_applicable">
+        <field name="name">Sending Sale to SAP Applicable</field>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_sale_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_payment_sap_applicable">
+        <field name="name">Sending Payment to SAP Applicable</field>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_payment_applicable()
+        </field>
+    </record>
+
     <record model="ir.actions.server" id="ofh_sale_order_action_send_order_to_sap">
         <field name="name">Send Order to SAP</field>
         <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
