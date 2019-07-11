@@ -1,5 +1,15 @@
 Changes
 -------
+2.4.11 (2019-07-10)
+-------------------
+- Undo not applicable for sending.
+- Add entity in supplier invoices.
+- Allow user to match refund PR with a charge payment request.
+- Add paid at in Sale list view.
+- Add total invoice in Sale Order and Sale Order line.
+- Add Flag when payment amount is different than Sale amount.
+- Fix order type filter in SAP Order.
+
 2.4.10 (2019-07-07)
 -------------------
 - Optimise SAP status and integration status in sale order and payment request.
