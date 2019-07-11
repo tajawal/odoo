@@ -1,6 +1,6 @@
 Changes
 -------
-2.4.11 (2019-07-10)
+2.4.12 (2019-07-10)
 -------------------
 - Undo not applicable for sending.
 - Add entity in supplier invoices.
