@@ -21,6 +21,7 @@ class OfhPaymentRequest(models.Model):
                 line_dict['is_refund'] = True
 
             line_dict['pnr'] = line.locator
+            line_dict['vendor_name'] = 'amd'
             line_dict['ticket_number'] = line.ticket_number
             line_dict['airline_code'] = line.iata_code
             line_dict['supplier_name'] = line.iata_code

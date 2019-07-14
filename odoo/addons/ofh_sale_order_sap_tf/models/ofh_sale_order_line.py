@@ -19,5 +19,6 @@ class OfhSaleOrderLine(models.Model):
         sale_line_dict['cost_currency'] = \
             self.invoice_line_ids[0].currency_id.name
         sale_line_dict['ticket_number'] = ''
+        sale_line_dict['vendor_name'] = 'tf'
 
         return [sale_line_dict]

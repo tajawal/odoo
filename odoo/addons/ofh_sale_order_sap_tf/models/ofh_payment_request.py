@@ -24,6 +24,7 @@ class OfhPaymentRequest(models.Model):
         line_dict['custom1'] = self.updated_at
         line_dict["vat_tax_code"] = self.tax_code
         line_dict["item_currency"] = self.currency_id.name
+        line_dict['vendor_name'] = 'tf'
 
         line_dict['cost_price'] = abs(line.currency_id.round(self.sap_zvd1))
 
