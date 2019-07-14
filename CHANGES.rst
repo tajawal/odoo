@@ -1,5 +1,11 @@
 Changes
 -------
+2.5.0 (2019-07-14)
+-------------------
+- Handle GDS matched with TF case.
+- Add Customer related details to the order header.
+- Improve Hotel skipped view and add Payment skipped view.
+
 2.4.12 (2019-07-10)
 -------------------
 - Undo not applicable for sending.
