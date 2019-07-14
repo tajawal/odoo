@@ -3,6 +3,21 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+
+    <record model="ir.ui.view" id="skipped_sap_payments_tree_view">
+        <field name="name">ofh.payment.sap.tree (in ofh_payment_sap)</field>
+        <field name="model">ofh.payment.sap</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" delete="0">
+                <field name="order_number"/>
+                <field name="track_id"/>
+                <field name="failing_text"/>
+                <field name="created_at"/>
+                <field name="send_date"/>
+            </tree>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_payment_sap_form_view">
         <field name="name">ofh.payment.sap.form (in ofh_payment_sap)</field>
         <field name="model">ofh.payment.sap</field>
@@ -87,21 +102,6 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="ofh_payment_sap_act_window">
-        <field name="name">SAP Payments</field>
-        <field name="res_model">ofh.payment.sap</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
-        <field name="context">{'search_default_failed_state': 1, 'search_default_sent_this_week': 1}</field>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_payment_sap_all_menu">
-        <field name="name">SAP Payments</field>
-        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
-        <field name="action" ref="ofh_payment_sap_act_window"/>
-        <field name="sequence" eval="20"/>
-    </record>
-
     <record model="ir.ui.view" id="ofh_payment_sap_tree_view">
         <field name="name">ofh.payment.sap.tree (in ofh_payment_sap)</field>
         <field name="model">ofh.payment.sap</field>
@@ -120,4 +120,49 @@
             </tree>
         </field>
     </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_sap_act_window">
+        <field name="name">SAP Payments</field>
+        <field name="res_model">ofh.payment.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_failed_state': 1, 'search_default_sent_this_week': 1}</field>
+    </record>
+
+    <record id="action_ofh_sap_payments_tree" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="ofh_payment_sap_tree_view"/>
+        <field name="act_window_id" ref="ofh_payment_sap_act_window"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_sap_all_menu">
+        <field name="name">SAP Payments</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="ofh_payment_sap_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record id="action_skipped_sap_payments" model="ir.actions.act_window">
+        <field name="name">Skipped Payments</field>
+        <field name="res_model">ofh.payment.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('failing_reason', '=', 'skipped')]</field>
+        <field name="context">{'search_default_sent_this_week': 1}</field>
+    </record>
+
+    <record id="action_skipped_sap_payments_tree" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="skipped_sap_payments_tree_view"/>
+        <field name="act_window_id" ref="action_skipped_sap_payments"/>
+    </record>
+
+    <record model="ir.ui.menu" id="action_skipped_sap_payments_menu">
+        <field name="name">Skipped Payments</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="action_skipped_sap_payments"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
 </odoo>

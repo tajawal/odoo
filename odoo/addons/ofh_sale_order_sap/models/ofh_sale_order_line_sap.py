@@ -12,7 +12,7 @@ class OfhSaleOrderLineSap(models.Model):
     _order = 'id'
 
     send_date = fields.Datetime(
-        string="Send to Sap At",
+        string="Sending Date",
         required=True,
         readonly=True,
         index=True,
@@ -541,29 +541,53 @@ class OfhSaleOrderLineSap(models.Model):
     )
     # Hotel details
     hotel_country = fields.Char(
-        string="hotel_country",
+        string="Hotel Country",
         readonly=True,
         compute="_compute_line_fields"
     )
     hotel_city = fields.Char(
-        string="hotel_city",
+        string="Hotel City",
         readonly=True,
         compute="_compute_line_fields"
     )
     hotel_id = fields.Char(
-        string="hotel_id",
+        string="Hotel Id",
         readonly=True,
         compute="_compute_line_fields"
     )
     hotel_supplier_id = fields.Char(
-        string="hotel_supplier_id",
+        string="Hotel Supplier Id",
         readonly=True,
         compute="_compute_line_fields"
     )
     hotel_contract_name = fields.Char(
-        string="hotel_contract_name",
+        string="Hotel Contract Name",
         readonly=True,
         compute="_compute_line_fields"
+    )
+    failing_text = fields.Char(
+        string="Response",
+        readonly=True,
+        store=False,
+        related='sap_sale_order_id.failing_text',
+    )
+    track_id = fields.Char(
+        string="Track ID",
+        readonly=True,
+        store=False,
+        compute="_compute_track_id"
+    )
+    created_at = fields.Datetime(
+        string="Order Creation Date",
+        readonly=True,
+        store=False,
+        related='sap_sale_order_id.sale_order_id.created_at',
+    )
+    hotel_name = fields.Char(
+        string="Hotel Name",
+        readonly=True,
+        store=False,
+        related='sale_order_line_id.hotel_name',
     )
 
     @api.multi
@@ -651,3 +675,12 @@ class OfhSaleOrderLineSap(models.Model):
             for cond in sap_line_detail.get('Conditions', []):
                 rec[cond.get('ConditionType').lower()] = \
                     f"{cond.get('Value')} {cond.get('Currency')}"
+
+    @api.multi
+    @api.depends('sap_sale_order_id')
+    def _compute_track_id(self):
+        for rec in self:
+            if rec.sap_sale_order_id:
+                return rec.sap_sale_order_id.sale_order_id.track_id
+            elif rec.payment_request_id:
+                return rec.payment_request_id.track_id

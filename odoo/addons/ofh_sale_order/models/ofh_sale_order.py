@@ -126,6 +126,18 @@ class OfhSaleOrder(models.Model):
         string="AHS Group Name",
         readonly=True,
     )
+    customer_email = fields.Char(
+        string="Customer Email",
+        readonly=True,
+    )
+    customer_number = fields.Char(
+        string="Customer Number",
+        readonly=True,
+    )
+    agent_email = fields.Char(
+        string="Agent Email",
+        readonly=True,
+    )
     country_code = fields.Char(
         string="Country Code",
         readonly=True,

@@ -67,7 +67,7 @@ class OfhPaymentSap(models.Model):
         readonly=True,
     )
     send_date = fields.Datetime(
-        string="Send to Sap At",
+        string="Sending Date",
         required=True,
         readonly=True,
         index=True,
@@ -111,7 +111,8 @@ class OfhPaymentSap(models.Model):
         track_visibility='onchange',
     )
     failing_text = fields.Char(
-        string="Response Text",
+        string="Response",
+        readonly=True,
     )
     sap_sale_order_id = fields.Many2one(
         comodel_name='ofh.sale.order.sap',
@@ -243,7 +244,7 @@ class OfhPaymentSap(models.Model):
         compute="_compute_payment_detail"
     )
     order_number = fields.Char(
-        string="order_number",
+        string="Order #",
         readonly=True,
         compute="_compute_payment_detail"
     )
@@ -371,6 +372,19 @@ class OfhPaymentSap(models.Model):
         string="SAP XML",
         readonly=True,
     )
+    created_at = fields.Datetime(
+        string="Created At",
+        readonly=True,
+        store=False,
+        related="payment_id.created_at"
+    )
+    track_id = fields.Char(
+        string="Track ID",
+        readonly=True,
+        store=False,
+        related="payment_id.track_id"
+    )
+
 
     @api.multi
     @api.depends('payment_request_id', 'payment_id')
