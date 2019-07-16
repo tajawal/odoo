@@ -9,3 +9,5 @@ from . import ofh_payment_sap
 from . import ofh_payment
 from . import ofh_payment_request
 from . import common
+from . import hub_sale_order_importer
+from . import hub_payment_request_importer

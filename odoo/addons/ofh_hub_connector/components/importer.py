@@ -115,6 +115,9 @@ class HubImporter(AbstractComponent):
         """[summary]
         """
 
+    def _must_block(self, binding) -> str:
+        """Must block binding from being updated."""
+
     def _map_data(self):
         """ Returns an instance of
         :py:class:`~odoo.addons.connector.components.mapper.MapRecord`
@@ -160,6 +163,7 @@ class HubImporter(AbstractComponent):
             self.hub_record = self._get_hub_data()
         except IDMissingInBackend:
             return _('Record does no longer exist in HUB.')
+
         skip = self._must_skip()
         if skip:
             return skip
@@ -167,6 +171,10 @@ class HubImporter(AbstractComponent):
 
         if not force and self._is_uptodate(binding):
             return _('Already up-to-date.')
+
+        block = self._must_block(binding)
+        if block:
+            return block
 
         # Keep a lock on this import until the transaction is committed
         # The lock is kept since we have detected that the informations
