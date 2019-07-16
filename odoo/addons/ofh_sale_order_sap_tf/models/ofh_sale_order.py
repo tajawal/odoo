@@ -20,8 +20,8 @@ class OfhSaleOrder(models.Model):
 
         # Usually the GDS booking lines are unmatched when they're fullfiled
         # within TF.
-        if all([
-                l.reconciliation_status != 'unreconciled'
+        if not all([
+                l.reconciliation_status == 'not_applicable'
                 for l in self.line_ids]):
             return super(OfhSaleOrder, self)._prepare_sap_lines_values()
 
