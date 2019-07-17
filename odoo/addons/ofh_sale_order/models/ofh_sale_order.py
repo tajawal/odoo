@@ -338,6 +338,18 @@ class OfhSaleOrder(models.Model):
         search='_search_is_payment_different',
         help="Technical field"
     )
+    order_status_export = fields.Char(
+        string="Order Status Export",
+        compute='_compute_order_status_export',
+        readonly=True,
+        store=False,
+    )
+    payment_status_export = fields.Char(
+        string="Payment Status Export",
+        compute='_compute_payment_status_export',
+        readonly=True,
+        store=False,
+    )
 
     @api.multi
     @api.depends(
@@ -469,3 +481,19 @@ class OfhSaleOrder(models.Model):
             backend=self.hub_bind_ids.backend_id,
             external_id=self.hub_bind_ids.external_id,
             force=True)
+
+    @api.multi
+    @api.depends('order_status')
+    def _compute_order_status_export(self):
+        for rec in self:
+            order_statuses = self._fields['order_status'].selection(self)
+            rec.order_status_export = dict(order_statuses) \
+                .get(rec.order_status)
+
+    @api.multi
+    @api.depends('payment_status')
+    def _compute_payment_status_export(self):
+        for rec in self:
+            payment_statuses = self._fields['payment_status'].selection(self)
+            rec.payment_status_export = dict(payment_statuses) \
+                .get(rec.payment_status)
