@@ -88,6 +88,16 @@ class OfhSupplierInvoiceForceMatch(models.TransientModel):
                         f"must belong to currently selected Sale: "
                         f"{rec.current_order_id.name}.")
 
+            if rec.line_id.invoice_status == 'TKTT' and \
+                    rec.new_payment_request_id.request_type != 'charge':
+                raise ValidationError(
+                    _("A 'TKTT' line can only match with a 'Charge' "
+                      "payment request."))
+            if rec.line_id.invoice_status == 'RFND' and \
+                    rec.new_payment_request_id.request_type == 'charge':
+                raise ValidationError(
+                    _("A 'RFND' line can't match with a 'Charge' "
+                      "payment request."))
             if rec.new_payment_request_id.order_type == 'hotel':
                 raise ValidationError(
                     _("You are not allowed to match with a 'Hotel' "
