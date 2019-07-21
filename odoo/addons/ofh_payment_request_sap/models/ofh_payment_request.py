@@ -233,14 +233,16 @@ class OfhPaymentRequest(models.Model):
     @api.depends(
         'supplier_total_amount', 'supplier_shamel_total_amount',
         'supplier_currency_id', 'fare_difference', 'penalty',
-        'matching_status', 'order_type')
+        'matching_status', 'order_type', 'is_full_refund',
+        'estimated_cost_in_supplier_currency', 'order_id.line_ids')
     def _compute_sap_zvd1(self):
         """ Compute supplier cost to send to SAP."""
         for rec in self:
             rec.sap_zvd1 = 0.0
             # Check if manual_sap_zvd1 zvd1 is set assign it to sap_zvd1
             if not float_is_zero(
-                    rec.manual_sap_zvd1, precision_rounding=rec.currency_id.rounding):
+                    rec.manual_sap_zvd1,
+                    precision_rounding=rec.currency_id.rounding):
                 rec.sap_zvd1 = abs(rec.manual_sap_zvd1)
                 continue
             if rec.matching_status == 'unmatched':
@@ -268,7 +270,12 @@ class OfhPaymentRequest(models.Model):
             if float_is_zero(
                     rec.sap_zvd1, precision_rounding=rec.currency_id.rounding)\
                     and rec.order_type == 'hotel':
-                rec.sap_zvd1 = abs(rec.fare_difference - rec.penalty)
+                if rec.is_full_refund:
+                    rec.sap_zvd1 = abs(sum([
+                        l.supplier_cost_amount
+                        for l in rec.order_id.line_ids]))
+                else:
+                    rec.sap_zvd1 = abs(rec.estimated_cost_in_supplier_currency)
 
     @api.multi
     @api.depends('output_vat_amount')
