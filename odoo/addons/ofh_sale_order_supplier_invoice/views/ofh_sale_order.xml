@@ -48,9 +48,10 @@
                     </field>
                 </group>
             </page>
-            <field name="total_supplier_cost" position="after">
+            <group name="cost_totals" position="inside">
                 <field name="total_invoice_amount" widget="monetary"/>
-            </field>
+                <field name="invoice_currency_id" invisible="1"/>
+            </group>
         </field>
     </record>
 

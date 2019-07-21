@@ -41,9 +41,10 @@
                     </tree>
                 </field>
             </page>
-            <field name="supplier_cost_amount" position="after">
+            <group name="supplier_detail" position="inside">
                 <field name="total_invoice_amount" widget="monetary"/>
-            </field>
+                <field name="invoice_currency_id" invisible="1"/>
+            </group>
         </field>
     </record>
 

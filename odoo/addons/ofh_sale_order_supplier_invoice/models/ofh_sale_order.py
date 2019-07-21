@@ -44,9 +44,17 @@ class OfhSaleOrder(models.Model):
         store=True,
         index=True,
     )
+    invoice_currency_id = fields.Many2one(
+        string="Invoice Currency",
+        comodel_name='res.currency',
+        compute='_compute_total_invoice_amount',
+        readonly=True,
+        store=False,
+    )
     total_invoice_amount = fields.Monetary(
         string="Total Invoice Amount",
         compute='_compute_total_invoice_amount',
+        currency_field='invoice_currency_id',
         readonly=True,
         store=False,
     )
