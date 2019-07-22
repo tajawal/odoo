@@ -1,5 +1,10 @@
 Changes
 -------
+2.6.0 (2019-07-14)
+-------------------
+- Fix ZVD1 calculation for Hotel Payment Requests.
+- Auto send Flight Sale order to SAP.
+
 2.5.0 (2019-07-14)
 -------------------
 - Handle GDS matched with TF case.
