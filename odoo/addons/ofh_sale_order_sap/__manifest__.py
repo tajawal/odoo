@@ -28,6 +28,7 @@
         'views/ofh_payment_request.xml',
         'wizards/ofh_sale_order_sap_import.xml',
         'data/backend.xml',
+        'data/sale_auto_send_cron.xml',
     ],
     'demo': [
         # 'demo/sap_backend.xml',

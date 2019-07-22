@@ -317,7 +317,7 @@ class OfhSaleOrder(models.Model):
         return values
 
     @api.multi
-    @job
+    @job(default_channel='root.sap')
     def send_order_to_sap(self):
         """Create and Send SAP Sale Order Record."""
         self.ensure_one()
@@ -411,3 +411,21 @@ class OfhSaleOrder(models.Model):
         return self.write({
             'is_payment_applicable': True,
         })
+
+    @api.model
+    def _auto_send_orders_to_sap(self):
+        """Auto Send candidates orders to SAP."""
+        import pdb; pdb.set_trace()
+        self.env.cr.execute("""select id from ofh_sale_order_auto_send""")
+        for record in self.env.cr.fetchall():
+            self.with_delay()._auto_send_to_sap(order_id=record[0])
+
+    @api.model
+    @job(default_channel='root.sap')
+    def _auto_send_to_sap(self, order_id):
+        """Auto Send a sale order to SAP."""
+        if not order_id:
+            return
+
+        order = self.browse(order_id)
+        return order.send_order_to_sap()
