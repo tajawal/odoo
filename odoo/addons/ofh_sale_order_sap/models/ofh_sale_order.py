@@ -415,7 +415,6 @@ class OfhSaleOrder(models.Model):
     @api.model
     def _auto_send_orders_to_sap(self):
         """Auto Send candidates orders to SAP."""
-        import pdb; pdb.set_trace()
         self.env.cr.execute("""select id from ofh_sale_order_auto_send""")
         for record in self.env.cr.fetchall():
             self.with_delay()._auto_send_to_sap(order_id=record[0])
