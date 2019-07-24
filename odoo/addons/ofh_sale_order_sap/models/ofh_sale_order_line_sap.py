@@ -572,7 +572,7 @@ class OfhSaleOrderLineSap(models.Model):
         related='sap_sale_order_id.failing_text',
     )
     track_id = fields.Char(
-        string="Track ID",
+        string="Track Id",
         readonly=True,
         store=False,
         compute="_compute_track_id"
@@ -677,10 +677,10 @@ class OfhSaleOrderLineSap(models.Model):
                     f"{cond.get('Value')} {cond.get('Currency')}"
 
     @api.multi
-    @api.depends('sap_sale_order_id')
+    @api.depends('sap_sale_order_id', 'payment_request_id')
     def _compute_track_id(self):
         for rec in self:
             if rec.sap_sale_order_id:
-                return rec.sap_sale_order_id.sale_order_id.track_id
+                rec.track_id = rec.sap_sale_order_id.sale_order_id.track_id
             elif rec.payment_request_id:
-                return rec.payment_request_id.track_id
+                rec.track_id = rec.payment_request_id.track_id
