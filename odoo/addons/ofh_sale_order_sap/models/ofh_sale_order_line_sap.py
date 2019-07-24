@@ -589,6 +589,10 @@ class OfhSaleOrderLineSap(models.Model):
         store=False,
         related='sale_order_line_id.hotel_name',
     )
+    active = fields.Boolean(
+        string="Active",
+        default=True,
+    )
 
     @api.multi
     @api.depends('line_detail')

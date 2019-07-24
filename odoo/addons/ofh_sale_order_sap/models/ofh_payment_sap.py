@@ -384,7 +384,10 @@ class OfhPaymentSap(models.Model):
         store=False,
         related="payment_id.track_id"
     )
-
+    active = fields.Boolean(
+        string="Active",
+        default=True,
+    )
 
     @api.multi
     @api.depends('payment_request_id', 'payment_id')
