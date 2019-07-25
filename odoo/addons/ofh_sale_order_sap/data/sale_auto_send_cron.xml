@@ -4,15 +4,26 @@
 
 <odoo>
 
-    <record model="ir.cron" id="cron_auto_send_orders_to_sap">
-        <field name="name">Sales Orders - Auto Send to SAP</field>
+    <record model="ir.cron" id="cron_auto_send_flight_orders_to_sap">
+        <field name="name">Flight Sales Orders - Auto Send to SAP</field>
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
         <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
         <field name="state">code</field>
-        <field name="code">model._auto_send_orders_to_sap()</field>
+        <field name="code">model._auto_send_flight_orders_to_sap()</field>
+    </record>
+
+    <record model="ir.cron" id="cron_auto_send_hotel_orders_to_sap">
+        <field name="name">Hotel Sales Orders - Auto Send to SAP</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">model._auto_send_hotel_orders_to_sap()</field>
     </record>
 
 </odoo>

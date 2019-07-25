@@ -413,9 +413,18 @@ class OfhSaleOrder(models.Model):
         })
 
     @api.model
-    def _auto_send_orders_to_sap(self):
+    def _auto_send_flight_orders_to_sap(self):
         """Auto Send candidates orders to SAP."""
-        self.env.cr.execute("""select id from ofh_sale_order_auto_send""")
+        self.env.cr.execute(
+            """select id from ofh_sale_order_flight_auto_send""")
+        for record in self.env.cr.fetchall():
+            self.with_delay()._auto_send_to_sap(order_id=record[0])
+
+    @api.model
+    def _auto_send_hotel_orders_to_sap(self):
+        """Auto Send candidates orders to SAP."""
+        self.env.cr.execute(
+            """select id from ofh_sale_order_hotel_auto_send""")
         for record in self.env.cr.fetchall():
             self.with_delay()._auto_send_to_sap(order_id=record[0])
 
