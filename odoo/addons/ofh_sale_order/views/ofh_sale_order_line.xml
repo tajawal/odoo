@@ -127,6 +127,8 @@
                 <field name="ticketing_office_id"/>
                 <field name="office_id"/>
                 <field name="supplier_name"/>
+                <field name="supplier_confirmation_number"/>
+                <field name="vendor_confirmation_number"/>
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('order_id.entity', '=', 'tajawal')]"/>
                 <filter name="almosafer" string="Almosafer" domain="[('order_id.entity', '=', 'almosafer')]"/>
