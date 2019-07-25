@@ -1,5 +1,10 @@
 Changes
 -------
+2.6.1 (2019-07-25)
+-------------------
+- Auto send Hotel Sale order to SAP.
+- Fix Skipped view for Hotels and Payments.
+
 2.6.0 (2019-07-14)
 -------------------
 - Fix ZVD1 calculation for Hotel Payment Requests.
