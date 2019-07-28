@@ -18,11 +18,8 @@
     'data': [
         'security/ofh_payment_request_sap_line.xml',
         'views/ofh_payment_request_sap_line.xml',
-        'wizards/ofh_payment_request_integration_update.xml',
-        'data/backend.xml',
-        'data/cron.xml',
         'views/ofh_payment_request.xml',
-        'wizards/ofh_payment_request_sap_import.xml',
+        'data/backend.xml',
     ],
     'demo': [
     ],

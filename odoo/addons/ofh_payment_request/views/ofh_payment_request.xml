@@ -163,8 +163,6 @@
             <tree duplicate="0" delete="0">
                 <field name="entity"/>
                 <field name="track_id"/>
-                <field name="order_reference"/>
-                <field name="created_at"/>
                 <field name="updated_at"/>
                 <field name="request_type"/>
                 <field name="total_amount" widget="monetary"/>

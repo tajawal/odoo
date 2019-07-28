@@ -3,12 +3,10 @@
 
 import logging
 from datetime import datetime
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
-from odoo.exceptions import ValidationError
 from odoo.tools import float_is_zero
 
-from .sap_xml_api import SapXmlApi
 
 try:
     from odoo.addons.server_environment import serv_config
@@ -172,22 +170,6 @@ class OfhPaymentRequest(models.Model):
     )
 
     @api.multi
-    @api.constrains(
-        'integration_status', 'sap_xml_sale_ref', 'sap_xml_file_ref')
-    def _check_sap_xml_details(self):
-        for rec in self:
-            if rec.integration_status == 'not_sent' and \
-               (rec.sap_xml_sale_ref or rec.sap_xml_file_ref):
-                raise ValidationError(
-                    _("SAP XML details can't be filled if the payment request "
-                      "has not been sent through integration."))
-            if rec.integration_status != 'not_sent' and \
-               not rec.sap_xml_sale_ref:
-                raise ValidationError(
-                    _("If the payment request is sent through integration the "
-                      "'SAP XML Order #' is mandatory."))
-
-    @api.multi
     @api.depends('order_discount', 'request_type', 'total_amount', 'discount',
                  'order_amount', 'sap_zvd1', 'is_egypt')
     def _compute_sap_zsel(self):
@@ -333,105 +315,13 @@ class OfhPaymentRequest(models.Model):
                     'supplier_invoice_line': line.id
                 })
 
-    @api.model
-    def _get_payment_request_not_sent_by_integration(self):
-        return self.search(
-            [('integration_status', '!=', 'sale_payment_sent'),
-             ('payment_request_status', '=', 'ready')])
-
-    @api.model
-    def _get_server_env(self) -> dict:
-        values = {}
-        section_name = 'sap_xml_api'
-        for field_name in (
-                SAP_XML_URL, SAP_XML_USERNAME, SAP_XML_PASSWORD, SOURCE):
-            try:
-                values[field_name] = serv_config.get(section_name, field_name)
-            except Exception:
-                _logger.exception(
-                    'error trying to read field %s in section %s',
-                    field_name, section_name)
-        return values
-
-    @job(default_channel='root')
-    @api.model
-    def get_sap_xml_details(self):
-        """Update payment request with integration details.
-        Use the SAP-XML-API API to get the integration details.
-        """
-        pr_not_in_integration = \
-            self._get_payment_request_not_sent_by_integration()
-        pr_not_in_integration = pr_not_in_integration.with_context(
-            tracking_disable=True)
-        for payment_request in pr_not_in_integration:
-            payment_request.with_delay().update_sap_xml_details()
-
-    @job(default_channel='root')
-    @api.multi
-    def update_sap_xml_details(self):
-        """Update the payment requests with the integration details.
-        SAP-XML-API details:
-            1- The order reference: ex. A80924181552_4432032R0
-            2- The Order file ID: ex. 29f64621906323R0
-            3- Update the reconciliation status.
-        """
-        self.ensure_one()
-        integration_details = self._get_server_env()
-        sap_xml = SapXmlApi(
-            sap_xml_url=integration_details.get(SAP_XML_URL),
-            sap_xml_username=integration_details.get(SAP_XML_USERNAME),
-            sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
-
-        source = integration_details.get(SOURCE)
-        _logger.info(
-            f"Updating Payment Request {self.track_id} Integration status")
-        refund_order = refund_doc = {}
-        if self.integration_status in ('not_sent', 'payment_sent'):
-            _logger.info(f"Check if sale part has been sent.")
-            refund_order = sap_xml.get_refund_order_details({
-                'orderNumber': self.order_reference,
-                'trackId': self.track_id,
-                'source': source,
-                'requestType': 'refund_order' if
-                self.request_type == 'refund' else 'sale_order'})
-        if self.integration_status in ('not_sent', 'sale_sent'):
-            _logger.info(f"Check if payment part has been sent.")
-            refund_doc = sap_xml.get_refund_doc_details({
-                'orderNumber': self.order_reference,
-                'trackId': self.track_id,
-                'source': source,
-                'requestType': 'refund_doc' if
-                self.request_type == 'refund' else 'sale_doc'})
-
-        if refund_order and refund_doc:
-            integration_status = self._get_new_integration_status(
-                'sale_payment_sent')
-            return self.write({
-                'integration_status': integration_status,
-                'sap_xml_sale_ref': refund_order.get('BookingNumber'),
-                'sap_xml_file_ref': refund_order.get('FileID')})
-        elif refund_order:
-            integration_status = self._get_new_integration_status('sale_sent')
-            return self.write({
-                'integration_status': integration_status,
-                'sap_xml_sale_ref': refund_order.get('BookingNumber'),
-                'sap_xml_file_ref': refund_order.get('FileID')})
-        elif refund_doc:
-            integration_status = self._get_new_integration_status(
-                'payment_sent')
-            return self.write({
-                'integration_status': integration_status,
-                'sap_xml_sale_ref': refund_doc.get('HeaderText'),
-                'sap_xml_file_ref': refund_doc.get('Assignment')})
-        return False
-
     @api.multi
     def action_send_multiple_payment_requests_to_sap(self):
         """Send multiple payment requests to SAP."""
         for rec in self:
             rec.with_delay().send_payment_request_to_sap()
 
-    @job(default_channel='root')
+    @job(default_channel='root.sap')
     @api.multi
     def send_payment_request_to_sap(self):
         """Send payment request to SAP through SAP-XML-API."""
@@ -456,149 +346,6 @@ class OfhPaymentRequest(models.Model):
             _logger.warn(f"PR# {self.track_id} is incomplete. Skipp it.")
             return False
 
-        integration_details = self._get_server_env()
-        sap_xml = SapXmlApi(
-            sap_xml_url=integration_details.get(SAP_XML_URL),
-            sap_xml_username=integration_details.get(SAP_XML_USERNAME),
-            sap_xml_password=integration_details.get(SAP_XML_PASSWORD))
-
-        source = integration_details.get(SOURCE)
-        _logger.info(f"Start sending PR# {self.track_id} to SAP.")
-        # Case where both sale and payment should be sent to SAP.
-        if self.sap_status in ('pending', 'not_in_sap', 'payment_in_sap'):
-            try:
-                payload = self._get_sale_sap_xml_api_payload(source)
-                _logger.info(
-                    f"Sending sale part to SAP with the "
-                    f"following values: {payload}")
-                sap_xml.sent_payment_request(payload)
-            except Exception:
-                _logger.warn("Sending sale part to SAP failed.")
-                self.message_post("Sending sale part to SAP failed.")
-
-        if self.sap_status in ('pending', 'not_in_sap', 'sale_in_sap'):
-            try:
-                payload = self._get_payment_sap_xml_api_payload(source)
-                _logger.info(
-                    f"Sending payment part to SAP with the "
-                    f"following values: {payload}")
-                sap_xml.sent_payment_request(payload)
-            except Exception:
-                _logger.warn("Sending payment part to SAP failed.")
-                self.message_post("Sending payment part to SAP failed.")
-
-        _logger.info(
-            "Sending is done. Updating Integartion status "
-            "after sending is done.")
-        self.update_sap_xml_details()
-
-    @api.multi
-    def _get_new_integration_status(self, integration_status: str) -> str:
-        """Return the new integration status depending on the previous status
-        Arguments:
-            integration_status {str} -- the new integration status
-        Returns:
-            str -- the new status that should be used.
-        """
-        self.ensure_one()
-        old_integration_status = self.integration_status
-        if old_integration_status == 'sale_payment_sent':
-            return old_integration_status
-        if (old_integration_status == 'payment_sent' and
-           integration_status == 'sale_sent') or \
-           (old_integration_status == 'sale_sent' and
-           integration_status == 'payment_sent'):
-            return 'sale_payment_sent'
-        return integration_status
-
-    @api.multi
-    def _get_sale_sap_xml_api_payload(self, source):
-        """Return the sale payload to send to SAP-XML-API."""
-        self.ensure_one()
-        booking_date = datetime.strftime(
-            fields.Datetime.from_string(
-                self.updated_at), '%Y%m%d')
-        payload = {
-            'orderId': self.order_id.hub_bind_ids[0].external_id,
-            'trackId': self.track_id,
-            'source': source,
-            'requestType': 'refund_order' if
-            self.request_type == 'refund' else 'sale_order',
-            'updates': {
-                'header': {
-                    'BookingDate': booking_date,
-                }
-            }
-        }
-
-        if self.sap_line_ids:
-            payload['updates']['lineItems'] = [
-                line.to_dict() for line in self.sap_line_ids]
-        else:
-            payload['updates']['lineItems'] = [{
-                'item_general': {
-                    'VATTaxCode': self.sap_tax_code,
-                    'pnr': self.sap_pnr,
-                    'BillingDate': booking_date,
-                },
-                'item_condition': {
-                    'ZVD1': self.sap_zvd1,
-                    # https://trello.com/c/CQvak1xI/125-fix-order-supplier-cost
-                    'ZVD1_CURRENCY': self.supplier_currency_id.name if
-                    self.supplier_currency_id else self.currency_id.name,
-                    'ZSEL': self.sap_zsel,
-                    'ZSEL_CURRENCY': self.currency_id.name,
-                    'ZVT1': self.sap_zvt1,
-                    'ZVT1_CURRENCY': self.currency_id.name,
-                    'ZDIS': self.sap_zdis,
-                    'ZDIS_CURRENCY': self.currency_id.name,
-                }
-            }]
-
-        if not float_is_zero(
-                self.change_fee,
-                precision_rounding=self.currency_id.rounding):
-            change_fee_line_item = self.get_change_fee_line_item()
-            payload['updates']['lineItems'].append(change_fee_line_item)
-
-        return payload
-
-    @api.multi
-    def get_change_fee_line_item(self):
-        """Return the Change Fee LineItem."""
-        self.ensure_one()
-        booking_date = datetime.strftime(
-            fields.Datetime.from_string(
-                self.updated_at), '%Y%m%d')
-
-        if self.manual_sap_zvd1_currency:
-            zvd1_currency = self.manual_sap_zvd1_currency.name
-        elif self.supplier_currency_id.name:
-            zvd1_currency = self.manual_sap_zvd1_currency.name
-        else:
-            zvd1_currency = self.currency_id.name
-
-        line_item = {
-            'item_general': {
-                'VATTaxCode': self.sap_change_fee_tax_code,
-                'ServiceItem': self.sap_change_fee_service_item,
-                'BillingDate': booking_date,
-                'GDSCode': "",
-            },
-            'item_condition': {
-                'ZVD1': 0.0,
-                'ZVD1_CURRENCY': zvd1_currency,
-                'ZSEL': self.sap_change_fee_zsel,
-                'ZSEL_CURRENCY': self.currency_id.name,
-                'ZVT1': self.sap_change_fee_zvt1,
-                'ZVT1_CURRENCY': self.currency_id.name,
-                'ZDIS': 0.0,
-                'ZDIS_CURRENCY': self.currency_id.name,
-            }
-        }
-
-        return line_item
-
     @api.multi
     @api.depends('change_fee', 'change_fee_vat_amount', 'order_type')
     def _compute_change_fee_line(self):
@@ -617,60 +364,3 @@ class OfhPaymentRequest(models.Model):
                 rec.sap_change_fee_service_item = '700000549'
             rec.sap_change_fee_tax_code = "SZ" if \
                 rec.sap_change_fee_zvt1 == 0.0 else "SS"
-
-    @api.multi
-    def _get_payment_sap_xml_api_payload(self, source):
-        """Return the payment payload to send to SAP-XML-API."""
-        self.ensure_one()
-        payload = {
-            'orderId': self.order_id.hub_bind_ids[0].external_id,
-            'trackId': self.track_id,
-            'source': source,
-            'requestType': 'refund_doc' if
-            self.request_type == 'refund' else 'sale_doc',
-            'updates': {
-                'DocumentDate': datetime.strftime(
-                    fields.Datetime.from_string(
-                        self.updated_at), '%Y%m%d'),
-                'Amount1': self.sap_payment_amount1,
-                'Amount2': self.sap_payment_amount2,
-                'Currency': self.currency_id.name,
-            }
-        }
-        if self.auth_code:
-            payload['updates']['ReferenceKey3'] = self.auth_code
-
-        return payload
-
-    @api.multi
-    def write(self, vals):
-        """Override the write function to make sure we update the payment
-        request with the right SAP status.
-        If a user upload an SAP sales report and the sap_status was already
-        marked as payment sent. the new status should be
-        `Sale & Payment In SAP` if the record is found in the report.
-        The same thing applies when a user uploads an SAP Payment report.
-
-        Arguments:
-            vals {dict} -- Dictionary of values to be updated.
-
-        """
-
-        new_status = vals.get('sap_status')
-        if not new_status or new_status not in \
-           ('payment_in_sap', 'sale_in_sap'):
-            return super(OfhPaymentRequest, self).write(vals)
-
-        for rec in self:
-            # If the last update will make both payment and sale sent to SAP
-            # the SAP status should be then 'IN SAP'.
-            new_vals = vals
-            if rec.sap_status == 'in_sap':
-                continue
-            if (rec.sap_status == 'payment_in_sap' and
-                    new_status == 'sale_in_sap') or \
-               (rec.sap_status == 'sale_in_sap' and
-                    new_status == 'payment_in_sap'):
-                new_vals['sap_status'] = 'in_sap'
-            super(OfhPaymentRequest, rec).write(new_vals)
-        return True

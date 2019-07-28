@@ -11,3 +11,4 @@ from . import ofh_payment_request
 from . import common
 from . import hub_sale_order_importer
 from . import hub_payment_request_importer
+from . import hub_payment_request_import_mapper

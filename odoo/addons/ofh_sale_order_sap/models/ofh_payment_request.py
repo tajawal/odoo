@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import json
 import logging
+from odoo.exceptions import ValidationError
 
 from odoo import _, api, fields, models
 from odoo.exceptions import MissingError, UserError
@@ -62,6 +63,18 @@ class OfhPaymentRequest(models.Model):
         store=False,
         compute='_compute_payment_sap_status',
         search='_search_payment_sap_status',
+    )
+    is_sale_applicable = fields.Boolean(
+        string="Is Sale Applicable?",
+        default=True,
+        readonly=True,
+        index=True,
+    )
+    is_payment_applicable = fields.Boolean(
+        string="Is Payment Applicable?",
+        default=True,
+        readonly=True,
+        index=True,
     )
 
     @api.multi
@@ -491,3 +504,50 @@ class OfhPaymentRequest(models.Model):
         for value in values:
             self.env['ofh.payment.sap'].with_context(
                 force_send=True).create(value[2])
+
+    @api.multi
+    def action_not_applicable(self):
+        if self.filtered(
+                lambda o:
+                o.new_integration_status or o.new_payment_integration_status):
+            raise ValidationError(
+                "Sale Order or Payment already sent to SAP.")
+        return self.write({
+            'is_sale_applicable': False,
+            'is_payment_applicable': False,
+        })
+
+    @api.multi
+    def action_applicable(self):
+        return self.write({
+            'is_sale_applicable': True,
+            'is_payment_applicable': True,
+        })
+
+    @api.multi
+    def action_sale_not_applicable(self):
+        if self.filtered(lambda o: o.new_integration_status):
+            raise ValidationError("Sale Order already sent to SAP.")
+        return self.write({
+            'is_sale_applicable': False,
+        })
+
+    @api.multi
+    def action_sale_applicable(self):
+        return self.write({
+            'is_sale_applicable': True,
+        })
+
+    @api.multi
+    def action_payment_not_applicable(self):
+        if self.filtered(lambda o: o.new_payment_integration_status):
+            raise ValidationError("Payment already sent to SAP.")
+        return self.write({
+            'is_payment_applicable': False,
+        })
+
+    @api.multi
+    def action_payment_applicable(self):
+        return self.write({
+            'is_payment_applicable': True,
+        })

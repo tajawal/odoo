@@ -43,6 +43,10 @@ class OfhSaleOrderSapExporter(Component):
 
     def _must_skip_payment_request(self, payment_request) -> str:
 
+        # If Payment Request not applicable for sending
+        if not payment_request.is_sale_applicable:
+            return "Not Applicable for Sending"
+
         # If Item has already been sent successfully don't send to SAP.
         if payment_request.sap_order_ids.filtered(
                 lambda o: o.state == 'success'):
@@ -264,6 +268,10 @@ class OfhPaymentSapExporter(Component):
         if binding._name == 'ofh.payment' and \
                 not binding.order_id.is_payment_applicable:
             return "Not Applicable for Sending"
+
+        if binding._name == 'ofh.payment.request' and \
+                not binding.is_payment_applicable:
+            return "Payment Not Applicable for Sending"
 
         return ''
 
