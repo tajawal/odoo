@@ -350,6 +350,12 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         store=False,
     )
+    supplier_name = fields.Char(
+        string="Supplier Name",
+        compute="_compute_supplier_name",
+        store=True,
+        track_visibility='onchange',
+    )
 
     @api.multi
     @api.depends(
@@ -497,3 +503,15 @@ class OfhSaleOrder(models.Model):
             payment_statuses = self._fields['payment_status'].selection(self)
             rec.payment_status_export = dict(payment_statuses) \
                 .get(rec.payment_status)
+
+    @api.multi
+    @api.depends(
+        'line_ids.supplier_name')
+    def _compute_supplier_name(self):
+        for rec in self:
+            supplier_name = []
+            rec.supplier_name = ''
+            for line in rec.line_ids:
+                supplier_name.append(line.supplier_name)
+            if supplier_name:
+                rec.supplier_name = ', '.join(set(supplier_name))

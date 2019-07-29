@@ -133,6 +133,7 @@
                 <field name="vendor_reference" filter_domain="['|', ('vendor_reference','ilike',self), ('supplier_reference','ilike', self)]" string="Locator"/>
                 <field name="ticketing_office_id"/>
                 <field name="office_id"/>
+                <field name="supplier_name"/>
                 <separator/>
                 <filter name="domestic_ksa" string="Domestic KSA" domain="[('line_ids.is_domestic_ksa', '=', True)]"/>
                 <separator/>
@@ -173,6 +174,7 @@
                 <field name="paid_at"/>
                 <field name="order_type"/>
                 <field name="ticketing_office_id"/>
+                <field name="supplier_name"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>
                 <field name="supplier_currency_id" invisible="1"/>
