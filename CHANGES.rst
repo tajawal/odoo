@@ -1,5 +1,10 @@
 Changes
 -------
+2.6.4 (2019-07-30)
+------------------
+- Supplier Name in Sales Order View.
+- Skipped view missing field added.
+
 2.6.3 (2019-07-30)
 ------------------
 - Mark payment request as not applicable.
