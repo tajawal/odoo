@@ -10,10 +10,6 @@
         <field name="inherit_id" ref="ofh_payment_request.ofh_payment_request_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
-                <button name="update_sap_xml_details"
-                        type="object"
-                        string="Update Integration Details"
-                        class="button-primary"/>
                 <button name="send_payment_request_to_sap"
                         type="object"
                         confirm="You are about to send this Payment Request to SAP. Are you sure?"

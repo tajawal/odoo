@@ -448,7 +448,7 @@ class OfhPaymentSap(models.Model):
                 payment_detail = {}
 
             rec.order_id = payment_detail.get('order_id')
-            rec.order_number = payment_detail.get('order_number')
+            rec.order_number = payment_detail.get('name')
             rec.order_type = payment_detail.get('order_type')
             rec.order_status = payment_detail.get('order_status')
             rec.supplier_name = payment_detail.get('supplier_name')
