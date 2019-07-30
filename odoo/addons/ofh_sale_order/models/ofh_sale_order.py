@@ -505,13 +505,10 @@ class OfhSaleOrder(models.Model):
                 .get(rec.payment_status)
 
     @api.multi
-    @api.depends(
-        'line_ids.supplier_name')
+    @api.depends('line_ids.supplier_name')
     def _compute_supplier_name(self):
         for rec in self:
-            supplier_name = []
-            rec.supplier_name = ''
-            for line in rec.line_ids:
-                supplier_name.append(line.supplier_name)
-            if supplier_name:
-                rec.supplier_name = ', '.join(set(supplier_name))
+            if not rec.line_ids:
+                continue
+            rec.supplier_name = ','.join(set(
+                [l.supplier_name for l in rec.line_ids]))
