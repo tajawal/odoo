@@ -1,8 +1,13 @@
 Changes
 -------
+2.6.3 (2019-07-30)
+------------------
+- Mark payment request as not applicable.
+
 2.6.2 (2019-07-25)
 -------------------
 - Update master data - New Airline code (GDS booking).
+
 2.6.1 (2019-07-25)
 -------------------
 - Auto send Hotel Sale order to SAP.
