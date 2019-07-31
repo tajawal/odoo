@@ -47,6 +47,17 @@ class OfhSaleOrder(models.Model):
             ("83", 'Manually Captured'),
             ("81", 'Voided'), ("64", 'Manual Payment'), ("1000", 'Mixed')]
 
+    @api.model
+    def _get_payment_status_view_selection(self):
+        return [
+            ("11111", "Captured"), ("83027", "Refund"),
+            ("83026", "Refund In Progress"), ("83025", "Refund Failed"),
+            ("00000", "Declined"), ("10000", "Authorized"),
+            ("20118", "Pending"), ("83035", "Void"), ("99999", "Deleted"),
+            ("10100", "Flagged"), ("10100", "Flagged"), ('20068', 'Timeout'),
+            ("20009", "Progress"), ("20010", "Partial Paid"),
+        ]
+
     name = fields.Char(
         string="Order ID",
         readonly=True,
@@ -356,6 +367,14 @@ class OfhSaleOrder(models.Model):
         store=True,
         track_visibility='onchange',
     )
+    computed_payment_status = fields.Selection(
+        string="Payment Status",
+        selection=_get_payment_status_view_selection,
+        readonly=True,
+        index=True,
+        track_visibility='onchange',
+        compute="_compute_payment_status"
+    )
 
     @api.multi
     @api.depends(
@@ -512,3 +531,12 @@ class OfhSaleOrder(models.Model):
                 continue
             rec.supplier_name = ','.join(set(
                 [l.supplier_name for l in rec.line_ids]))
+
+    @api.multi
+    @api.depends('payment_ids.payment_status')
+    def _compute_payment_status(self):
+        for rec in self:
+            if not rec.payment_ids:
+                continue
+            rec.computed_payment_status = rec.payment_ids[-1].payment_status
+
