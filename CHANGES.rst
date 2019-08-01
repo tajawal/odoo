@@ -1,5 +1,10 @@
 Changes
 -------
+2.6.6 (2019-08-01)
+------------------
+- Payment Status
+- Sales Order View - Missing Actions.
+
 2.6.4 (2019-07-30)
 ------------------
 - Supplier Name in Sales Order View.
