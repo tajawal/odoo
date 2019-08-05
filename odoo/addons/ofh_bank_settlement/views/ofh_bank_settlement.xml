@@ -49,7 +49,6 @@
         <field name="model">ofh.bank.settlement</field>
         <field name="arch" type="xml">
             <tree delete="0">
-                <field name="entity"/>
                 <field name="name"/>
                 <field name="auth_code"/>
                  <field name="currency_id"/>
@@ -65,22 +64,6 @@
         <field name="res_model">ofh.bank.settlement</field>
         <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[]</field>
-        <field name="context">{}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_bank_settlement_almosafer_act_window">
-        <field name="name">Bank Settlements</field>
-        <field name="res_model">ofh.bank.settlement</field>
-        <field name="view_mode">tree,form,pivot</field>
-        <field name="domain">[('entity', '=', 'almosafer')]</field>
-        <field name="context">{}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_bank_settlement_tajawal_act_window">
-        <field name="name">Bank Settlements</field>
-        <field name="res_model">ofh.bank.settlement</field>
-        <field name="view_mode">tree,form,pivot</field>
-        <field name="domain">[('entity', '=', 'tajawal')]</field>
         <field name="context">{}</field>
     </record>
 
