@@ -19,7 +19,7 @@ class OfhBankSettlement(models.Model):
         track_visibility='always',
     )
     name = fields.Char(
-        string="Payment Gateway ID",
+        string="Name",
         readonly=True,
         required=True,
         index=True,
