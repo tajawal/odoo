@@ -12,6 +12,10 @@
     'depends': [
     ],
     'data': [
+        'security/groups.xml',
         'views/ofh_payment_gateway.xml',
+    ],
+    'demo': [
+        'demo/ofh_payment_gateway.xml',
     ],
 }

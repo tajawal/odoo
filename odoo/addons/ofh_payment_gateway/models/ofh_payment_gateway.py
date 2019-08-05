@@ -7,7 +7,7 @@ from odoo import fields, models
 class OfhPaymentGateway(models.Model):
     _name = 'ofh.payment.gateway'
     _description = "Ofh Payment Gateway"
-    _rec_name = 'pg_id'
+    _rec_name = 'name'
 
     created_at = fields.Datetime(
         required=True,
@@ -22,6 +22,14 @@ class OfhPaymentGateway(models.Model):
         string="Payment Gateway ID",
         readonly=True,
         required=True,
+        index=True,
+    )
+    entity = fields.Selection(
+        selection=[
+            ('almosafer', 'Almosafer'),
+            ('tajawal', 'Tajawal')],
+        required=True,
+        readonly=True,
         index=True,
     )
     provider = fields.Selection(

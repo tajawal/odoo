@@ -1,7 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2019 Tajawal LCC
+<!-- Copyright 2019 Tajawal LLC
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
 
+    <record model="ir.ui.view" id="ofh_payment_gateway_form_view">
+        <field name="name">ofh.payment.gateway.form (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group name="header" col="4">
+                        <field name="created_at" />
+                        <field name="updated_at" />
+                        <field name="provider" />
+                        <field name="acquirer_bank" />
+                        <field name="track_id" />
+                        <field name="auth_code" />
+                        <field name="payment_method" />
+                        <field name="payment_by" />
+                        <field name="transaction_date" />
+                        <field name="total" />
+                        <field name="currency_id" />
+                        <field name="payment_status" />
+                        <field name="card_name" />
+                        <field name="card_number" />
+                        <field name="card_bin" />
+                        <field name="card_bank" />
+                        <field name="card_type" />
+                        <field name="card_wallet_type" />
+                        <field name="card_expiry_year" />
+                        <field name="card_expiry_month" />
+                        <field name="response_description" />
+                        <field name="customer_email" />
+                        <field name="cvv_check" />
+                        <field name="arn" />
+                        <field name="payment_id" />
+                        <field name="server_ip" />
+                        <field name="reported_mid" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_gateway_tree_view">
+        <field name="name">ofh.payment.gateway.tree (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="entity"/>
+                <field name="name"/>
+                <field name="auth_code" />
+                 <field name="currency_id" />
+                <field name="created_at"/>
+                <field name="updated_at"/>
+                <field name="total" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_gateway_act_window">
+        <field name="name">Payment Gateways</field>
+        <field name="res_model">ofh.payment.gateway</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_gateway_main_menu">
+        <field name="name">Payment Gateways</field>
+        <field name="sequence" eval="100"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_gateway_menu">
+        <field name="name">Payment Gateways</field>
+        <field name="parent_id" ref="ofh_payment_gateway_main_menu"/>
+        <field name="sequence" eval="100"/>
+    </record>
 </odoo>
