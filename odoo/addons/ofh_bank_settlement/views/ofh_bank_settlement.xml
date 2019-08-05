@@ -94,13 +94,13 @@
 
     <record model="ir.ui.menu" id="ofh_bank_settlement_main_menu">
         <field name="name">Bank Settlements</field>
-        <field name="sequence" eval="70"/>
+        <field name="sequence" eval="80"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_bank_settlement_menu">
         <field name="name">Bank Settlements</field>
         <field name="parent_id" ref="ofh_bank_settlement.ofh_bank_settlement_main_menu"/>
-        <field name="sequence" eval="70"/>
+        <field name="sequence" eval="80"/>
     </record>
 
 </odoo>
