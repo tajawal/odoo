@@ -7,7 +7,6 @@ from odoo import fields, models
 class OfhPaymentGateway(models.Model):
     _name = 'ofh.payment.gateway'
     _description = "Ofh Payment Gateway"
-    _rec_name = 'name'
 
     created_at = fields.Datetime(
         required=True,
