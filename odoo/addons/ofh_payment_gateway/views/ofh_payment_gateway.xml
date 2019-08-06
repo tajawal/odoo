@@ -72,30 +72,6 @@
         <field name="context">{}</field>
     </record>
 
-    <record model="ir.actions.act_window" id="ofh_payment_gateway_almosafer_act_window">
-        <field name="name">Payment Gateways</field>
-        <field name="res_model">ofh.payment.gateway</field>
-        <field name="view_mode">tree,form,pivot</field>
-        <field name="domain">[('entity', '=', 'almosafer')]</field>
-        <field name="context">{}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_payment_gateway_tajawal_act_window">
-        <field name="name">Payment Gateways</field>
-        <field name="res_model">ofh.payment.gateway</field>
-        <field name="view_mode">tree,form,pivot</field>
-        <field name="domain">[('entity', '=', 'tajawal')]</field>
-        <field name="context">{}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_payment_gateway_incomplete_act_window">
-        <field name="name">Payment Gateways</field>
-        <field name="res_model">ofh.payment.gateway</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
-        <field name="context">{}</field>
-    </record>
-
     <record model="ir.ui.menu" id="ofh_payment_gateway_main_menu">
         <field name="name">Payment Gateways</field>
         <field name="sequence" eval="70"/>
@@ -104,6 +80,13 @@
     <record model="ir.ui.menu" id="ofh_payment_gateway_menu">
         <field name="name">Payment Gateways</field>
         <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_main_menu"/>
+        <field name="sequence" eval="70"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_gateway_menu">
+        <field name="name">Payment Gateways</field>
+        <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_main_menu"/>
+        <field name="action" ref="ofh_payment_gateway.ofh_payment_gateway_all_act_window"/>
         <field name="sequence" eval="70"/>
     </record>
 

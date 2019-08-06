@@ -5,14 +5,14 @@
     'name': 'Ofh Bank Settlement',
     'description': """
         Synchronisation of payments from Bank Settlement""",
-    'version': '11.0.1.1.1',
+    'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
     ],
     'data': [
-        'security/groups.xml',
+        # 'security/groups.xml',
         'views/ofh_bank_settlement.xml',
     ],
     'demo': [
