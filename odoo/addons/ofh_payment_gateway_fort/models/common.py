@@ -235,7 +235,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).fort_backend(record)
+            return super(PaymentGatewayMapper, self).arn(record)
         return {}
 
     @mapping
