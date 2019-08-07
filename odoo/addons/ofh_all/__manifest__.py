@@ -30,6 +30,7 @@
         'ofh_payment_gateway',
         'ofh_payment_gateway_fort',
         'ofh_payment_gateway_checkout',
+        'ofh_payment_gateway_knet',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
         'base_optional_quick_create',
