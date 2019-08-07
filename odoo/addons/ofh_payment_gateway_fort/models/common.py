@@ -56,7 +56,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).provider(record)
+            return super(PaymentGatewayMapper, self).acquirer_bank(record)
         aquirer_bank = record.get('Acquirer Name')
         if aquirer_bank == 'Commercial International bank':
             return {'acquirer_bank': 'cib'}
@@ -102,7 +102,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).created_at(record)
+            return super(PaymentGatewayMapper, self).transaction_date(record)
         # TODO: correct the format 6/30/2019 11:45:23 PM
         dt = datetime.strptime(record.get('Date & Time'), '%m/%d/%y %H:%M')
         return {'transaction_date': fields.Date.to_string(dt)}
@@ -136,62 +136,122 @@ class PaymentGatewayMapper(Component):
 
     @mapping
     def card_name(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_name(record)
         return {}
 
     @mapping
     def card_number(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_number(record)
         return {}
 
     @mapping
     def card_bin(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_bin(record)
         return {}
 
     @mapping
     def card_bank(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_bank(record)
         return {}
 
     @mapping
     def card_type(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_type(record)
         return {}
 
     @mapping
     def card_wallet_type(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_wallet_type(record)
         return {}
 
     @mapping
     def card_expiry_year(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_expiry_year(record)
         return {}
 
     @mapping
     def card_expiry_month(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).card_expiry_month(record)
         return {}
 
     @mapping
     def response_description(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).response_description(record)
         return {}
 
     @mapping
     def customer_email(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).customer_email(record)
         return {}
 
     @mapping
     def cvv_check(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).cvv_check(record)
         return {}
 
     @mapping
     def is_3d_secure(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).is_3d_secure(record)
         return {}
 
     @mapping
     def arn(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).fort_backend(record)
         return {}
 
     @mapping
     def payment_id(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).payment_id(record)
         return {}
 
     @mapping
     def server_ip(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayMapper, self).server_ip(record)
         return {}
 
     @mapping
