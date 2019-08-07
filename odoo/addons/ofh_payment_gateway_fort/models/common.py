@@ -49,7 +49,7 @@ class PaymentGatewayMapper(Component):
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
             return super(PaymentGatewayMapper, self).payment_gateway_id(record)
-        return {'provider': record.get('FORT ID')}
+        return {'payment_gateway_id': record.get('FORT ID')}
 
     @mapping
     def acquirer_bank(self, record):
