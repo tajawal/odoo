@@ -18,6 +18,7 @@
                         <field name="created_at" />
                         <field name="updated_at" />
                         <field name="provider" />
+                        <field name="payment_gateway_id" />
                         <field name="acquirer_bank" />
                         <field name="track_id" />
                         <field name="auth_code" />
@@ -53,7 +54,7 @@
         <field name="model">ofh.payment.gateway</field>
         <field name="arch" type="xml">
             <tree delete="0">
-                <field name="entity"/>
+                <field name="payment_gateway_id" />
                 <field name="name"/>
                 <field name="auth_code" />
                  <field name="currency_id" />
@@ -88,6 +89,19 @@
         <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_main_menu"/>
         <field name="action" ref="ofh_payment_gateway.ofh_payment_gateway_all_act_window"/>
         <field name="sequence" eval="70"/>
+    </record>
+
+    <record model="ir.ui.menu" id="all_payment_gateway_menu">
+        <field name="name">All Payment Gateways</field>
+        <field name="parent_id" ref="ofh_payment_gateway_main_menu"/>
+        <field name="action" ref="ofh_payment_gateway_all_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_gateway_import_main_menu">
+        <field name="name">Import reports</field>
+        <field name="parent_id" ref="ofh_payment_gateway_main_menu"/>
+        <field name="sequence" eval="20"/>
     </record>
 
 </odoo>

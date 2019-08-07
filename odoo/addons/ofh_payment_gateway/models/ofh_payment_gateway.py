@@ -1,7 +1,7 @@
 # Copyright 2019 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class OfhPaymentGateway(models.Model):
@@ -18,25 +18,20 @@ class OfhPaymentGateway(models.Model):
         track_visibility='always',
     )
     name = fields.Char(
+        string="Name",
+        compute='_compute_name',
+        readonly=True,
+        store=True,
+    )
+    payment_gateway_id = fields.Char(
         string="Payment Gateway ID",
         readonly=True,
         required=True,
         index=True,
     )
-    entity = fields.Selection(
-        selection=[
-            ('almosafer', 'Almosafer'),
-            ('tajawal', 'Tajawal')],
-        required=True,
-        readonly=True,
-        index=True,
-    )
     provider = fields.Selection(
         string="Provider",
-        selection=[
-            ('fort', 'Fort'),
-            ('checkout', 'Checkout'),
-            ('knet', 'Knet')],
+        selection=[],
         required=True,
         readonly=True,
         index=True,
@@ -44,6 +39,8 @@ class OfhPaymentGateway(models.Model):
     acquirer_bank = fields.Selection(
         string="Acquirer Bank",
         selection=[
+            ('mashreq', 'Mashreq'),
+            ('cib', 'CIB'),
             ('sabb', 'SABB'),
             ('rajhi', 'Rajhi'),
             ('knet', 'Knet')],
@@ -90,7 +87,8 @@ class OfhPaymentGateway(models.Model):
         selection=[
             ('Void authorization', 'Void Authorisation'),
             ('Authorization', 'Authorisation'),
-            ('Captured', 'Capture')],
+            ('Captured', 'Capture'),
+            ('Capture', 'Capture')],
         required=False,
         readonly=True,
     )
@@ -154,6 +152,20 @@ class OfhPaymentGateway(models.Model):
         string="Reported MID",
         readonly=True,
     )
+    is_3d_secure = fields.Boolean(
+        string="Is 3d Secure?",
+        readonly=True,
+        default=False
+    )
 
+    @api.multi
+    @api.depends('provider', 'auth_code')
+    def _compute_name(self):
+        for rec in self:
+            compute_function = '_{}_compute_name'.format(rec.provider)
+            if hasattr(rec, compute_function):
+                getattr(rec, compute_function)()
+            else:
+                rec.name = '{}{}'.format(rec.provider, rec.auth_code)
 
 

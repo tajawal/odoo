@@ -22,11 +22,11 @@ class PaymentGatewayMapper(Component):
         return {}
 
     @mapping
-    def entity(self, record):
+    def provider(self, record):
         return {}
 
     @mapping
-    def provider(self, record):
+    def payment_gateway_id(self, record):
         return {}
 
     @mapping
@@ -123,6 +123,10 @@ class PaymentGatewayMapper(Component):
 
     @mapping
     def reported_mid(self, record):
+        return {}
+
+    @mapping
+    def is_3d_secure(self, record):
         return {}
 
 
