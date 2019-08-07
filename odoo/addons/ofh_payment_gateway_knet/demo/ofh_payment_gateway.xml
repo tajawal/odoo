@@ -7,34 +7,34 @@
     <record id="ofh_payment_gateway_knet_1" model="ofh.payment.gateway">
         <field name="created_at">2019-08-02</field>
         <field name="updated_at">2019-08-02</field>
-        <field name="name">B8FBCE577W1A68785FF9</field>
+        <field name="name">knet</field>
         <field name="entity">almosafer</field>
         <field name="provider">knet</field>
-        <field name="payment_gateway_id">156192387100015000</field>
-        <field name="acquirer_bank">cib</field>
-        <field name="track_id">537f055d-8058-43f1-8c9d-2479b29b124c</field>
-        <field name="auth_code">893198</field>
-        <field name="payment_method">Visa</field>
-        <field name="payment_by">Visa</field>
+        <field name="payment_gateway_id">chg_Pt7c4020192359Bn2t2306458</field>
+        <field name="acquirer_bank"></field>
+        <field name="track_id">8ee7c07e-69d7-46f4-9638-d1c5d03c85db</field>
+        <field name="auth_code">893133</field>
+        <field name="payment_method">KNET</field>
+        <field name="payment_by">Credit Card</field>
         <field name="transaction_date">2019-06-23</field>
-        <field name="total">1684.18</field>
+        <field name="total">1232.23</field>
         <field name="currency_id" ref="base.SAR"/>
-        <field name="payment_status">Authorization</field>
+        <field name="payment_status">Captured</field>
         <field name="card_name"></field>
-        <field name="card_number"></field>
-        <field name="card_bin"></field>
-        <field name="card_bank"></field>
-        <field name="card_type"></field>
+        <field name="card_number">470350******8150</field>
+        <field name="card_bin">470350</field>
+        <field name="card_bank">BOUBYAN BANK K.S.C.</field>
+        <field name="card_type">DEBIT</field>
         <field name="card_wallet_type"></field>
-        <field name="card_expiry_year"></field>
-        <field name="card_expiry_month"></field>
-        <field name="response_description"></field>
-        <field name="customer_email"></field>
+        <field name="card_expiry_year">-</field>
+        <field name="card_expiry_month">-</field>
+        <field name="response_description">Captured</field>
+        <field name="customer_email">q8awri@xyz.com</field>
         <field name="cvv_check"></field>
-        <field name="arn"></field>
+        <field name="arn">917500673767</field>
         <field name="payment_id"></field>
         <field name="server_ip"></field>
-        <field name="reported_mid">80096</field>
+        <field name="reported_mid">80000500</field>
     </record>
 
 </odoo>
