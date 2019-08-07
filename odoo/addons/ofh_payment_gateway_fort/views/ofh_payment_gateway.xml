@@ -10,7 +10,7 @@
         <field name="sequence" eval="30"/>
     </record>
 
-    <record model="ir.actions.act_window" id="fort_payment_gateway_act_window">
+    <record model="ir.actions.act_window" id="ofh_payment_gateway_menu">
         <field name="name">Fort Payment Gateways</field>
         <field name="res_model">ofh.payment.gateway</field>
         <field name="view_mode">tree,form</field>
@@ -21,7 +21,7 @@
     <record model="ir.ui.menu" id="ofh_fort_payment_gateway_line_menu">
         <field name="name">Fort Payment Gateways</field>
         <field name="parent_id" ref="ofh_payment_gateway.all_payment_gateway_menu"/>
-        <field name="action" ref="fort_payment_gateway_act_window"/>
+        <field name="action" ref="ofh_payment_gateway_menu"/>
         <field name="sequence" eval="40"/>
     </record>
 
