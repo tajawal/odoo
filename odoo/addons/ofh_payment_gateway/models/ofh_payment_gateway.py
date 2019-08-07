@@ -86,9 +86,12 @@ class OfhPaymentGateway(models.Model):
         string="Payment Status",
         selection=[
             ('Void authorization', 'Void Authorisation'),
+            ('Void Authorisation', 'Void Authorisation'),
             ('Authorization', 'Authorisation'),
             ('Captured', 'Capture'),
-            ('Capture', 'Capture')],
+            ('Capture', 'Capture'),
+            ('Authorisation', 'Authorisation'),
+            ('Refund', 'Refund')],
         required=False,
         readonly=True,
     )

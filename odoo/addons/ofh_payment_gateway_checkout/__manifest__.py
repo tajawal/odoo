@@ -2,9 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Ofh Payment Gateway Fort',
+    'name': 'Ofh Payment Gateway Checkout',
     'description': """
-        Synchronisation of payments from Payment Gateway for Fort""",
+        Synchronisation of payments from Payment Gateway for Checkout""",
     'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
