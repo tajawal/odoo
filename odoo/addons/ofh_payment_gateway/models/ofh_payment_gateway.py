@@ -62,7 +62,7 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
     )
     payment_by = fields.Char(
-        string="Payment Method",
+        string="Payment By",
         required=True,
         readonly=True,
     )

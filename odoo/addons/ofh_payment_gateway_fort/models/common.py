@@ -87,7 +87,7 @@ class PaymentGatewayMapper(Component):
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
             return super(PaymentGatewayMapper, self).payment_method(record)
-        return {'payment_method': record.get('Payment Method')}
+        return {'payment_method': record.get('Payment Option')}
 
     @mapping
     def payment_by(self, record):
