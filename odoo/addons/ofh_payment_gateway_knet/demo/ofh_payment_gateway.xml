@@ -3,7 +3,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-
     <record id="ofh_payment_gateway_knet_1" model="ofh.payment.gateway">
         <field name="created_at">2019-08-02</field>
         <field name="updated_at">2019-08-02</field>
@@ -36,5 +35,4 @@
         <field name="server_ip"></field>
         <field name="reported_mid">80000500</field>
     </record>
-
 </odoo>
