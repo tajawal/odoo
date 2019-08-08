@@ -5,7 +5,7 @@ from odoo import _, api, fields, models
 from odoo.exceptions import MissingError
 
 
-class OfhSupplierInvoiceImport(models.TransientModel):
+class OfhPaymentGatewayImport(models.TransientModel):
 
     _name = 'ofh.payment.gateway.import'
 
