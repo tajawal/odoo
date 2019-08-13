@@ -8,8 +8,8 @@ server_wide_modules=web,queue_job,logging_json
 limit_memory_hard = 1677721600
 limit_memory_soft = 629145600
 limit_request = 8192
-limit_time_cpu = 600
-limit_time_real = 1200
+limit_time_cpu = 1200
+limit_time_real = 1500
 max_cron_threads = 1
 log_level=debug_rpc
 
