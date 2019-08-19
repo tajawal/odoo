@@ -28,9 +28,9 @@
         'ofh_sale_order_sap_tv',
         # Payment Gateway Addons
         'ofh_payment_gateway',
-        'ofh_payment_gateway_fort',
+        # 'ofh_payment_gateway_fort',
         'ofh_payment_gateway_checkout',
-        'ofh_payment_gateway_knet',
+        # 'ofh_payment_gateway_knet',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
         'base_optional_quick_create',
