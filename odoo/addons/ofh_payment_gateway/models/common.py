@@ -10,23 +10,11 @@ class PaymentGatewayMapper(Component):
     _apply_on = 'ofh.payment.gateway'
 
     @mapping
-    def created_at(self, record):
-        return {}
-
-    @mapping
-    def updated_at(self, record):
-        return {}
-
-    @mapping
     def name(self, record):
         return {}
 
     @mapping
     def provider(self, record):
-        return {}
-
-    @mapping
-    def payment_gateway_id(self, record):
         return {}
 
     @mapping
@@ -82,7 +70,7 @@ class PaymentGatewayMapper(Component):
         return {}
 
     @mapping
-    def card_type(self, record):
+    def is_card_mada(self, record):
         return {}
 
     @mapping
