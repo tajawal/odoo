@@ -74,7 +74,7 @@ class PaymentGatewayMapper(Component):
         return {}
 
     @mapping
-    def card_wallet_type(self, record):
+    def is_apple_pay(self, record):
         return {}
 
     @mapping

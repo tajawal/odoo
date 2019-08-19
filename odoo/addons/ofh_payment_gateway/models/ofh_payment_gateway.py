@@ -1,7 +1,7 @@
 # Copyright 2019 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 
 
 class OfhPaymentGateway(models.Model):
@@ -11,7 +11,8 @@ class OfhPaymentGateway(models.Model):
     name = fields.Char(
         string="Payment Reference",
         readonly=True,
-        index=True
+        index=True,
+        required=True,
     )
     provider = fields.Selection(
         string="Provider",
@@ -78,7 +79,7 @@ class OfhPaymentGateway(models.Model):
             ('auth', 'Authorised'),
             ('capture', 'Captured'),
             ('refund', 'Refunded')],
-        required=False,
+        required=True,
         readonly=True,
     )
     card_name = fields.Char(
@@ -148,3 +149,8 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         default=False
     )
+
+    _sql_constraints = [
+        ('unique_payment_getway', 'unique(name)',
+         _("This line has been uploaded"))
+    ]

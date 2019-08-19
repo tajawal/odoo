@@ -7,7 +7,7 @@
         <field name="name">Checkout Report</field>
         <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_import_main_menu"/>
         <field name="action" ref="ofh_payment_gateway_checkout.ofh_payment_gateway_import_act_window"/>
-        <field name="sequence" eval="30"/>
+        <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_gateway_menu">
@@ -22,7 +22,7 @@
         <field name="name">Checkout Payments</field>
         <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_menu"/>
         <field name="action" ref="ofh_payment_gateway_menu"/>
-        <field name="sequence" eval="40"/>
+        <field name="sequence" eval="10"/>
     </record>
 
 </odoo>
