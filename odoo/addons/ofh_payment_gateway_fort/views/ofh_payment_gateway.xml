@@ -7,11 +7,11 @@
         <field name="name">Fort Report</field>
         <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_import_main_menu"/>
         <field name="action" ref="ofh_payment_gateway_fort.ofh_payment_gateway_import_act_window"/>
-        <field name="sequence" eval="30"/>
+        <field name="sequence" eval="20"/>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_gateway_menu">
-        <field name="name">Fort Payment Gateways</field>
+        <field name="name">Fort Payments</field>
         <field name="res_model">ofh.payment.gateway</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('provider', '=', 'fort')]</field>
@@ -19,10 +19,10 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_fort_payment_gateway_line_menu">
-        <field name="name">Fort Payment Gateways</field>
-        <field name="parent_id" ref="ofh_payment_gateway.all_payment_gateway_menu"/>
+        <field name="name">Fort Payments</field>
+        <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_menu"/>
         <field name="action" ref="ofh_payment_gateway_menu"/>
-        <field name="sequence" eval="40"/>
+        <field name="sequence" eval="20"/>
     </record>
 
 </odoo>

@@ -17,8 +17,9 @@ PAYMENT_STATUSES = {
     'Capture': 'capture',
     'Authorisation': 'auth',
     'Void Authorisation': 'void',
-    'refund': 'refund',
+    'Refund': 'refund',
 }
+
 APPLE_PAY = "Apple Pay"
 
 
@@ -30,7 +31,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).payment_gateway_id(record)
+            return super(PaymentGatewayMapper, self).name(record)
         return {'name': record.get('Action ID')}
 
     @mapping
@@ -163,7 +164,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_type(record)
+            return super(PaymentGatewayMapper, self).is_card_mada(record)
         card_type = record.get('UDF1')
         return {'is_card_mada': card_type == 'MADA'}
 
@@ -172,7 +173,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_wallet_type(record)
+            return super(PaymentGatewayMapper, self).is_apple_pay(record)
         card_wallet_type = record.get('Card Wallet Type')
         return {'card_wallet_type': card_wallet_type == APPLE_PAY}
 
