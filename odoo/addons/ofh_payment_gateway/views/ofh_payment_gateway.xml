@@ -14,35 +14,38 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                    <group name="header" col="4">
-                        <field name="created_at" />
-                        <field name="updated_at" />
-                        <field name="provider" />
-                        <field name="payment_gateway_id" />
-                        <field name="acquirer_bank" />
-                        <field name="track_id" />
-                        <field name="auth_code" />
-                        <field name="payment_method" />
-                        <field name="payment_by" />
-                        <field name="transaction_date" />
-                        <field name="total" />
-                        <field name="currency_id" />
-                        <field name="payment_status" />
-                        <field name="card_name" />
-                        <field name="card_number" />
-                        <field name="card_bin" />
-                        <field name="card_bank" />
-                        <field name="card_type" />
-                        <field name="card_wallet_type" />
-                        <field name="card_expiry_year" />
-                        <field name="card_expiry_month" />
-                        <field name="response_description" />
-                        <field name="customer_email" />
-                        <field name="cvv_check" />
-                        <field name="arn" />
-                        <field name="payment_id" />
-                        <field name="server_ip" />
-                        <field name="reported_mid" />
+                    <field name="currency_id" invisible="1"/>
+                    <group name="main_info" col="4">
+                        <field name="provider"/>
+                        <field name="acquirer_bank"/>
+                        <field name="payment_method"/>
+                        <field name="payment_by"/>
+                        <field name="transaction_date"/>
+                        <field name="total"/>
+                        <field name="payment_status"/>
+                        <field name="response_description"/>
+                    </group>
+                    <group name="references" string="References" col="4">
+                        <field name="auth_code"/>
+                        <field name="reported_mid"/>
+                        <field name="payment_id"/>
+                        <field name="track_id"/>
+                        <field name="arn"/>
+                    </group>
+                    <group name="card_details" string="Card Details" col="4">
+                        <field name="card_name"/>
+                        <field name="card_number"/>
+                        <field name="card_bin"/>
+                        <field name="card_bank"/>
+                        <field name="is_card_mada"/>
+                        <field name="is_apple_pay"/>
+                        <field name="card_expiry_month"/>
+                        <field name="card_expiry_year"/>
+                        <field name="cvv_check"/>
+                    </group>
+                    <group name="customer_details" string="Customer Details" col="4">
+                        <field name="customer_email"/>
+                        <field name="server_ip"/>
                     </group>
                 </sheet>
             </form>
@@ -54,13 +57,13 @@
         <field name="model">ofh.payment.gateway</field>
         <field name="arch" type="xml">
             <tree delete="0">
-                <field name="payment_gateway_id" />
                 <field name="name"/>
-                <field name="auth_code" />
-                 <field name="currency_id" />
-                <field name="created_at"/>
-                <field name="updated_at"/>
-                <field name="total" />
+                <field name="provider"/>
+                <field name="acquirer_bank"/>
+                <field name="auth_code"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="total" widget="monetary"/>
+                <field name="payment_status"/>
             </tree>
         </field>
     </record>
@@ -87,13 +90,12 @@
     <record model="ir.ui.menu" id="ofh_payment_gateway_menu">
         <field name="name">Payment Gateways</field>
         <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_main_menu"/>
-        <field name="action" ref="ofh_payment_gateway.ofh_payment_gateway_all_act_window"/>
-        <field name="sequence" eval="70"/>
+        <field name="sequence" eval="20"/>
     </record>
 
     <record model="ir.ui.menu" id="all_payment_gateway_menu">
-        <field name="name">All Payment Gateways</field>
-        <field name="parent_id" ref="ofh_payment_gateway_main_menu"/>
+        <field name="name">All Payments</field>
+        <field name="parent_id" ref="ofh_payment_gateway_menu"/>
         <field name="action" ref="ofh_payment_gateway_all_act_window"/>
         <field name="sequence" eval="10"/>
     </record>

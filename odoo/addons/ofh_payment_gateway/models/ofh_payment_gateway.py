@@ -8,26 +8,10 @@ class OfhPaymentGateway(models.Model):
     _name = 'ofh.payment.gateway'
     _description = "Ofh Payment Gateway"
 
-    created_at = fields.Datetime(
-        required=True,
-        readonly=True,
-    )
-    updated_at = fields.Datetime(
-        required=True,
-        readonly=True,
-        track_visibility='always',
-    )
     name = fields.Char(
-        string="Name",
-        compute='_compute_name',
+        string="Payment Reference",
         readonly=True,
-        store=True,
-    )
-    payment_gateway_id = fields.Char(
-        string="Payment Gateway ID",
-        readonly=True,
-        required=True,
-        index=True,
+        index=True
     )
     provider = fields.Selection(
         string="Provider",
@@ -56,17 +40,23 @@ class OfhPaymentGateway(models.Model):
         required=True,
         readonly=True,
     )
+    # TODO should be selection list?
     payment_method = fields.Char(
         string="Payment Method",
         required=True,
         readonly=True,
     )
-    payment_by = fields.Char(
+    payment_by = fields.Selection(
         string="Payment By",
+        selection=[
+            ('credit_card', 'Credit Card'),
+        ],
         required=True,
         readonly=True,
+        default='credit_card',
     )
     transaction_date = fields.Datetime(
+        string="Transaction Date",
         required=True,
         readonly=True,
     )
@@ -84,13 +74,10 @@ class OfhPaymentGateway(models.Model):
     payment_status = fields.Selection(
         string="Payment Status",
         selection=[
-            ('Void authorization', 'Void Authorisation'),
-            ('Void Authorisation', 'Void Authorisation'),
-            ('Authorization', 'Authorisation'),
-            ('Captured', 'Capture'),
-            ('Capture', 'Capture'),
-            ('Authorisation', 'Authorisation'),
-            ('Refund', 'Refund')],
+            ('void', 'Voided'),
+            ('auth', 'Authorised'),
+            ('capture', 'Captured'),
+            ('refund', 'Refunded')],
         required=False,
         readonly=True,
     )
@@ -110,12 +97,14 @@ class OfhPaymentGateway(models.Model):
         string="Card Issuing Bank",
         readonly=True,
     )
-    card_type = fields.Char(
-        string="Card Type",
+    is_card_mada = fields.Boolean(
+        string="MADA?",
         readonly=True,
+        default=False,
     )
-    card_wallet_type = fields.Char(
-        string="Card Wallet Type",
+    is_apple_pay = fields.Boolean(
+        string="Apple Pay?",
+        default=False,
         readonly=True,
     )
     card_expiry_year = fields.Char(
@@ -159,15 +148,3 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         default=False
     )
-
-    @api.multi
-    @api.depends('provider', 'auth_code')
-    def _compute_name(self):
-        for rec in self:
-            compute_function = '_{}_compute_name'.format(rec.provider)
-            if hasattr(rec, compute_function):
-                getattr(rec, compute_function)()
-            else:
-                rec.name = '{}{}'.format(rec.provider, rec.auth_code)
-
-
