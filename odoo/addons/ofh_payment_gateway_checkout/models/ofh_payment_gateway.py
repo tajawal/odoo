@@ -10,12 +10,3 @@ class OfhPaymentGateway(models.Model):
     provider = fields.Selection(
         selection_add=[('checkout', 'Checkout')],
     )
-
-    @api.multi
-    def _checkout_compute_name(self):
-        self.ensure_one
-        self.name = '{}_{}'.format(
-            self.provider, self.auth_code)
-
-
-
