@@ -11,7 +11,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_gateway_menu">
-        <field name="name">Checkout Payment Gateways</field>
+        <field name="name">Checkout Payments</field>
         <field name="res_model">ofh.payment.gateway</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('provider', '=', 'checkout')]</field>
@@ -19,8 +19,8 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_checkout_payment_gateway_line_menu">
-        <field name="name">Checkout Payment Gateways</field>
-        <field name="parent_id" ref="ofh_payment_gateway.all_payment_gateway_menu"/>
+        <field name="name">Checkout Payments</field>
+        <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_menu"/>
         <field name="action" ref="ofh_payment_gateway_menu"/>
         <field name="sequence" eval="40"/>
     </record>

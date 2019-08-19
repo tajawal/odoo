@@ -7,33 +7,31 @@ from odoo.addons.connector.components.mapper import mapping
 
 from odoo import fields
 
+ACQUIRER_BANK = {
+    'Al Rajhi': 'rajhi',
+    'TAJAWAL GENERAL TRADING LLC': 'mashreq',
+    'Al Mosafer GW Services': 'sabb',
+}
+
+PAYMENT_STATUSES = {
+    'Capture': 'capture',
+    'Authorisation': 'auth',
+    'Void Authorisation': 'void',
+    'refund': 'refund',
+}
+APPLE_PAY = "Apple Pay"
+
 
 class PaymentGatewayMapper(Component):
     _inherit = 'payment.gateway.mapper'
-
-    @mapping
-    def created_at(self, record):
-        checkout_backend = self.env.ref(
-            'ofh_payment_gateway_checkout.checkout_import_backend')
-        if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).created_at(record)
-        return {'created_at': datetime.today().strftime("%d-%m-%y")}
-
-    @mapping
-    def updated_at(self, record):
-        checkout_backend = self.env.ref(
-            'ofh_payment_gateway_checkout.checkout_import_backend')
-        if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).updated_at(record)
-        return {'updated_at': datetime.today().strftime("%d-%m-%y")}
 
     @mapping
     def name(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).name(record)
-        return {'name': 'checkout'}
+            return super(PaymentGatewayMapper, self).payment_gateway_id(record)
+        return {'name': record.get('Action ID')}
 
     @mapping
     def provider(self, record):
@@ -44,26 +42,15 @@ class PaymentGatewayMapper(Component):
         return {'provider': 'checkout'}
 
     @mapping
-    def payment_gateway_id(self, record):
-        checkout_backend = self.env.ref(
-            'ofh_payment_gateway_checkout.checkout_import_backend')
-        if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).payment_gateway_id(record)
-        return {'payment_gateway_id': record.get('Action ID')}
-
-    @mapping
     def acquirer_bank(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayMapper, self).acquirer_bank(record)
         acquirer_bank = record.get('Business Name')
-        if acquirer_bank == 'Al Rajhi':
-            return {'acquirer_bank': 'rajhi'}
-        elif acquirer_bank == 'TAJAWAL GENERAL TRADING LLC':
-            return {'acquirer_bank': 'mashreq'}
-        elif acquirer_bank == 'Al Mosafer GW Services':
-            return {'acquirer_bank': 'sabb'}
+
+        # TODO: What should be the default one?
+        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, '')}
 
     @mapping
     def track_id(self, record):
@@ -88,16 +75,6 @@ class PaymentGatewayMapper(Component):
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayMapper, self).payment_method(record)
         return {'payment_method': record.get('Payment Method')}
-
-    @mapping
-    def payment_by(self, record):
-        checkout_backend = self.env.ref(
-            'ofh_payment_gateway_checkout.checkout_import_backend')
-        if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).payment_by(record)
-        if not record.get('CC Number'):
-            return {}
-        return {'payment_by': 'Credit Card'}
 
     @mapping
     def transaction_date(self, record):
@@ -134,7 +111,8 @@ class PaymentGatewayMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayMapper, self).payment_status(record)
-        return {'payment_status': record.get('Action Type')}
+        status = record.get('Action Type', '')
+        return {'payment_status': PAYMENT_STATUSES.get(status, '')}
 
     @mapping
     def card_name(self, record):
@@ -181,29 +159,22 @@ class PaymentGatewayMapper(Component):
         return {'card_bank': card_bank}
 
     @mapping
-    def card_type(self, record):
+    def is_card_mada(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayMapper, self).card_type(record)
         card_type = record.get('UDF1')
-        if not card_type:
-            return {}
-        if card_type == 'MADA':
-            return {'card_type': 'Yes'}
-        else:
-            return {'card_type': 'No'}
+        return {'is_card_mada': card_type == 'MADA'}
 
     @mapping
-    def card_wallet_type(self, record):
+    def is_apple_pay(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayMapper, self).card_wallet_type(record)
         card_wallet_type = record.get('Card Wallet Type')
-        if not card_wallet_type:
-            return {}
-        return {'card_wallet_type': card_wallet_type}
+        return {'card_wallet_type': card_wallet_type == APPLE_PAY}
 
     @mapping
     def card_expiry_year(self, record):
@@ -232,7 +203,8 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).response_description(record)
+            return super(PaymentGatewayMapper, self).response_description(
+                record)
         response_description = record.get('Response Description')
         if not response_description:
             return {}
@@ -266,10 +238,7 @@ class PaymentGatewayMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayMapper, self).is_3d_secure(record)
-        is_3d_secure = record.get('3D Secure Payment')
-        if not is_3d_secure:
-            return {}
-        return {'is_3d_secure': is_3d_secure}
+        return {'is_3d_secure': record.get('3D Secure Payment', False)}
 
     @mapping
     def arn(self, record):
@@ -316,33 +285,16 @@ class PaymentGatewayMapper(Component):
         return {'reported_mid': reported_mid}
 
 
-class PaymentGatewayRecordImporter(Component):
-    _name = 'payment.gateway.record.importer'
-    _inherit = 'importer.record'
-    _apply_on = ['ofh.payment.gateway']
-
-    odoo_unique_key = 'name'
-
-    def required_keys(self, create=False):
-        """Keys that are mandatory to import a line."""
-        return {}
-
-    def run(self, record, **kw):
-        result = super(PaymentGatewayRecordImporter, self).run(
-            record, **kw)
-        msg = ' '.join([
-            '{} import chunk completed'.format(
-                self.tracker.log_prefix.upper()),
-            '[created: {created}]',
-            '[updated: {updated}]',
-            '[skipped: {skipped}]',
-            '[errored: {errored}]',
-        ]).format(**self.tracker.get_counters())
-        self.env.user.notify_info(msg)
-        return result
-
-
 class PaymentGatewayHandler(Component):
-    _inherit = 'importer.odoorecord.handler'
-    _name = 'payment.gateway.handler'
-    _apply_on = ['ofh.payment.gateway']
+    _inherit = 'payment.gateway.handler'
+
+    def odoo_find_domain(self, values, orig_values):
+        """Domain to find the GDS invoice line record in odoo."""
+        checkout_backend = self.env.ref(
+            'ofh_payment_gateway_checkout.checkout_import_backend')
+        if self.backend_record != checkout_backend:
+            return super(PaymentGatewayHandler, self).odoo_find_domain(
+                values, orig_values)
+        return [
+                ('provider', '=', 'checkout'),
+                (self.unique_key, '=', values.get('Action ID'))]
