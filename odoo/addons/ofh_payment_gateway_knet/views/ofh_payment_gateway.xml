@@ -20,7 +20,7 @@
 
     <record model="ir.ui.menu" id="ofh_knet_payment_gateway_line_menu">
         <field name="name">Knet Payment Gateways</field>
-        <field name="parent_id" ref="ofh_payment_gateway.all_payment_gateway_menu"/>
+        <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_menu"/>
         <field name="action" ref="ofh_payment_gateway_menu"/>
         <field name="sequence" eval="40"/>
     </record>

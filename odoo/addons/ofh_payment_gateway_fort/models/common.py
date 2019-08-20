@@ -8,9 +8,8 @@ from odoo.addons.connector.components.mapper import mapping
 from odoo import fields
 
 ACQUIRER_BANK = {
-    'Commercial International bank': 'cib',
-    'Mashreq': 'mashreq',
-    'The Saudi British Bank': 'sabb'
+    'Commercial International Bank (CIB)': 'cib',
+    'The Saudi British Bank (SABB)': 'sabb'
 }
 
 PAYMENT_STATUSES = {
@@ -52,7 +51,7 @@ class PaymentGatewayMapper(Component):
         if self.backend_record != fort_backend:
             return super(PaymentGatewayMapper, self).acquirer_bank(record)
         acquirer_bank = record.get('Acquirer Name')
-        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, '')}
+        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, 'mashreq')}
 
     @mapping
     def track_id(self, record):
