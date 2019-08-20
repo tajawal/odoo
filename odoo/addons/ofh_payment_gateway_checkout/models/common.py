@@ -50,8 +50,7 @@ class PaymentGatewayMapper(Component):
             return super(PaymentGatewayMapper, self).acquirer_bank(record)
         acquirer_bank = record.get('Business Name')
 
-        # TODO: What should be the default one?
-        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, '')}
+        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, 'sabb')}
 
     @mapping
     def track_id(self, record):
@@ -297,5 +296,5 @@ class PaymentGatewayHandler(Component):
             return super(PaymentGatewayHandler, self).odoo_find_domain(
                 values, orig_values)
         return [
-                ('provider', '=', 'checkout'),
-                (self.unique_key, '=', values.get('Action ID'))]
+            ('provider', '=', 'checkout'),
+            (self.unique_key, '=', values.get('Action ID'))]

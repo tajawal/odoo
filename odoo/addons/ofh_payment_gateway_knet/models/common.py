@@ -7,25 +7,13 @@ from odoo.addons.connector.components.mapper import mapping
 
 from odoo import fields
 
+PAYMENT_STATUSES = {
+    'Captured': 'capture',
+}
+
 
 class PaymentGatewayMapper(Component):
     _inherit = 'payment.gateway.mapper'
-
-    @mapping
-    def created_at(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).created_at(record)
-        return {'created_at': datetime.today().strftime("%d-%m-%y")}
-
-    @mapping
-    def updated_at(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).updated_at(record)
-        return {'updated_at': datetime.today().strftime("%d-%m-%y")}
 
     @mapping
     def name(self, record):
@@ -33,7 +21,7 @@ class PaymentGatewayMapper(Component):
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
             return super(PaymentGatewayMapper, self).name(record)
-        return {'name': 'knet'}
+        return {'name': record.get('ACTION ID')}
 
     @mapping
     def provider(self, record):
@@ -44,20 +32,12 @@ class PaymentGatewayMapper(Component):
         return {'provider': 'knet'}
 
     @mapping
-    def payment_gateway_id(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).payment_gateway_id(record)
-        return {'payment_gateway_id': record.get('ACTION ID')}
-
-    @mapping
     def acquirer_bank(self, record):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
             return super(PaymentGatewayMapper, self).acquirer_bank(record)
-        return {}
+        return {'acquirer_bank': 'sabb'}
 
     @mapping
     def track_id(self, record):
@@ -84,23 +64,13 @@ class PaymentGatewayMapper(Component):
         return {'payment_method': record.get('PAYMENT METHOD')}
 
     @mapping
-    def payment_by(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).payment_by(record)
-        if not record.get('CC Number'):
-            return {}
-        return {'payment_by': 'Credit Card'}
-
-    @mapping
     def transaction_date(self, record):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
             return super(PaymentGatewayMapper, self).transaction_date(record)
         # TODO: correct the format 6/30/2019 11:45:23 PM
-        dt = datetime.strptime(record.get('ACTION DATE	'), '%m/%d/%y %H:%M')
+        dt = datetime.strptime(record.get('ACTION DATE'), '%m/%d/%Y %H:%M:%S')
         return {'transaction_date': fields.Date.to_string(dt)}
 
     @mapping
@@ -128,7 +98,8 @@ class PaymentGatewayMapper(Component):
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
             return super(PaymentGatewayMapper, self).payment_status(record)
-        return {'payment_status': record.get('RESPONSE DESCRIPTION')}
+        state = record.get('RESPONSE DESCRIPTION')
+        return {'payment_status': PAYMENT_STATUSES.get(state, '')}
 
     @mapping
     def card_name(self, record):
@@ -163,22 +134,6 @@ class PaymentGatewayMapper(Component):
         return {'card_bank': record.get('ISSUING BANK')}
 
     @mapping
-    def card_type(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_type(record)
-        return {}
-
-    @mapping
-    def card_wallet_type(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_wallet_type(record)
-        return {}
-
-    @mapping
     def card_expiry_year(self, record):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
@@ -199,7 +154,8 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).response_description(record)
+            return super(PaymentGatewayMapper, self).response_description(
+                record)
         return {'response_description': record.get('RESPONSE DESCRIPTION')}
 
     @mapping
@@ -209,14 +165,6 @@ class PaymentGatewayMapper(Component):
         if self.backend_record != knet_backend:
             return super(PaymentGatewayMapper, self).customer_email(record)
         return {'customer_email': record.get('CUSTOMER EMAIL')}
-
-    @mapping
-    def cvv_check(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).cvv_check(record)
-        return {}
 
     @mapping
     def is_3d_secure(self, record):
@@ -233,22 +181,6 @@ class PaymentGatewayMapper(Component):
         if self.backend_record != knet_backend:
             return super(PaymentGatewayMapper, self).arn(record)
         return {'arn': record.get('ACQUIRER REFERENCE ID')}
-
-    @mapping
-    def payment_id(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).payment_id(record)
-        return {}
-
-    @mapping
-    def server_ip(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).server_ip(record)
-        return {}
 
     @mapping
     def reported_mid(self, record):
@@ -286,6 +218,15 @@ class PaymentGatewayRecordImporter(Component):
 
 
 class PaymentGatewayHandler(Component):
-    _inherit = 'importer.odoorecord.handler'
-    _name = 'payment.gateway.handler'
-    _apply_on = ['ofh.payment.gateway']
+    _inherit = 'payment.gateway.handler'
+
+    def odoo_find_domain(self, values, orig_values):
+        """Domain to find the GDS invoice line record in odoo."""
+        knet_backend = self.env.ref(
+            'ofh_payment_gateway_knet.knet_import_backend')
+        if self.backend_record != knet_backend:
+            return super(PaymentGatewayHandler, self).odoo_find_domain(
+                values, orig_values)
+        return [
+            ('provider', '=', 'checkout'),
+            (self.unique_key, '=', values.get('Action ID'))]

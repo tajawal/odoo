@@ -29,6 +29,7 @@ class OfhPaymentGateway(models.Model):
             ('sabb', 'SABB'),
             ('rajhi', 'Rajhi'),
             ('knet', 'Knet')],
+        required=True,
         readonly=True,
     )
     track_id = fields.Char(
