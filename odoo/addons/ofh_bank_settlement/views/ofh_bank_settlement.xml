@@ -3,6 +3,7 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+
     <record model="ir.ui.view" id="ofh_bank_settlement_form_view">
         <field name="name">ofh.bank.settlement.form (in ofh_bank_settlement)</field>
         <field name="model">ofh.bank.settlement</field>
@@ -14,30 +15,29 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                    <group name="header" col="4">
-                        <field name="created_at"/>
-                        <field name="updated_at"/>
-                        <field name="name"/>
+                    <group name="general_info" col="4">
                         <field name="bank_name"/>
-                        <field name="reported_mid"/>
+                        <field name="name"/>
                         <field name="account_number"/>
                         <field name="payment_method"/>
-                        <field name="card_type"/>
-                        <field name="transaction_date"/>
-                        <field name="card_number"/>
-                        <field name="gross_transaction_amount"/>
-                        <field name="currency_id"/>
-                        <field name="reported_merchant_charges"/>
-                        <field name="reported_merchant_vat"/>
+                        <field name="reported_mid"/>
                         <field name="payment_status"/>
-                        <field name="arn"/>
-                        <field name="auth_code"/>
-                        <field name="is_3d_secure"/>
-                        <field name="net_transaction_amount"/>
-                        <field name="posting_date"/>
-                        <field name="reconciliation_reference_id"/>
-                        <field name="full_terminal_number"/>
                         <field name="settlement_date"/>
+                        <field name="posting_date"/>
+                    </group>
+                    <group name="card_info" string="Card Details" col="4">
+                        <field name="card_number"/>
+                        <field name="transaction_date"/>
+                        <field name="is_mada"/>
+                        <field name="is_3d_secure"/>
+                        <field name="auth_code"/>
+                    </group>
+                    <group name="finance_info" string="Finance Details" col="4">
+                        <field name="gross_amount"/>
+                        <field name="net_transaction_amount" widget="monetary"/>
+                        <field name="merchant_charge_amount" widget="monetary"/>
+                        <field name="merchant_charge_vat" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
                     </group>
                 </sheet>
             </form>
@@ -49,12 +49,15 @@
         <field name="model">ofh.bank.settlement</field>
         <field name="arch" type="xml">
             <tree delete="0">
+                <field name="bank_name"/>
                 <field name="name"/>
+                <field name="account_number"/>
+                <field name="settlement_date"/>
+                <field name="posting_date"/>
                 <field name="auth_code"/>
-                 <field name="currency_id"/>
-                <field name="created_at"/>
-                <field name="updated_at"/>
-                <field name="gross_transaction_amount"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="gross_amount" widget="monetary"/>
+                <field name="payment_status"/>
             </tree>
         </field>
     </record>
@@ -65,24 +68,6 @@
         <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_bank_settlement_main_menu">
-        <field name="name">Bank Settlements</field>
-        <field name="sequence" eval="80"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_bank_settlement_menu">
-        <field name="name">Bank Settlements</field>
-        <field name="parent_id" ref="ofh_bank_settlement.ofh_bank_settlement_main_menu"/>
-        <field name="sequence" eval="80"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_bank_settlement_menu">
-        <field name="name">Bank Settlements</field>
-        <field name="parent_id" ref="ofh_bank_settlement.ofh_bank_settlement_main_menu"/>
-        <field name="action" ref="ofh_bank_settlement.ofh_bank_settlement_all_act_window"/>
-        <field name="sequence" eval="80"/>
     </record>
 
 </odoo>

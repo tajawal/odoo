@@ -10,10 +10,12 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
+        'ofh_hub_connector',
     ],
     'data': [
         # 'security/groups.xml',
         'views/ofh_bank_settlement.xml',
+        'wizards/ofh_bank_settlement_import.xml',
     ],
     'demo': [
         'demo/ofh_bank_settlement.xml',

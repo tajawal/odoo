@@ -3,12 +3,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
-    <record model="ir.ui.menu" id="ofh_knet_payment_gateway_import_menu">
-        <field name="name">Knet Report</field>
-        <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_import_main_menu"/>
-        <field name="action" ref="ofh_payment_gateway_knet.ofh_payment_gateway_import_act_window"/>
-        <field name="sequence" eval="30"/>
-    </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_gateway_menu">
         <field name="name">Knet Payment Gateways</field>
@@ -16,13 +10,6 @@
         <field name="view_mode">tree,form</field>
         <field name="domain">[('provider', '=', 'knet')]</field>
         <field name="context">{}</field>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_knet_payment_gateway_line_menu">
-        <field name="name">Knet Payment Gateways</field>
-        <field name="parent_id" ref="ofh_payment_gateway.ofh_payment_gateway_menu"/>
-        <field name="action" ref="ofh_payment_gateway_menu"/>
-        <field name="sequence" eval="40"/>
     </record>
 
 </odoo>
