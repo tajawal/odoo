@@ -15,7 +15,7 @@
     ],
     'data': [
         'data/backend.xml',
-        'wizards/ofh_payment_gateway_import.xml',
+        'wizards/ofh_payment_gateway_line_import.xml',
         'views/ofh_payment_gateway.xml',
     ],
     'demo': [

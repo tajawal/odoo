@@ -7,7 +7,7 @@ from odoo import api, fields, models
 
 class OfhPaymentGatewayLineImport(models.TransientModel):
 
-    _inherit = 'ofh.payment.gateway.import'
+    _inherit = 'ofh.payment.gateway.line.import'
 
     file_type = fields.Selection(
         selection_add=[('fort', 'Fort')],

@@ -1,1 +1,1 @@
-from . import ofh_payment_gateway_import
+from . import ofh_payment_gateway_line_import
