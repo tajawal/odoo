@@ -25,7 +25,7 @@ FORT_MIDS_BY_CURRENCY = {
 
 
 class PaymentGatewayLineMapper(Component):
-    _inherit = 'payment.gateway.mapper'
+    _inherit = 'payment.gateway.line.mapper'
 
     @mapping
     def name(self, record):
