@@ -5,9 +5,9 @@ from odoo import _, api, fields, models
 from odoo.exceptions import MissingError
 
 
-class OfhPaymentGatewayImport(models.TransientModel):
+class OfhPaymentGatewayLineImport(models.TransientModel):
 
-    _name = 'ofh.payment.gateway.import'
+    _name = 'ofh.payment.gateway.line.import'
 
     file_type = fields.Selection(
         string="Report type",
