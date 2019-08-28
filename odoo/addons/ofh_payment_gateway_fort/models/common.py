@@ -24,7 +24,7 @@ FORT_MIDS_BY_CURRENCY = {
 }
 
 
-class PaymentGatewayMapper(Component):
+class PaymentGatewayLineMapper(Component):
     _inherit = 'payment.gateway.mapper'
 
     @mapping
@@ -32,7 +32,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).name(record)
+            return super(PaymentGatewayLineMapper, self).name(record)
         reference = f"{record.get('FORT ID')}_{record.get('Operation', '')}"
         return {'name': reference}
 
@@ -41,7 +41,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).provider(record)
+            return super(PaymentGatewayLineMapper, self).provider(record)
         return {'provider': 'fort'}
 
     @mapping
@@ -49,7 +49,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).acquirer_bank(record)
+            return super(PaymentGatewayLineMapper, self).acquirer_bank(record)
         acquirer_bank = record.get('Acquirer Name')
         return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, 'mashreq')}
 
@@ -58,7 +58,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).track_id(record)
+            return super(PaymentGatewayLineMapper, self).track_id(record)
         return {'track_id': record.get('Merchant Reference')}
 
     @mapping
@@ -66,7 +66,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).auth_code(record)
+            return super(PaymentGatewayLineMapper, self).auth_code(record)
         return {'auth_code': record.get('Authorization Code')}
 
     @mapping
@@ -74,7 +74,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).payment_method(record)
+            return super(PaymentGatewayLineMapper, self).payment_method(record)
         return {'payment_method': record.get('Payment Option')}
 
     @mapping
@@ -82,7 +82,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).transaction_date(record)
+            return super(PaymentGatewayLineMapper, self).transaction_date(record)
         # TODO: correct the format 6/30/2019 11:45:23 PM
         dt = datetime.strptime(record.get('Date & Time'), '%m/%d/%y %H:%M')
         return {'transaction_date': fields.Date.to_string(dt)}
@@ -92,7 +92,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).total(record)
+            return super(PaymentGatewayLineMapper, self).total(record)
         return {'total': float(record.get('Amount'))}
 
     @mapping
@@ -100,7 +100,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).currency_id(record)
+            return super(PaymentGatewayLineMapper, self).currency_id(record)
         currency = record.get('Currency')
         if not currency:
             return {}
@@ -111,7 +111,7 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).payment_status(record)
+            return super(PaymentGatewayLineMapper, self).payment_status(record)
         state = record.get('Operation', '')
         return {'payment_status': PAYMENT_STATUSES.get(state, '')}
 
@@ -120,13 +120,13 @@ class PaymentGatewayMapper(Component):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayMapper, self).reported_mid(record)
+            return super(PaymentGatewayLineMapper, self).reported_mid(record)
         currency = record.get('Currency')
         return {'reported_mid': FORT_MIDS_BY_CURRENCY.get(currency, '')}
 
 
-class PaymentGatewayHandler(Component):
-    _inherit = 'payment.gateway.handler'
+class PaymentGatewayLineHandler(Component):
+    _inherit = 'payment.gateway.line.handler'
 
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the GDS invoice line record in odoo."""
@@ -134,7 +134,7 @@ class PaymentGatewayHandler(Component):
             'ofh_payment_gateway_fort.fort_import_backend')
 
         if self.backend_record != fort_backend:
-            return super(PaymentGatewayHandler, self).odoo_find_domain(
+            return super(PaymentGatewayLineHandler, self).odoo_find_domain(
                 values, orig_values)
         return [
             ('provider', '=', 'fort'),

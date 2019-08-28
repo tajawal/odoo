@@ -5,8 +5,8 @@
 <odoo>
 
     <record model="ir.actions.act_window" id="ofh_payment_gateway_import_act_window">
-        <field name="name">Checkout Payment Gateway Import</field>
-        <field name="res_model">ofh.payment.gateway.import</field>
+        <field name="name">Checkout Payment Gateway Line Import</field>
+        <field name="res_model">ofh.payment.gateway.line.import</field>
         <field name="view_mode">form</field>
         <field name="context">{'default_file_type': 'checkout'}</field>
         <field name="target">new</field>

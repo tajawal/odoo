@@ -5,7 +5,7 @@
 from odoo import api, fields, models
 
 
-class OfhPaymentGatewayImport(models.TransientModel):
+class OfhPaymentGatewayLineImport(models.TransientModel):
 
     _inherit = 'ofh.payment.gateway.import'
 

@@ -12,15 +12,15 @@ PAYMENT_STATUSES = {
 }
 
 
-class PaymentGatewayMapper(Component):
-    _inherit = 'payment.gateway.mapper'
+class PaymentGatewayLineMapper(Component):
+    _inherit = 'payment.gateway.line.mapper'
 
     @mapping
     def name(self, record):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).name(record)
+            return super(PaymentGatewayLineMapper, self).name(record)
         return {'name': record.get('ACTION ID')}
 
     @mapping
@@ -28,7 +28,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).provider(record)
+            return super(PaymentGatewayLineMapper, self).provider(record)
         return {'provider': 'knet'}
 
     @mapping
@@ -36,7 +36,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).acquirer_bank(record)
+            return super(PaymentGatewayLineMapper, self).acquirer_bank(record)
         return {'acquirer_bank': 'sabb'}
 
     @mapping
@@ -44,7 +44,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).track_id(record)
+            return super(PaymentGatewayLineMapper, self).track_id(record)
         return {'track_id': record.get('REFERENCE')}
 
     @mapping
@@ -52,7 +52,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).auth_code(record)
+            return super(PaymentGatewayLineMapper, self).auth_code(record)
         return {'auth_code': record.get('AUTH CODE')}
 
     @mapping
@@ -60,7 +60,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).payment_method(record)
+            return super(PaymentGatewayLineMapper, self).payment_method(record)
         return {'payment_method': record.get('PAYMENT METHOD')}
 
     @mapping
@@ -68,7 +68,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).transaction_date(record)
+            return super(PaymentGatewayLineMapper, self).transaction_date(record)
         # TODO: correct the format 6/30/2019 11:45:23 PM
         dt = datetime.strptime(record.get('ACTION DATE'), '%m/%d/%Y %H:%M:%S')
         return {'transaction_date': fields.Date.to_string(dt)}
@@ -78,7 +78,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).total(record)
+            return super(PaymentGatewayLineMapper, self).total(record)
         return {'total': float(record.get('AMOUNT'))}
 
     @mapping
@@ -86,7 +86,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).currency_id(record)
+            return super(PaymentGatewayLineMapper, self).currency_id(record)
         currency = record.get('CURRENCY')
         if not currency:
             return {}
@@ -97,7 +97,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).payment_status(record)
+            return super(PaymentGatewayLineMapper, self).payment_status(record)
         state = record.get('RESPONSE DESCRIPTION')
         return {'payment_status': PAYMENT_STATUSES.get(state, '')}
 
@@ -106,7 +106,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_name(record)
+            return super(PaymentGatewayLineMapper, self).card_name(record)
         return {'card_name': record.get('CARD HOLDER NAME')}
 
     @mapping
@@ -114,7 +114,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_number(record)
+            return super(PaymentGatewayLineMapper, self).card_number(record)
         return {'card_number': record.get('CC NUMBER')}
 
     @mapping
@@ -122,7 +122,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_bin(record)
+            return super(PaymentGatewayLineMapper, self).card_bin(record)
         return {'card_bin': record.get('CC BIN')}
 
     @mapping
@@ -130,7 +130,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_bank(record)
+            return super(PaymentGatewayLineMapper, self).card_bank(record)
         return {'card_bank': record.get('ISSUING BANK')}
 
     @mapping
@@ -138,7 +138,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_expiry_year(record)
+            return super(PaymentGatewayLineMapper, self).card_expiry_year(record)
         return {'card_expiry_year': record.get('EXPIRY YEAR')}
 
     @mapping
@@ -146,7 +146,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).card_expiry_month(record)
+            return super(PaymentGatewayLineMapper, self).card_expiry_month(record)
         return {'card_expiry_month': record.get('EXPIRY MONTH')}
 
     @mapping
@@ -154,7 +154,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).response_description(
+            return super(PaymentGatewayLineMapper, self).response_description(
                 record)
         return {'response_description': record.get('RESPONSE DESCRIPTION')}
 
@@ -163,7 +163,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).customer_email(record)
+            return super(PaymentGatewayLineMapper, self).customer_email(record)
         return {'customer_email': record.get('CUSTOMER EMAIL')}
 
     @mapping
@@ -171,7 +171,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).is_3d_secure(record)
+            return super(PaymentGatewayLineMapper, self).is_3d_secure(record)
         return {'is_3d_secure': record.get('3D SECURE PAYMENT')}
 
     @mapping
@@ -179,7 +179,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).arn(record)
+            return super(PaymentGatewayLineMapper, self).arn(record)
         return {'arn': record.get('ACQUIRER REFERENCE ID')}
 
     @mapping
@@ -187,7 +187,7 @@ class PaymentGatewayMapper(Component):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayMapper, self).reported_mid(record)
+            return super(PaymentGatewayLineMapper, self).reported_mid(record)
         return {'reported_mid': record.get('MID')}
 
 
@@ -217,15 +217,15 @@ class PaymentGatewayRecordImporter(Component):
         return result
 
 
-class PaymentGatewayHandler(Component):
-    _inherit = 'payment.gateway.handler'
+class PaymentGatewayLineHandler(Component):
+    _inherit = 'payment.gateway.line.handler'
 
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the GDS invoice line record in odoo."""
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
-            return super(PaymentGatewayHandler, self).odoo_find_domain(
+            return super(PaymentGatewayLineHandler, self).odoo_find_domain(
                 values, orig_values)
         return [
             ('provider', '=', 'checkout'),
