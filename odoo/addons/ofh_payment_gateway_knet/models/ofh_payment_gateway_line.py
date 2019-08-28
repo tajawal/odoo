@@ -4,8 +4,8 @@
 from odoo import fields, models
 
 
-class OfhPaymentGateway(models.Model):
-    _inherit = 'ofh.payment.gateway'
+class OfhPaymentGatewayLine(models.Model):
+    _inherit = 'ofh.payment.gateway.line'
 
     provider = fields.Selection(
         selection_add=[('knet', 'Knet')],

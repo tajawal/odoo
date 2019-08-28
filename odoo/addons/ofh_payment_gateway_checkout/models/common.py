@@ -23,15 +23,15 @@ PAYMENT_STATUSES = {
 APPLE_PAY = "Apple Pay"
 
 
-class PaymentGatewayMapper(Component):
-    _inherit = 'payment.gateway.mapper'
+class PaymentGatewayLineMapper(Component):
+    _inherit = 'payment.gateway.line.mapper'
 
     @mapping
     def name(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).name(record)
+            return super(PaymentGatewayLineMapper, self).name(record)
         return {'name': record.get('Action ID')}
 
     @mapping
@@ -39,7 +39,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).provider(record)
+            return super(PaymentGatewayLineMapper, self).provider(record)
         return {'provider': 'checkout'}
 
     @mapping
@@ -47,7 +47,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).acquirer_bank(record)
+            return super(PaymentGatewayLineMapper, self).acquirer_bank(record)
         acquirer_bank = record.get('Business Name')
 
         return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, 'sabb')}
@@ -57,7 +57,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).track_id(record)
+            return super(PaymentGatewayLineMapper, self).track_id(record)
         return {'track_id': record.get('Reference')}
 
     @mapping
@@ -65,7 +65,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).auth_code(record)
+            return super(PaymentGatewayLineMapper, self).auth_code(record)
         return {'auth_code': record.get('Auth Code')}
 
     @mapping
@@ -73,7 +73,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).payment_method(record)
+            return super(PaymentGatewayLineMapper, self).payment_method(record)
         return {'payment_method': record.get('Payment Method')}
 
     @mapping
@@ -81,7 +81,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).transaction_date(record)
+            return super(PaymentGatewayLineMapper, self).transaction_date(record)
         # TODO: correct the format 6/30/2019 11:45:23 PM
         dt = datetime.strptime(record.get('Action Date UTC'), '%m/%d/%y %H:%M')
         return {'transaction_date': fields.Date.to_string(dt)}
@@ -91,7 +91,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).total(record)
+            return super(PaymentGatewayLineMapper, self).total(record)
         return {'total': float(record.get('Amount'))}
 
     @mapping
@@ -99,7 +99,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).currency_id(record)
+            return super(PaymentGatewayLineMapper, self).currency_id(record)
         currency = record.get('Currency')
         if not currency:
             return {}
@@ -110,7 +110,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).payment_status(record)
+            return super(PaymentGatewayLineMapper, self).payment_status(record)
         status = record.get('Action Type', '')
         return {'payment_status': PAYMENT_STATUSES.get(status, '')}
 
@@ -119,7 +119,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_name(record)
+            return super(PaymentGatewayLineMapper, self).card_name(record)
         cc_name = record.get('Card Holder Name')
         if not cc_name:
             return {}
@@ -130,7 +130,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_number(record)
+            return super(PaymentGatewayLineMapper, self).card_number(record)
         card_number = record.get('CC Number')
         if not card_number:
             return {}
@@ -141,7 +141,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_bin(record)
+            return super(PaymentGatewayLineMapper, self).card_bin(record)
         card_bin = record.get('CC BIN')
         if not card_bin:
             return {}
@@ -152,7 +152,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_bank(record)
+            return super(PaymentGatewayLineMapper, self).card_bank(record)
         card_bank = record.get('Issuing Bank')
         if not card_bank:
             return {}
@@ -163,7 +163,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).is_card_mada(record)
+            return super(PaymentGatewayLineMapper, self).is_card_mada(record)
         card_type = record.get('UDF1')
         return {'is_card_mada': card_type == 'MADA'}
 
@@ -172,7 +172,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).is_apple_pay(record)
+            return super(PaymentGatewayLineMapper, self).is_apple_pay(record)
         card_wallet_type = record.get('Card Wallet Type')
         return {'card_wallet_type': card_wallet_type == APPLE_PAY}
 
@@ -181,7 +181,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_expiry_year(record)
+            return super(PaymentGatewayLineMapper, self).card_expiry_year(record)
         card_expiry_year = record.get('Expiry Year')
         if not card_expiry_year:
             return {}
@@ -192,7 +192,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).card_expiry_month(record)
+            return super(PaymentGatewayLineMapper, self).card_expiry_month(record)
         card_expiry_month = record.get('Expiry Month')
         if not card_expiry_month:
             return {}
@@ -203,7 +203,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).response_description(
+            return super(PaymentGatewayLineMapper, self).response_description(
                 record)
         response_description = record.get('Response Description')
         if not response_description:
@@ -215,7 +215,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).customer_email(record)
+            return super(PaymentGatewayLineMapper, self).customer_email(record)
         customer_email = record.get('Customer Email')
         if not customer_email:
             return {}
@@ -226,7 +226,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).cvv_check(record)
+            return super(PaymentGatewayLineMapper, self).cvv_check(record)
         cvv_check = record.get('CVV Check')
         if not cvv_check:
             return {}
@@ -237,7 +237,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).is_3d_secure(record)
+            return super(PaymentGatewayLineMapper, self).is_3d_secure(record)
         return {'is_3d_secure': record.get('3D Secure Payment', False)}
 
     @mapping
@@ -245,7 +245,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).arn(record)
+            return super(PaymentGatewayLineMapper, self).arn(record)
         arn = record.get('Acquirer Reference ID')
         if not arn:
             return {}
@@ -256,7 +256,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).payment_id(record)
+            return super(PaymentGatewayLineMapper, self).payment_id(record)
         payment_id = record.get('Payment ID')
         if not payment_id:
             return {}
@@ -267,7 +267,7 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).server_ip(record)
+            return super(PaymentGatewayLineMapper, self).server_ip(record)
         server_ip = record.get('Server IP')
         if not server_ip:
             return {}
@@ -278,22 +278,22 @@ class PaymentGatewayMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayMapper, self).reported_mid(record)
+            return super(PaymentGatewayLineMapper, self).reported_mid(record)
         reported_mid = record.get('UDF4')
         if not reported_mid:
             return {}
         return {'reported_mid': reported_mid}
 
 
-class PaymentGatewayHandler(Component):
-    _inherit = 'payment.gateway.handler'
+class PaymentGatewayLineHandler(Component):
+    _inherit = 'payment.gateway.line.handler'
 
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the GDS invoice line record in odoo."""
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayHandler, self).odoo_find_domain(
+            return super(PaymentGatewayLineHandler, self).odoo_find_domain(
                 values, orig_values)
         return [
             ('provider', '=', 'checkout'),
