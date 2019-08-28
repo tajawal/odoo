@@ -66,4 +66,12 @@
         </field>
     </record>
 
+    <record model="ir.actions.act_window" id="ofh_payment_all_act_window">
+        <field name="name">All Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
 </odoo>

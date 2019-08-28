@@ -4,11 +4,11 @@
 
 <odoo>
 
-    <record model="ir.actions.act_window" id="ofh_payment_gateway_menu">
-        <field name="name">Fort Payments</field>
-        <field name="res_model">ofh.payment.gateway</field>
+    <record model="ir.actions.act_window" id="ofh_bank_settlement_rajhi_act_window">
+        <field name="name">Rajhi Settlement</field>
+        <field name="res_model">ofh.bank.settlement</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('provider', '=', 'fort')]</field>
+        <field name="domain">[('bank_name', '=', 'rajhi')]</field>
         <field name="context">{}</field>
     </record>
 
