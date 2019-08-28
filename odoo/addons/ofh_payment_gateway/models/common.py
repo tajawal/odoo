@@ -4,10 +4,10 @@ from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 
 
-class PaymentGatewayMapper(Component):
-    _name = 'payment.gateway.mapper'
+class PaymentGatewayLineMapper(Component):
+    _name = 'payment.gateway.line.mapper'
     _inherit = 'importer.base.mapper'
-    _apply_on = 'ofh.payment.gateway'
+    _apply_on = 'ofh.payment.gateway.line'
 
     @mapping
     def name(self, record):
@@ -118,11 +118,11 @@ class PaymentGatewayMapper(Component):
         return {}
 
 
-class PaymentGatewayRecordImporter(Component):
+class PaymentGatewayLineRecordImporter(Component):
 
-    _name = 'payment.gateway.record.importer'
+    _name = 'payment.gateway.line.record.importer'
     _inherit = 'importer.record'
-    _apply_on = ['ofh.payment.gateway']
+    _apply_on = ['ofh.payment.gateway.line']
 
     odoo_unique_key = 'name'
 
@@ -131,7 +131,7 @@ class PaymentGatewayRecordImporter(Component):
         return {}
 
     def run(self, record, **kw):
-        result = super(PaymentGatewayRecordImporter, self).run(
+        result = super(PaymentGatewayLineRecordImporter, self).run(
             record, **kw)
         msg = ' '.join([
             '{} import chunk completed'.format(
@@ -145,7 +145,7 @@ class PaymentGatewayRecordImporter(Component):
         return result
 
 
-class PaymentGatewayHandler(Component):
+class PaymentGatewayLineHandler(Component):
     _inherit = 'importer.odoorecord.handler'
-    _name = 'payment.gateway.handler'
-    _apply_on = ['ofh.payment.gateway']
+    _name = 'payment.gateway.line.handler'
+    _apply_on = ['ofh.payment.gateway.line']
