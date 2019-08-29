@@ -16,7 +16,11 @@ class OfhPaymentGateway(models.Model):
     )
     provider = fields.Selection(
         string="Provider",
-        selection=[],
+        selection=[
+            ('checkout', 'Checkout'),
+            ('fort', 'Fort'),
+            ('knet', 'Knet'),
+        ],
         required=True,
         readonly=True,
         index=True,
@@ -219,29 +223,29 @@ class OfhPaymentGateway(models.Model):
         for rec in self:
             if not rec.payment_gateway_line_ids:
                 continue
-            self.provider = rec.payment_gateway_line_ids[0].provider
-            self.acquirer_bank = rec.payment_gateway_line_ids[0].acquirer_bank
-            self.track_id = rec.payment_gateway_line_ids[0].track_id
-            self.auth_code = rec.payment_gateway_line_ids[0].auth_code
-            self.payment_method = rec.payment_gateway_line_ids[0].payment_method
-            self.payment_by = rec.payment_gateway_line_ids[0].payment_by
-            self.transaction_date = rec.payment_gateway_line_ids[0].transaction_date
-            self.total = rec.payment_gateway_line_ids[0].total
-            self.currency_id = rec.payment_gateway_line_ids[0].currency_id
-            self.payment_status = rec.payment_gateway_line_ids[0].payment_status
-            self.card_name = rec.payment_gateway_line_ids[0].card_name
-            self.card_number = rec.payment_gateway_line_ids[0].card_number
-            self.card_bin = rec.payment_gateway_line_ids[0].card_bin
-            self.card_bank = rec.payment_gateway_line_ids[0].card_bank
-            self.is_card_mada = rec.payment_gateway_line_ids[0].is_card_mada
-            self.is_apple_pay = rec.payment_gateway_line_ids[0].is_apple_pay
-            self.card_expiry_year = rec.payment_gateway_line_ids[0].card_expiry_year
-            self.card_expiry_month = rec.payment_gateway_line_ids[0].card_expiry_month
-            self.response_description = rec.payment_gateway_line_ids[0].response_description
-            self.customer_email = rec.payment_gateway_line_ids[0].customer_email
-            self.cvv_check = rec.payment_gateway_line_ids[0].cvv_check
-            self.arn = rec.payment_gateway_line_ids[0].arn
-            self.payment_id = rec.payment_gateway_line_ids[0].payment_id
-            self.server_ip = rec.payment_gateway_line_ids[0].server_ip
-            self.reported_mid = rec.payment_gateway_line_ids[0].reported_mid
-            self.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
+            rec.provider = rec.payment_gateway_line_ids[0].provider
+            rec.acquirer_bank = rec.payment_gateway_line_ids[0].acquirer_bank
+            rec.track_id = rec.payment_gateway_line_ids[0].track_id
+            rec.auth_code = rec.payment_gateway_line_ids[0].auth_code
+            rec.payment_method = rec.payment_gateway_line_ids[0].payment_method
+            rec.payment_by = rec.payment_gateway_line_ids[0].payment_by
+            rec.transaction_date = rec.payment_gateway_line_ids[0].transaction_date
+            rec.total = rec.payment_gateway_line_ids[0].total
+            rec.currency_id = rec.payment_gateway_line_ids[0].currency_id
+            rec.payment_status = rec.payment_gateway_line_ids[0].payment_status
+            rec.card_name = rec.payment_gateway_line_ids[0].card_name
+            rec.card_number = rec.payment_gateway_line_ids[0].card_number
+            rec.card_bin = rec.payment_gateway_line_ids[0].card_bin
+            rec.card_bank = rec.payment_gateway_line_ids[0].card_bank
+            rec.is_card_mada = rec.payment_gateway_line_ids[0].is_card_mada
+            rec.is_apple_pay = rec.payment_gateway_line_ids[0].is_apple_pay
+            rec.card_expiry_year = rec.payment_gateway_line_ids[0].card_expiry_year
+            rec.card_expiry_month = rec.payment_gateway_line_ids[0].card_expiry_month
+            rec.response_description = rec.payment_gateway_line_ids[0].response_description
+            rec.customer_email = rec.payment_gateway_line_ids[0].customer_email
+            rec.cvv_check = rec.payment_gateway_line_ids[0].cvv_check
+            rec.arn = rec.payment_gateway_line_ids[0].arn
+            rec.payment_id = rec.payment_gateway_line_ids[0].payment_id
+            rec.server_ip = rec.payment_gateway_line_ids[0].server_ip
+            rec.reported_mid = rec.payment_gateway_line_ids[0].reported_mid
+            rec.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
