@@ -124,6 +124,27 @@ class PaymentGatewayLineMapper(Component):
         currency = record.get('Currency')
         return {'reported_mid': FORT_MIDS_BY_CURRENCY.get(currency, '')}
 
+    @mapping
+    def payment_gateway_id(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
+        unique_id = record.get('FORT ID')
+        if not unique_id:
+            return {}
+        pg_model = self.env["ofh.payment.gateway"]
+        payment_gateway = pg_model.search(
+            [('name', '=', unique_id)], limit=1)
+
+        if payment_gateway:
+            return {'payment_gateway_id': payment_gateway.id}
+        else:
+            pg_created = pg_model.create({
+                'name': unique_id
+            })
+            return {'payment_gateway_id': pg_created.id}
+
 
 class PaymentGatewayLineHandler(Component):
     _inherit = 'payment.gateway.line.handler'

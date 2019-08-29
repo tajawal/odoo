@@ -25,7 +25,7 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         index=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     acquirer_bank = fields.Selection(
         string="Acquirer Bank",
