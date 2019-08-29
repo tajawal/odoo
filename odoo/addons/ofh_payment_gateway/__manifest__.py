@@ -15,6 +15,7 @@
     'data': [
         # 'security/groups.xml',
         'views/ofh_payment_gateway.xml',
+        'views/ofh_payment_gateway_line.xml',
         'wizards/ofh_payment_gateway_line_import.xml',
     ],
 }
