@@ -13,7 +13,6 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         index=True,
         required=True,
-        store=False
     )
     provider = fields.Selection(
         string="Provider",
