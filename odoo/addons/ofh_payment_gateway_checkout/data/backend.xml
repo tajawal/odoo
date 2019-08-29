@@ -14,7 +14,7 @@
         <field name="name">Checkout Report</field>
         <field name="key">Checkout</field>
         <field name="settings">
-            ofh.payment.gateway::payment.gateway.line.record.importer
+            ofh.payment.gateway.line::payment.gateway.line.record.importer
         </field>
     </record>
 

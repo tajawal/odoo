@@ -174,7 +174,7 @@ class PaymentGatewayLineMapper(Component):
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).is_apple_pay(record)
         card_wallet_type = record.get('Card Wallet Type')
-        return {'card_wallet_type': card_wallet_type == APPLE_PAY}
+        return {'is_apple_pay': card_wallet_type == APPLE_PAY}
 
     @mapping
     def card_expiry_year(self, record):
