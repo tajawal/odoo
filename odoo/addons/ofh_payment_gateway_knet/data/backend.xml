@@ -14,7 +14,7 @@
         <field name="name">Knet Report</field>
         <field name="key">Knet</field>
         <field name="settings">
-            ofh.payment.gateway::payment.gateway.record.line.importer
+            ofh.payment.gateway.line::payment.gateway.line.record.importer
         </field>
     </record>
 

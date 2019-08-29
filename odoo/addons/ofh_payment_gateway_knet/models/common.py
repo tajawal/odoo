@@ -190,6 +190,27 @@ class PaymentGatewayLineMapper(Component):
             return super(PaymentGatewayLineMapper, self).reported_mid(record)
         return {'reported_mid': record.get('MID')}
 
+    @mapping
+    def payment_gateway_id(self, record):
+        knet_backend = self.env.ref(
+            'ofh_payment_gateway_knet.knet_import_backend')
+        if self.backend_record != knet_backend:
+            return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
+        unique_id = record.get('ACTION ID')
+        if not unique_id:
+            return {}
+        pg_model = self.env["ofh.payment.gateway"]
+        payment_gateway = pg_model.search(
+            [('name', '=', unique_id)], limit=1)
+
+        if payment_gateway:
+            return {'payment_gateway_id': payment_gateway.id}
+        else:
+            pg_created = pg_model.create({
+                'name': unique_id
+            })
+            return {'payment_gateway_id': pg_created.id}
+
 
 class PaymentGatewayRecordImporter(Component):
     _name = 'payment.gateway.record.importer'
@@ -229,4 +250,4 @@ class PaymentGatewayLineHandler(Component):
                 values, orig_values)
         return [
             ('provider', '=', 'checkout'),
-            (self.unique_key, '=', values.get('Action ID'))]
+            (self.unique_key, '=', values.get('ACTION ID'))]
