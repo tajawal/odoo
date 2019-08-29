@@ -7,6 +7,7 @@ from odoo import fields, models, _
 class OfhPaymentGatewayLine(models.Model):
     _name = 'ofh.payment.gateway.line'
     _description = "Ofh Payment Gateway Line"
+    _order = 'transaction_date DESC'
 
     name = fields.Char(
         string="Payment Reference",
@@ -152,7 +153,7 @@ class OfhPaymentGatewayLine(models.Model):
     )
     payment_gateway_id = fields.Many2one(
         string="Payment Gateway",
-        required=True,
+        # required=True,
         readonly=True,
         index=True,
         comodel_name='ofh.payment.gateway',
