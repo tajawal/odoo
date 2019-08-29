@@ -294,7 +294,6 @@ class PaymentGatewayLineMapper(Component):
         if not unique_id:
             return {}
         pg_model = self.env["ofh.payment.gateway"]
-        pg_model.search()
         payment_gateway = pg_model.search(
             [('name', '=', unique_id)], limit=1)
 
