@@ -117,6 +117,10 @@ class PaymentGatewayLineMapper(Component):
     def is_3d_secure(self, record):
         return {}
 
+    @mapping
+    def payment_gateway_id(self, record):
+        return {}
+
 
 class PaymentGatewayLineRecordImporter(Component):
 
