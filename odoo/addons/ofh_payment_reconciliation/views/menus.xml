@@ -5,19 +5,19 @@
 <odoo>
 
     <record model="ir.ui.menu" id="ofh_payment_main_menu">
-        <field name="name">Payments</field>
+        <field name="name">Hub Payments</field>
         <field name="sequence" eval="70"/>
     </record>
 
     <!-- Payment menus-->
     <record model="ir.ui.menu" id="ofh_payment_menu">
-        <field name="name">Payments</field>
+        <field name="name">Hub Payments</field>
         <field name="parent_id" ref="ofh_payment_main_menu"/>
         <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_all_payment_menu">
-        <field name="name">All Payments</field>
+        <field name="name">All Hub Payments</field>
         <field name="parent_id" ref="ofh_payment_menu"/>
         <field name="action" ref="ofh_payment.ofh_payment_all_act_window"/>
         <field name="sequence" eval="10"/>
