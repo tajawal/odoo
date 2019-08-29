@@ -153,7 +153,7 @@ class OfhPaymentGatewayLine(models.Model):
     )
     payment_gateway_id = fields.Many2one(
         string="Payment Gateway",
-        # required=True,
+        required=True,
         readonly=True,
         index=True,
         comodel_name='ofh.payment.gateway',

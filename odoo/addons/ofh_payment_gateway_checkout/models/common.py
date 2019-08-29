@@ -5,7 +5,7 @@ from datetime import datetime
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 
-from odoo import fields
+from odoo import fields, models, api
 
 ACQUIRER_BANK = {
     'Al Rajhi': 'rajhi',
@@ -283,6 +283,28 @@ class PaymentGatewayLineMapper(Component):
         if not reported_mid:
             return {}
         return {'reported_mid': reported_mid}
+
+    @mapping
+    def payment_gateway_id(self, record):
+        checkout_backend = self.env.ref(
+            'ofh_payment_gateway_checkout.checkout_import_backend')
+        if self.backend_record != checkout_backend:
+            return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
+        unique_id = record.get('Action ID')
+        if not unique_id:
+            return {}
+        pg_model = self.env["ofh.payment.gateway"]
+        pg_model.search()
+        payment_gateway = pg_model.search(
+            [('name', '=', unique_id)], limit=1)
+
+        if payment_gateway:
+            return {'payment_gateway_id': payment_gateway.id}
+        else:
+            pg_created = pg_model.create({
+                'name': unique_id
+            })
+            return {'payment_gateway_id': pg_created.id}
 
 
 class PaymentGatewayLineHandler(Component):
