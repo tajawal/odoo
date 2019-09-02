@@ -67,14 +67,15 @@
         <field name="model">ofh.payment.gateway</field>
         <field name="arch" type="xml">
             <tree delete="0">
-                <field name="name"/>
                 <field name="provider"/>
-                <field name="acquirer_bank"/>
+                <field name="entity"/>
+                <field name="payment_id"/>
                 <field name="auth_code"/>
-                <field name="currency_id" invisible="1"/>
+                <field name="currency_id"/>
+                <field name="transaction_date"/>
+                <field name="acquirer_bank"/>
                 <field name="total" widget="monetary"/>
                 <field name="payment_status"/>
-                 <field name="entity"/>
             </tree>
         </field>
     </record>
