@@ -92,3 +92,34 @@ class TestPaymentGatewayCheckoutImport(common.TransactionComponentRegistryCase):
         self.assertEquals(first_line.arn, '9.17806')
         self.assertEquals(first_line.payment_id, '0869CE077G1A6CFE90C8')
         self.assertEquals(first_line.entity, 'tajawal')
+
+        # Second Payment Gateway Checkout test - Void
+        first_line = self.payment_gateway_line_model.search(
+            [('name', '=', 'C86BEE177G1A6D7D5FA9')])
+        self.assertTrue(first_line)
+        self.assertEquals(len(first_line), 1)
+
+        self.assertEquals(first_line.name, 'C86BEE177G1A6D7D5FA9')
+        self.assertEquals(first_line.provider, 'checkout')
+        self.assertEquals(first_line.acquirer_bank, 'sabb')
+        self.assertEquals(first_line.track_id, '944fec04-625a-4fdc-96f1-71b40f11a7b6')
+        self.assertEquals(first_line.auth_code, '106063')
+        self.assertEquals(first_line.payment_method, 'Visa')
+        self.assertEquals(first_line.payment_status, 'void')
+        self.assertEquals(first_line.entity, 'tajawal')
+
+        # Third Payment Gateway Checkout test - Refund
+        first_line = self.payment_gateway_line_model.search(
+            [('name', '=', 'C9FBBE377V1A6E198E5E')])
+        self.assertTrue(first_line)
+        self.assertEquals(len(first_line), 1)
+
+        self.assertEquals(first_line.name, 'C9FBBE377V1A6E198E5E')
+        self.assertEquals(first_line.provider, 'checkout')
+        self.assertEquals(first_line.acquirer_bank, 'sabb')
+        self.assertEquals(first_line.track_id, '5e0bdb38-a186-4b5e-ad82-0d43449f5376')
+        self.assertEquals(first_line.auth_code, '149226')
+        self.assertEquals(first_line.payment_method, 'Visa')
+        self.assertEquals(first_line.payment_status, 'refund')
+        self.assertEquals(first_line.entity, 'tajawal')
+
