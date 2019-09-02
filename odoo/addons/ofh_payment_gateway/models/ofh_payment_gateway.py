@@ -213,6 +213,10 @@ class OfhPaymentGateway(models.Model):
         index=True,
         compute="_compute_payment_gateway",
     )
+    response_code = fields.Char(
+        readonly=True,
+        compute="_compute_payment_gateway",
+    )
     payment_gateway_line_ids = fields.One2many(
         string="Payment Gateway Lines",
         comodel_name='ofh.payment.gateway.line',

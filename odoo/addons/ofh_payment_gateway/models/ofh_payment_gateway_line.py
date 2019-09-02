@@ -160,6 +160,9 @@ class OfhPaymentGatewayLine(models.Model):
         readonly=True,
         index=True,
     )
+    response_code = fields.Char(
+        readonly=True,
+    )
     payment_gateway_id = fields.Many2one(
         string="Payment Gateway",
         required=True,
