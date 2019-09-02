@@ -3,8 +3,10 @@
 
 from datetime import datetime
 
+from odoo import api, fields, models
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector_importer.models.job_mixin import JobRelatedMixin
 
 
 class SupplierInvoiceLineMapper(Component):
@@ -146,6 +148,32 @@ class SupplierInvoiceLineMapper(Component):
         if self.backend_record != tv_backend:
             return {}
         return {'booked_by_user': record.get('BookedByUser')}
+
+
+class ImportRecordSet(models.Model, JobRelatedMixin):
+    _inherit = 'import.recordset'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        gds_backend = self.env.ref(
+            'ofh_supplier_invoice_tv.tv_import_backend')
+        if self.backend_id == gds_backend:
+            return self._run_import(channel='root.import.tv')
+        return super(ImportRecordSet, self).run_import()
+
+
+class ImportRecord(models.Model, JobRelatedMixin):
+    _inherit = 'import.record'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        gds_backend = self.env.ref(
+            'ofh_supplier_invoice_tv.tv_import_backend')
+        if self.backend_id == gds_backend:
+            return self._run_import(channel='root.import.tv')
+        return super(ImportRecord, self).run_import()
 
 
 class SupplierInvoiceLineHandler(Component):
