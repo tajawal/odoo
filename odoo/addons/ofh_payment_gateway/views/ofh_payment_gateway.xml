@@ -25,6 +25,8 @@
                         <field name="total"/>
                         <field name="payment_status"/>
                         <field name="response_description"/>
+                        <field name="entity"/>
+                        <field name="is_3d_secure"/>
                     </group>
                     <group name="references" string="References" col="4">
                         <field name="auth_code"/>
@@ -72,6 +74,7 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="total" widget="monetary"/>
                 <field name="payment_status"/>
+                 <field name="entity"/>
             </tree>
         </field>
     </record>

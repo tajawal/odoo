@@ -191,6 +191,14 @@ class PaymentGatewayLineMapper(Component):
         return {'reported_mid': record.get('MID')}
 
     @mapping
+    def entity(self, record):
+        knet_backend = self.env.ref(
+            'ofh_payment_gateway_knet.knet_import_backend')
+        if self.backend_record != knet_backend:
+            return super(PaymentGatewayLineMapper, self).entity(record)
+        return {'entity': record.get('Entity')}
+
+    @mapping
     def payment_gateway_id(self, record):
         knet_backend = self.env.ref(
             'ofh_payment_gateway_knet.knet_import_backend')

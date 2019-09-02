@@ -21,7 +21,6 @@ class OfhPaymentGateway(models.Model):
             ('fort', 'Fort'),
             ('knet', 'Knet'),
         ],
-        # required=True,
         readonly=True,
         index=True,
         compute="_compute_payment_gateway",
@@ -206,6 +205,14 @@ class OfhPaymentGateway(models.Model):
         compute="_compute_payment_gateway",
         store=False
     )
+    entity = fields.Selection(
+        selection=[
+            ('almosafer', 'Almosafer'),
+            ('tajawal', 'Tajawal')],
+        readonly=True,
+        index=True,
+        compute="_compute_payment_gateway",
+    )
     payment_gateway_line_ids = fields.One2many(
         string="Payment Gateway Lines",
         comodel_name='ofh.payment.gateway.line',
@@ -249,3 +256,4 @@ class OfhPaymentGateway(models.Model):
             rec.server_ip = rec.payment_gateway_line_ids[0].server_ip
             rec.reported_mid = rec.payment_gateway_line_ids[0].reported_mid
             rec.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
+            rec.entity = rec.payment_gateway_line_ids[0].entity
