@@ -21,7 +21,7 @@ class OfhPaymentGateway(models.Model):
             ('fort', 'Fort'),
             ('knet', 'Knet'),
         ],
-        required=True,
+        # required=True,
         readonly=True,
         index=True,
         compute="_compute_payment_gateway",
