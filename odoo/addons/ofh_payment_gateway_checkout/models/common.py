@@ -66,7 +66,8 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).auth_code(record)
-        return {'auth_code': record.get('Auth Code')}
+        auth_code = record.get('Auth Code')
+        return {'auth_code': auth_code}
 
     @mapping
     def payment_method(self, record):
@@ -283,6 +284,14 @@ class PaymentGatewayLineMapper(Component):
         if not reported_mid:
             return {}
         return {'reported_mid': reported_mid}
+
+    @mapping
+    def entity(self, record):
+        checkout_backend = self.env.ref(
+            'ofh_payment_gateway_checkout.checkout_import_backend')
+        if self.backend_record != checkout_backend:
+            return super(PaymentGatewayLineMapper, self).entity(record)
+        return {'entity': record.get('Entity')}
 
     @mapping
     def payment_gateway_id(self, record):

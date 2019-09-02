@@ -152,6 +152,14 @@ class OfhPaymentGatewayLine(models.Model):
         readonly=True,
         default=False
     )
+    entity = fields.Selection(
+        selection=[
+            ('almosafer', 'Almosafer'),
+            ('tajawal', 'Tajawal')],
+        required=True,
+        readonly=True,
+        index=True,
+    )
     payment_gateway_id = fields.Many2one(
         string="Payment Gateway",
         required=True,
