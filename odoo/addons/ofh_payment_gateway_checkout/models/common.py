@@ -298,7 +298,14 @@ class PaymentGatewayLineMapper(Component):
             [('name', '=', unique_id)], limit=1)
 
         if payment_gateway:
-            return {'payment_gateway_id': payment_gateway.id}
+            if payment_gateway.payment_status in ('refund', 'void'):
+                pg_created = pg_model.create({
+                    'name': unique_id
+                })
+                return {'payment_gateway_id': pg_created.id}
+            else:
+                return {'payment_gateway_id': payment_gateway.id}
+
         else:
             pg_created = pg_model.create({
                 'name': unique_id
