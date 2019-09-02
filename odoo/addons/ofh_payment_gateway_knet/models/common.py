@@ -255,5 +255,5 @@ class PaymentGatewayLineHandler(Component):
             return super(PaymentGatewayLineHandler, self).odoo_find_domain(
                 values, orig_values)
         return [
-            ('provider', '=', 'checkout'),
+            ('provider', '=', 'knet'),
             (self.unique_key, '=', values.get('ACTION ID'))]

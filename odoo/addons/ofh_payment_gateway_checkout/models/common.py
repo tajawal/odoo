@@ -305,7 +305,6 @@ class PaymentGatewayLineMapper(Component):
                 return {'payment_gateway_id': pg_created.id}
             else:
                 return {'payment_gateway_id': payment_gateway.id}
-
         else:
             pg_created = pg_model.create({
                 'name': unique_id
