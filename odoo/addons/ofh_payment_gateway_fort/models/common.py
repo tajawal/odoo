@@ -125,6 +125,17 @@ class PaymentGatewayLineMapper(Component):
         return {'reported_mid': FORT_MIDS_BY_CURRENCY.get(currency, '')}
 
     @mapping
+    def payment_id(self, record):
+        fort_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_record != fort_backend:
+            return super(PaymentGatewayLineMapper, self).payment_id(record)
+        payment_id = record.get('FORT ID')
+        if not payment_id:
+            return {}
+        return {'payment_id': payment_id}
+
+    @mapping
     def entity(self, record):
         fort_backend = self.env.ref(
             'ofh_payment_gateway_fort.fort_import_backend')

@@ -1,0 +1,10 @@
+FORT ID,Acquirer Name,Merchant Country,Merchant Reference,Authorization Code,Payment Method,Payment Option,Channel,Date & Time,Amount,Currency,Operation,Entity
+156192387100015000,Mashreq,United Arab Emirates,934e3859-57e7-4770-978e-7c2c7ca4d12c,753080,Credit Cards,MasterCard,Trusted,6/30/19 23:45,1833.92,AED,Capture,tajawal
+156192387100015000,Mashreq,United Arab Emirates,934e3859-57e7-4770-978e-7c2c7ca4d12c,753080,Credit Cards,MasterCard,Trusted,6/30/19 23:45,1833.92,AED,Authorization,tajawal
+156192258300010000,Mashreq,United Arab Emirates,f4f933b2-6fcb-42e9-b814-b618910ec12e,931112,Credit Cards,Visa,Trusted,6/30/19 23:25,1150.42,AED,Capture,tajawal
+156192258300010000,Mashreq,United Arab Emirates,f4f933b2-6fcb-42e9-b814-b618910ec12e,931112,Credit Cards,Visa,Trusted,6/30/19 23:25,1150.42,AED,Authorization,tajawal
+156192259200010000,Mashreq,United Arab Emirates,467d6d72-b6ae-4802-ab85-a1a9d84b3a2b,T32748,Credit Cards,MasterCard,Trusted,6/30/19 23:23,1180,AED,Capture,tajawal
+156192259200010000,Mashreq,United Arab Emirates,467d6d72-b6ae-4802-ab85-a1a9d84b3a2b,T32748,Credit Cards,MasterCard,Trusted,6/30/19 23:23,1180,AED,Authorization,tajawal
+156192239100009000,Mashreq,United Arab Emirates,59f253e1-79d9-4ac9-a4b7-66846e18b051,74312,Credit Cards,Visa,Trusted,6/30/19 23:20,1500,AED,Capture,tajawal
+156192239100009000,Mashreq,United Arab Emirates,59f253e1-79d9-4ac9-a4b7-66846e18b051,74312,Credit Cards,Visa,Trusted,6/30/19 23:20,1500,AED,Authorization,tajawal
+156192223300008000,Mashreq,United Arab Emirates,ff81d010-f043-494f-8ca8-22e208cb901b,T99760,Credit Cards,MasterCard,Trusted,6/30/19 23:17,1210,AED,Capture,tajawal
