@@ -125,6 +125,10 @@ class PaymentGatewayLineMapper(Component):
     def entity(self, record):
         return {}
 
+    @mapping
+    def response_code(self, record):
+        return {}
+
 
 class PaymentGatewayLineRecordImporter(Component):
 
