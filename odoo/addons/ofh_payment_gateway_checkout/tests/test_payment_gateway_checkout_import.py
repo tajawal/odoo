@@ -71,3 +71,4 @@ class TestPaymentGatewayCheckoutImport(common.TransactionComponentRegistryCase):
         self.assertTrue(first_line)
         self.assertEquals(len(first_line), 1)
         self.assertEquals(first_line.provider, 'checkout')
+        self.assertEquals(first_line.payment_status, 'auth')
