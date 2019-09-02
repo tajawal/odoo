@@ -137,6 +137,7 @@ class OfhPaymentGatewayLine(models.Model):
     payment_id = fields.Char(
         string="Payment ID",
         readonly=True,
+        store=True
     )
     server_ip = fields.Char(
         string="Server IP",
