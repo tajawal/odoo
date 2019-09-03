@@ -15,6 +15,9 @@ class OfhSaleOrderLine(models.Model):
 
         sale_line_dict = self._get_sale_line_dict()
 
+        # Hotel may be paid later and at the time of the payment is where
+        # we will send the whole order to SAP.
+        sale_line_dict['billing_date'] = self.order_id.paid_at
         sale_line_dict['pnr'] = \
             f"{self.vendor_confirmation_number}.{self.line_reference}"
         sale_line_dict['supplier_ref'] = \
