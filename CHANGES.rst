@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.7 (2019-09-03)
+------------------
+- Hotel Pay Later Billing Date
+
 2.6.6 (2019-08-01)
 ------------------
 - Payment Status
