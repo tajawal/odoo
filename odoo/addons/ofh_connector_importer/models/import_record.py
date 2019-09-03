@@ -25,14 +25,19 @@ class ImportRecord(models.Model, JobRelatedMixin):
         for item in self:
             # we create a record and a job for each model name
             # that needs to be imported
-            for model, importer in item.recordset_id.available_models():
+            for (model, importer, is_last_importer) in \
+                    item.recordset_id.available_models():
                 # TODO: grab component from config
-                result = job_method(importer, model)
+                result = job_method(
+                    importer, model, is_last_importer=is_last_importer)
                 _result[model] = result
                 if self.debug_mode():
                     # debug mode, no job here: reset it!
                     item.write({'job_id': False})
                 else:
+                    # FIXME: we should have a o2m here otherwise
+                    # w/ multiple importers for the same record
+                    # we keep the reference on w/ the last job.
                     item.write({'job_id': result.db_record().id})
         return _result
 
