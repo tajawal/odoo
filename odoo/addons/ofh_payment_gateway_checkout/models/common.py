@@ -294,14 +294,6 @@ class PaymentGatewayLineMapper(Component):
         return {'entity': record.get('Entity')}
 
     @mapping
-    def response_code(self, record):
-        checkout_backend = self.env.ref(
-            'ofh_payment_gateway_checkout.checkout_import_backend')
-        if self.backend_record != checkout_backend:
-            return super(PaymentGatewayLineMapper, self).response_code(record)
-        return {'response_code': record.get('Response Code')}
-
-    @mapping
     def payment_gateway_id(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
