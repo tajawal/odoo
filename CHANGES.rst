@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.10 (2019-09-03)
+------------------
+- Requirement.txt change
+
 2.6.7 (2019-09-03)
 ------------------
 - Hotel Pay Later Billing Date
