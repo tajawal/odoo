@@ -299,8 +299,14 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
+
+        response_code = record.get('Response Code', '111111')
+        if response_code[0][:1] != '1':
+            return {}
+
         unique_id = record.get('Action ID')
         payment_id = record.get('Payment ID')
+
         if not unique_id:
             return {}
         pg_model = self.env["ofh.payment.gateway"]
