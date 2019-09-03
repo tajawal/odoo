@@ -127,7 +127,6 @@ class PaymentGatewayLineMapper(Component):
 
 
 class PaymentGatewayLineRecordImporter(Component):
-
     _name = 'payment.gateway.line.record.importer'
     _inherit = 'importer.record'
     _apply_on = ['ofh.payment.gateway.line']
@@ -141,9 +140,9 @@ class PaymentGatewayLineRecordImporter(Component):
             values {dict} -- Mapped values
             origin_values {dict} -- Original raw data.
         """
-        response_code = origin_values.get('Response Code', '10000')
+        response_code = origin_values.get('Response Code', '111111')
 
-        if not response_code.startsWith('1'):
+        if response_code[0][:1] != '1':
             return {'message': "Payment Gateway not applicable for import"}
         return {}
 
