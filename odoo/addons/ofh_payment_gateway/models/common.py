@@ -125,10 +125,6 @@ class PaymentGatewayLineMapper(Component):
     def entity(self, record):
         return {}
 
-    @mapping
-    def response_code(self, record):
-        return {}
-
 
 class PaymentGatewayLineRecordImporter(Component):
 
@@ -137,6 +133,19 @@ class PaymentGatewayLineRecordImporter(Component):
     _apply_on = ['ofh.payment.gateway.line']
 
     odoo_unique_key = 'name'
+
+    def skip_it(self, values, origin_values) -> dict:
+        """ Return True if the response code does not starts with 1.
+
+        Arguments:
+            values {dict} -- Mapped values
+            origin_values {dict} -- Original raw data.
+        """
+        response_code = origin_values.get('Response Code', '10000')
+
+        if not response_code.startsWith('1'):
+            return {'message': "Payment Gateway not applicable for import"}
+        return {}
 
     def required_keys(self, create=False):
         """Keys that are mandatory to import a line."""
