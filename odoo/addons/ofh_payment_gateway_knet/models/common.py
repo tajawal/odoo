@@ -218,7 +218,7 @@ class PaymentGatewayLineMapper(Component):
         response_code = record.get('Response Code', '111111')
         if response_code[0][:1] != '1':
             return {}
-        
+
         unique_id = record.get('ACTION ID')
         if not unique_id:
             return {}
