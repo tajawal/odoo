@@ -9,7 +9,7 @@ from odoo.addons.connector.components.mapper import mapping
 
 PAYMENT_METHODS = {
     'VISA': 'visa',
-    'MasterCard': 'master_card',
+    'MASTERCARD': 'master_card',
 }
 PAYMENT_STATUSES = {
     'PRCH': 'capture',
