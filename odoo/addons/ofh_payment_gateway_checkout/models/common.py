@@ -67,6 +67,8 @@ class PaymentGatewayLineMapper(Component):
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).auth_code(record)
         auth_code = record.get('Auth Code')
+        if len(auth_code) < 6:
+            auth_code = auth_code.ljust(6, '0')
         return {'auth_code': auth_code}
 
     @mapping
