@@ -59,7 +59,7 @@
         <field name="name">ofh.payment.gateway.line.tree (in ofh_payment_gateway_line)</field>
         <field name="model">ofh.payment.gateway.line</field>
         <field name="arch" type="xml">
-            <tree delete="0">
+            <tree delete="1">
                 <field name="provider"/>
                 <field name="entity"/>
                 <field name="payment_id"/>
