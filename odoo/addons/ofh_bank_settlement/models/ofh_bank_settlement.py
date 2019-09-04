@@ -14,7 +14,7 @@ class OfhBankSettlement(models.Model):
         readonly=True,
         required=True,
     )
-    settlement_date = fields.Datetime(
+    settlement_date = fields.Date(
         string="Settlement Date",
         readonly=True,
     )
@@ -105,7 +105,7 @@ class OfhBankSettlement(models.Model):
         readonly=True,
         default=False
     )
-    posting_date = fields.Datetime(
+    posting_date = fields.Date(
         string="Posting Date",
         readonly=True,
     )
