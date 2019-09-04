@@ -53,7 +53,10 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
             return super(PaymentGatewayLineMapper, self).auth_code(record)
-        return {'auth_code': record.get('AUTH CODE')}
+        auth_code = record.get('AUTH CODE')
+        if len(auth_code) < 6:
+            auth_code = auth_code.ljust(6, '0')
+        return {'auth_code': auth_code}
 
     @mapping
     def payment_method(self, record):

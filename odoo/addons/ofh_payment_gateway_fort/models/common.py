@@ -67,7 +67,10 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
             return super(PaymentGatewayLineMapper, self).auth_code(record)
-        return {'auth_code': record.get('Authorization Code')}
+        auth_code = record.get('Authorization Code')
+        if len(auth_code) < 6:
+            auth_code = auth_code.ljust(6, '0')
+        return {'auth_code': auth_code}
 
     @mapping
     def payment_method(self, record):
