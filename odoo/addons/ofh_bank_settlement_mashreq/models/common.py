@@ -163,7 +163,10 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).auth_code(record)
-        return {'auth_code': record.get('AUTH CD')}
+        auth_code = record.get('AUTH CD')
+        if len(auth_code) < 6:
+            auth_code = auth_code.ljust(6, '0')
+        return {'auth_code': auth_code}
 
     @mapping
     def is_3d_secure(self, record):

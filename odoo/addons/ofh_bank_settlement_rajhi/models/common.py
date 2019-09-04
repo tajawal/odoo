@@ -34,7 +34,7 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_rajhi.rajhi_bank_settlement_import_backend')
         if self.backend_record != rajhi_backend:
             return super(BankSettlementMapper, self).settlement_date(record)
-        dt = datetime.strptime(record.get('Settlement Date'), '%m/%d/%Y')
+        dt = datetime.strptime(record.get('Settlement Date'), '%-m/%d/%y')
         return {'settlement_date': fields.Date.to_string(dt)}
 
     @mapping
@@ -89,7 +89,7 @@ class BankSettlementMapper(Component):
         dt = datetime.strptime(
             f"{record.get('Transaction Date')}"
             f" "
-            f"{record.get('Transaction Time')}", '%m/%d/%Y %H:%M:%S')
+            f"{record.get('Transaction Time')}", '%-m/%d/%y %H:%M:%S')
 
         return {'transaction_date': fields.Datetime.to_string(dt)}
 
@@ -165,7 +165,10 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_rajhi.rajhi_bank_settlement_import_backend')
         if self.backend_record != rajhi_backend:
             return super(BankSettlementMapper, self).auth_code(record)
-        return {'auth_code': record.get('Authorization Code')}
+        auth_code = record.get('Authorization Code')
+        if len(auth_code) < 6:
+            auth_code = auth_code.ljust(6, '0')
+        return {'auth_code': auth_code}
 
     @mapping
     def is_3d_secure(self, record):
@@ -182,7 +185,7 @@ class BankSettlementMapper(Component):
         if self.backend_record != rajhi_backend:
             return super(BankSettlementMapper, self).posting_date(record)
         dt = datetime.strptime(
-            record.get('Posting Date'), '%m/%d/%Y')
+            record.get('Posting Date'), '%-m/%d/%y')
         return {'posting_date': fields.Date.to_string(dt)}
 
 
