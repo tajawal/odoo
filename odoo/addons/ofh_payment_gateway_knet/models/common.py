@@ -71,7 +71,7 @@ class PaymentGatewayLineMapper(Component):
             return super(PaymentGatewayLineMapper, self).transaction_date(record)
         # TODO: correct the format 6/30/2019 11:45:23 PM
         dt = datetime.strptime(record.get('ACTION DATE'), '%m/%d/%Y %H:%M:%S')
-        return {'transaction_date': fields.Date.to_string(dt)}
+        return {'transaction_date': fields.Datetime.to_string(dt)}
 
     @mapping
     def total(self, record):
