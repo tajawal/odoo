@@ -34,7 +34,7 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_rajhi.rajhi_bank_settlement_import_backend')
         if self.backend_record != rajhi_backend:
             return super(BankSettlementMapper, self).settlement_date(record)
-        dt = datetime.strptime(record.get('Settlement Date'), '%-m/%d/%y')
+        dt = datetime.strptime(record.get('Settlement Date'), '%m/%d/%y')
         return {'settlement_date': fields.Date.to_string(dt)}
 
     @mapping
@@ -89,7 +89,7 @@ class BankSettlementMapper(Component):
         dt = datetime.strptime(
             f"{record.get('Transaction Date')}"
             f" "
-            f"{record.get('Transaction Time')}", '%-m/%d/%y %H:%M:%S')
+            f"{record.get('Transaction Time')}", '%m/%d/%y %H:%M:%S')
 
         return {'transaction_date': fields.Datetime.to_string(dt)}
 
@@ -185,7 +185,7 @@ class BankSettlementMapper(Component):
         if self.backend_record != rajhi_backend:
             return super(BankSettlementMapper, self).posting_date(record)
         dt = datetime.strptime(
-            record.get('Posting Date'), '%-m/%d/%y')
+            record.get('Posting Date'), '%m/%d/%y')
         return {'posting_date': fields.Date.to_string(dt)}
 
 
