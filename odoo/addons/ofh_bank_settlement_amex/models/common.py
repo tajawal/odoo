@@ -163,7 +163,7 @@ class BankSettlementMapper(Component):
             return super(BankSettlementMapper, self).auth_code(record)
         auth_code = record.get('Approval Code')
         if len(auth_code) < 6:
-            auth_code = auth_code.ljust(6, '0')
+            auth_code = auth_code.rjust(6, '0')
         return {'auth_code': auth_code}
 
     @mapping
