@@ -83,10 +83,7 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_amex.amex_bank_settlement_import_backend')
         if self.backend_record != amex_backend:
             return super(BankSettlementMapper, self).transaction_date(record)
-        dt = datetime.strptime(
-            f"{record.get('Transaction Date')}", '%d/%m/%Y')
-
-        return {'transaction_date': fields.Datetime.to_string(dt)}
+        return {}
 
     @mapping
     def card_number(self, record):

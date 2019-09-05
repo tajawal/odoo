@@ -86,11 +86,7 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).transaction_date(record)
-        dt = datetime.strptime(
-            f"{record.get('DATE')}"
-            f" "
-            f"{record.get('TIME')}", '%d/%m/%Y %H:%M:%S')
-        return {'transaction_date': fields.Datetime.to_string(dt)}
+        return {}
 
     @mapping
     def card_number(self, record):

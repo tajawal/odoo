@@ -19,7 +19,7 @@ class OfhBankSettlementImport(models.TransientModel):
         backend = self.env.ref(
             'ofh_bank_settlement_amex.amex_bank_settlement_import_backend')
         import_type = self.env.ref(
-            'ofh_bank_settlement_amex.bank_settlement_import_type')
+            'ofh_bank_settlement_amex.amex_bank_settlement_import_type')
 
         return backend._import_report(
             import_type=import_type,
