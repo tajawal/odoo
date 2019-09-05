@@ -135,7 +135,7 @@ class BankSettlementMapper(Component):
             return super(BankSettlementMapper, self).merchant_charge_amount(
                 record)
         return {
-            'merchant_charge_amount': abs(float(record.get('Service fee', 0.00)))
+            'merchant_charge_amount': abs(float(record.get('Service Fee', 0.00)))
         }
 
     @mapping

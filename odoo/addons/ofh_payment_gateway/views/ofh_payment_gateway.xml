@@ -27,6 +27,7 @@
                         <field name="response_description"/>
                         <field name="entity"/>
                         <field name="is_3d_secure"/>
+                        <field name="is_apple_pay"/>
                     </group>
                     <group name="references" string="References" col="4">
                         <field name="auth_code"/>
