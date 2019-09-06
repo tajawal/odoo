@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.11 (2019-09-06)
+------------------
+- Quick fix in PR must block function
+
 2.6.10 (2019-09-03)
 ------------------
 - Requirement.txt change
