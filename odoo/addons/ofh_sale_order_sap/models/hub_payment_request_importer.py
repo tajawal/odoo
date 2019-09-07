@@ -10,7 +10,7 @@ class HubPaymentRequestImporter(Component):
 
     def _must_block(self, binding) -> str:
         """Must block binding from being updated."""
-        # if binding.new_sap_status:
-        #     return 'Synchronization is blocked order '\
-        #         'has already been sent to SAP.'
+        if binding.new_sap_status:
+            return 'Synchronization is blocked order '\
+                'has already been sent to SAP.'
         return ''
