@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.14 (2019-09-07)
+------------------
+- Revert - Quick fix in PR must block function
+
 2.6.11 (2019-09-06)
 ------------------
 - Quick fix in PR must block function
