@@ -22,12 +22,14 @@ class OfhSaleOrder(models.Model):
         default=True,
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     is_payment_applicable = fields.Boolean(
         string="Is Payment Applicable?",
         default=True,
         readonly=True,
         index=True,
+        track_visibility='onchange',
     )
     integration_status = fields.Boolean(
         string="Is Sent?",
