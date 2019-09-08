@@ -10,6 +10,15 @@ from odoo.addons.connector.components.mapper import mapping
 PAYMENT_METHODS = {
     'VISA': 'visa',
     'MasterCard': 'master_card',
+    'Master PR': 'master_card',
+    'Master CO': 'master_card',
+    'Master ST': 'master_card',
+    'MAST Intl': 'master_card',
+    'Visa INTL': 'visa',
+    'Visa PREM': 'visa',
+    'Visa STAN': 'visa',
+    'VISA COMM': 'visa',
+    'Mashreq': 'mashreq',
 }
 PAYMENT_STATUSES = {
     'PRCH': 'capture',
@@ -103,7 +112,7 @@ class BankSettlementMapper(Component):
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).currency_id(record)
         currency = record.get('CRNCY', '')
-        return {'currency_id': self.env.ref('base.'+currency).id}
+        return {'currency_id': self.env.ref('base.' + currency).id}
 
     @mapping
     def gross_amount(self, record):
