@@ -40,7 +40,8 @@ class OfhBankSettlement(models.Model):
         selection=[
             ('none', 'N/A'),
             ('visa', 'VISA'),
-            ('master_card', "Master Card")],
+            ('master_card', "Master Card"),
+            ('mashreq', "Mashreq")],
         string="Payment Method",
         readonly=True,
         required=True,
