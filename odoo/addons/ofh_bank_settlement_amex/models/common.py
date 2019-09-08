@@ -99,7 +99,7 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_amex.amex_bank_settlement_import_backend')
         if self.backend_record != amex_backend:
             return super(BankSettlementMapper, self).currency_id(record)
-        currency = record.get('CURRENCY', '')
+        currency = record.get('Currency', '')
         return {'currency_id': self.env.ref('base.'+currency.upper()).id}
 
     @mapping
@@ -146,7 +146,7 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_amex.amex_bank_settlement_import_backend')
         if self.backend_record != amex_backend:
             return super(BankSettlementMapper, self).payment_status(record)
-        vos = record.get('Submission Amount', 0.00)
+        vos = float(record.get('Submission Amount', 0.00))
         if vos >= 0:
             return {'payment_status': 'capture'}
         else:
