@@ -688,3 +688,16 @@ class OfhSaleOrderLineSap(models.Model):
                 rec.track_id = rec.sap_sale_order_id.sale_order_id.track_id
             elif rec.payment_request_id:
                 rec.track_id = rec.payment_request_id.track_id
+
+    @api.multi
+    def action_mark_order_as_not_applicable(self):
+        sales = self.filtered(
+            lambda r: r.sap_sale_order_id.sale_order_id).mapped(
+                'sap_sale_order_id.sale_order_id')
+        if sales:
+            sales.action_sale_not_applicable()
+        prs = self.filtered(
+            lambda r: r.payment_request_id).mapped(
+                'payment_request_id')
+        if prs:
+            prs.action_sale_not_applicable()

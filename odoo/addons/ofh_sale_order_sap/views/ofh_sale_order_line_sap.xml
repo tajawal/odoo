@@ -3,6 +3,17 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+    <record model="ir.actions.server" id="ofh_sale_order_line_sap_skipped">
+        <field name="name">Mark Sale Order as Not Applicable</field>
+        <field name="model_id" ref="model_ofh_sale_order_line_sap"/>
+        <field name="binding_model_id" ref="model_ofh_sale_order_line_sap"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_mark_order_as_not_applicable()
+        </field>
+    </record>
+
     <record id="action_hotel_skipped_sap_sale_order_lines" model="ir.actions.act_window">
         <field name="name">Hotel Skipped Lines</field>
         <field name="res_model">ofh.sale.order.line.sap</field>

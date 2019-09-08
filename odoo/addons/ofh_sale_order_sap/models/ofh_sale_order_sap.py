@@ -358,3 +358,16 @@ class OfhSaleOrderSap(models.Model):
                 rec.order_type = rec.payment_request_id.order_type
             elif rec.sale_order_id:
                 rec.order_type = rec.sale_order_id.order_type
+
+    @api.multi
+    def action_mark_order_as_not_applicable(self):
+        sales = self.filtered(
+            lambda r: r.sale_order_id).mapped(
+            'sale_order_id')
+        if sales:
+            sales.action_sale_not_applicable()
+        prs = self.filtered(
+            lambda r: r.payment_request_id).mapped(
+            'payment_request_id')
+        if prs:
+            prs.action_sale_not_applicable()
