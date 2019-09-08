@@ -100,7 +100,7 @@ class BankSettlementMapper(Component):
         if self.backend_record != amex_backend:
             return super(BankSettlementMapper, self).currency_id(record)
         currency = record.get('CURRENCY', '')
-        return {'currency_id': self.env.ref('base.' + currency.upper()).id}
+        return {'currency_id': self.env.ref('base.'+currency.upper()).id}
 
     @mapping
     def gross_amount(self, record):
