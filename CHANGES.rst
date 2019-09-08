@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.15 (2019-09-08)
+------------------
+- Ayesha - Skipped Issue Mark Order as NA
+
 2.6.14 (2019-09-07)
 ------------------
 - Revert - Quick fix in PR must block function
