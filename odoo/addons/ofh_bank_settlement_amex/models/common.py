@@ -84,7 +84,7 @@ class BankSettlementMapper(Component):
         if self.backend_record != amex_backend:
             return super(BankSettlementMapper, self).transaction_date(record)
         dt = datetime.strptime(
-            f"{record.get('Transaction Date')}", '%d/%m/%Y')
+            f"{record.get('Transaction Date dd/mm/yyyy')}", '%d/%m/%Y')
 
         return {'transaction_date': fields.Datetime.to_string(dt)}
 
