@@ -138,7 +138,10 @@ class BankSettlementMapper(Component):
         if self.backend_record != amex_backend:
             return super(BankSettlementMapper, self).merchant_charge_vat(
                 record)
-        return {'merchant_charge_vat': ''}
+        amount = abs(float(record.get('Discount Amount', 0.00)))
+        percentage = 0.5 * amount
+
+        return {'merchant_charge_vat': percentage}
 
     @mapping
     def payment_status(self, record):
