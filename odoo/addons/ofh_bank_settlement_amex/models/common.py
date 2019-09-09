@@ -83,7 +83,10 @@ class BankSettlementMapper(Component):
             'ofh_bank_settlement_amex.amex_bank_settlement_import_backend')
         if self.backend_record != amex_backend:
             return super(BankSettlementMapper, self).transaction_date(record)
-        return {}
+        dt = datetime.strptime(
+            f"{record.get('Transaction Date')}", '%d/%m/%Y')
+
+        return {'transaction_date': fields.Datetime.to_string(dt)}
 
     @mapping
     def card_number(self, record):
@@ -139,7 +142,7 @@ class BankSettlementMapper(Component):
             return super(BankSettlementMapper, self).merchant_charge_vat(
                 record)
         amount = abs(float(record.get('Discount Amount', 0.00)))
-        percentage = 0.5 * amount
+        percentage = 0.05 * amount
 
         return {'merchant_charge_vat': percentage}
 
