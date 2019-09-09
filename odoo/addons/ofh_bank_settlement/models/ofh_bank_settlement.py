@@ -53,7 +53,7 @@ class OfhBankSettlement(models.Model):
         readonly=True,
         default=False,
     )
-    transaction_date = fields.Datetime(
+    transaction_date = fields.Date(
         string="Transaction Date",
         readonly=True,
         index=True,
