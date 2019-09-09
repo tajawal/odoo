@@ -39,7 +39,7 @@ class OfhBankSettlement(models.Model):
     payment_method = fields.Selection(
         selection=[
             ('none', 'N/A'),
-            ('visa', 'VISA'),
+            ('visa', 'Visa'),
             ('master_card', "Master Card"),
             ('mashreq', "Mashreq")],
         string="Payment Method",
