@@ -231,7 +231,7 @@ class OfhPaymentGateway(models.Model):
             ('matched', 'Matched'),
             ('not_applicable', 'Not Applicable')],
         default='unmatched',
-        required=True,
+        required=False,
         index=True,
         readonly=True,
         track_visibility='always',
