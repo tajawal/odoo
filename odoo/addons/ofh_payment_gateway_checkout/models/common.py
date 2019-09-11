@@ -308,6 +308,7 @@ class PaymentGatewayLineMapper(Component):
 
         unique_id = record.get('Action ID')
         payment_id = record.get('Payment ID')
+        track_id = record.get('Reference')
 
         if not unique_id:
             return {}
@@ -316,17 +317,14 @@ class PaymentGatewayLineMapper(Component):
             [('payment_id', '=', payment_id)], limit=1)
 
         # Matching with Payment Logic
+        hub_payment_id = False
+        matching_status = 'unmatched'
         payment_ids = self.env['ofh.payment'].search(
-            self._get_payment_domain())
+            [('track_id', '=', track_id)])
 
-        if not payment_ids:
-            hub_payment_id = False
-            matching_status = 'unmatched'
-
-        if len(payment_ids) == 1:
-            hub_payment_id = payment_ids[0]
+        if len(payment_ids):
+            hub_payment_id = payment_ids[0].id
             matching_status = 'matched'
-
 
         if payment_gateway:
             if payment_gateway.payment_status in ('refund', 'void'):
