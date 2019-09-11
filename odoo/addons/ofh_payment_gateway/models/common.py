@@ -169,3 +169,18 @@ class PaymentGatewayLineHandler(Component):
     _inherit = 'importer.odoorecord.handler'
     _name = 'payment.gateway.line.handler'
     _apply_on = ['ofh.payment.gateway.line']
+
+
+
+class PaymentGatewayHandler(Component):
+    _inherit = 'importer.odoorecord.handler'
+    _name = 'payment.gateway.handler'
+    _apply_on = ['ofh.payment.gateway']
+
+    def odoo_post_create(self, odoo_record, values, orig_values):
+        """
+        Match a new created record with existing
+        payment.
+        """
+        odoo_record.match_with_payment()
+

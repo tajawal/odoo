@@ -308,7 +308,6 @@ class PaymentGatewayLineMapper(Component):
 
         unique_id = record.get('Action ID')
         payment_id = record.get('Payment ID')
-        track_id = record.get('Reference')
 
         if not unique_id:
             return {}
@@ -316,40 +315,19 @@ class PaymentGatewayLineMapper(Component):
         payment_gateway = pg_model.search(
             [('payment_id', '=', payment_id)], limit=1)
 
-        # Matching with Payment Logic
-        hub_payment_id = False
-        matching_status = 'unmatched'
-        payment_ids = self.env['ofh.payment'].search(
-            [('track_id', '=', track_id)])
-
-        if len(payment_ids):
-            hub_payment_id = payment_ids[0].id
-            matching_status = 'matched'
-
         if payment_gateway:
             if payment_gateway.payment_status in ('refund', 'void'):
                 pg_created = pg_model.create({
-                    'name': unique_id,
-                    'hub_payment_id': hub_payment_id,
-                    'matching_status': matching_status
+                    'name': unique_id
                 })
                 return {'payment_gateway_id': pg_created.id}
             else:
                 return {'payment_gateway_id': payment_gateway.id}
         else:
             pg_created = pg_model.create({
-                'name': unique_id,
-                'hub_payment_id': hub_payment_id,
-                'matching_status': matching_status
+                'name': unique_id
             })
             return {'payment_gateway_id': pg_created.id}
-
-
-    @api.multi
-    def _get_payment_domain(self):
-        return [
-            ('track_id', '=', self.track_id)]
-
 
 class PaymentGatewayLineHandler(Component):
     _inherit = 'payment.gateway.line.handler'
