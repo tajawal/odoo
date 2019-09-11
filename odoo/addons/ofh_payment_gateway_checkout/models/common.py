@@ -329,6 +329,7 @@ class PaymentGatewayLineMapper(Component):
             })
             return {'payment_gateway_id': pg_created.id}
 
+
 class PaymentGatewayLineHandler(Component):
     _inherit = 'payment.gateway.line.handler'
 
