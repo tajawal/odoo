@@ -11,6 +11,7 @@
     'website': 'https://seera.sa',
     'depends': [
         'ofh_payment',
+        'ofh_payment_gateway',
         'ofh_payment_gateway_checkout',
         'ofh_payment_gateway_fort',
         'ofh_payment_gateway_knet',
