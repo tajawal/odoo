@@ -281,3 +281,26 @@ class OfhPaymentGateway(models.Model):
             rec.reported_mid = rec.payment_gateway_line_ids[0].reported_mid
             rec.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
             rec.entity = rec.payment_gateway_line_ids[0].entity
+
+    @api.multi
+    def match_with_payment(self):
+        """Match a payment gateway object with a Payment or Payment Request."""
+        self.ensure_one()
+        self._match_with_payment()
+        self._match_with_payment_request()
+
+    @api.multi
+    def _match_with_payment(self):
+        self.ensure_one()
+        # Matching with Payment Logic
+        payment_ids = self.env['ofh.payment'].search(
+            [('track_id', '=', self.track_id)])
+
+        if len(payment_ids):
+            self.hub_payment_id = payment_ids[0].id
+            self.matching_status = 'matched'
+
+    @api.multi
+    def _get_payment_domain(self):
+        return [
+            ('track_id', '=', self.track_id)]
