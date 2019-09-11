@@ -1,3 +1,4 @@
+from . import ofh_payment_request
 from . import ofh_payment
 from . import ofh_payment_gateway_line
 from . import ofh_payment_gateway
