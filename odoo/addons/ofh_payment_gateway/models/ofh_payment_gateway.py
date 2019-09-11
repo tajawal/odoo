@@ -301,6 +301,17 @@ class OfhPaymentGateway(models.Model):
             self.matching_status = 'matched'
 
     @api.multi
+    def _match_with_payment_request(self):
+        self.ensure_one()
+        # Matching with Payment Request Logic
+        payment_request_ids = self.env['ofh.payment.request'].search(
+            [('track_id', '=', self.track_id)])
+
+        if len(payment_request_ids):
+            self.hub_payment_request_id = payment_request_ids[0].id
+            self.matching_status = 'matched'
+
+    @api.multi
     def _get_payment_domain(self):
         return [
             ('track_id', '=', self.track_id)]
