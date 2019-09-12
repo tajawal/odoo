@@ -21,6 +21,7 @@
         'ofh_bank_settlement_amex',
     ],
     'data': [
+        'views/ofh_payment_gateway.xml',
         'views/ofh_payment.xml',
         'views/menus.xml',
     ],
