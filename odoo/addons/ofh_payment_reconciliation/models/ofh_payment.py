@@ -4,12 +4,9 @@ from odoo import fields, models
 class OfhPayment(models.Model):
     _inherit = 'ofh.payment'
 
-    payment_gateway_id = fields.Many2one(
+    payment_gateway_ids = fields.One2many(
         string="Payment Gateway ID",
-        required=False,
-        readonly=True,
-        index=True,
         comodel_name='ofh.payment.gateway',
-        ondelete='cascade',
-        auto_join=True,
+        inverse_name='hub_payment_id',
     )
+
