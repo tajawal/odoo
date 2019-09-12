@@ -42,6 +42,9 @@
                         <page name="charges_detail" string="Charges">
                             <field name="charge_ids" nolabel="1"/>
                         </page>
+                        <page name="payment_gateway_detail" string="Payment Gateways">
+                            <field name="payment_gateway_id" nolabel="1"/>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
