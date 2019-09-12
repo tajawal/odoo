@@ -19,7 +19,7 @@
     <record model="ir.ui.menu" id="ofh_all_payment_menu">
         <field name="name">All Hub Payments</field>
         <field name="parent_id" ref="ofh_payment_menu"/>
-        <field name="action" ref="ofh_payment.ofh_payment_all_act_window"/>
+        <field name="action" ref="ofh_payment_reconciliation.ofh_payment_all_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
 

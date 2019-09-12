@@ -5,7 +5,7 @@
 <odoo>
 
     <record model="ir.ui.view" id="ofh_payment_form_view">
-        <field name="name">ofh.payment.form (in ofh_payment)</field>
+        <field name="name">ofh.payment.form (in ofh_payment_reconciliation)</field>
         <field name="model">ofh.payment</field>
         <field name="arch" type="xml">
             <form create="0" duplicate="0" delete="0">
@@ -43,18 +43,13 @@
                             <field name="charge_ids" nolabel="1"/>
                         </page>
                     </notebook>
-                    <notebook>
-                        <page name="payment_gateway_details" string="Charges">
-                            <field name="payment_gateway_id" nolabel="1"/>
-                        </page>
-                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
     <record model="ir.ui.view" id="ofh_payment_tree_view">
-        <field name="name">ofh.payment.tree (in ofh_payment)</field>
+        <field name="name">ofh.payment.tree (in ofh_payment_reconciliation)</field>
         <field name="model">ofh.payment</field>
         <field name="arch" type="xml">
             <tree duplicate="0" delete="0">
@@ -77,6 +72,20 @@
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_tree_view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="ofh_payment_tree_view"/>
+        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_form_view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="ofh_payment_form_view"/>
+            <field name="act_window_id" ref="ofh_payment_all_act_window"/>
     </record>
 
 </odoo>
