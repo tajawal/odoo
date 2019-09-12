@@ -4,12 +4,15 @@
 
 <odoo>
 
-
-
     <record model="ir.ui.view" id="ofh_payment_gateway_tree_view">
         <field name="name">ofh.payment.gateway.tree (in ofh_payment_gateway)</field>
         <field name="model">ofh.payment.gateway</field>
         <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="matching_status"/>
+            </tree>
+        </field>
     </record>
 
 </odoo>
