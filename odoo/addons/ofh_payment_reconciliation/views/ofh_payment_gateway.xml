@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+
+
+    <record model="ir.ui.view" id="ofh_payment_gateway_tree_view">
+        <field name="name">ofh.payment.gateway.tree (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+        <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_tree_view"/>
+    </record>
+
+</odoo>
