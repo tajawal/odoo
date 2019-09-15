@@ -242,6 +242,11 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         track_visibility='always',
     )
+    bank_settlement_ids = fields.One2many(
+        string="Bank Settlement ID",
+        comodel_name='ofh.bank.settlement',
+        inverse_name='payment_gateway_id',
+    )
 
     _sql_constraints = [
         ('unique_payment_getway', 'unique(name)',
