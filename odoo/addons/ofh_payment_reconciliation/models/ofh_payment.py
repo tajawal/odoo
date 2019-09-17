@@ -9,4 +9,10 @@ class OfhPayment(models.Model):
         comodel_name='ofh.payment.gateway',
         inverse_name='hub_payment_id',
     )
+    bank_settlement_ids = fields.One2many(
+        string="Bank Settlements",
+        related="payment_gateway_ids.bank_settlement_ids",
+        readonly=True,
+        store=False,
+    )
 
