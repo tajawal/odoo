@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_bank_settlement_tree_view">
+        <field name="name">ofh.bank.settlement.tree (in ofh_bank_settlement)</field>
+        <field name="model">ofh.bank.settlement</field>
+        <field name="inherit_id" ref="ofh_bank_settlement.ofh_bank_settlement_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="matching_status"/>
+                <field name="reconciliation_status"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

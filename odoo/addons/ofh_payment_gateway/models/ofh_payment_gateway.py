@@ -37,7 +37,7 @@ class OfhPaymentGateway(models.Model):
         required=True,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     track_id = fields.Char(
         string="Track ID",
@@ -51,7 +51,7 @@ class OfhPaymentGateway(models.Model):
         required=True,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     # TODO should be selection list?
     payment_method = fields.Char(
@@ -104,7 +104,7 @@ class OfhPaymentGateway(models.Model):
         required=True,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     card_name = fields.Char(
         string="Card Name",

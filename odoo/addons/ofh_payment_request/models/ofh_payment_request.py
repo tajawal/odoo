@@ -179,6 +179,7 @@ class OfhPaymentRequest(models.Model):
     # End of amount fields
     entity = fields.Selection(
         selection=[
+            ('almosafer_branch', 'Almosafer Branch'),
             ('almosafer', 'Almosafer'),
             ('tajawal', 'Tajawal')],
         required=False,  # TODO: Fix it!
