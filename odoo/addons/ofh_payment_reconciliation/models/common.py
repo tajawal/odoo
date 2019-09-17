@@ -23,8 +23,6 @@ class BankSettlementHandler(Component):
         Match a new created record with existing
         payment.
         """
-        bank_name = odoo_record.bank_name
-
         odoo_record.match_with_payment_gateway()
 
 
