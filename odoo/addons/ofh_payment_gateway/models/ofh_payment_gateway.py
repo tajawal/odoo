@@ -84,7 +84,7 @@ class OfhPaymentGateway(models.Model):
         currency_field='currency_id',
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     currency_id = fields.Many2one(
         string='Currency',
@@ -242,11 +242,7 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         track_visibility='always',
     )
-    bank_settlement_ids = fields.One2many(
-        string="Bank Settlement ID",
-        comodel_name='ofh.bank.settlement',
-        inverse_name='payment_gateway_id',
-    )
+
 
     _sql_constraints = [
         ('unique_payment_getway', 'unique(name)',
