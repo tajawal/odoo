@@ -44,7 +44,7 @@ class OfhPaymentGateway(models.Model):
         required=True,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     auth_code = fields.Char(
         string="Auth Code",
