@@ -7,6 +7,78 @@ from odoo import fields, models, api
 class OfhBankSettlement(models.Model):
     _inherit = 'ofh.bank.settlement'
 
+    payment_gateway_id = fields.Many2one(
+        string="Payment Gateway Id",
+        comodel_name='ofh.payment.gateway',
+        required=False,
+        ondelete='cascade'
+    )
+    matching_status = fields.Selection(
+        string="Matching Status",
+        selection=[
+            ('unmatched', 'Unmatched'),
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable')],
+        default='unmatched',
+        required=True,
+        index=True,
+        readonly=True,
+        track_visibility='always',
+    )
+    reconciliation_status = fields.Selection(
+        string="Reconciliation Status",
+        selection=[
+            ('reconciled', 'Reconciled'),
+            ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
+        ],
+        default='unreconciled',
+        compute='_compute_reconciliation_amount',
+        store=True,
+        index=True,
+        readonly=True,
+        track_visibility='onchange',
+    )
+    reconciliation_tag = fields.Char(
+        string="Reconciliation Tag",
+        track_visibility='onchange',
+    )
+    reconciliation_amount = fields.Monetary(
+        string="Reconciliation Amount",
+        compute='_compute_reconciliation_amount',
+        currency_field='currency_id',
+        readonly=True,
+        store=False,
+    )
+
+    @api.multi
+    @api.depends(
+        'payment_gateway_id.total', 'matching_status',
+        'gross_amount', 'reconciliation_tag')
+    def _compute_reconciliation_amount(self):
+        for rec in self:
+            rec.reconciliation_amount = 0
+
+            if rec.matching_status == 'unmatched':
+                rec.reconciliation_status = 'unreconciled'
+                continue
+
+            if rec.matching_status == 'not_applicable':
+                rec.reconciliation_status = 'not_applicable'
+                continue
+
+            rec.reconciliation_amount = \
+                abs(rec.payment_gateway_id.total - rec.gross_amount)
+
+            if rec.reconciliation_tag:
+                rec.reconciliation_status = 'reconciled'
+                continue
+
+            if rec.reconciliation_amount <= 1:
+                rec.reconciliation_status = 'reconciled'
+            else:
+                rec.reconciliation_status = 'unreconciled'
+
     @api.multi
     def match_with_payment_gateway(self):
         """Match a bank settlement object with a Payment Gateway."""

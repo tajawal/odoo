@@ -7,6 +7,12 @@ from odoo import fields, models, api, _
 class OfhPaymentGateway(models.Model):
     _inherit = 'ofh.payment.gateway'
 
+    bank_settlement_ids = fields.One2many(
+        string="Bank Settlement ID",
+        comodel_name='ofh.bank.settlement',
+        inverse_name='payment_gateway_id',
+    )
+
     @api.multi
     def match_with_payment(self):
         """Match a payment gateway object with a Payment or Payment Request."""

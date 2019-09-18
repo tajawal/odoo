@@ -9,7 +9,8 @@ from odoo import fields
 
 ACQUIRER_BANK = {
     'Commercial International Bank (CIB)': 'cib',
-    'The Saudi British Bank (SABB)': 'sabb'
+    'The Saudi British Bank (SABB)': 'sabb',
+    'Mashreq': 'mashreq'
 }
 
 PAYMENT_STATUSES = {
@@ -50,8 +51,9 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_fort.fort_import_backend')
         if self.backend_record != fort_backend:
             return super(PaymentGatewayLineMapper, self).acquirer_bank(record)
+
         acquirer_bank = record.get('Acquirer Name')
-        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, 'mashreq')}
+        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank)}
 
     @mapping
     def track_id(self, record):
