@@ -159,11 +159,14 @@ class PaymentGatewayLineMapper(Component):
             return {}
 
         unique_id = record.get('FORT ID')
+        track_id = record.get('Merchant Reference')
         if not unique_id:
             return {}
         pg_model = self.env["ofh.payment.gateway"]
         payment_gateway = pg_model.search(
-            [('name', '=', unique_id)], limit=1)
+            [('name', '=', unique_id),
+             ('track_id', '=', track_id)
+             ], limit=1)
 
         if payment_gateway:
             if payment_gateway.payment_status in ('refund', 'void'):
