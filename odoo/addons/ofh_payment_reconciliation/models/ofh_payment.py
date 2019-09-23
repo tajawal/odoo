@@ -19,5 +19,10 @@ class OfhPayment(models.Model):
         string="Bank Settlement Date",
         related="bank_settlement_ids.settlement_date",
     )
-
+    response_description = fields.Char(
+        related="payment_gateway_ids.response_description",
+    )
+    arn = fields.Char(
+        related="payment_gateway_ids.arn",
+    )
 

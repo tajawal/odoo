@@ -100,6 +100,9 @@
         <field name="model">ofh.payment</field>
         <field name="arch" type="xml">
             <search>
+                <field name="track_id"/>
+                <field name="auth_code"/>
+                <field name="arn"/>
                 <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_ids.entity', '=', 'tajawal')]"/>
                 <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_ids.entity', '=', 'almosafer')]"/>
                 <separator/>
@@ -113,7 +116,7 @@
                 <filter name="acquirer_bank_sabb" string="Acquirer Bank Sabb" domain="[('payment_gateway_ids.acquirer_bank', '=', 'sabb')]"/>
                 <filter name="acquirer_bank_rajhi" string="Acquirer Bank Al Rajhi" domain="[('payment_gateway_ids.acquirer_bank', '=', 'rajhi')]"/>
                 <filter name="acquirer_bank_Knet" string="Acquirer Bank KNET" domain="[('payment_gateway_ids.acquirer_bank', '=', 'knet')]"/>
-
+                <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_ids.entity', '=', 'tajawal')]"/>
             </search>
         </field>
