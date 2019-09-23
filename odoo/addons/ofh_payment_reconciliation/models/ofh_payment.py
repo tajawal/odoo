@@ -25,4 +25,7 @@ class OfhPayment(models.Model):
     arn = fields.Char(
         related="payment_gateway_ids.arn",
     )
+    is_apple_pay = fields.Boolean(
+        related="payment_gateway_ids.is_apple_pay",
+    )
 
