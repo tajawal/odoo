@@ -15,5 +15,9 @@ class OfhPayment(models.Model):
         readonly=True,
         store=False,
     )
+    settlement_date = fields.Date(
+        string="Bank Settlement Date",
+        related="bank_settlement_ids.settlement_date",
+    )
 
 

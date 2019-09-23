@@ -13,6 +13,7 @@ class OfhPaymentGateway(models.Model):
         inverse_name='payment_gateway_id',
     )
 
+
     @api.multi
     def match_with_payment(self):
         """Match a payment gateway object with a Payment or Payment Request."""
