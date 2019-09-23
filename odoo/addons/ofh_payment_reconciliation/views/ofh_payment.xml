@@ -94,4 +94,23 @@
         <field name="act_window_id" ref="ofh_payment_all_act_window"/>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_search_view">
+        <field name="name">ofh.payment.search (in ofh_payment)</field>
+        <field name="model">ofh.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_ids.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_ids.entity', '=', 'almosafer')]"/>
+                <separator/>
+                <filter name="updated_this_month" string="Updated This month" domain="[('updated_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_this_month" string="Created this month" domain="[('created_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter name="hotel" string="Hotel" domain="[('order_type', '=', 'hotel')]"/>
+                <filter name="flight" string="Flight" domain="[('order_type', '=', 'flight')]"/>
+            </search>
+        </field>
+    </record>
+
 </odoo>

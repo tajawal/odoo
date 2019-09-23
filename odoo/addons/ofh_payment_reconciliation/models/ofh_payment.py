@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class OfhPayment(models.Model):
@@ -15,4 +15,5 @@ class OfhPayment(models.Model):
         readonly=True,
         store=False,
     )
+
 

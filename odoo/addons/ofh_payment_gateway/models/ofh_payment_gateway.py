@@ -59,7 +59,7 @@ class OfhPaymentGateway(models.Model):
         required=True,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     payment_by = fields.Selection(
         string="Payment By",
@@ -70,14 +70,14 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         default='credit_card',
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     transaction_date = fields.Datetime(
         string="Transaction Date",
         required=True,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     total = fields.Monetary(
         string="Total",
@@ -92,7 +92,7 @@ class OfhPaymentGateway(models.Model):
         required=True,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     payment_status = fields.Selection(
         string="Payment Status",
@@ -110,75 +110,75 @@ class OfhPaymentGateway(models.Model):
         string="Card Name",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     card_number = fields.Char(
         string="Card Number",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     card_bin = fields.Char(
         string="Card Bin",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     card_bank = fields.Char(
         string="Card Issuing Bank",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     is_card_mada = fields.Boolean(
         string="MADA?",
         readonly=True,
         default=False,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     is_apple_pay = fields.Boolean(
         string="Apple Pay?",
         default=False,
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     card_expiry_year = fields.Char(
         string="Card Expiry Year",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     card_expiry_month = fields.Char(
         string="Card Expiry Month",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     response_description = fields.Char(
         string="Response Description",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     customer_email = fields.Char(
         string="Customer Email",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     cvv_check = fields.Char(
         string="CVV Check",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     arn = fields.Char(
         string="ARN",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     payment_id = fields.Char(
         string="Payment ID",
@@ -190,20 +190,20 @@ class OfhPaymentGateway(models.Model):
         string="Server IP",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     reported_mid = fields.Char(
         string="Reported MID",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     is_3d_secure = fields.Boolean(
         string="Is 3d Secure?",
         readonly=True,
         default=False,
         compute="_compute_payment_gateway",
-        store=False
+        store=True
     )
     entity = fields.Selection(
         selection=[
@@ -212,6 +212,7 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         index=True,
         compute="_compute_payment_gateway",
+        store=True
     )
     payment_gateway_line_ids = fields.One2many(
         string="Payment Gateway Lines",
