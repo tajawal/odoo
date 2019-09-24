@@ -54,6 +54,10 @@ class OfhPayment(models.Model):
         index=True,
         readonly=True,
     )
+    reconciliation_tag = fields.Char(
+        string="Reconciliation Taffffg",
+        track_visibility='onchange',
+    )
     is_applicable = fields.Boolean(
         string="Is Applicable?",
         default=True,
@@ -92,8 +96,17 @@ class OfhPayment(models.Model):
     def _compute_reconciliation_status(self):
         for rec in self:
             rec.reconciliation_status = 'unreconciled'
+            if rec.reconciliation_tag:
+                rec.reconciliation_status = 'reconciled'
+                continue
+
             if rec.bank_settlement_ids and rec.bank_settlement_ids.reconciliation_status == "reconciled":
                 rec.reconciliation_status = 'reconciled'
                 continue
 
-
+    @api.multi
+    def action_update_reconciliation_tag(self, reconciliation_tag):
+        return self.write({
+            'reconciliation_tag': reconciliation_tag,
+            'reconciliation_status': 'reconciled',
+        })
