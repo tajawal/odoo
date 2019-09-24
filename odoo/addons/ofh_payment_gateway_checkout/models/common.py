@@ -308,12 +308,14 @@ class PaymentGatewayLineMapper(Component):
 
         unique_id = record.get('Action ID')
         payment_id = record.get('Payment ID')
+        track_id = record.get('Reference')
 
         if not unique_id:
             return {}
         pg_model = self.env["ofh.payment.gateway"]
         payment_gateway = pg_model.search(
-            [('payment_id', '=', payment_id)], limit=1)
+            [('payment_id', '=', payment_id),
+             ('track_id', '=', track_id)], limit=1)
 
         if payment_gateway:
             if payment_gateway.payment_status in ('refund', 'void'):
