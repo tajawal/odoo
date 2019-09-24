@@ -73,6 +73,8 @@
                 <field name="card_type"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="payment_status"/>
+                <field name="matching_status"/>
+                <field name="reconciliation_status"/>
             </tree>
         </field>
     </record>
