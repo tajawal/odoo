@@ -21,6 +21,7 @@
         'ofh_bank_settlement_amex',
     ],
     'data': [
+        'wizards/ofh_payment_reconciliation_tag.xml',
         'views/ofh_bank_settlement.xml',
         'views/ofh_payment_gateway.xml',
         'views/ofh_payment.xml',
