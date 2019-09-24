@@ -38,6 +38,7 @@
                         <field name="payment_status"/>
                         <field name="currency_id" invisible="1"/>
                         <field name="settlement_date" invisible="1"/>
+                        <field name="is_applicable"/>
                     </group>
                     <group name="status" string="Statuses" col="4">
                         <field name="matching_status"/>
@@ -75,6 +76,7 @@
                 <field name="payment_status"/>
                 <field name="matching_status"/>
                 <field name="reconciliation_status"/>
+                <field name="is_applicable"/>
             </tree>
         </field>
     </record>
@@ -125,6 +127,28 @@
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_ids.entity', '=', 'tajawal')]"/>
             </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_applicable">
+        <field name="name">Mark as Applicable</field>
+        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name = "binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_not_applicable">
+        <field name="name">Mark as not Applicable</field>
+        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name = "binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_not_applicable()
         </field>
     </record>
 
