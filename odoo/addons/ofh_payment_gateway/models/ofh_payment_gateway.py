@@ -34,14 +34,12 @@ class OfhPaymentGateway(models.Model):
             ('sabb', 'SABB'),
             ('rajhi', 'Rajhi'),
             ('knet', 'Knet')],
-        required=True,
         readonly=True,
         compute="_compute_payment_gateway",
         store=True
     )
     track_id = fields.Char(
         string="Track ID",
-        required=True,
         readonly=True,
         compute="_compute_payment_gateway",
         store=True,
@@ -49,7 +47,6 @@ class OfhPaymentGateway(models.Model):
     )
     auth_code = fields.Char(
         string="Auth Code",
-        required=True,
         readonly=True,
         compute="_compute_payment_gateway",
         store=True
@@ -57,7 +54,6 @@ class OfhPaymentGateway(models.Model):
     # TODO should be selection list?
     payment_method = fields.Char(
         string="Payment Method",
-        required=True,
         readonly=True,
         compute="_compute_payment_gateway",
         store=True
@@ -67,7 +63,6 @@ class OfhPaymentGateway(models.Model):
         selection=[
             ('credit_card', 'Credit Card'),
         ],
-        required=True,
         readonly=True,
         default='credit_card',
         compute="_compute_payment_gateway",
@@ -75,7 +70,6 @@ class OfhPaymentGateway(models.Model):
     )
     transaction_date = fields.Datetime(
         string="Transaction Date",
-        required=True,
         readonly=True,
         compute="_compute_payment_gateway",
         store=True
@@ -90,7 +84,6 @@ class OfhPaymentGateway(models.Model):
     currency_id = fields.Many2one(
         string='Currency',
         comodel_name='res.currency',
-        required=True,
         readonly=True,
         compute="_compute_payment_gateway",
         store=True
@@ -102,7 +95,6 @@ class OfhPaymentGateway(models.Model):
             ('auth', 'Authorised'),
             ('capture', 'Captured'),
             ('refund', 'Refunded')],
-        required=True,
         readonly=True,
         compute="_compute_payment_gateway",
         store=True
@@ -211,6 +203,7 @@ class OfhPaymentGateway(models.Model):
             ('almosafer', 'Almosafer'),
             ('tajawal', 'Tajawal')],
         readonly=True,
+        default="almosafer",
         index=True,
         compute="_compute_payment_gateway",
         store=True
