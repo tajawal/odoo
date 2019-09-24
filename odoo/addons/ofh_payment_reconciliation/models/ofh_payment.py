@@ -58,10 +58,6 @@ class OfhPayment(models.Model):
         string="Reconciliation Tag",
         track_visibility='onchange',
     )
-    unreconciliation_tag = fields.Char(
-        string="Unreconciliation Reason",
-        track_visibility='onchange',
-    )
     is_applicable = fields.Boolean(
         string="Is Applicable?",
         default=True,
@@ -115,8 +111,3 @@ class OfhPayment(models.Model):
             'reconciliation_status': 'reconciled',
         })
 
-    @api.multi
-    def action_update_unreconciliation_tag(self, unreconciliation_tag):
-        return self.write({
-            'unreconciliation_tag': unreconciliation_tag,
-        })
