@@ -55,7 +55,7 @@ class OfhPayment(models.Model):
         readonly=True,
     )
     reconciliation_tag = fields.Char(
-        string="Reconciliation Taffffg",
+        string="Reconciliation Tag",
         track_visibility='onchange',
     )
     is_applicable = fields.Boolean(
