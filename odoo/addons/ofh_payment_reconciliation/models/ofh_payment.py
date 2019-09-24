@@ -54,6 +54,24 @@ class OfhPayment(models.Model):
         index=True,
         readonly=True,
     )
+    is_applicable = fields.Boolean(
+        string="Is Applicable?",
+        default=True,
+        readonly=True,
+        index=True,
+    )
+
+    @api.multi
+    def action_applicable(self):
+        return self.write({
+            'is_applicable': True,
+        })
+
+    @api.multi
+    def action_not_applicable(self):
+        return self.write({
+            'is_applicable': False,
+        })
 
     @api.multi
     @api.depends(
