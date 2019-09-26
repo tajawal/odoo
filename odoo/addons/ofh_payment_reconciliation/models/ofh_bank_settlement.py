@@ -98,7 +98,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(('checkout', 'fort')))
+            self._get_payment_gateway_domain(['checkout', 'fort']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -107,7 +107,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(('checkout')))
+            self._get_payment_gateway_domain(['checkout']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -116,7 +116,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(('checkout', 'fort')))
+            self._get_payment_gateway_domain(['checkout', 'fort']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -125,13 +125,13 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(('checkout')))
+            self._get_payment_gateway_domain(['checkout']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
     @api.multi
     def _get_payment_gateway_domain(self, provider):
-        return [('provider', '=', provider),
+        return [('provider', 'in', provider),
                 ('acquirer_bank', '=', self.bank_name),
                 ('auth_code', '=', self.auth_code),
                 ('payment_status', '=', self.payment_status)]
