@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models, api
+from odoo.exceptions import MissingError
 
 
 class OfhBankSettlement(models.Model):
@@ -84,14 +85,11 @@ class OfhBankSettlement(models.Model):
         """Match a bank settlement object with a Payment Gateway."""
         self.ensure_one()
         if self.matching_status not in ('matched', 'not_applicable'):
-            if self.bank_name == 'sabb':
-                self._match_with_payment_gateway_sabb()
-            elif self.bank_name == 'rajhi':
-                self._match_with_payment_gateway_rajhi()
-            elif self.bank_name == 'mashreq':
-                self._match_with_payment_gateway_mashreq()
-            elif self.bank_name == 'amex':
-                self._match_with_payment_gateway_amex()
+            match_function = f'_match_with_payment_gateway_{self.bank_name}'
+            if hasattr(self, match_function):
+                getattr(self, match_function)()
+            else:
+                raise MissingError(_("Method not implemented."))
 
     @api.multi
     def _match_with_payment_gateway_sabb(self):
