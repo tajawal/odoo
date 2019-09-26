@@ -49,12 +49,12 @@
                         <page name="charges_detail" string="Charges">
                             <field name="charge_ids" nolabel="1"/>
                         </page>
-                        <page name="payment_gateway_detail" string="Payment Gateways">
+                        <page name="payment_gateway_detail" string="Payment Gateway">
                             <group col="4">
                                 <field name="payment_gateway_id"/>
                             </group>
                         </page>
-                        <page name="bank_settlement_details" string="Bank Settlement">
+                        <page name="bank_settlement_detail" string="Bank Settlement">
                             <group col="4">
                                 <field name="bank_settlement_id"/>
                             </group>
