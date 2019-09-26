@@ -50,10 +50,14 @@
                             <field name="charge_ids" nolabel="1"/>
                         </page>
                         <page name="payment_gateway_detail" string="Payment Gateways">
-                            <field name="payment_gateway_id" nolabel="1"/>
+                            <group col="4">
+                                <field name="payment_gateway_id"/>
+                            </group>
                         </page>
                         <page name="bank_settlement_details" string="Bank Settlement">
-                            <field name="bank_settlement_id" nolabel="1"/>
+                            <group col="4">
+                                <field name="bank_settlement_id"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
