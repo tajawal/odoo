@@ -96,7 +96,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout', 'fort']))
+            self._get_payment_gateway_domain(['checkout', 'fort']), limit=1)
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -105,7 +105,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout']))
+            self._get_payment_gateway_domain(['checkout']), limit=1)
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -114,7 +114,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout', 'fort']))
+            self._get_payment_gateway_domain(['checkout', 'fort']), limit=1)
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -123,7 +123,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout']))
+            self._get_payment_gateway_domain(['checkout']), limit=1)
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -135,21 +135,23 @@ class OfhBankSettlement(models.Model):
                 ('payment_status', '=', self.payment_status)]
 
     @api.multi
-    def _set_payment_gateway_matching(self, payment_gateway_ids):
+    def _set_payment_gateway_matching(self, payment_gateway_id):
         self.ensure_one()
-        if len(payment_gateway_ids):
-            self.payment_gateway_id = payment_gateway_ids[0].id
-            self.matching_status = 'matched'
+        if payment_gateway_id:
+            self.write({
+                "payment_gateway_id": payment_gateway_id.id,
+                "matching_status": 'matched'
+            })
+
             # Updating the relation
-            payment_gateway_ids[0].write({
+            payment_gateway_id.write({
                 'bank_settlement_id': self.id,
             })
 
             # Updating in Payments
-            payment_ids = self.env['ofh.payment'].search(
-                [('id', '=', payment_gateway_ids[0].hub_payment_id[0].id)])
-            if len(payment_ids):
-                payment_ids[0].write({
+            payment_id = self.env['ofh.payment'].search(
+                [('id', '=', payment_gateway_id.hub_payment_id[0].id)], limit=1)
+            if payment_id:
+                payment_id.write({
                     'bank_settlement_id': self.id,
                 })
-
