@@ -50,29 +50,34 @@ class OfhPaymentGateway(models.Model):
     def _match_with_payment(self):
         self.ensure_one()
         # Matching with Payment Logic
-        payment_ids = self.env['ofh.payment'].search(
-            self._get_payment_domain())
+        payment_id = self.env['ofh.payment'].search(
+            self._get_payment_domain(), limit=1)
 
-        if len(payment_ids):
-            self.hub_payment_id = payment_ids[0].id
-            self.matching_status = 'matched'
+        if payment_id:
+            self.write({
+                "hub_payment_id": payment_id.id,
+                "matching_status": 'matched'
+            })
             # Updating the relation
-            payment_ids[0].write({
+            payment_id.write({
                 'payment_gateway_id': self.id,
             })
 
+    # TODO: Need to remove this when done with Payments Object change
     @api.multi
     def _match_with_payment_request(self):
         self.ensure_one()
         # Matching with Payment Request Logic
-        payment_request_ids = self.env['ofh.payment.request'].search(
-            self._get_payment_domain())
+        payment_request_id = self.env['ofh.payment.request'].search(
+            self._get_payment_domain(), limit=1)
 
-        if len(payment_request_ids):
-            self.hub_payment_request_id = payment_request_ids[0].id
-            self.matching_status = 'matched'
+        if len(payment_request_id):
+            self.write({
+                "hub_payment_request_id": payment_request_id.id,
+                "matching_status": 'matched'
+            })
             # Updating the relation
-            payment_request_ids[0].write({
+            payment_request_id.write({
                 'payment_gateway_id': self.id,
             })
 
