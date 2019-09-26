@@ -33,7 +33,8 @@ class BankSettlementMapper(Component):
     @mapping
     def name(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).name(record)
         return {'name': record.get("ARN REFNO")}
@@ -41,7 +42,8 @@ class BankSettlementMapper(Component):
     @mapping
     def settlement_date(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).settlement_date(record)
         dt = datetime.strptime(record.get('Settlement Date'), '%d/%m/%Y')
@@ -50,7 +52,8 @@ class BankSettlementMapper(Component):
     @mapping
     def bank_name(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).bank_name(record)
         return {'bank_name': 'mashreq'}
@@ -58,7 +61,8 @@ class BankSettlementMapper(Component):
     @mapping
     def reported_mid(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).reported_mid(record)
         return {'reported_mid': record.get('MERCH ID', '')}
@@ -66,7 +70,8 @@ class BankSettlementMapper(Component):
     @mapping
     def account_number(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).account_number(record)
         return {'account_number': record.get('ACCOUNT ID', '')}
@@ -74,7 +79,8 @@ class BankSettlementMapper(Component):
     @mapping
     def payment_method(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).payment_method(record)
         method = record.get('CARD ISSUER')
@@ -83,7 +89,8 @@ class BankSettlementMapper(Component):
     @mapping
     def is_mada(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).is_mada(record)
         if record.get('CARD ISSUER', '').lower() == 'mada':
@@ -93,7 +100,8 @@ class BankSettlementMapper(Component):
     @mapping
     def transaction_date(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).transaction_date(record)
         return {}
@@ -101,7 +109,8 @@ class BankSettlementMapper(Component):
     @mapping
     def card_number(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).card_number(record)
         return {'card_number': record.get('CARD')}
@@ -109,7 +118,8 @@ class BankSettlementMapper(Component):
     @mapping
     def currency_id(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).currency_id(record)
         currency = record.get('CRNCY', '')
@@ -118,7 +128,8 @@ class BankSettlementMapper(Component):
     @mapping
     def gross_amount(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).gross_amount(record)
 
@@ -127,7 +138,8 @@ class BankSettlementMapper(Component):
     @mapping
     def net_transaction_amount(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).net_transaction_amount(
                 record)
@@ -136,7 +148,8 @@ class BankSettlementMapper(Component):
     @mapping
     def merchant_charge_amount(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).merchant_charge_amount(
                 record)
@@ -147,7 +160,8 @@ class BankSettlementMapper(Component):
     @mapping
     def merchant_charge_vat(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).merchant_charge_vat(
                 record)
@@ -156,7 +170,8 @@ class BankSettlementMapper(Component):
     @mapping
     def payment_status(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).payment_status(record)
         state = record.get('TRAN TYPE', '')
@@ -166,7 +181,8 @@ class BankSettlementMapper(Component):
     @mapping
     def auth_code(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).auth_code(record)
         auth_code = record.get('AUTH CD')
@@ -177,7 +193,8 @@ class BankSettlementMapper(Component):
     @mapping
     def is_3d_secure(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).is_3d_secure(record)
         return {}
@@ -185,7 +202,8 @@ class BankSettlementMapper(Component):
     @mapping
     def posting_date(self, record):
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementMapper, self).posting_date(record)
         return {}
@@ -197,7 +215,8 @@ class BankSettlementHandler(Component):
     def odoo_find_domain(self, values, orig_values):
         """Domain to find the GDS invoice line record in odoo."""
         mashreq_backend = self.env.ref(
-            'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
+            'ofh_bank_settlement_mashreq.'
+            'mashreq_bank_settlement_import_backend')
         if self.backend_record != mashreq_backend:
             return super(BankSettlementHandler, self).odoo_find_domain(
                 values, orig_values)

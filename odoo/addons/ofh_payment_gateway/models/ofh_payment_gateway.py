@@ -238,7 +238,6 @@ class OfhPaymentGateway(models.Model):
         track_visibility='always',
     )
 
-
     _sql_constraints = [
         ('unique_payment_getway', 'unique(name)',
          _("This line has been uploaded"))
@@ -256,7 +255,8 @@ class OfhPaymentGateway(models.Model):
             rec.auth_code = rec.payment_gateway_line_ids[0].auth_code
             rec.payment_method = rec.payment_gateway_line_ids[0].payment_method
             rec.payment_by = rec.payment_gateway_line_ids[0].payment_by
-            rec.transaction_date = rec.payment_gateway_line_ids[0].transaction_date
+            rec.transaction_date = \
+                rec.payment_gateway_line_ids[0].transaction_date
             rec.total = rec.payment_gateway_line_ids[0].total
             rec.currency_id = rec.payment_gateway_line_ids[0].currency_id
             rec.payment_status = rec.payment_gateway_line_ids[0].payment_status
@@ -266,9 +266,12 @@ class OfhPaymentGateway(models.Model):
             rec.card_bank = rec.payment_gateway_line_ids[0].card_bank
             rec.is_card_mada = rec.payment_gateway_line_ids[0].is_card_mada
             rec.is_apple_pay = rec.payment_gateway_line_ids[0].is_apple_pay
-            rec.card_expiry_year = rec.payment_gateway_line_ids[0].card_expiry_year
-            rec.card_expiry_month = rec.payment_gateway_line_ids[0].card_expiry_month
-            rec.response_description = rec.payment_gateway_line_ids[0].response_description
+            rec.card_expiry_year = \
+                rec.payment_gateway_line_ids[0].card_expiry_year
+            rec.card_expiry_month = \
+                rec.payment_gateway_line_ids[0].card_expiry_month
+            rec.response_description = \
+                rec.payment_gateway_line_ids[0].response_description
             rec.customer_email = rec.payment_gateway_line_ids[0].customer_email
             rec.cvv_check = rec.payment_gateway_line_ids[0].cvv_check
             rec.arn = rec.payment_gateway_line_ids[0].arn
