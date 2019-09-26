@@ -7,10 +7,11 @@ from odoo import fields, models, api, _
 class OfhPaymentGateway(models.Model):
     _inherit = 'ofh.payment.gateway'
 
-    bank_settlement_ids = fields.One2many(
+    bank_settlement_id = fields.Many2one(
         string="Bank Settlement ID",
         comodel_name='ofh.bank.settlement',
-        inverse_name='payment_gateway_id',
+        required=False,
+        track_visibility='onchange',
     )
 
     @api.multi
@@ -26,22 +27,30 @@ class OfhPaymentGateway(models.Model):
         self.ensure_one()
         # Matching with Payment Logic
         payment_ids = self.env['ofh.payment'].search(
-            [('track_id', '=', self.track_id)])
+            self._get_payment_domain())
 
         if len(payment_ids):
             self.hub_payment_id = payment_ids[0].id
             self.matching_status = 'matched'
+            # Updating the relation
+            payment_ids[0].write({
+                'payment_gateway_id': self.id,
+            })
 
     @api.multi
     def _match_with_payment_request(self):
         self.ensure_one()
         # Matching with Payment Request Logic
         payment_request_ids = self.env['ofh.payment.request'].search(
-            [('track_id', '=', self.track_id)])
+            self._get_payment_domain())
 
         if len(payment_request_ids):
             self.hub_payment_request_id = payment_request_ids[0].id
             self.matching_status = 'matched'
+            # Updating the relation
+            payment_request_ids[0].write({
+                'payment_gateway_id': self.id,
+            })
 
     @api.multi
     def _get_payment_domain(self):

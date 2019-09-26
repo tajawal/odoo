@@ -98,54 +98,51 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            [('provider', 'in', ('checkout', 'fort')),
-             ('acquirer_bank', '=', self.bank_name),
-             ('auth_code', '=', self.auth_code),
-             ('payment_status', '=', self.payment_status)])
+            self._get_payment_gateway_domain(('checkout', 'fort')))
 
-        if len(payment_gateway_ids):
-            self.payment_gateway_id = payment_gateway_ids[0].id
-            self.matching_status = 'matched'
-
+        self._set_payment_gateway_matching(payment_gateway_ids)
 
     @api.multi
     def _match_with_payment_gateway_rajhi(self):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            [('provider', '=', 'checkout'),
-             ('acquirer_bank', '=', self.bank_name),
-             ('auth_code', '=', self.auth_code),
-             ('payment_status', '=', self.payment_status)])
+            self._get_payment_gateway_domain(('checkout')))
 
-        if len(payment_gateway_ids):
-            self.payment_gateway_id = payment_gateway_ids[0].id
-            self.matching_status = 'matched'
+        self._set_payment_gateway_matching(payment_gateway_ids)
 
     @api.multi
     def _match_with_payment_gateway_mashreq(self):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            [('provider', 'in', ('checkout', 'fort')),
-             ('acquirer_bank', '=', self.bank_name),
-             ('auth_code', '=', self.auth_code),
-             ('payment_status', '=', self.payment_status)])
+            self._get_payment_gateway_domain(('checkout', 'fort')))
 
-        if len(payment_gateway_ids):
-            self.payment_gateway_id = payment_gateway_ids[0].id
-            self.matching_status = 'matched'
+        self._set_payment_gateway_matching(payment_gateway_ids)
 
     @api.multi
     def _match_with_payment_gateway_amex(self):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            [('provider', '=', 'checkout'),
-             ('acquirer_bank', '=', self.bank_name),
-             ('auth_code', '=', self.auth_code),
-             ('payment_status', '=', self.payment_status)])
+            self._get_payment_gateway_domain(('checkout')))
 
+        self._set_payment_gateway_matching(payment_gateway_ids)
+
+    @api.multi
+    def _get_payment_gateway_domain(self, provider):
+        return [('provider', '=', provider),
+                ('acquirer_bank', '=', self.bank_name),
+                ('auth_code', '=', self.auth_code),
+                ('payment_status', '=', self.payment_status)]
+
+    @api.multi
+    def _set_payment_gateway_matching(self, payment_gateway_ids):
+        self.ensure_one()
         if len(payment_gateway_ids):
             self.payment_gateway_id = payment_gateway_ids[0].id
             self.matching_status = 'matched'
+            # Updating the relation
+            payment_gateway_ids[0].write({
+                'bank_settlement_id': self.id,
+            })

@@ -50,10 +50,10 @@
                             <field name="charge_ids" nolabel="1"/>
                         </page>
                         <page name="payment_gateway_detail" string="Payment Gateways">
-                            <field name="payment_gateway_ids" nolabel="1"/>
+                            <field name="payment_gateway_id" nolabel="1"/>
                         </page>
                         <page name="bank_settlement_details" string="Bank Settlement">
-                            <field name="bank_settlement_ids" nolabel="1"/>
+                            <field name="bank_settlement_id" nolabel="1"/>
                         </page>
                     </notebook>
                 </sheet>
@@ -112,21 +112,21 @@
                 <field name="track_id"/>
                 <field name="auth_code"/>
                 <field name="arn"/>
-                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_ids.entity', '=', 'tajawal')]"/>
-                <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_ids.entity', '=', 'almosafer')]"/>
+                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_id.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_id.entity', '=', 'almosafer')]"/>
                 <separator/>
                 <filter name="updated_this_month" string="Updated This month" domain="[('updated_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
                 <filter name="created_this_month" string="Created this month" domain="[('created_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
                 <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
                 <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
                 <separator/>
-                <filter name="acquirer_bank_mashreq" string="Acquirer Bank Mashreq" domain="[('payment_gateway_ids.acquirer_bank', '=', 'mashreq')]"/>
-                <filter name="acquirer_bank_cib" string="Acquirer Bank CIB" domain="[('payment_gateway_ids.acquirer_bank', '=', 'cib')]"/>
-                <filter name="acquirer_bank_sabb" string="Acquirer Bank Sabb" domain="[('payment_gateway_ids.acquirer_bank', '=', 'sabb')]"/>
-                <filter name="acquirer_bank_rajhi" string="Acquirer Bank Al Rajhi" domain="[('payment_gateway_ids.acquirer_bank', '=', 'rajhi')]"/>
-                <filter name="acquirer_bank_Knet" string="Acquirer Bank KNET" domain="[('payment_gateway_ids.acquirer_bank', '=', 'knet')]"/>
+                <filter name="acquirer_bank_mashreq" string="Acquirer Bank Mashreq" domain="[('payment_gateway_id.acquirer_bank', '=', 'mashreq')]"/>
+                <filter name="acquirer_bank_cib" string="Acquirer Bank CIB" domain="[('payment_gateway_id.acquirer_bank', '=', 'cib')]"/>
+                <filter name="acquirer_bank_sabb" string="Acquirer Bank Sabb" domain="[('payment_gateway_id.acquirer_bank', '=', 'sabb')]"/>
+                <filter name="acquirer_bank_rajhi" string="Acquirer Bank Al Rajhi" domain="[('payment_gateway_id.acquirer_bank', '=', 'rajhi')]"/>
+                <filter name="acquirer_bank_Knet" string="Acquirer Bank KNET" domain="[('payment_gateway_id.acquirer_bank', '=', 'knet')]"/>
                 <separator/>
-                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_ids.entity', '=', 'tajawal')]"/>
+                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_id.entity', '=', 'tajawal')]"/>
             </search>
         </field>
     </record>
