@@ -7,11 +7,10 @@ class OfhPayment(models.Model):
     payment_gateway_id = fields.Many2one(
         string="Payment Gateway ID",
         comodel_name='ofh.payment.gateway',
-        inverse_name='hub_payment_id',
     )
     bank_settlement_id = fields.Many2one(
-        string="Bank Settlements",
-        related="payment_gateway_ids.bank_settlement_ids",
+        string="Bank Settlement ID",
+        related="payment_gateway_id.bank_settlement_id",
         readonly=True,
         store=False,
     )
@@ -23,10 +22,10 @@ class OfhPayment(models.Model):
         related="payment_gateway_id.response_description",
     )
     arn = fields.Char(
-        related="payment_gateway_ids.arn",
+        related="payment_gateway_id.arn",
     )
     is_apple_pay = fields.Boolean(
-        related="payment_gateway_ids.is_apple_pay",
+        related="payment_gateway_id.is_apple_pay",
     )
     matching_status = fields.Selection(
         string="Matching Status",
@@ -78,20 +77,20 @@ class OfhPayment(models.Model):
 
     @api.multi
     @api.depends(
-        'payment_gateway_ids', 'bank_settlement_ids')
+        'payment_gateway_id', 'bank_settlement_id')
     def _compute_matching_status(self):
         for rec in self:
             rec.matching_status = "unmatched"
-            if rec.payment_gateway_ids and rec.bank_settlement_ids:
+            if rec.payment_gateway_id and rec.bank_settlement_id:
                 rec.matching_status = 'matched'
                 continue
 
-            if rec.payment_gateway_ids or rec.bank_settlement_ids:
+            if rec.payment_gateway_id or rec.bank_settlement_id:
                 rec.matching_status = 'partial_matched'
                 continue
 
     @api.multi
-    @api.depends('bank_settlement_ids')
+    @api.depends('bank_settlement_id')
     def _compute_reconciliation_status(self):
         for rec in self:
             rec.reconciliation_status = 'unreconciled'
@@ -99,7 +98,7 @@ class OfhPayment(models.Model):
                 rec.reconciliation_status = 'reconciled'
                 continue
 
-            if rec.bank_settlement_ids and rec.bank_settlement_ids[0].reconciliation_status == "reconciled":
+            if rec.bank_settlement_id and rec.bank_settlement_id.reconciliation_status == "reconciled":
                 rec.reconciliation_status = 'reconciled'
                 continue
 
