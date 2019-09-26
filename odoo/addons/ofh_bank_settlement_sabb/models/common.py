@@ -87,7 +87,7 @@ class BankSettlementMapper(Component):
         if self.backend_record != sabb_backend:
             return super(BankSettlementMapper, self).transaction_date(record)
         dt = datetime.strptime(
-            f"{record.get('Transaction Date DD:MM:YYYY')}" 
+            f"{record.get('Transaction Date DD:MM:YYYY')}"
             f"{record.get('Transaction Time')}", '%d/%m/%Y%H:%M:%S')
 
         return {'transaction_date': fields.Datetime.to_string(dt)}
@@ -116,15 +116,18 @@ class BankSettlementMapper(Component):
         if self.backend_record != sabb_backend:
             return super(BankSettlementMapper, self).gross_amount(record)
 
-        return {'gross_amount': abs(float(record.get('Transaction Amount', 0.00)))}
+        return {
+            'gross_amount': abs(
+                float(record.get('Transaction Amount', 0.00)))
+        }
 
     @mapping
     def net_transaction_amount(self, record):
         sabb_backend = self.env.ref(
             'ofh_bank_settlement_sabb.sab_bank_settlement_import_backend')
         if self.backend_record != sabb_backend:
-            return super(BankSettlementMapper, self).net_transaction_amount(
-                record)
+            return super(
+                BankSettlementMapper, self).net_transaction_amount(record)
         return {}
 
     @mapping
@@ -135,7 +138,8 @@ class BankSettlementMapper(Component):
             return super(BankSettlementMapper, self).merchant_charge_amount(
                 record)
         return {
-            'merchant_charge_amount': abs(float(record.get('Discount Amount', 0.00)))
+            'merchant_charge_amount': abs(
+                float(record.get('Discount Amount', 0.00)))
         }
 
     @mapping

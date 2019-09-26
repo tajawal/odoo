@@ -11,7 +11,8 @@ class OfhBankSettlement(models.Model):
         string="Payment Gateway Id",
         comodel_name='ofh.payment.gateway',
         required=False,
-        ondelete='cascade'
+        ondelete='cascade',
+        track_visibility='onchange',
     )
     matching_status = fields.Selection(
         string="Matching Status",
@@ -23,7 +24,7 @@ class OfhBankSettlement(models.Model):
         required=True,
         index=True,
         readonly=True,
-        track_visibility='always',
+        track_visibility='onchange',
     )
     reconciliation_status = fields.Selection(
         string="Reconciliation Status",
@@ -34,7 +35,6 @@ class OfhBankSettlement(models.Model):
         ],
         default='unreconciled',
         compute='_compute_reconciliation_amount',
-        store=True,
         index=True,
         readonly=True,
         track_visibility='onchange',

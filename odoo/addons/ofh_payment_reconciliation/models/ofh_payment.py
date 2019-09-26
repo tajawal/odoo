@@ -4,12 +4,12 @@ from odoo import fields, models, api
 class OfhPayment(models.Model):
     _inherit = 'ofh.payment'
 
-    payment_gateway_ids = fields.One2many(
+    payment_gateway_id = fields.Many2one(
         string="Payment Gateway ID",
         comodel_name='ofh.payment.gateway',
         inverse_name='hub_payment_id',
     )
-    bank_settlement_ids = fields.One2many(
+    bank_settlement_id = fields.Many2one(
         string="Bank Settlements",
         related="payment_gateway_ids.bank_settlement_ids",
         readonly=True,
@@ -17,10 +17,10 @@ class OfhPayment(models.Model):
     )
     settlement_date = fields.Date(
         string="Bank Settlement Date",
-        related="bank_settlement_ids.settlement_date",
+        related="bank_settlement_id.settlement_date",
     )
     response_description = fields.Char(
-        related="payment_gateway_ids.response_description",
+        related="payment_gateway_id.response_description",
     )
     arn = fields.Char(
         related="payment_gateway_ids.arn",
@@ -40,7 +40,6 @@ class OfhPayment(models.Model):
         readonly=True,
         store=False,
         compute='_compute_matching_status',
-
     )
     reconciliation_status = fields.Selection(
         string="Reconciliation Status",
@@ -100,7 +99,7 @@ class OfhPayment(models.Model):
                 rec.reconciliation_status = 'reconciled'
                 continue
 
-            if rec.bank_settlement_ids and rec.bank_settlement_ids.reconciliation_status == "reconciled":
+            if rec.bank_settlement_ids and rec.bank_settlement_ids[0].reconciliation_status == "reconciled":
                 rec.reconciliation_status = 'reconciled'
                 continue
 
@@ -110,4 +109,3 @@ class OfhPayment(models.Model):
             'reconciliation_tag': reconciliation_tag,
             'reconciliation_status': 'reconciled',
         })
-

@@ -125,7 +125,10 @@ class BankSettlementMapper(Component):
         if self.backend_record != rajhi_backend:
             return super(BankSettlementMapper, self).net_transaction_amount(
                 record)
-        return {'net_transaction_amount': abs(float(record.get('Net Amount', 0.00)))}
+        return {
+            'net_transaction_amount': abs(
+                float(record.get('Net Amount', 0.00)))
+        }
 
     @mapping
     def merchant_charge_amount(self, record):
@@ -135,7 +138,8 @@ class BankSettlementMapper(Component):
             return super(BankSettlementMapper, self).merchant_charge_amount(
                 record)
         return {
-            'merchant_charge_amount': abs(float(record.get('Service Fee', 0.00)))
+            'merchant_charge_amount': abs(
+                float(record.get('Service Fee', 0.00)))
         }
 
     @mapping
@@ -145,7 +149,10 @@ class BankSettlementMapper(Component):
         if self.backend_record != rajhi_backend:
             return super(BankSettlementMapper, self).merchant_charge_vat(
                 record)
-        return {'merchant_charge_vat': abs(float(record.get('VAT Amount', 0.00)))}
+        return {
+            'merchant_charge_vat': abs(
+                float(record.get('VAT Amount', 0.00)))
+        }
 
     @mapping
     def payment_status(self, record):
