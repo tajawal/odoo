@@ -144,3 +144,12 @@ class OfhBankSettlement(models.Model):
             payment_gateway_ids[0].write({
                 'bank_settlement_id': self.id,
             })
+
+            # Updating in Payments
+            payment_ids = self.env['ofh.payment'].search(
+                [('id', '=', payment_gateway_ids[0].hub_payment_id[0].id)])
+            if len(payment_ids):
+                payment_ids[0].write({
+                    'bank_settlement_id': self.id,
+                })
+
