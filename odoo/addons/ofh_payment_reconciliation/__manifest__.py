@@ -19,6 +19,8 @@
         'ofh_bank_settlement_mashreq',
         'ofh_bank_settlement_rajhi',
         'ofh_bank_settlement_amex',
+        'ofh_payment',
+        'ofh_payment_request',
     ],
     'data': [
         'wizards/ofh_payment_reconciliation_tag.xml',

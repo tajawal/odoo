@@ -51,9 +51,6 @@
                         <field name="customer_email"/>
                         <field name="server_ip"/>
                     </group>
-                    <group name="matching_status_detail" string="Statuses" col="4">
-                        <field name="matching_status"/>
-                    </group>
                     <notebook>
                         <page name="payment_gateway_lines" string="Payment Gateway Lines">
                             <group name="payment_gateway_lines" col="4">

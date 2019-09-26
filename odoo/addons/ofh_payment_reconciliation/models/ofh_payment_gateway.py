@@ -7,6 +7,30 @@ from odoo import fields, models, api, _
 class OfhPaymentGateway(models.Model):
     _inherit = 'ofh.payment.gateway'
 
+    hub_payment_id = fields.Many2one(
+        string="Hub Payment Id",
+        comodel_name='ofh.payment',
+        required=False,
+        ondelete='cascade'
+    )
+    hub_payment_request_id = fields.Many2one(
+        string="Hub Payment Request Id",
+        comodel_name='ofh.payment.request',
+        required=False,
+        ondelete='cascade'
+    )
+    matching_status = fields.Selection(
+        string="Matching Status",
+        selection=[
+            ('unmatched', 'Unmatched'),
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable')],
+        default='unmatched',
+        required=True,
+        index=True,
+        readonly=True,
+        track_visibility='always',
+    )
     bank_settlement_id = fields.Many2one(
         string="Bank Settlement ID",
         comodel_name='ofh.bank.settlement',

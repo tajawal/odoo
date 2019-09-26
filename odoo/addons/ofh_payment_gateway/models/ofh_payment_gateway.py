@@ -213,30 +213,6 @@ class OfhPaymentGateway(models.Model):
         comodel_name='ofh.payment.gateway.line',
         inverse_name='payment_gateway_id',
     )
-    hub_payment_id = fields.Many2one(
-        string="Hub Payment Id",
-        comodel_name='ofh.payment',
-        required=False,
-        ondelete='cascade'
-    )
-    hub_payment_request_id = fields.Many2one(
-        string="Hub Payment Request Id",
-        comodel_name='ofh.payment.request',
-        required=False,
-        ondelete='cascade'
-    )
-    matching_status = fields.Selection(
-        string="Matching Status",
-        selection=[
-            ('unmatched', 'Unmatched'),
-            ('matched', 'Matched'),
-            ('not_applicable', 'Not Applicable')],
-        default='unmatched',
-        required=True,
-        index=True,
-        readonly=True,
-        track_visibility='always',
-    )
 
     _sql_constraints = [
         ('unique_payment_getway', 'unique(name)',
