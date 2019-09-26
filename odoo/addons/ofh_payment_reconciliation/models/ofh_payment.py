@@ -9,10 +9,8 @@ class OfhPayment(models.Model):
         comodel_name='ofh.payment.gateway',
     )
     bank_settlement_id = fields.Many2one(
-        string="Bank Settlement ID",
         related="payment_gateway_id.bank_settlement_id",
-        readonly=True,
-        store=False,
+        store=True,
     )
     settlement_date = fields.Date(
         string="Bank Settlement Date",
