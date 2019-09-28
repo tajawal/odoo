@@ -15,6 +15,8 @@ ORDER_STATUS_AUTO_CONFIRMED = 58
 ORDER_STATUS_REFUNDED = 95
 ORDER_STATUS_CANCELED = 94
 ORDER_STATUS_MANUALLY_CANCELLED = 96
+UNIFY_STORE_ID = 1000
+UNIFY_GROUP_ID = 7
 
 _logger = logging.getLogger(__name__)
 
@@ -124,7 +126,10 @@ class HubPaymentRequestImporter(Component):
         Returns:
             bool -- True if the record should be skipped else False
         """
-        return self.hub_record.get('status') not in PROCESSED_HUB_STATUSES
+
+        return self.hub_record.get('store_id') != UNIFY_STORE_ID and \
+               self.hub_record.get('group_id') != UNIFY_GROUP_ID and \
+               self.hub_record.get('status') not in PROCESSED_HUB_STATUSES
 
     def _get_hub_data(self):
         """ Return the raw hub data for ``self.external_id `` """
