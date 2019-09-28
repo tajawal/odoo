@@ -6,6 +6,8 @@ from odoo.addons.connector.components.mapper import mapping
 from odoo import fields
 import json
 
+UNIFY_STORE_ID = 1000
+UNIFY_GROUP_ID = 7
 
 class HubSaleOrderImportMapper(Component):
     _name = 'hub.sale.order.import.mapper'
@@ -614,6 +616,15 @@ class HubSaleOrderImporter(Component):
             self.hub_record.get('updated_at'))
 
         return hub_date < sync_date
+
+    def _must_skip(self) -> bool:
+        """ Skip Unify Sale Orders.
+
+        Returns:
+            bool -- True if the record should be skipped else False
+        """
+        return self.hub_record.get('store_id') is not UNIFY_STORE_ID and \
+               self.hub_record.get('group_id') is not UNIFY_GROUP_ID
 
 
 class HubSaleOrderLineImportMapChild(Component):
