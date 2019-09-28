@@ -127,8 +127,8 @@ class HubPaymentRequestImporter(Component):
             bool -- True if the record should be skipped else False
         """
 
-        return self.hub_record.get('store_id') is not UNIFY_STORE_ID and \
-               self.hub_record.get('group_id') is not UNIFY_GROUP_ID and \
+        return self.hub_record.get('store_id') != UNIFY_STORE_ID and \
+               self.hub_record.get('group_id') != UNIFY_GROUP_ID and \
                self.hub_record.get('status') not in PROCESSED_HUB_STATUSES
 
     def _get_hub_data(self):
