@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.16 (2019-09-28)
+------------------
+- Skip Unify Orders and PRs
+
 2.6.15 (2019-09-08)
 ------------------
 - Ayesha - Skipped Issue Mark Order as NA
