@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.17 (2019-09-29)
+------------------
+- Correction - Skip Unify Orders and PRs
+
 2.6.16 (2019-09-28)
 ------------------
 - Skip Unify Orders and PRs
