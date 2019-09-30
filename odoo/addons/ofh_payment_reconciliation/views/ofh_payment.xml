@@ -46,18 +46,17 @@
                         <field name="reconciliation_tag"/>
                     </group>
                     <notebook>
-                        <page name="charges_detail" string="Charges">
-                            <field name="charge_ids" nolabel="1"/>
-                        </page>
-                        <page name="payment_gateway_detail" string="Payment Gateway">
+                        <page name="payment_gateway_detail" string="Payment Gateway &amp; Bank Settlement">
                             <group col="4">
                                 <field name="payment_gateway_id"/>
-                            </group>
-                        </page>
-                        <page name="bank_settlement_detail" string="Bank Settlement">
-                            <group col="4">
+                                <field name="response_description"/>
+                                <field name="arn"/>
+                                <field name="is_apple_pay"/>
                                 <field name="bank_settlement_id"/>
                             </group>
+                        </page>
+                        <page name="charges_detail" string="Charges">
+                            <field name="charge_ids" nolabel="1"/>
                         </page>
                     </notebook>
                 </sheet>
