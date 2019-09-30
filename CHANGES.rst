@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.18 (2019-09-30)
+------------------
+- Reducing Memory
+
 2.6.17 (2019-09-29)
 ------------------
 - Correction - Skip Unify Orders and PRs
