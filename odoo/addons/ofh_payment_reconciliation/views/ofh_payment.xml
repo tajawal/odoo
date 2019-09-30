@@ -52,7 +52,10 @@
                                 <field name="response_description"/>
                                 <field name="arn"/>
                                 <field name="is_apple_pay"/>
+                            </group>
+                            <group col="4">
                                 <field name="bank_settlement_id"/>
+                                <field name="bank_name"/>
                             </group>
                         </page>
                         <page name="charges_detail" string="Charges">
@@ -123,13 +126,6 @@
                 <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
                 <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
                 <separator/>
-                <filter name="acquirer_bank_mashreq" string="Acquirer Bank Mashreq" domain="[('payment_gateway_id.acquirer_bank', '=', 'mashreq')]"/>
-                <filter name="acquirer_bank_cib" string="Acquirer Bank CIB" domain="[('payment_gateway_id.acquirer_bank', '=', 'cib')]"/>
-                <filter name="acquirer_bank_sabb" string="Acquirer Bank Sabb" domain="[('payment_gateway_id.acquirer_bank', '=', 'sabb')]"/>
-                <filter name="acquirer_bank_rajhi" string="Acquirer Bank Al Rajhi" domain="[('payment_gateway_id.acquirer_bank', '=', 'rajhi')]"/>
-                <filter name="acquirer_bank_Knet" string="Acquirer Bank KNET" domain="[('payment_gateway_id.acquirer_bank', '=', 'knet')]"/>
-                <separator/>
-                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_id.entity', '=', 'tajawal')]"/>
             </search>
         </field>
     </record>
