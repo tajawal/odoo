@@ -31,6 +31,25 @@ class OfhPayment(models.Model):
     bank_name = fields.Selection(
         related="bank_settlement_id.bank_name",
     )
+    entity = fields.Selection(
+        related="payment_gateway_id.entity",
+    )
+    provider = fields.Selection(
+        related="payment_gateway_id.provider",
+    )
+    payment_method = fields.Selection(
+        related="bank_settlement_id.payment_method",
+    )
+    is_mada = fields.Boolean(
+        related="bank_settlement_id.is_mada",
+    )
+    gross_amount = fields.Monetary(
+        related="bank_settlement_id.gross_amount",
+    )
+    total = fields.Monetary(
+        string="PG Total",
+        related="payment_gateway_id.total",
+    )
 
     matching_status = fields.Selection(
         string="Matching Status",
