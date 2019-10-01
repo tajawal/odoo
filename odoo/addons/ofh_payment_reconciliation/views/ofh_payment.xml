@@ -123,6 +123,7 @@
         <field name="model">ofh.payment</field>
         <field name="arch" type="xml">
             <search>
+                <field name="pg_matching_status"/>
                 <field name="track_id"/>
                 <field name="auth_code"/>
                 <field name="arn"/>
