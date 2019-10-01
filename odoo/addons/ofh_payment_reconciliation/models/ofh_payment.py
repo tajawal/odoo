@@ -50,7 +50,9 @@ class OfhPayment(models.Model):
         string="PG Total",
         related="payment_gateway_id.total",
     )
-
+    pg_matching_status = fields.Selection(
+        related="payment_gateway_id.matching_status",
+    )
     matching_status = fields.Selection(
         string="Matching Status",
         selection=[
