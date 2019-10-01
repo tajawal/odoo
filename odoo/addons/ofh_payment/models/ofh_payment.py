@@ -60,6 +60,7 @@ class OfhPayment(models.Model):
         readonly=True,
     )
     track_id = fields.Char(
+        string="Track Id",
         required=True,
         readonly=True,
         index=True,
