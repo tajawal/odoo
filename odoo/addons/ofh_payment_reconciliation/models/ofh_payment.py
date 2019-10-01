@@ -25,6 +25,9 @@ class OfhPayment(models.Model):
     is_apple_pay = fields.Boolean(
         related="payment_gateway_id.is_apple_pay",
     )
+    pg_payment_status = fields.Selection(
+        related="payment_gateway_id.payment_status",
+    )
     bank_name = fields.Selection(
         related="bank_settlement_id.bank_name",
     )
