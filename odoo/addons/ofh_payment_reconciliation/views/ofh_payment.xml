@@ -52,6 +52,7 @@
                                 <field name="response_description"/>
                                 <field name="arn"/>
                                 <field name="is_apple_pay"/>
+                                <field name="pg_payment_status"/>
                             </group>
                             <group col="4">
                                 <field name="bank_settlement_id"/>
