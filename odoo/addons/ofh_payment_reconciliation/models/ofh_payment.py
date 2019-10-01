@@ -53,6 +53,9 @@ class OfhPayment(models.Model):
     pg_matching_status = fields.Selection(
         related="payment_gateway_id.matching_status",
     )
+    ticketing_office_id = fields.Char(
+        related="order_id.ticketing_office_id",
+    )
     matching_status = fields.Selection(
         string="Matching Status",
         selection=[
