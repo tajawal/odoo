@@ -5,10 +5,11 @@ class OfhPayment(models.Model):
     _inherit = 'ofh.payment'
 
     payment_gateway_id = fields.Many2one(
-        string="Payment Gateway ID",
+        string="Payment Gateway",
         comodel_name='ofh.payment.gateway',
     )
     bank_settlement_id = fields.Many2one(
+        string="Bank Settlement Id",
         comodel_name='ofh.bank.settlement',
         store=True,
     )
@@ -34,11 +35,8 @@ class OfhPayment(models.Model):
     entity = fields.Selection(
         related="payment_gateway_id.entity",
     )
-    provider = fields.Selection(
+    pg_provider = fields.Selection(
         related="payment_gateway_id.provider",
-    )
-    payment_method = fields.Selection(
-        related="bank_settlement_id.payment_method",
     )
     is_mada = fields.Boolean(
         related="bank_settlement_id.is_mada",

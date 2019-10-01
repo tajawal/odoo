@@ -48,7 +48,7 @@
                     </group>
                     <notebook>
                         <page name="payment_gateway_detail" string="Payment Gateway &amp; Bank Settlement">
-                            <group col="4">
+                            <group col="4" string="Payment Gateway">
                                 <field name="payment_gateway_id"/>
                                 <field name="response_description"/>
                                 <field name="arn"/>
@@ -58,7 +58,7 @@
                                 <field name="provider"/>
                                 <field name="total"/>
                             </group>
-                            <group col="4">
+                            <group col="4" string="Bank Settlement">
                                 <field name="bank_settlement_id"/>
                                 <field name="bank_name"/>
                                 <field name="settlement_date"/>
@@ -124,6 +124,7 @@
         <field name="model">ofh.payment</field>
         <field name="arch" type="xml">
             <search>
+                <field name="pg_provider"/>
                 <field name="ticketing_office_id"/>
                 <field name="order_id"/>
                 <field name="pg_matching_status"/>
