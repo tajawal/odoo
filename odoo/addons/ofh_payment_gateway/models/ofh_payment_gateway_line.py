@@ -29,7 +29,8 @@ class OfhPaymentGatewayLine(models.Model):
             ('cib', 'CIB'),
             ('sabb', 'SABB'),
             ('rajhi', 'Rajhi'),
-            ('knet', 'Knet')],
+            ('knet', 'Knet'),
+            ('amex', 'Amex')],
         required=True,
         readonly=True,
     )
