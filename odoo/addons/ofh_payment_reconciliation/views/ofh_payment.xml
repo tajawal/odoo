@@ -55,14 +55,13 @@
                                 <field name="is_apple_pay"/>
                                 <field name="pg_payment_status"/>
                                 <field name="entity"/>
-                                <field name="provider"/>
+                                <field name="pg_provider"/>
                                 <field name="total"/>
                             </group>
                             <group col="4" string="Bank Settlement">
                                 <field name="bank_settlement_id"/>
                                 <field name="bank_name"/>
                                 <field name="settlement_date"/>
-                                <field name="payment_method"/>
                                 <field name="is_mada"/>
                                 <field name="gross_amount"/>
                             </group>
