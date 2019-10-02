@@ -21,6 +21,8 @@ PAYMENT_STATUSES = {
 }
 
 APPLE_PAY = "apple pay"
+BANK_MASHREQ = 'mashreq'
+BANK_AMEX = 'amex'
 
 
 class PaymentGatewayLineMapper(Component):
@@ -48,9 +50,15 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).acquirer_bank(record)
-        acquirer_bank = record.get('Business Name')
 
-        return {'acquirer_bank': ACQUIRER_BANK.get(acquirer_bank, 'sabb')}
+        acquirer_bank = record.get('Business Name')
+        acquirer_bank = ACQUIRER_BANK.get(acquirer_bank, 'sabb')
+        payment_method = record.get('Payment Method')
+
+        if acquirer_bank == BANK_MASHREQ and payment_method.lower() == BANK_AMEX:
+            acquirer_bank = BANK_AMEX
+
+        return {'acquirer_bank': acquirer_bank}
 
     @mapping
     def track_id(self, record):
