@@ -33,7 +33,8 @@ class OfhPaymentGateway(models.Model):
             ('cib', 'CIB'),
             ('sabb', 'SABB'),
             ('rajhi', 'Rajhi'),
-            ('knet', 'Knet')],
+            ('knet', 'Knet'),
+            ('amex', 'Amex')],
         readonly=True,
         compute="_compute_payment_gateway",
         store=True
