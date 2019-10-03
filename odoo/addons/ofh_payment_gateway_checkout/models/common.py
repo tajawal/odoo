@@ -22,7 +22,13 @@ PAYMENT_STATUSES = {
 
 APPLE_PAY = "apple pay"
 BANK_MASHREQ = 'mashreq'
+BANK_SABB = 'sabb'
 BANK_AMEX = 'amex'
+
+CURRENCY_SAR = 'SAR'
+
+MID_1 = "80000404"
+MID_2 = "80000455"
 
 
 class PaymentGatewayLineMapper(Component):
@@ -290,9 +296,22 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).reported_mid(record)
+        udf4 = record.get('UDF4')
+        udf1 = record.get('UDF1')
         reported_mid = record.get('UDF4')
         if not reported_mid:
-            return {}
+            if self.acquirer_bank == BANK_SABB and self.is_card_mada and self.currency_id.name == CURRENCY_SAR:
+                reported_mid = MID_1
+
+            if self.acquirer_bank == BANK_SABB and self.is_apple_pay and self.card_bin == '506968':
+                reported_mid = MID_1
+
+            if self.acquirer_bank == BANK_SABB and self.is_apple_pay and self.currency_id.name == CURRENCY_SAR:
+                reported_mid = MID_2
+
+            if self.acquirer_bank == BANK_SABB and self.currency_id.name == CURRENCY_SAR and not udf4 and not udf1:
+                reported_mid = MID_2
+
         return {'reported_mid': reported_mid}
 
     @mapping
