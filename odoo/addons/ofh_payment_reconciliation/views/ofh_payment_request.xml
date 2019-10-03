@@ -21,15 +21,10 @@
                         <field name="entity"/>
                         <field name="is_egypt"/>
                     </group>
-                    <group name="vendor_details" string="Vendor Details">
-                        <group>
-                            <field name="vendor_id"/>
-                            <field name="plan_code"/>
-                        </group>
-                    </group>
                     <group col="4" name="status_details" string="Statuses">
                         <field name="pr_matching_status"/>
                         <field name="pr_reconciliation_status"/>
+                        <field name="is_applicable"/>
                     </group>
                     <notebook>
                         <page name="payment_gateway_detail" string="Payment Gateway &amp; Bank Settlement">
@@ -94,6 +89,7 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="pr_matching_status"/>
                 <field name="pr_reconciliation_status"/>
+                <field name="is_applicable"/>
             </tree>
         </field>
     </record>

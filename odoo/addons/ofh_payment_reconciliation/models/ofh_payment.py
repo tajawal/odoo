@@ -50,9 +50,6 @@ class OfhPayment(models.Model):
         string="PG Total",
         related="payment_gateway_id.total",
     )
-    pg_matching_status = fields.Selection(
-        related="payment_gateway_id.matching_status",
-    )
     ticketing_office_id = fields.Char(
         related="order_id.ticketing_office_id",
     )
@@ -66,7 +63,6 @@ class OfhPayment(models.Model):
         required=True,
         index=True,
         readonly=True,
-        store=False,
         compute='_compute_matching_status',
     )
     reconciliation_status = fields.Selection(
