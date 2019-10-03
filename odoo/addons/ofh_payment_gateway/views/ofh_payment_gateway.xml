@@ -63,6 +63,28 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_gateway_search_view">
+        <field name="name">ofh.payment.gateway.search (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="payment_id"/>
+                <field name="provider"/>
+                <field name="track_id"/>
+                <field name="auth_code"/>
+                <field name="arn"/>
+                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_id.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_id.entity', '=', 'almosafer')]"/>
+                <separator/>
+                <filter name="updated_this_month" string="Updated This month" domain="[('updated_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_this_month" string="Created this month" domain="[('created_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="ofh_payment_gateway_tree_view">
         <field name="name">ofh.payment.gateway.tree (in ofh_payment_gateway)</field>
         <field name="model">ofh.payment.gateway</field>
