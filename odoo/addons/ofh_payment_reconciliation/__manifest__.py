@@ -26,6 +26,7 @@
         'wizards/ofh_payment_reconciliation_tag.xml',
         'views/ofh_bank_settlement.xml',
         'views/ofh_payment_gateway.xml',
+        'views/ofh_payment_request.xml',
         'views/ofh_payment.xml',
         'views/menus.xml',
     ],
