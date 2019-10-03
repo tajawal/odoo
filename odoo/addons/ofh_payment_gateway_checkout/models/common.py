@@ -302,16 +302,16 @@ class PaymentGatewayLineMapper(Component):
         reported_mid = udf4
         if not reported_mid:
             if self.acquirer_bank == BANK_SABB and self.is_card_mada and self.currency_id.name == CURRENCY_SAR:
-                reported_mid = MID_1
+                return {'reported_mid': MID_1}
 
             if self.acquirer_bank == BANK_SABB and self.is_apple_pay and self.card_bin == '506968':
-                reported_mid = MID_1
+                return {'reported_mid': MID_1}
 
             if self.acquirer_bank == BANK_SABB and self.is_apple_pay and self.currency_id.name == CURRENCY_SAR:
-                reported_mid = MID_2
+                return {'reported_mid': MID_2}
 
             if self.acquirer_bank == BANK_SABB and self.currency_id.name == CURRENCY_SAR and not udf4 and not udf1:
-                reported_mid = MID_2
+                return {'reported_mid': MID_2}
 
         return {'reported_mid': reported_mid}
 
