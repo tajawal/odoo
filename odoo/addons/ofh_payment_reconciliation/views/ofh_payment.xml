@@ -126,7 +126,7 @@
                 <field name="pg_provider"/>
                 <field name="ticketing_office_id"/>
                 <field name="order_id"/>
-                <field name="pg_matching_status"/>
+                <field name="matching_status"/>
                 <field name="track_id"/>
                 <field name="auth_code"/>
                 <field name="arn"/>
