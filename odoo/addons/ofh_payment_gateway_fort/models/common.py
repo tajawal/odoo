@@ -14,9 +14,9 @@ ACQUIRER_BANK = {
 }
 
 PAYMENT_STATUSES = {
-    'Capture': 'capture',
-    'Authorization': 'auth',
-    'Refund': 'refund',
+    'capture': 'capture',
+    'authorization': 'auth',
+    'refund': 'refund',
 }
 
 FORT_MIDS_BY_CURRENCY = {
@@ -118,7 +118,7 @@ class PaymentGatewayLineMapper(Component):
         if self.backend_record != fort_backend:
             return super(PaymentGatewayLineMapper, self).payment_status(record)
         state = record.get('Operation', '')
-        return {'payment_status': PAYMENT_STATUSES.get(state, '')}
+        return {'payment_status': PAYMENT_STATUSES.get(state.lower(), '')}
 
     @mapping
     def reported_mid(self, record):
