@@ -67,7 +67,7 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         default='credit_card',
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     transaction_date = fields.Datetime(
         string="Transaction Date",
@@ -80,14 +80,14 @@ class OfhPaymentGateway(models.Model):
         currency_field='currency_id',
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     currency_id = fields.Many2one(
         string='Currency',
         comodel_name='res.currency',
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     payment_status = fields.Selection(
         string="Payment Status",
@@ -104,25 +104,25 @@ class OfhPaymentGateway(models.Model):
         string="Card Name",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     card_number = fields.Char(
         string="Card Number",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     card_bin = fields.Char(
         string="Card Bin",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     card_bank = fields.Char(
         string="Card Issuing Bank",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     is_card_mada = fields.Boolean(
         string="MADA?",
@@ -142,13 +142,13 @@ class OfhPaymentGateway(models.Model):
         string="Card Expiry Year",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     card_expiry_month = fields.Char(
         string="Card Expiry Month",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     response_description = fields.Char(
         string="Response Description",
@@ -160,13 +160,13 @@ class OfhPaymentGateway(models.Model):
         string="Customer Email",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     cvv_check = fields.Char(
         string="CVV Check",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     arn = fields.Char(
         string="ARN",
@@ -184,7 +184,7 @@ class OfhPaymentGateway(models.Model):
         string="Server IP",
         readonly=True,
         compute="_compute_payment_gateway",
-        store=True
+        store=False
     )
     reported_mid = fields.Char(
         string="Reported MID",
