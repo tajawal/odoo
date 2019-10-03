@@ -43,6 +43,19 @@
             </form>
         </field>
     </record>
+     <record model="ir.ui.view" id="ofh_bank_settlement_search_view">
+        <field name="name">ofh.bank.settlement.search (in ofh_bank_settlement)</field>
+        <field name="model">ofh.bank.settlement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="settlement_date" />
+                <field name="bank_name" />
+                <field name="reported_mid" />
+                <field name="auth_code" />
+            </search>
+        </field>
+    </record>
 
     <record model="ir.ui.view" id="ofh_bank_settlement_tree_view">
         <field name="name">ofh.bank.settlement.tree (in ofh_bank_settlement)</field>
