@@ -298,7 +298,8 @@ class PaymentGatewayLineMapper(Component):
             return super(PaymentGatewayLineMapper, self).reported_mid(record)
         udf4 = record.get('UDF4')
         udf1 = record.get('UDF1')
-        reported_mid = record.get('UDF4')
+
+        reported_mid = udf4
         if not reported_mid:
             if self.acquirer_bank == BANK_SABB and self.is_card_mada and self.currency_id.name == CURRENCY_SAR:
                 reported_mid = MID_1
