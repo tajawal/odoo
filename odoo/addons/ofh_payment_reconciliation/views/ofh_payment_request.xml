@@ -20,6 +20,7 @@
                         <field name="total_amount" widget="monetary"/>
                         <field name="entity"/>
                         <field name="is_egypt"/>
+                        <field name="booking_source"/>
                     </group>
                     <group col="4" name="status_details" string="Statuses">
                         <field name="pg_matching_status"/>

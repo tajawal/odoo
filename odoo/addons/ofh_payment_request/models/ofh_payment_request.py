@@ -316,6 +316,25 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=False,
     )
+    booking_source = fields.Selection(
+        string="Booking Source",
+        selection=[
+            ('offline', 'Offline'),
+            ('online', 'Online')],
+        readonly=True,
+        store=True,
+        compute="_compute_booking_source"
+    )
+
+    @api.multi
+    @api.depends('track_id')
+    def _compute_booking_source(self):
+        for rec in self:
+            track_id = rec.track_id
+            rec.booking_source = 'online'
+            if track_id.find('mp') != -1:
+                rec.booking_source = 'offline'
+                continue
 
     @api.multi
     @api.depends('insurance', 'fare_difference', 'penalty')
