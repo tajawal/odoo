@@ -18,6 +18,7 @@
             <group name="references" position="inside">
                     <field name="hub_payment_id"/>
                     <field name="hub_payment_request_id"/>
+                    <field name="bank_settlement_id"/>
             </group>
         </field>
     </record>
