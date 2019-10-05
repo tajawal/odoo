@@ -33,7 +33,6 @@
                         <field name="auth_code"/>
                         <field name="reported_mid"/>
                         <field name="payment_id"/>
-                        <field name="track_id"/>
                         <field name="arn"/>
                     </group>
                     <group name="card_details" string="Card Details" col="4">

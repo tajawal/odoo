@@ -3,6 +3,24 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
 <odoo>
+    <record model="ir.ui.view" id="ofh_payment_gateway_form_view">
+        <field name="name">ofh.payment.gateway.from (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+        <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_form_view"/>
+        <field name="arch" type="xml">
+            <group position="after">
+                <group  name="statuses" string="Statuses" col="4">
+                    <field name="hub_matching_status"/>
+                    <field name="settlement_matching_status"/>
+                    <field name="reconciliation_status"/>
+                </group>
+            </group>
+            <group name="references" position="inside">
+                    <field name="hub_payment_id"/>
+                    <field name="hub_payment_request_id"/>
+            </group>
+        </field>
+    </record>
 
     <record model="ir.ui.view" id="ofh_payment_gateway_tree_view">
         <field name="name">ofh.payment.gateway.tree (in ofh_payment_gateway)</field>
