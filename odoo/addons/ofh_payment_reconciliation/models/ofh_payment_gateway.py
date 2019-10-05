@@ -119,7 +119,7 @@ class OfhPaymentGateway(models.Model):
     def match_with_payment(self):
         """Match a payment gateway object with a Payment or Payment Request."""
         self.ensure_one()
-        if self.matching_status not in ('matched', 'not_applicable'):
+        if self.hub_matching_status not in ('matched', 'not_applicable'):
             self._match_with_payment()
             self._match_with_payment_request()
 
