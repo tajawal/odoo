@@ -8,15 +8,14 @@
         <field name="model">ofh.bank.settlement</field>
         <field name="inherit_id" ref="ofh_bank_settlement.ofh_bank_settlement_form_view"/>
         <field name="arch" type="xml">
-            <group position="after">
+            <sheet position="inside">
                 <group name="statuses" string="Statuses" col="4">
                     <field name="matching_status"/>
                 </group>
                 <group name="references" string="References" col="4">
                     <field name="payment_gateway_id"/>
                 </group>
-            </group>
-
+            </sheet>
         </field>
     </record>
 
