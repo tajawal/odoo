@@ -33,7 +33,7 @@
                         <field name="is_3d_secure"/>
                         <field name="is_installment"/>
                         <field name="bank_name"/>
-                        <field name="source"/>
+                        <field name="booking_source"/>
                         <field name="total_amount" widget="monetary"/>
                         <field name="payment_status"/>
                         <field name="currency_id" invisible="1"/>
