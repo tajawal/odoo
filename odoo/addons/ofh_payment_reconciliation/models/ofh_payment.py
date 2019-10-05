@@ -78,6 +78,14 @@ class OfhPayment(models.Model):
         readonly=True,
         index=True,
     )
+    booking_source = fields.Selection(
+        string="Booking Source",
+        selection=[
+            ('offline', 'Offline'),
+            ('online', 'Online')],
+        readonly=True,
+        compute="_compute_booking_source"
+    )
 
     @api.multi
     def action_applicable(self):
@@ -101,6 +109,15 @@ class OfhPayment(models.Model):
                 rec.matching_status = 'matched'
                 continue
 
+    @api.multi
+    @api.depends('track_id')
+    def _compute_booking_source(self):
+        for rec in self:
+            track_id = rec.track_id
+            rec.booking_source = 'online'
+            if track_id.find('mp') != -1:
+                rec.booking_source = 'offline'
+                continue
 
     @api.multi
     def action_update_reconciliation_tag(self, reconciliation_tag):
