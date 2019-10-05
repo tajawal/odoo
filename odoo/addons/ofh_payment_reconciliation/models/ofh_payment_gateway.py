@@ -19,8 +19,8 @@ class OfhPaymentGateway(models.Model):
         required=False,
         ondelete='cascade'
     )
-    matching_status = fields.Selection(
-        string="Matching Status",
+    hub_matching_status = fields.Selection(
+        string="Hub Matching Status",
         selection=[
             ('unmatched', 'Unmatched'),
             ('matched', 'Matched'),
@@ -31,12 +31,89 @@ class OfhPaymentGateway(models.Model):
         readonly=True,
         track_visibility='always',
     )
+    settlement_matching_status = fields.Selection(
+        string="Settlement Matching Status",
+        selection=[
+            ('unmatched', 'Unmatched'),
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable')],
+        default='unmatched',
+        required=True,
+        index=True,
+        readonly=True,
+        track_visibility='always',
+        store=False,
+        compute='_compute_settlement_matching_status',
+    )
     bank_settlement_id = fields.Many2one(
         string="Bank Settlement ID",
         comodel_name='ofh.bank.settlement',
         required=False,
         track_visibility='onchange',
     )
+    reconciliation_status = fields.Selection(
+        string="Reconciliation Status",
+        selection=[
+            ('reconciled', 'Reconciled'),
+            ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
+        ],
+        default='unreconciled',
+        compute='_compute_reconciliation_amount',
+        index=True,
+        readonly=True,
+        store=False,
+        track_visibility='onchange',
+    )
+    reconciliation_tag = fields.Char(
+        string="Reconciliation Tag",
+        track_visibility='onchange',
+    )
+    reconciliation_amount = fields.Monetary(
+        string="Reconciliation Amount",
+        compute='_compute_reconciliation_amount',
+        currency_field='currency_id',
+        readonly=True,
+        store=False,
+    )
+
+    @api.multi
+    @api.depends(
+        'total', 'settlement_matching_status',
+        'bank_settlement_id.gross_amount', 'reconciliation_tag')
+    def _compute_reconciliation_amount(self):
+        for rec in self:
+            rec.reconciliation_amount = 0
+
+            if rec.settlement_matching_status == 'unmatched':
+                rec.reconciliation_status = 'unreconciled'
+                continue
+
+            if rec.settlement_matching_status == 'not_applicable':
+                rec.reconciliation_status = 'not_applicable'
+                continue
+
+            rec.reconciliation_amount = \
+                abs(rec.total - rec.bank_settlement_id.gross_amount)
+
+            if rec.reconciliation_tag:
+                rec.reconciliation_status = 'reconciled'
+                continue
+
+            if rec.reconciliation_amount <= 1:
+                rec.reconciliation_status = 'reconciled'
+            else:
+                rec.reconciliation_status = 'unreconciled'
+
+    @api.multi
+    @api.depends('bank_settlement_id')
+    def _compute_settlement_matching_status(self):
+        for rec in self:
+            rec.settlement_matching_status = 'unmatched'
+
+            if rec.bank_settlement_id:
+                rec.settlement_matching_status = 'matched'
+                continue
 
     @api.multi
     def match_with_payment(self):
@@ -56,7 +133,7 @@ class OfhPaymentGateway(models.Model):
         if payment_id:
             self.write({
                 "hub_payment_id": payment_id.id,
-                "matching_status": 'matched'
+                "hub_matching_status": 'matched'
             })
             # Updating the relation
             payment_id.write({
@@ -74,7 +151,7 @@ class OfhPaymentGateway(models.Model):
         if len(payment_request_id):
             self.write({
                 "hub_payment_request_id": payment_request_id.id,
-                "matching_status": 'matched'
+                "hub_matching_status": 'matched'
             })
             # Updating the relation
             payment_request_id.write({

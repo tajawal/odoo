@@ -57,6 +57,9 @@ class PaymentGatewayLineMapper(Component):
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).acquirer_bank(record)
 
+        return {'acquirer_bank': self._get_acquirer_bank(record)}
+
+    def _get_acquirer_bank(self, record):
         acquirer_bank = record.get('Business Name')
         acquirer_bank = ACQUIRER_BANK.get(acquirer_bank, 'sabb')
         payment_method = record.get('Payment Method')
@@ -64,7 +67,7 @@ class PaymentGatewayLineMapper(Component):
         if acquirer_bank == BANK_MASHREQ and payment_method.lower() == BANK_AMEX:
             acquirer_bank = BANK_AMEX
 
-        return {'acquirer_bank': acquirer_bank}
+        return acquirer_bank
 
     @mapping
     def track_id(self, record):
@@ -181,8 +184,11 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).is_card_mada(record)
+        return {'is_card_mada': self._get_is_card_mada(record)}
+
+    def _get_is_card_mada(self, record):
         card_type = record.get('UDF1')
-        return {'is_card_mada': card_type == 'MADA'}
+        return card_type == 'MADA'
 
     @mapping
     def is_apple_pay(self, record):
@@ -190,8 +196,11 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).is_apple_pay(record)
+        return {'is_apple_pay': self._get_is_apple_pay(record)}
+
+    def _get_is_apple_pay(self, record):
         card_wallet_type = record.get('Card Wallet Type')
-        return {'is_apple_pay': card_wallet_type.lower() == APPLE_PAY}
+        return card_wallet_type.lower() == APPLE_PAY
 
     @mapping
     def card_expiry_year(self, record):
@@ -301,16 +310,22 @@ class PaymentGatewayLineMapper(Component):
 
         reported_mid = udf4
         if not reported_mid:
-            if self.acquirer_bank == BANK_SABB and self.is_card_mada and self.currency_id.name == CURRENCY_SAR:
+            currency = record.get('Currency')
+            card_bin = record.get('CC BIN')
+            acquirer_bank = self._get_acquirer_bank(record)
+            is_apple_pay = self._get_is_apple_pay(record)
+            is_card_mada = self._get_is_card_mada(record)
+
+            if acquirer_bank == BANK_SABB and is_card_mada and currency == CURRENCY_SAR:
                 return {'reported_mid': MID_1}
 
-            if self.acquirer_bank == BANK_SABB and self.is_apple_pay and self.card_bin == '506968':
+            if acquirer_bank == BANK_SABB and is_apple_pay and card_bin == '506968':
                 return {'reported_mid': MID_1}
 
-            if self.acquirer_bank == BANK_SABB and self.is_apple_pay and self.currency_id.name == CURRENCY_SAR:
+            if acquirer_bank == BANK_SABB and is_apple_pay and currency == CURRENCY_SAR:
                 return {'reported_mid': MID_2}
 
-            if self.acquirer_bank == BANK_SABB and self.currency_id.name == CURRENCY_SAR and not udf4 and not udf1:
+            if acquirer_bank == BANK_SABB and currency == CURRENCY_SAR and not udf4 and not udf1:
                 return {'reported_mid': MID_2}
 
         return {'reported_mid': reported_mid}

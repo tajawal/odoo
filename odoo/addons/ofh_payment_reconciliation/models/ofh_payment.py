@@ -57,25 +57,16 @@ class OfhPayment(models.Model):
         string="Matching Status",
         selection=[
             ('unmatched', 'Unmatched'),
-            ('matched', 'Matched'),
-            ('partial_matched', 'Partial Matched')],
+            ('matched', 'Matched')],
         default='unmatched',
         required=True,
         index=True,
         readonly=True,
+        store=True,
         compute='_compute_matching_status',
     )
     reconciliation_status = fields.Selection(
-        string="Reconciliation Status",
-        selection=[
-            ('reconciled', 'Reconciled'),
-            ('unreconciled', 'Unreconciled'),
-        ],
-        default='unreconciled',
-        compute='_compute_reconciliation_status',
-        store=False,
-        index=True,
-        readonly=True,
+        related="payment_gateway_id.reconciliation_status",
     )
     reconciliation_tag = fields.Char(
         string="Reconciliation Tag",
@@ -110,22 +101,6 @@ class OfhPayment(models.Model):
                 rec.matching_status = 'matched'
                 continue
 
-            if rec.payment_gateway_id or rec.bank_settlement_id:
-                rec.matching_status = 'partial_matched'
-                continue
-
-    @api.multi
-    @api.depends('bank_settlement_id')
-    def _compute_reconciliation_status(self):
-        for rec in self:
-            rec.reconciliation_status = 'unreconciled'
-            if rec.reconciliation_tag:
-                rec.reconciliation_status = 'reconciled'
-                continue
-
-            if rec.bank_settlement_id and rec.bank_settlement_id.reconciliation_status == "reconciled":
-                rec.reconciliation_status = 'reconciled'
-                continue
 
     @api.multi
     def action_update_reconciliation_tag(self, reconciliation_tag):

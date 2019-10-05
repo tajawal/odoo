@@ -11,7 +11,6 @@
         <field name="arch" type="xml">
             <tree position="inside">
                 <field name="matching_status"/>
-                <field name="reconciliation_status"/>
             </tree>
         </field>
     </record>

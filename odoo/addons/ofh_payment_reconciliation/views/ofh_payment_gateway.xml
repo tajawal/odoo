@@ -10,7 +10,9 @@
         <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_tree_view"/>
         <field name="arch" type="xml">
             <tree position="inside">
-                <field name="matching_status"/>
+                <field name="hub_matching_status"/>
+                <field name="settlement_matching_status"/>
+                <field name="reconciliation_status"/>
             </tree>
         </field>
     </record>

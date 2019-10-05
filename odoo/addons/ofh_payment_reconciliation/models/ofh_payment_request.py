@@ -63,7 +63,7 @@ class OfhPaymentRequest(models.Model):
         store=False,
         compute='_compute_matching_status',
     )
-    pr_reconciliation_status = fields.Selection(
+    reconciliation_status = fields.Selection(
         string="Reconciliation Status",
         selection=[
             ('reconciled', 'Reconciled'),
@@ -118,16 +118,16 @@ class OfhPaymentRequest(models.Model):
         for rec in self:
             rec.reconciliation_status = 'unreconciled'
             if rec.reconciliation_tag:
-                rec.pr_reconciliation_status = 'reconciled'
+                rec.reconciliation_status = 'reconciled'
                 continue
 
-            if rec.bank_settlement_id and rec.bank_settlement_id.pr_reconciliation_status == "reconciled":
-                rec.pr_reconciliation_status = 'reconciled'
+            if rec.bank_settlement_id and rec.bank_settlement_id.reconciliation_status == "reconciled":
+                rec.reconciliation_status = 'reconciled'
                 continue
 
     @api.multi
     def action_update_reconciliation_tag(self, reconciliation_tag):
         return self.write({
             'reconciliation_tag': reconciliation_tag,
-            'pr_reconciliation_status': 'reconciled',
+            'reconciliation_status': 'reconciled',
         })
