@@ -23,7 +23,7 @@
                     </group>
                     <group col="4" name="status_details" string="Statuses">
                         <field name="pr_matching_status"/>
-                        <field name="pr_reconciliation_status"/>
+                        <field name="reconciliation_status"/>
                         <field name="is_applicable"/>
                     </group>
                     <notebook>
@@ -88,7 +88,7 @@
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="pr_matching_status"/>
-                <field name="pr_reconciliation_status"/>
+                <field name="reconciliation_status"/>
                 <field name="is_applicable"/>
             </tree>
         </field>
