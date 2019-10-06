@@ -5,12 +5,12 @@
 <odoo>
 
     <record model="ir.ui.view" id="ofh_payment_reconciliation_tag_form_view">
-        <field name="name">ofh.payment.reconciliation.tag.form (in ofh_payment)</field>
+        <field name="name">ofh.payment.reconciliation.tag.form (in ofh_payment_gateway)</field>
         <field name="model">ofh.payment.reconciliation.tag</field>
         <field name="arch" type="xml">
             <form>
                 <group>
-                    <field name="payment_ids" invisible="1"/>
+                    <field name="payment_gateway_ids" invisible="1"/>
                     <field name="reconciliation_tag"/>
                 </group>
                 <footer>
@@ -32,7 +32,7 @@
         <field name="view_mode">form</field>
         <field name="view_type">form</field>
         <field name="view_id" ref="ofh_payment_reconciliation_tag_form_view"/>
-        <field name="binding_model_id" ref="model_ofh_payment"/>
+        <field name="binding_model_id" ref="model_ofh_payment_gateway"/>
         <field name="target">new</field>
     </record>
 
