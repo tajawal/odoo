@@ -27,6 +27,10 @@ class OfhBankSettlement(models.Model):
         readonly=True,
         track_visibility='onchange',
     )
+    reconciliation_status = fields.Selection(
+        related="payment_gateway_id.reconciliation_status",
+        store=True
+    )
 
     @api.multi
     def match_with_payment_gateway(self):
