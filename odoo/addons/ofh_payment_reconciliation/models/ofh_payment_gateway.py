@@ -60,7 +60,7 @@ class OfhPaymentGateway(models.Model):
         compute='_compute_reconciliation_amount',
         index=True,
         readonly=True,
-        store=False,
+        store=True,
         track_visibility='onchange',
     )
     reconciliation_tag = fields.Char(
@@ -191,6 +191,17 @@ class OfhPaymentGateway(models.Model):
     @api.multi
     def _unlink_payment(self):
         self.ensure_one()
+        if self.hub_payment_id:
+            self.hub_payment_id.write({
+                'payment_gateway_id': False,
+                'pg_matching_status': 'unmatched',
+            })
+
+        if self.hub_payment_request_id:
+            self.hub_payment_request_id.write({
+                'payment_gateway_id': False,
+                'pg_matching_status': 'unmatched',
+            })
         self.write({
             'hub_payment_id': False,
             'hub_payment_request_id': False,

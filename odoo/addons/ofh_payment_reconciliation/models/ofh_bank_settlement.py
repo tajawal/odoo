@@ -126,6 +126,10 @@ class OfhBankSettlement(models.Model):
     @api.multi
     def _unlink_payment_gateway(self):
         self.ensure_one()
+        self.payment_gateway_id.write({
+            'bank_settlement_id': False,
+            'settlement_matching_status': 'unmatched',
+        })
         self.write({
             'payment_gateway_id': False,
             'settlement_matching_status': 'unmatched',
