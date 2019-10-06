@@ -169,7 +169,3 @@ class PaymentGatewayLineHandler(Component):
     _inherit = 'importer.odoorecord.handler'
     _name = 'payment.gateway.line.handler'
     _apply_on = ['ofh.payment.gateway.line']
-
-
-
-

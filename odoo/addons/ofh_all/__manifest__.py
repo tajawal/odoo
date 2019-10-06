@@ -38,6 +38,8 @@
         'ofh_bank_settlement_mashreq',
         'ofh_bank_settlement_rajhi',
         'ofh_bank_settlement_amex',
+        # Payment Reconciliation
+        'ofh_payment_reconciliation',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
         'base_optional_quick_create',
