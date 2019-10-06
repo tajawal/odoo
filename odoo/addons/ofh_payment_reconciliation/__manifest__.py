@@ -23,6 +23,7 @@
         'ofh_payment_request',
     ],
     'data': [
+        'wizards/ofh_payment_gateway_force_match.xml',
         'wizards/ofh_payment_reconciliation_tag.xml',
         'views/ofh_bank_settlement.xml',
         'views/ofh_payment_gateway.xml',
