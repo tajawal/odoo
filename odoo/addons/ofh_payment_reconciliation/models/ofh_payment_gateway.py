@@ -146,10 +146,60 @@ class OfhPaymentGateway(models.Model):
             # Updating the relation
             payment_request_id.write({
                 'payment_gateway_id': self.id,
-                'pg_matching_status':  'matched',
+                'pg_matching_status': 'matched',
             })
 
     @api.multi
     def _get_payment_domain(self):
         return [
             ('track_id', '=', self.track_id)]
+
+    def _force_match_payment(
+            self, hub_payment_id=False, hub_payment_request_id=False):
+
+
+        self.ensure_one()
+        if not hub_payment_id and not hub_payment_request_id:
+            return
+
+        # Remove the current link in the invoice line.
+        if self.hub_payment_id or self.hub_payment_request_id:
+            self._unlink_payment()
+
+        if hub_payment_id:
+            # Link the payment gateway with the new record.
+            if hub_payment_id:
+                hub_payment_id.write({
+                    'payment_gateway_id': self.id,
+                    'pg_matching_status': 'matched',
+                })
+                return self.write({
+                    'hub_payment_id': hub_payment_id.id,
+                    'hub_matching_status': 'matched',
+                })
+        else:
+
+            # Link the payment gateway with the new record.
+            if hub_payment_request_id:
+                hub_payment_request_id.write({
+                    'payment_gateway_id': self.id,
+                    'pg_matching_status': 'matched',
+                })
+                return self.write({
+                    'hub_payment_request_id': hub_payment_request_id.id,
+                    'hub_matching_status': 'matched',
+                })
+
+    @api.multi
+    def _unlink_payment(self):
+        self.ensure_one()
+        self.write({
+            'hub_payment_id': False,
+            'hub_payment_request_id': False,
+            'hub_matching_status': 'unmatched',
+        })
+
+    @api.multi
+    def action_unlink_payment(self):
+        for rec in self:
+            rec._unlink_payment()
