@@ -184,16 +184,11 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).is_card_mada(record)
-<<<<<<< HEAD
         return {'is_card_mada': self._get_is_card_mada(record)}
 
     def _get_is_card_mada(self, record):
         card_type = record.get('UDF1')
-        return card_type == 'MADA'
-=======
-        card_type = record.get('UDF1').lower()
-        return {'is_card_mada': card_type == 'mada'}
->>>>>>> [REF]ofh_payment_gateway_checkout: fix payment gateway creation.
+        return card_type.lower() == 'MADA'
 
     @mapping
     def is_apple_pay(self, record):
@@ -201,16 +196,11 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).is_apple_pay(record)
-<<<<<<< HEAD
         return {'is_apple_pay': self._get_is_apple_pay(record)}
 
     def _get_is_apple_pay(self, record):
         card_wallet_type = record.get('Card Wallet Type')
         return card_wallet_type.lower() == APPLE_PAY
-=======
-        card_wallet_type = record.get('Card Wallet Type').lower()
-        return {'is_apple_pay': card_wallet_type.lower() == APPLE_PAY}
->>>>>>> [REF]ofh_payment_gateway_checkout: fix payment gateway creation.
 
     @mapping
     def card_expiry_year(self, record):
