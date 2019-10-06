@@ -38,7 +38,7 @@ class OfhPaymentRequest(models.Model):
         related="bank_settlement_id.net_transaction_amount",
     )
     pg_matching_status = fields.Selection(
-        string="Matching Status",
+        string="PG Matching Status",
         selection=[
             ('unmatched', 'Unmatched'),
             ('matched', 'Matched')],

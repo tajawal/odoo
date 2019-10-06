@@ -145,6 +145,7 @@ class OfhPaymentGateway(models.Model):
             # Updating the relation
             payment_request_id.write({
                 'payment_gateway_id': self.id,
+                'pg_matching_status':  'matched',
             })
 
     @api.multi
