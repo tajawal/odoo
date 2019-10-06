@@ -50,6 +50,7 @@ class OfhPaymentRequest(models.Model):
     )
     pg_reconciliation_status = fields.Selection(
         related="payment_gateway_id.reconciliation_status",
+        store=True
     )
     reconciliation_tag = fields.Char(
         string="Reconciliation Tag",
