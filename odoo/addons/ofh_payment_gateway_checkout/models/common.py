@@ -2,10 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import datetime
 
+from odoo import fields
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
-
-from odoo import fields, models, api
 
 ACQUIRER_BANK = {
     'Al Rajhi': 'rajhi',
@@ -62,9 +61,9 @@ class PaymentGatewayLineMapper(Component):
     def _get_acquirer_bank(self, record):
         acquirer_bank = record.get('Business Name')
         acquirer_bank = ACQUIRER_BANK.get(acquirer_bank, 'sabb')
-        payment_method = record.get('Payment Method')
+        payment_method = record.get('Payment Method', '').lower()
 
-        if acquirer_bank == BANK_MASHREQ and payment_method.lower() == BANK_AMEX:
+        if acquirer_bank == BANK_MASHREQ and payment_method == BANK_AMEX:
             acquirer_bank = BANK_AMEX
 
         return acquirer_bank
@@ -75,7 +74,7 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).track_id(record)
-        return {'track_id': record.get('Reference')}
+        return {'track_id': record.get('Reference', '')}
 
     @mapping
     def auth_code(self, record):
@@ -101,7 +100,8 @@ class PaymentGatewayLineMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayLineMapper, self).transaction_date(record)
+            return super(PaymentGatewayLineMapper, self).transaction_date(
+                record)
         # TODO: correct the format 6/30/2019 11:45:23 PM
         dt = datetime.strptime(record.get('Action Date UTC'), '%m/%d/%y %H:%M')
         return {'transaction_date': fields.Datetime.to_string(dt)}
@@ -184,11 +184,16 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).is_card_mada(record)
+<<<<<<< HEAD
         return {'is_card_mada': self._get_is_card_mada(record)}
 
     def _get_is_card_mada(self, record):
         card_type = record.get('UDF1')
         return card_type == 'MADA'
+=======
+        card_type = record.get('UDF1').lower()
+        return {'is_card_mada': card_type == 'mada'}
+>>>>>>> [REF]ofh_payment_gateway_checkout: fix payment gateway creation.
 
     @mapping
     def is_apple_pay(self, record):
@@ -196,18 +201,24 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).is_apple_pay(record)
+<<<<<<< HEAD
         return {'is_apple_pay': self._get_is_apple_pay(record)}
 
     def _get_is_apple_pay(self, record):
         card_wallet_type = record.get('Card Wallet Type')
         return card_wallet_type.lower() == APPLE_PAY
+=======
+        card_wallet_type = record.get('Card Wallet Type').lower()
+        return {'is_apple_pay': card_wallet_type.lower() == APPLE_PAY}
+>>>>>>> [REF]ofh_payment_gateway_checkout: fix payment gateway creation.
 
     @mapping
     def card_expiry_year(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayLineMapper, self).card_expiry_year(record)
+            return super(PaymentGatewayLineMapper, self).card_expiry_year(
+                record)
         card_expiry_year = record.get('Expiry Year')
         if not card_expiry_year:
             return {}
@@ -218,7 +229,8 @@ class PaymentGatewayLineMapper(Component):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayLineMapper, self).card_expiry_month(record)
+            return super(PaymentGatewayLineMapper, self).card_expiry_month(
+                record)
         card_expiry_month = record.get('Expiry Month')
         if not card_expiry_month:
             return {}
@@ -303,12 +315,15 @@ class PaymentGatewayLineMapper(Component):
     def reported_mid(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
+
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).reported_mid(record)
+
         udf4 = record.get('UDF4')
         udf1 = record.get('UDF1')
 
         reported_mid = udf4
+
         if not reported_mid:
             currency = record.get('Currency')
             card_bin = record.get('CC BIN')
@@ -334,45 +349,43 @@ class PaymentGatewayLineMapper(Component):
     def entity(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
+
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).entity(record)
+
         return {'entity': record.get('Entity')}
 
     @mapping
     def payment_gateway_id(self, record):
         checkout_backend = self.env.ref(
             'ofh_payment_gateway_checkout.checkout_import_backend')
+
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
+            return super(PaymentGatewayLineMapper, self).\
+                payment_gateway_id(record)
 
-        response_code = record.get('Response Code', '111111')
-        if response_code[0][:1] != '1':
-            return {}
-
-        unique_id = record.get('Action ID')
-        payment_id = record.get('Payment ID')
         track_id = record.get('Reference')
 
-        if not unique_id:
+        if not track_id:
             return {}
-        pg_model = self.env["ofh.payment.gateway"]
-        payment_gateway = pg_model.search(
-            [('payment_id', '=', payment_id),
-             ('track_id', '=', track_id)], limit=1)
 
-        if payment_gateway:
-            if payment_gateway.payment_status in ('refund', 'void'):
-                pg_created = pg_model.create({
-                    'name': unique_id
-                })
-                return {'payment_gateway_id': pg_created.id}
-            else:
-                return {'payment_gateway_id': payment_gateway.id}
+        domain = [('track_id', '=', track_id)]
+
+        payment_status = self.payment_status(record).get('payment_status')
+
+        pg_model = self.env['ofh.payment.gateway']
+
+        if payment_status in ('refund', 'void'):
+            domain.append(('payment_status', 'in', ('refund', 'void')))
         else:
-            pg_created = pg_model.create({
-                'name': unique_id
-            })
-            return {'payment_gateway_id': pg_created.id}
+            domain.append(('payment_status', 'not in', ('refund', 'void')))
+
+        payment_gateway = pg_model.search(domain, limit=1)
+
+        if not payment_gateway:
+            payment_gateway = pg_model.create({'name': track_id})
+
+        return {'payment_gateway_id': payment_gateway.id}
 
 
 class PaymentGatewayLineHandler(Component):
