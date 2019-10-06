@@ -9,6 +9,7 @@
         <field name="model">ofh.bank.settlement</field>
         <field name="arch" type="xml">
             <form>
+                <header></header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
