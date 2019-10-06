@@ -60,6 +60,7 @@
                                 <field name="bank_name"/>
                                 <field name="settlement_date"/>
                                 <field name="gross_amount"/>
+                                <field name="net_transaction_amount"/>
                             </group>
                         </page>
                         <page name="charges_detail" string="Charges">

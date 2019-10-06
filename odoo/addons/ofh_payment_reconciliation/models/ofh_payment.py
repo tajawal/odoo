@@ -34,6 +34,9 @@ class OfhPayment(models.Model):
     gross_amount = fields.Monetary(
         related="bank_settlement_id.gross_amount",
     )
+    net_transaction_amount = fields.Monetary(
+        related="bank_settlement_id.net_transaction_amount",
+    )
     pg_matching_status = fields.Selection(
         string="PG Matching Status",
         selection=[
