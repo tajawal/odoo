@@ -23,6 +23,7 @@
                     <field name="hub_matching_status"/>
                     <field name="settlement_matching_status"/>
                     <field name="reconciliation_status"/>
+                    <field name="reconciliation_tag"/>
                 </group>
             </group>
             <group name="references" position="inside">

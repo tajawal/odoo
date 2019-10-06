@@ -212,3 +212,10 @@ class OfhPaymentGateway(models.Model):
     def action_unlink_payment(self):
         for rec in self:
             rec._unlink_payment()
+
+    @api.multi
+    def action_update_reconciliation_tag(self, reconciliation_tag):
+        return self.write({
+            'reconciliation_tag': reconciliation_tag,
+            'reconciliation_status': 'reconciled',
+        })

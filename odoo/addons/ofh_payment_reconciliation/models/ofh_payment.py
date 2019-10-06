@@ -52,10 +52,6 @@ class OfhPayment(models.Model):
         related="payment_gateway_id.reconciliation_status",
         store=True
     )
-    reconciliation_tag = fields.Char(
-        string="Reconciliation Tag",
-        track_visibility='onchange',
-    )
     is_applicable = fields.Boolean(
         string="Is Applicable?",
         default=True,
@@ -73,11 +69,4 @@ class OfhPayment(models.Model):
     def action_not_applicable(self):
         return self.write({
             'is_applicable': False,
-        })
-
-    @api.multi
-    def action_update_reconciliation_tag(self, reconciliation_tag):
-        return self.write({
-            'reconciliation_tag': reconciliation_tag,
-            'reconciliation_status': 'reconciled',
         })
