@@ -42,11 +42,9 @@ class OfhPaymentGateway(models.Model):
         index=True,
         readonly=True,
         track_visibility='always',
-        store=False,
-        compute='_compute_settlement_matching_status',
     )
     bank_settlement_id = fields.Many2one(
-        string="Bank Settlement ID",
+        string="Bank Settlement",
         comodel_name='ofh.bank.settlement',
         required=False,
         track_visibility='onchange',
@@ -106,16 +104,6 @@ class OfhPaymentGateway(models.Model):
                 rec.reconciliation_status = 'unreconciled'
 
     @api.multi
-    @api.depends('bank_settlement_id')
-    def _compute_settlement_matching_status(self):
-        for rec in self:
-            rec.settlement_matching_status = 'unmatched'
-
-            if rec.bank_settlement_id:
-                rec.settlement_matching_status = 'matched'
-                continue
-
-    @api.multi
     def match_with_payment(self):
         """Match a payment gateway object with a Payment or Payment Request."""
         self.ensure_one()
@@ -138,6 +126,7 @@ class OfhPaymentGateway(models.Model):
             # Updating the relation
             payment_id.write({
                 'payment_gateway_id': self.id,
+                'pg_matching_status': 'matched',
             })
 
     # TODO: Need to remove this when done with Payments Object change
