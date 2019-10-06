@@ -94,12 +94,5 @@ class OfhBankSettlement(models.Model):
             # Updating the relation
             payment_gateway_id.write({
                 'bank_settlement_id': self.id,
+                'settlement_matching_status': 'matched',
             })
-
-            # Updating in Payments
-            payment_id = self.env['ofh.payment'].search(
-                [('id', '=', payment_gateway_id.hub_payment_id[0].id)], limit=1)
-            if payment_id:
-                payment_id.write({
-                    'bank_settlement_id': self.id,
-                })

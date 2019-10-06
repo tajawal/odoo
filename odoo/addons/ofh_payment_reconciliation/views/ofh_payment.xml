@@ -42,7 +42,7 @@
                         <field name="order_id"/>
                     </group>
                     <group name="status" string="Statuses" col="4">
-                        <field name="matching_status"/>
+                        <field name="pg_matching_status"/>
                         <field name="reconciliation_status"/>
                         <field name="reconciliation_tag"/>
                     </group>
@@ -54,15 +54,11 @@
                                 <field name="arn"/>
                                 <field name="is_apple_pay"/>
                                 <field name="pg_payment_status"/>
-                                <field name="entity"/>
-                                <field name="pg_provider"/>
-                                <field name="total"/>
                             </group>
                             <group col="4" string="Bank Settlement">
                                 <field name="bank_settlement_id"/>
                                 <field name="bank_name"/>
                                 <field name="settlement_date"/>
-                                <field name="is_mada"/>
                                 <field name="gross_amount"/>
                             </group>
                         </page>
@@ -89,7 +85,7 @@
                 <field name="card_type"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="payment_status"/>
-                <field name="matching_status"/>
+                <field name="pg_matching_status"/>
                 <field name="reconciliation_status"/>
                 <field name="is_applicable"/>
             </tree>
@@ -123,10 +119,9 @@
         <field name="model">ofh.payment</field>
         <field name="arch" type="xml">
             <search>
-                <field name="pg_provider"/>
                 <field name="ticketing_office_id"/>
                 <field name="order_id"/>
-                <field name="matching_status"/>
+                <field name="pg_matching_status"/>
                 <field name="track_id"/>
                 <field name="auth_code"/>
                 <field name="arn"/>
