@@ -9,9 +9,7 @@ class OfhPaymentRequest(models.Model):
         comodel_name='ofh.payment.gateway',
     )
     bank_settlement_id = fields.Many2one(
-        string="Bank Settlement Id",
-        comodel_name='ofh.bank.settlement',
-        store=True,
+        related="payment_gateway_id.bank_settlement_id",
     )
     settlement_date = fields.Date(
         string="Bank Settlement Date",
@@ -33,22 +31,8 @@ class OfhPaymentRequest(models.Model):
     bank_name = fields.Selection(
         related="bank_settlement_id.bank_name",
     )
-    entity = fields.Selection(
-        related="payment_gateway_id.entity",
-    )
-    pg_provider = fields.Selection(
-        string="Payment Gateway Provider",
-        related="payment_gateway_id.provider",
-    )
-    is_mada = fields.Boolean(
-        related="bank_settlement_id.is_mada",
-    )
     gross_amount = fields.Monetary(
         related="bank_settlement_id.gross_amount",
-    )
-    total = fields.Monetary(
-        string="PG Total",
-        related="payment_gateway_id.total",
     )
     pg_matching_status = fields.Selection(
         string="Matching Status",
@@ -60,7 +44,6 @@ class OfhPaymentRequest(models.Model):
         index=True,
         readonly=True,
         store=True,
-        compute='_compute_matching_status',
     )
     pg_reconciliation_status = fields.Selection(
         related="payment_gateway_id.reconciliation_status",
@@ -87,16 +70,6 @@ class OfhPaymentRequest(models.Model):
         return self.write({
             'is_applicable': False,
         })
-
-    @api.multi
-    @api.depends(
-        'payment_gateway_id', 'bank_settlement_id')
-    def _compute_matching_status(self):
-        for rec in self:
-            rec.pg_matching_status = "unmatched"
-            if rec.payment_gateway_id and rec.bank_settlement_id:
-                rec.pr_matching_status = 'matched'
-                continue
 
     @api.multi
     def action_update_reconciliation_tag(self, reconciliation_tag):
