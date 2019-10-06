@@ -82,6 +82,7 @@ class OfhPaymentGateway(models.Model):
     def _compute_reconciliation_amount(self):
         for rec in self:
             rec.reconciliation_amount = 0
+            rec.reconciliation_status = 'unreconciled'
 
             if rec.settlement_matching_status == 'unmatched':
                 rec.reconciliation_status = 'unreconciled'
