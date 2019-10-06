@@ -8,6 +8,16 @@
         <field name="model">ofh.bank.settlement</field>
         <field name="inherit_id" ref="ofh_bank_settlement.ofh_bank_settlement_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+                <button name="%(ofh_bank_settlement_force_match_act_window)d"
+                        type="action"
+                        string="Force match with Payment Gateway"
+                        class="btn-success"/>
+                <button name="action_unlink_payment_gateway"
+                        type="object"
+                        class="btn-danger"
+                        string="Unlink"/>
+            </header>
             <sheet position="inside">
                 <group name="statuses" string="Statuses" col="4">
                     <field name="matching_status"/>

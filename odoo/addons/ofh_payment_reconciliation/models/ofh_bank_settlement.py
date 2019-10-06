@@ -100,3 +100,38 @@ class OfhBankSettlement(models.Model):
                 'bank_settlement_id': self.id,
                 'settlement_matching_status': 'matched',
             })
+
+    def _force_match_payment_gateway(
+            self, payment_gateway_id=False):
+
+        self.ensure_one()
+        if not payment_gateway_id:
+            return
+
+        # Remove the current link in the invoice line.
+        if self.payment_gateway_id:
+            self._unlink_payment_gateway()
+
+        # Link the payment gateway with the new payment gateway.
+        if payment_gateway_id:
+            payment_gateway_id.write({
+                'bank_settlement_id': self.id,
+                'settlement_matching_status': 'matched',
+            })
+            return self.write({
+                'payment_gateway_id': payment_gateway_id.id,
+                'matching_status': 'matched',
+            })
+
+    @api.multi
+    def _unlink_payment_gateway(self):
+        self.ensure_one()
+        self.write({
+            'payment_gateway_id': False,
+            'settlement_matching_status': 'unmatched',
+        })
+
+    @api.multi
+    def action_unlink_payment_gateway(self):
+        for rec in self:
+            rec._unlink_payment_gateway()

@@ -157,7 +157,6 @@ class OfhPaymentGateway(models.Model):
     def _force_match_payment(
             self, hub_payment_id=False, hub_payment_request_id=False):
 
-
         self.ensure_one()
         if not hub_payment_id and not hub_payment_request_id:
             return
@@ -167,7 +166,7 @@ class OfhPaymentGateway(models.Model):
             self._unlink_payment()
 
         if hub_payment_id:
-            # Link the payment gateway with the new record.
+            # Link the payment gateway with the new payment.
             if hub_payment_id:
                 hub_payment_id.write({
                     'payment_gateway_id': self.id,
@@ -178,8 +177,7 @@ class OfhPaymentGateway(models.Model):
                     'hub_matching_status': 'matched',
                 })
         else:
-
-            # Link the payment gateway with the new record.
+            # Link the payment gateway with the new payment request.
             if hub_payment_request_id:
                 hub_payment_request_id.write({
                     'payment_gateway_id': self.id,
