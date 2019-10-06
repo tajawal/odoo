@@ -107,6 +107,16 @@ class BankSettlementMapper(Component):
         if self.backend_record != sabb_backend:
             return super(BankSettlementMapper, self).currency_id(record)
 
+        reported_mid = record.get('Terminal ID', '')
+        if reported_mid == '80537' or reported_mid == '80000458':
+            return {'currency_id': self.env.ref('base.AED').id}
+
+        if reported_mid == '80538' or reported_mid == '80000459':
+            return {'currency_id': self.env.ref('base.KWD').id}
+
+        if reported_mid == '80096' or reported_mid == '80000404' or reported_mid == '80000455':
+            return {'currency_id': self.env.ref('base.SAR').id}
+
         return {'currency_id': self.env.ref('base.SAR').id}
 
     @mapping
