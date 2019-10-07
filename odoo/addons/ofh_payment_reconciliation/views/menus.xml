@@ -11,20 +11,20 @@
 
     <!-- Payment menus-->
     <record model="ir.ui.menu" id="ofh_payment_menu">
-        <field name="name">Hub Payments</field>
+        <field name="name">Payments</field>
         <field name="parent_id" ref="ofh_payment_main_menu"/>
         <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_all_payment_menu">
-        <field name="name">All Hub Payments</field>
+        <field name="name">All Payments</field>
         <field name="parent_id" ref="ofh_payment_menu"/>
         <field name="action" ref="ofh_payment_reconciliation.ofh_payment_all_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_all_payment__request_menu">
-        <field name="name">All Hub Payment Requests</field>
+        <field name="name">All Payment Requests</field>
         <field name="parent_id" ref="ofh_payment_menu"/>
         <field name="action" ref="ofh_payment_reconciliation.ofh_payment_request_all_act_window"/>
         <field name="sequence" eval="10"/>
@@ -61,7 +61,7 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_knet_payment_gateway_line_menu">
-        <field name="name">Knet Payment Gateways</field>
+        <field name="name">Knet Payments</field>
         <field name="parent_id" ref="ofh_payment_gateway_menu"/>
         <field name="action" ref="ofh_payment_gateway_knet.ofh_payment_gateway_menu"/>
         <field name="sequence" eval="40"/>
@@ -77,7 +77,7 @@
     </record>
 
     <record model="ir.ui.menu" id="ofh_bank_settlement_menu">
-        <field name="name">All Banks Settlements</field>
+        <field name="name">All Settlements</field>
         <field name="parent_id" ref="ofh_bank_settlement_main_menu"/>
         <field name="action" ref="ofh_bank_settlement.ofh_bank_settlement_all_act_window"/>
         <field name="sequence" eval="10"/>
