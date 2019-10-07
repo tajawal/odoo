@@ -48,16 +48,36 @@ class OfhPaymentRequest(models.Model):
         readonly=True,
         store=True,
     )
-    pg_reconciliation_status = fields.Selection(
-        related="payment_gateway_id.reconciliation_status",
-        store=True
-    )
     is_applicable = fields.Boolean(
         string="Is Applicable?",
         default=True,
         readonly=True,
         index=True,
     )
+    pg_reconciliation_status = fields.Selection(
+        string="Reconciliation Status",
+        selection=[
+            ('reconciled', 'Reconciled'),
+            ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
+        ],
+        default='unreconciled',
+        compute='_compute_reconciliation_status',
+        search='_search_pg_reconciliation_status',
+        index=True,
+        readonly=True,
+    )
+
+    @api.multi
+    @api.depends(
+        'payment_gateway_id.reconciliation_status')
+    def _compute_reconciliation_status(self):
+        for rec in self:
+            rec.pg_reconciliation_status = rec.payment_gateway_id.reconciliation_status
+
+            if not rec.payment_gateway_id.reconciliation_status:
+                rec.pg_reconciliation_status = 'unreconciled'
+                continue
 
     @api.multi
     def action_applicable(self):
@@ -70,3 +90,7 @@ class OfhPaymentRequest(models.Model):
         return self.write({
             'is_applicable': False,
         })
+
+    @api.multi
+    def _search_pg_reconciliation_status(self, operator, value):
+        return [('pg_reconciliation_status', operator, value)]
