@@ -5,7 +5,7 @@
 <odoo>
 
     <record model="ir.ui.menu" id="ofh_payment_main_menu">
-        <field name="name">Hub Payments</field>
+        <field name="name">Payments</field>
         <field name="sequence" eval="70"/>
     </record>
 
