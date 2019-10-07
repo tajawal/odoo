@@ -28,9 +28,33 @@ class OfhBankSettlement(models.Model):
         track_visibility='onchange',
     )
     reconciliation_status = fields.Selection(
-        related="payment_gateway_id.reconciliation_status",
-        store=True
+        string="Reconciliation Status",
+        selection=[
+            ('reconciled', 'Reconciled'),
+            ('unreconciled', 'Unreconciled'),
+            ('not_applicable', 'Not Applicable'),
+        ],
+        default='unreconciled',
+        compute='_compute_reconciliation_status',
+        search='_search_reconciliation_status',
+        index=True,
+        readonly=True,
     )
+
+    @api.multi
+    @api.depends(
+        'payment_gateway_id.reconciliation_status')
+    def _compute_reconciliation_status(self):
+        for rec in self:
+            rec.reconciliation_status = rec.payment_gateway_id.reconciliation_status
+
+            if not rec.payment_gateway_id.reconciliation_status:
+                rec.reconciliation_status = 'unreconciled'
+                continue
+
+    @api.multi
+    def _search_reconciliation_status(self, operator, value):
+        return [('reconciliation_status', operator, value)]
 
     @api.multi
     def match_with_payment_gateway(self):
