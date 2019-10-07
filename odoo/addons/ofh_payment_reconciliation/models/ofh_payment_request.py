@@ -1,3 +1,6 @@
+# Copyright 2019 Tajawal LCC
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 from odoo import fields, models, api
 
 
@@ -9,6 +12,7 @@ class OfhPaymentRequest(models.Model):
         comodel_name='ofh.payment.gateway',
     )
     bank_settlement_id = fields.Many2one(
+        string="Bank Settlement",
         related="payment_gateway_id.bank_settlement_id",
     )
     settlement_date = fields.Date(
@@ -38,21 +42,15 @@ class OfhPaymentRequest(models.Model):
         related="bank_settlement_id.net_transaction_amount",
     )
     pg_matching_status = fields.Selection(
-        string="PG Matching Status",
         selection=[
             ('unmatched', 'Unmatched'),
-            ('matched', 'Matched')],
+            ('matched', 'Matched'),
+            ('not_applicable', 'Not Applicable')],
         default='unmatched',
         required=True,
         index=True,
         readonly=True,
         store=True,
-    )
-    is_applicable = fields.Boolean(
-        string="Is Applicable?",
-        default=True,
-        readonly=True,
-        index=True,
     )
     pg_reconciliation_status = fields.Selection(
         string="Reconciliation Status",
@@ -69,26 +67,26 @@ class OfhPaymentRequest(models.Model):
     )
 
     @api.multi
-    @api.depends(
-        'payment_gateway_id')
+    @api.depends('payment_gateway_id.reconciliation_status')
     def _compute_reconciliation_status(self):
         for rec in self:
             rec.pg_reconciliation_status = 'unreconciled'
 
             if rec.payment_gateway_id:
-                rec.pg_reconciliation_status = rec.payment_gateway_id.reconciliation_status
+                rec.pg_reconciliation_status = \
+                    rec.payment_gateway_id.reconciliation_status
                 continue
 
     @api.multi
-    def action_applicable(self):
+    def action_pg_matching_not_applicable(self):
         return self.write({
-            'is_applicable': True,
+            'pg_matching_status': 'not_applicable',
         })
 
     @api.multi
-    def action_not_applicable(self):
+    def action_pg_matching_applicable(self):
         return self.write({
-            'is_applicable': False,
+            'pg_matching_status': 'unmatched',
         })
 
     @api.multi
