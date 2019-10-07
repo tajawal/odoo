@@ -218,34 +218,29 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_knet.knet_import_backend')
         if self.backend_record != knet_backend:
             return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
-        response_code = record.get('Response Code', '111111')
-        if response_code[0][:1] != '1':
-            return {}
 
-        unique_id = record.get('ACTION ID')
         track_id = record.get('REFERENCE')
 
-        if not unique_id:
+        if not track_id:
             return {}
-        pg_model = self.env["ofh.payment.gateway"]
-        payment_gateway = pg_model.search(
-            [('name', '=', unique_id),
-             ('track_id', '=', track_id)
-             ], limit=1)
 
-        if payment_gateway:
-            if payment_gateway.payment_status in ('refund', 'void'):
-                pg_created = pg_model.create({
-                    'name': unique_id
-                })
-                return {'payment_gateway_id': pg_created.id}
-            else:
-                return {'payment_gateway_id': payment_gateway.id}
+        domain = [('track_id', '=', track_id)]
+
+        payment_status = self.payment_status(record).get('payment_status')
+
+        pg_model = self.env['ofh.payment.gateway']
+
+        if payment_status in ('refund', 'void'):
+            domain.append(('payment_status', 'in', ('refund', 'void')))
         else:
-            pg_created = pg_model.create({
-                'name': unique_id
-            })
-            return {'payment_gateway_id': pg_created.id}
+            domain.append(('payment_status', 'not in', ('refund', 'void')))
+
+        payment_gateway = pg_model.search(domain, limit=1)
+
+        if not payment_gateway:
+            payment_gateway = pg_model.create({'name': track_id})
+
+        return {'payment_gateway_id': payment_gateway.id}
 
 
 class PaymentGatewayRecordImporter(Component):
