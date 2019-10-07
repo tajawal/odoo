@@ -351,12 +351,13 @@ class PaymentGatewayLineMapper(Component):
             'ofh_payment_gateway_checkout.checkout_import_backend')
 
         if self.backend_record != checkout_backend:
-            return super(PaymentGatewayLineMapper, self).\
+            return super(PaymentGatewayLineMapper, self). \
                 payment_gateway_id(record)
 
         track_id = record.get('Reference')
+        response_code = record.get('Response Code', '111111')
 
-        if not track_id:
+        if not track_id or response_code[0][:1] != '1':
             return {}
 
         domain = [('track_id', '=', track_id)]

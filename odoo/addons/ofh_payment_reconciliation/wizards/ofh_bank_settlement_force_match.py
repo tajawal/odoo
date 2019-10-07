@@ -24,6 +24,7 @@ class OfhBankSettlementForceMatch(models.TransientModel):
         required=True,
         readonly=True,
         default=_get_default_payment_id,
+        ondelete="cascade"
     )
     current_payment_gateway_id = fields.Many2one(
         string="Current Payment Gateway",

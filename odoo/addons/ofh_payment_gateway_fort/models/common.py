@@ -157,8 +157,9 @@ class PaymentGatewayLineMapper(Component):
                 payment_gateway_id(record)
 
         track_id = record.get('Merchant Reference')
+        response_code = record.get('Response Code', '111111')
 
-        if not track_id:
+        if not track_id or response_code[0][:1] != '1':
             return {}
 
         domain = [('track_id', '=', track_id)]
