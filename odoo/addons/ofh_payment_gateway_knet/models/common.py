@@ -212,38 +212,6 @@ class PaymentGatewayLineMapper(Component):
             return super(PaymentGatewayLineMapper, self).entity(record)
         return {'entity': record.get('Entity')}
 
-    @mapping
-    def payment_gateway_id(self, record):
-        knet_backend = self.env.ref(
-            'ofh_payment_gateway_knet.knet_import_backend')
-        if self.backend_record != knet_backend:
-            return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
-
-        # TODO: Need to move response code check to skip_it function
-        track_id = record.get('REFERENCE')
-        response_code = record.get('Response Code', '111111')
-
-        if not track_id or response_code[0][:1] != '1':
-            return {}
-
-        domain = [('track_id', '=', track_id)]
-
-        payment_status = self.payment_status(record).get('payment_status')
-
-        pg_model = self.env['ofh.payment.gateway']
-
-        if payment_status in ('refund', 'void'):
-            domain.append(('payment_status', 'in', ('refund', 'void')))
-        else:
-            domain.append(('payment_status', 'not in', ('refund', 'void')))
-
-        payment_gateway = pg_model.search(domain, limit=1)
-
-        if not payment_gateway:
-            payment_gateway = pg_model.create({'name': track_id})
-
-        return {'payment_gateway_id': payment_gateway.id}
-
 
 class PaymentGatewayRecordImporter(Component):
     _name = 'payment.gateway.record.importer'

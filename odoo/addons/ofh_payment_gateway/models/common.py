@@ -119,7 +119,29 @@ class PaymentGatewayLineMapper(Component):
 
     @mapping
     def payment_gateway_id(self, record):
-        return {}
+        track_id = self.track_id(record).get('track_id')
+        response_code = record.get('Response Code', '111111')
+
+        if not track_id or response_code[0][:1] != '1':
+            return {}
+
+        domain = [('track_id', '=', track_id)]
+
+        payment_status = self.payment_status(record).get('payment_status')
+
+        pg_model = self.env['ofh.payment.gateway']
+
+        if payment_status in ('refund', 'void'):
+            domain.append(('payment_status', 'in', ('refund', 'void')))
+        else:
+            domain.append(('payment_status', 'not in', ('refund', 'void')))
+
+        payment_gateway = pg_model.search(domain, limit=1)
+
+        if not payment_gateway:
+            payment_gateway = pg_model.create({'name': track_id})
+
+        return {'payment_gateway_id': payment_gateway.id}
 
     @mapping
     def entity(self, record):
