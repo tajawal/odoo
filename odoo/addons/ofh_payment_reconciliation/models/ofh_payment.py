@@ -82,13 +82,13 @@ class OfhPayment(models.Model):
 
     @api.multi
     @api.depends(
-        'payment_gateway_id.reconciliation_status')
+        'payment_gateway_id')
     def _compute_reconciliation_status(self):
         for rec in self:
-            rec.reconciliation_status = rec.payment_gateway_id.reconciliation_status
+            rec.reconciliation_status = 'unreconciled'
 
-            if not rec.payment_gateway_id.reconciliation_status:
-                rec.reconciliation_status = 'unreconciled'
+            if rec.payment_gateway_id:
+                rec.reconciliation_status = rec.payment_gateway_id.reconciliation_status
                 continue
 
     @api.multi

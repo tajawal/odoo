@@ -46,10 +46,10 @@ class OfhBankSettlement(models.Model):
         'payment_gateway_id.reconciliation_status')
     def _compute_reconciliation_status(self):
         for rec in self:
-            rec.reconciliation_status = rec.payment_gateway_id.reconciliation_status
+            rec.reconciliation_status = 'unreconciled'
 
-            if not rec.payment_gateway_id.reconciliation_status:
-                rec.reconciliation_status = 'unreconciled'
+            if rec.payment_gateway_id:
+                rec.reconciliation_status = rec.payment_gateway_id.reconciliation_status
                 continue
 
     @api.multi
