@@ -38,7 +38,6 @@
                         <field name="payment_status"/>
                         <field name="currency_id" invisible="1"/>
                         <field name="settlement_date" invisible="1"/>
-                        <field name="is_applicable"/>
                         <field name="order_id"/>
                     </group>
                     <group name="status" string="Statuses" col="4">
@@ -87,7 +86,6 @@
                 <field name="payment_status"/>
                 <field name="pg_matching_status"/>
                 <field name="reconciliation_status"/>
-                <field name="is_applicable"/>
             </tree>
         </field>
     </record>
@@ -138,24 +136,24 @@
     </record>
 
     <record model="ir.actions.server" id="ofh_applicable">
-        <field name="name">Mark as Applicable</field>
+        <field name="name">PG matching Applicable</field>
         <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
         <field name = "binding_model_id" ref="ofh_payment.model_ofh_payment"/>
         <field name="state">code</field>
         <field name="code">
 if records:
-    records.action_applicable()
+    records.action_pg_matching_applicable()
         </field>
     </record>
 
     <record model="ir.actions.server" id="ofh_not_applicable">
-        <field name="name">Mark as not Applicable</field>
+        <field name="name">PG  Matching not Applicable</field>
         <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
         <field name = "binding_model_id" ref="ofh_payment.model_ofh_payment"/>
         <field name="state">code</field>
         <field name="code">
 if records:
-    records.action_not_applicable()
+    records.action_pg_matching_not_applicable()
         </field>
     </record>
 
