@@ -203,6 +203,10 @@ class OfhPaymentRequest(models.Model):
         required=True,
         readonly=True,
     )
+    parent_track_id = fields.Char(
+        string="Parent Track ID",
+        readonly=True,
+    )
     plan_code = fields.Char(
         readonly=True,
     )
