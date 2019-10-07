@@ -354,6 +354,7 @@ class PaymentGatewayLineMapper(Component):
             return super(PaymentGatewayLineMapper, self). \
                 payment_gateway_id(record)
 
+        # TODO: Need to move response code check to skip_it function
         track_id = record.get('Reference')
         response_code = record.get('Response Code', '111111')
 

@@ -219,6 +219,7 @@ class PaymentGatewayLineMapper(Component):
         if self.backend_record != knet_backend:
             return super(PaymentGatewayLineMapper, self).payment_gateway_id(record)
 
+        # TODO: Need to move response code check to skip_it function
         track_id = record.get('REFERENCE')
         response_code = record.get('Response Code', '111111')
 
