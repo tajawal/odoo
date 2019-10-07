@@ -24,6 +24,7 @@ class OfhPaymentGatewayForceMatch(models.TransientModel):
         required=True,
         readonly=True,
         default=_get_default_payment_id,
+        ondelete="cascade"
     )
     current_hub_payment_id = fields.Many2one(
         string="Current Hub Payment",

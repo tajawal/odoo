@@ -50,7 +50,8 @@ class OfhPayment(models.Model):
     )
     reconciliation_status = fields.Selection(
         related="payment_gateway_id.reconciliation_status",
-        store=True
+        store=True,
+        default='unreconciled',
     )
     is_applicable = fields.Boolean(
         string="Is Applicable?",
