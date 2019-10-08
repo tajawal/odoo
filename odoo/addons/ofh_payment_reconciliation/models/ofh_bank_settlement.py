@@ -49,7 +49,8 @@ class OfhBankSettlement(models.Model):
             rec.reconciliation_status = 'unreconciled'
 
             if rec.payment_gateway_id:
-                rec.reconciliation_status = rec.payment_gateway_id.reconciliation_status
+                rec.reconciliation_status = \
+                    rec.payment_gateway_id.reconciliation_status
                 continue
 
     @api.multi
@@ -113,17 +114,20 @@ class OfhBankSettlement(models.Model):
     @api.multi
     def _set_payment_gateway_matching(self, payment_gateway_id):
         self.ensure_one()
-        if payment_gateway_id:
-            self.write({
-                "payment_gateway_id": payment_gateway_id.id,
-                "matching_status": 'matched'
-            })
+        if not payment_gateway_id:
+            return
 
-            # Updating the relation
-            payment_gateway_id.write({
-                'bank_settlement_id': self.id,
-                'settlement_matching_status': 'matched',
-            })
+        self.write({
+            "payment_gateway_id": payment_gateway_id.id,
+            "matching_status": 'matched'
+        })
+
+        # Updating the relation
+        payment_gateway_id.write({
+            'bank_settlement_id': self.id,
+            'settlement_matching_status': 'matched',
+        })
+        return
 
     def _force_match_payment_gateway(
             self, payment_gateway_id=False):
@@ -137,15 +141,15 @@ class OfhBankSettlement(models.Model):
             self._unlink_payment_gateway()
 
         # Link the payment gateway with the new payment gateway.
-        if payment_gateway_id:
-            payment_gateway_id.write({
-                'bank_settlement_id': self.id,
-                'settlement_matching_status': 'matched',
-            })
-            return self.write({
-                'payment_gateway_id': payment_gateway_id.id,
-                'matching_status': 'matched',
-            })
+        payment_gateway_id.write({
+            'bank_settlement_id': self.id,
+            'settlement_matching_status': 'matched',
+        })
+        self.write({
+            'payment_gateway_id': payment_gateway_id.id,
+            'matching_status': 'matched',
+        })
+        return
 
     @api.multi
     def _unlink_payment_gateway(self):
@@ -158,6 +162,7 @@ class OfhBankSettlement(models.Model):
             'payment_gateway_id': False,
             'settlement_matching_status': 'unmatched',
         })
+        return
 
     @api.multi
     def action_unlink_payment_gateway(self):
