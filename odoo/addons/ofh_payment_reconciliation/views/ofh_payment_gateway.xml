@@ -27,8 +27,8 @@
                 </group>
             </group>
             <group name="references" position="inside">
-                <field name="hub_payment_id"/>
-                <field name="hub_payment_request_id"/>
+                <field name="hub_payment_id" context="{'form_view_ref':'ofh_payment_reconciliation.ofh_payment_form_view'}"/>
+                <field name="hub_payment_request_id" context="{'form_view_ref':'ofh_payment_reconciliation.ofh_payment_request_form_view'}"/>
                 <field name="bank_settlement_id"/>
             </group>
         </field>
