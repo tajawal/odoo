@@ -343,7 +343,7 @@ class PaymentGatewayLineMapper(Component):
         if self.backend_record != checkout_backend:
             return super(PaymentGatewayLineMapper, self).entity(record)
 
-        return {'entity': record.get('Entity')}
+        return {'entity': record.get('Entity').lower()}
 
 
 class PaymentGatewayLineHandler(Component):
