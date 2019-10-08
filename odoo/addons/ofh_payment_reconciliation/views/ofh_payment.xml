@@ -147,9 +147,9 @@ if records:
     </record>
 
     <record model="ir.actions.server" id="ofh_not_applicable">
-        <field name="name">PG  Matching not Applicable</field>
+        <field name="name">PG Matching not Applicable</field>
         <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
-        <field name = "binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="binding_model_id" ref="ofh_payment.model_ofh_payment"/>
         <field name="state">code</field>
         <field name="code">
 if records:

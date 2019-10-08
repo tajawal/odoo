@@ -112,4 +112,26 @@
         <field name="act_window_id" ref="ofh_payment_request_all_act_window"/>
     </record>
 
+    <record model="ir.actions.server" id="ofh_applicable">
+        <field name="name">PG matching Applicable</field>
+        <field name="model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
+        <field name="binding_model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_pg_matching_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_not_applicable">
+        <field name="name">PG Matching not Applicable</field>
+        <field name="model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
+        <field name="binding_model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_pg_matching_not_applicable()
+        </field>
+    </record>
+
 </odoo>
