@@ -24,7 +24,7 @@
                     <field name="reconciliation_status"/>
                 </group>
                 <group name="references" string="References" col="4">
-                    <field name="payment_gateway_id"/>
+                    <field name="payment_gateway_id" context="{'form_view_ref':'ofh_payment_reconciliation.ofh_payment_gateway_form_view'}"/>
                 </group>
             </sheet>
         </field>
