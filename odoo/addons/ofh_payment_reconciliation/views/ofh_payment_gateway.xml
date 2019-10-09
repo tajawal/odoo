@@ -47,4 +47,16 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_gateway_search_view">
+        <field name="name">ofh.payment.gateway.search (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+       <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_search_view"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <filter name="not_captured_in_24_hours" string="Not Captured in 24 Hours" domain="['&amp;', ('transaction_date', '&gt;=', (context_today() - relativedelta(days=1)).strftime('%%Y-%%m-%%d')), ('payment_status', '=', 'auth')]"/>
+            </search>
+        </field>
+    </record>
+
 </odoo>
