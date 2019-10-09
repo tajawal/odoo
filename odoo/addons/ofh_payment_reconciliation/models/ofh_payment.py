@@ -65,6 +65,12 @@ class OfhPayment(models.Model):
         index=True,
         readonly=True,
     )
+    is_voided = fields.Boolean(
+        string='Is Voided?',
+        compute='_compute_is_voided',
+        store=True,
+        readonly=True,
+    )
 
     @api.multi
     def action_pg_matching_applicable(self):
@@ -92,3 +98,14 @@ class OfhPayment(models.Model):
     @api.multi
     def _search_reconciliation_status(self, operator, value):
         return [('reconciliation_status', operator, value)]
+
+    @api.multi
+    @api.depends('order_id')
+    def _compute_is_voided(self):
+        for rec in self:
+            rec.is_voided = False
+            if len(rec.order_id.payment_request_ids) != 1:
+                continue
+            if rec.order_id.payment_request_ids[0].request_type != 'void':
+                continue
+            rec.is_voided = True
