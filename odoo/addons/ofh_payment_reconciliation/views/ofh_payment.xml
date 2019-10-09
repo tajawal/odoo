@@ -93,7 +93,7 @@
     <record model="ir.actions.act_window" id="ofh_payment_all_act_window">
         <field name="name">All Payments</field>
         <field name="res_model">ofh.payment</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,search</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
@@ -131,6 +131,8 @@
                 <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
                 <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
                 <separator/>
+                <filter name="not_captured_in_48_hours" string="Not Captured in 48 Hours" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(days=2)).strftime('%%Y-%%m-%%d')), ('payment_status', '=', '10000')]"/>
+                <filter name="is_void" string="Is Void?" domain="[('is_voided', '&gt;=', True)]"/>
             </search>
         </field>
     </record>
