@@ -59,7 +59,7 @@
                 <separator/>
                 <filter name="not_captured_in_24_hours" string="Not Captured in 24 Hours" domain="['&amp;', ('transaction_date', '&gt;=', (context_today() - relativedelta(days=1)).strftime('%%Y-%%m-%%d')), ('payment_status', '=', 'auth')]"/>
                 <filter name="is_void" string="Is Void" domain="[('payment_status', '=', 'void')]"/>
-                <filter name="not_void_in_hub" string="Not Void in Hub" domain="['&amp;', ('hub_matching_status', '=', 'matched'), ('payment_status', '=', 'void'), '|',('hub_payment_id.is_void', '=', True), ('hub_payment_request_id.request_type', '=', 'void')]"/>
+                <filter name="not_void_in_hub" string="Not Void in Hub" domain="['&amp;', ('hub_matching_status', '=', 'matched'), ('payment_status', '=', 'void'), '|',('hub_payment_id.is_voided', '=', True), ('hub_payment_request_id.request_type', '=', 'void')]"/>
             </search>
         </field>
     </record>
