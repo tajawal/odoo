@@ -57,8 +57,8 @@
         <field name="arch" type="xml">
             <search position="inside">
                 <separator/>
-                <filter name="not_captured_in_24_hours" string="Not Captured in 24 Hours" domain="['&amp;', ('transaction_date', '&gt;=', (context_today() - relativedelta(days=1)).strftime('%%Y-%%m-%%d')), ('payment_status', '==', 'auth')]"/>
-                <filter name="is_void" string="Is Void" domain="[('payment_status', '==', 'void')]"/>
+                <filter name="not_captured_in_24_hours" string="Not Captured in 24 Hours" domain="['&amp;', ('transaction_date', '&gt;=', (context_today() - relativedelta(days=1)).strftime('%%Y-%%m-%%d')), ('payment_status', '=', 'auth')]"/>
+                <filter name="is_void" string="Is Void" domain="[('payment_status', '=', 'void')]"/>
             </search>
         </field>
     </record>
