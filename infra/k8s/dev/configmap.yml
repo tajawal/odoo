@@ -5,7 +5,7 @@ metadata:
   name: finance-hub-config
   namespace: default
 data:
-  db_endpoint: "finance-hub-dev.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"
+  db_endpoint: "financehub-dev-restore.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"
   myenv: "dev"
   worker: "2"
   hub_source : "hub-dev"
