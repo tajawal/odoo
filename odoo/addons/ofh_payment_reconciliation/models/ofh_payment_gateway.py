@@ -113,7 +113,7 @@ class OfhPaymentGateway(models.Model):
         if self.hub_matching_status in ('matched', 'not_applicable'):
             return
         self._match_with_payment()
-        if not self.payment_id:
+        if not self.hub_payment_id:
             self._match_with_payment_request()
         return
 
