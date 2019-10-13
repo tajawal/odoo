@@ -150,16 +150,11 @@ class OfhPaymentGateway(models.Model):
         # TODO: needs better implementation
         self.ensure_one()
 
-        # Only Match with Void and Refunded
+        # Only Match with Void, Charge and Refund
         if self.payment_status not in ('void', 'refund'):
-            domain = [
-                ('track_id', '=', self.track_id),
-                ('request_type', '=', 'charge')]
-
+            domain = self._get_payment_request_domain_charge()
         else:
-            domain = [
-                ('parent_track_id', '=', self.track_id),
-                ('request_type', 'in', ('void', 'refund'))]
+            domain = self._get_payment_request_domain_refund()
 
         # Matching with Payment Request Logic
         payment_request_id = self.env['ofh.payment.request'].search(
@@ -188,11 +183,18 @@ class OfhPaymentGateway(models.Model):
             ('provider', '!=', 'loyalty')]
 
     @api.multi
-    def _get_payment_request_domain(self):
+    def _get_payment_request_domain_charge(self):
         self.ensure_one()
         return [
-            '|', ('track_id', '=', self.track_id),
-            ('parent_track_id', '=', self.track_id)]
+            ('track_id', '=', self.track_id),
+            ('request_type', '=', 'charge')]
+
+    @api.multi
+    def _get_payment_request_domain_refund(self):
+        self.ensure_one()
+        return [
+            ('parent_track_id', '=', self.track_id),
+            ('request_type', 'in', ('void', 'refund'))]
 
     def _force_match_payment(
             self, hub_payment_id=False, hub_payment_request_id=False):
