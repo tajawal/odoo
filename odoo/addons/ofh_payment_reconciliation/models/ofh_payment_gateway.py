@@ -147,15 +147,23 @@ class OfhPaymentGateway(models.Model):
     # TODO: Need to remove this when done with Payments Object change
     @api.multi
     def _match_with_payment_request(self):
+        # TODO: needs better implementation
         self.ensure_one()
 
         # Only Match with Void and Refunded
         if self.payment_status not in ('void', 'refund'):
-            return False
+            domain = [
+                ('track_id', '=', self.track_id),
+                ('request_type', '=', 'charge')]
+
+        else:
+            domain = [
+                ('parent_track_id', '=', self.track_id),
+                ('request_type', 'in', ('void', 'refund'))]
 
         # Matching with Payment Request Logic
         payment_request_id = self.env['ofh.payment.request'].search(
-            self._get_payment_request_domain(), limit=1)
+            domain, limit=1)
 
         if not payment_request_id:
             return False
@@ -174,7 +182,10 @@ class OfhPaymentGateway(models.Model):
     @api.multi
     def _get_payment_domain(self):
         self.ensure_one()
-        return [('track_id', '=', self.track_id)]
+        # TODO: the search should by provider.
+        return [
+            ('track_id', '=', self.track_id),
+            ('provider', '!=', 'loyalty')]
 
     @api.multi
     def _get_payment_request_domain(self):
