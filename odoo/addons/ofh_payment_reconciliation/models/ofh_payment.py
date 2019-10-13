@@ -109,3 +109,16 @@ class OfhPayment(models.Model):
             if rec.order_id.payment_request_ids[0].request_type != 'void':
                 continue
             rec.is_voided = True
+
+    @api.multi
+    def action_unlink_payment(self):
+        for rec in self:
+            rec._unlink_payments()
+
+    @api.multi
+    def _unlink_payments(self):
+        self.ensure_one()
+        self.write({
+            'payment_gateway_id': False,
+            'pg_matching_status': 'unmatched',
+        })
