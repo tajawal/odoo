@@ -73,8 +73,8 @@
                 <field name="track_id"/>
                 <field name="auth_code"/>
                 <field name="arn"/>
-                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_id.entity', '=', 'tajawal')]"/>
-                <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_id.entity', '=', 'almosafer')]"/>
+                <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('entity', '=', 'almosafer')]"/>
             </search>
         </field>
     </record>
