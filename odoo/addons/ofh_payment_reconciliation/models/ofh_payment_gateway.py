@@ -120,6 +120,11 @@ class OfhPaymentGateway(models.Model):
     @api.multi
     def _match_with_payment(self):
         self.ensure_one()
+
+        # Only Match with Auth and Captured
+        if self.payment_status not in ('auth', 'capture'):
+            return False
+
         # Matching with Payment Logic
         payment_id = self.env['ofh.payment'].search(
             self._get_payment_domain(), limit=1)
@@ -143,6 +148,11 @@ class OfhPaymentGateway(models.Model):
     @api.multi
     def _match_with_payment_request(self):
         self.ensure_one()
+
+        # Only Match with Void and Refunded
+        if self.payment_status not in ('void', 'refund'):
+            return False
+
         # Matching with Payment Request Logic
         payment_request_id = self.env['ofh.payment.request'].search(
             self._get_payment_request_domain(), limit=1)
