@@ -160,15 +160,4 @@ if records:
         </field>
     </record>
 
-    <record model="ir.actions.server" id="ofh_unlink_pg">
-        <field name="name">Unlink from PG</field>
-        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
-        <field name="binding_model_id" ref="ofh_payment.model_ofh_payment"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_unlink_payment()
-        </field>
-    </record>
-
 </odoo>
