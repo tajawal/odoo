@@ -86,6 +86,7 @@
             <tree delete="0">
                 <field name="provider"/>
                 <field name="entity"/>
+                <field name="track_id"/>
                 <field name="payment_id"/>
                 <field name="auth_code"/>
                 <field name="currency_id"/>
