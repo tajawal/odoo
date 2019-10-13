@@ -13,6 +13,7 @@
                     <field name="currency_id" invisible="1"/>
                     <group col="4" name="general_details" string="General Information">
                         <field name="track_id"/>
+                        <field name="parent_track_id"/>
                         <field name="order_reference"/>
                         <field name="request_type"/>
                         <field name="request_status"/>
