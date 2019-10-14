@@ -14,7 +14,7 @@ max_cron_threads = 1
 log_level=debug_rpc
 
 [queue_job]
-channels = root:4,root.hub:4:throttle=2,root.sap:4:throttle=2,root.import:4,root.import.gds:1,root.import.tf:1,root.import.sap:1,root.import.tv:1
+channels = root:4,root.hub:4:throttle=2,root.sap:4:throttle=2,root.import:1,root.import.gds:1,root.import.tf:1,root.import.sap:1,root.import.tv:1
 [hub_backend.$myenv-hub]
 hub_api_location=$hub_api_location
 hub_api_username=$hub_api_username
