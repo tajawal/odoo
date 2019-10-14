@@ -1,0 +1,85 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: {{ required "A valid unique wf name is required" .Values.workflowname }}
+spec:
+  entrypoint: ci-test
+  volumes:
+  - name: git-sshkey-secret
+    secret:
+      secretName: git-sshkey-secret
+      defaultMode: 256
+  - name: argo-ci-volume
+    hostPath:
+      path: /data/ci-app
+  onExit: exit-handler
+  templates:
+  - name: ci-test
+    steps:
+    - - name: checkout
+        template: checkout
+    - - name: pylint
+        template: pylint-code-quality
+      - name: flake8
+        template: flake8-code-quality
+  - container:
+      command:
+      - /usr/local/bin/checkout.sh
+      env:
+      - name: PULL_NUMBER
+        value: "{{ .Values.pull_number }}"
+      - name: REPO_NAME
+        value: "{{ .Values.repo_name }}"
+      - name: REPO_OWNER
+        value: "{{ .Values.repo_owner }}"
+      - name: BUILD_NUMBER
+        value: "{{ .Values.build_number }}"
+      image: tajawalcom/docker-argo-ci:v1.2
+      volumeMounts:
+      - mountPath: /app
+        name: argo-ci-volume
+      - mountPath: "/root/.ssh/"
+        name: git-sshkey-secret
+    name: checkout
+  - container:
+      command:
+      - /bin/bash
+      - -c
+      - "virtualenv --python=$(which python3) venv-pylint && venv-pylint/bin/pip install acsoo && ln -sf venv-pylint/bin/acsoo && ./acsoo pylint"
+      - 2>&1
+      image: vaibhavjain882/odoo-base:1
+      volumeMounts:
+      - mountPath: /app
+        name: argo-ci-volume
+      - mountPath: "/root/.ssh/"
+        name: git-sshkey-secret
+      workingDir: /app/finance_hub/
+    name: pylint-code-quality
+  - container:
+      command:
+      - /bin/bash
+      - -c
+      - "virtualenv --python=$(which python3) venv-flake8 && venv-flake8/bin/pip install acsoo && ln -sf venv-flake8/bin/acsoo && ./acsoo flake8"
+      - 2>&1
+      image: vaibhavjain882/odoo-base:1
+      volumeMounts:
+      - mountPath: /app
+        name: argo-ci-volume
+      - mountPath: "/root/.ssh/"
+        name: git-sshkey-secret
+      workingDir: /app/finance_hub/
+    name: flake8-code-quality
+  - name: exit-handler
+    steps:
+      - - name: clean-up-resources
+          template: clean
+  - name: clean
+    container:
+      image: tajawalcom/docker-argo-ci:v1.2
+      command: ["/bin/bash", "-c", "rm -rf finance_hub"]
+      volumeMounts:
+      - mountPath: /app
+        name: argo-ci-volume
+      - mountPath: "/root/.ssh/"
+        name: git-sshkey-secret
+      workingDir: /app
