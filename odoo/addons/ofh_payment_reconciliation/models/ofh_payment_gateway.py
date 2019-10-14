@@ -113,13 +113,18 @@ class OfhPaymentGateway(models.Model):
         if self.hub_matching_status in ('matched', 'not_applicable'):
             return
         self._match_with_payment()
-        if not self.payment_id:
+        if not self.hub_payment_id:
             self._match_with_payment_request()
         return
 
     @api.multi
     def _match_with_payment(self):
         self.ensure_one()
+
+        # Only Match with Auth and Captured
+        if self.payment_status not in ('auth', 'capture'):
+            return False
+
         # Matching with Payment Logic
         payment_id = self.env['ofh.payment'].search(
             self._get_payment_domain(), limit=1)
@@ -142,10 +147,18 @@ class OfhPaymentGateway(models.Model):
     # TODO: Need to remove this when done with Payments Object change
     @api.multi
     def _match_with_payment_request(self):
+        # TODO: needs better implementation
         self.ensure_one()
+
+        # Only Match with Void, Charge and Refund
+        if self.payment_status not in ('void', 'refund'):
+            domain = self._get_payment_request_domain_charge()
+        else:
+            domain = self._get_payment_request_domain_refund()
+
         # Matching with Payment Request Logic
         payment_request_id = self.env['ofh.payment.request'].search(
-            self._get_payment_request_domain(), limit=1)
+            domain, limit=1)
 
         if not payment_request_id:
             return False
@@ -164,14 +177,24 @@ class OfhPaymentGateway(models.Model):
     @api.multi
     def _get_payment_domain(self):
         self.ensure_one()
-        return [('track_id', '=', self.track_id)]
+        # TODO: the search should by provider.
+        return [
+            ('track_id', '=', self.track_id),
+            ('provider', '!=', 'loyalty')]
 
     @api.multi
-    def _get_payment_request_domain(self):
+    def _get_payment_request_domain_charge(self):
         self.ensure_one()
         return [
-            '|', ('track_id', '=', self.track_id),
-            ('parent_track_id', '=', self.track_id)]
+            ('track_id', '=', self.track_id),
+            ('request_type', '=', 'charge')]
+
+    @api.multi
+    def _get_payment_request_domain_refund(self):
+        self.ensure_one()
+        return [
+            ('parent_track_id', '=', self.track_id),
+            ('request_type', 'in', ('void', 'refund'))]
 
     def _force_match_payment(
             self, hub_payment_id=False, hub_payment_request_id=False):

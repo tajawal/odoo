@@ -20,7 +20,7 @@
         'ofh_bank_settlement_rajhi',
         'ofh_bank_settlement_amex',
         'ofh_sale_order',
-        'ofh_payment_request',
+        'ofh_sale_order_payment_request',
     ],
     'data': [
         'wizards/ofh_bank_settlement_force_match.xml',
