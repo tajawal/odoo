@@ -110,3 +110,8 @@ class OfhBankSettlement(models.Model):
         string="Posting Date",
         readonly=True,
     )
+
+    _sql_constraints = [
+        ('unique_bank_settlement', 'unique(name, bank_name)',
+         _("This line has been uploaded"))
+    ]
