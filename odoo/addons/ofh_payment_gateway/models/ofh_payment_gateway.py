@@ -168,7 +168,7 @@ class OfhPaymentGateway(models.Model):
         compute="_compute_payment_gateway",
         store=False
     )
-    arn = fields.Char(
+    arn = fields.Integer(
         string="ARN",
         readonly=True,
         compute="_compute_payment_gateway",

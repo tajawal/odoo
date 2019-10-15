@@ -131,7 +131,7 @@ class OfhPaymentGatewayLine(models.Model):
         string="CVV Check",
         readonly=True,
     )
-    arn = fields.Char(
+    arn = fields.Integer(
         string="ARN",
         readonly=True,
     )
