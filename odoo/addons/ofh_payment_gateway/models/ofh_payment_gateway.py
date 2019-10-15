@@ -265,3 +265,11 @@ class OfhPaymentGateway(models.Model):
                 except:
                     rec.auth_code = rec.payment_gateway_line_ids[0].auth_code
 
+            if not rec.arn:
+                # Pick arn from the Authorised one
+                try:
+                    rec.arn = rec.payment_gateway_line_ids[1].arn
+                except:
+                    rec.arn = rec.payment_gateway_line_ids[0].arn
+
+
