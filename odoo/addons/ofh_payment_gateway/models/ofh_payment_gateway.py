@@ -229,7 +229,6 @@ class OfhPaymentGateway(models.Model):
             rec.provider = rec.payment_gateway_line_ids[0].provider
             rec.acquirer_bank = rec.payment_gateway_line_ids[0].acquirer_bank
             rec.track_id = rec.payment_gateway_line_ids[0].track_id
-            rec.auth_code = rec.payment_gateway_line_ids[0].auth_code
             rec.payment_method = rec.payment_gateway_line_ids[0].payment_method
             rec.payment_by = rec.payment_gateway_line_ids[0].payment_by
             rec.transaction_date = \
@@ -257,3 +256,10 @@ class OfhPaymentGateway(models.Model):
             rec.reported_mid = rec.payment_gateway_line_ids[0].reported_mid
             rec.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
             rec.entity = rec.payment_gateway_line_ids[0].entity
+
+            # Pick auth code from the Authorised one
+            try:
+                rec.auth_code = rec.payment_gateway_line_ids[1].auth_code
+            except:
+                rec.auth_code = rec.payment_gateway_line_ids[0].auth_code
+
