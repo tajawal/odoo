@@ -8,3 +8,4 @@ FORT ID,Acquirer Name,Merchant Country,Merchant Reference,Authorization Code,Pay
 156192239100009000,Mashreq,United Arab Emirates,59f253e1-79d9-4ac9-a4b7-66846e18b051,74312,Credit Cards,Visa,Trusted,6/30/19 23:20,1500,AED,Capture,tajawal
 156192239100009000,Mashreq,United Arab Emirates,59f253e1-79d9-4ac9-a4b7-66846e18b051,74312,Credit Cards,Visa,Trusted,6/30/19 23:20,1500,AED,Authorization,tajawal
 156192223300008000,Mashreq,United Arab Emirates,ff81d010-f043-494f-8ca8-22e208cb901b,T99760,Credit Cards,MasterCard,Trusted,6/30/19 23:17,1210,AED,Capture,tajawal
+156604527600073000,Commercial International Bank (CIB),United Arab Emirates,a6491de2-9489-4ac3-bf92-bc47b56c5b8f,,Credit Cards,MASTERCARD,Trusted,8/18/19 3:34,1630.34,EGP,CAPTURE,almosafer

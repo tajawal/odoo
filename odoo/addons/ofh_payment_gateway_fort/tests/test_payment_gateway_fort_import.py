@@ -52,6 +52,23 @@ class TestPaymentGatewayFortImport(common.TransactionComponentRegistryCase):
         })
         self.backend.debug_mode = True
 
+    def test_payment_gateway_line_fort_skip(self):
+        for chunk in self.source.get_lines():
+            self.record.set_data(chunk)
+            with self.backend.work_on(
+                'import.record',
+                components_registry=self.comp_registry
+            ) as work:
+                importer = work.component_by_name(
+                    'payment.gateway.line.record.importer',
+                    'ofh.payment.gateway.line')
+                self.assertTrue(importer)
+                importer.run(self.record)
+
+        pg_line = self.payment_gateway_line_model.search(
+            [('track_id', '=', 'a6491de2-9489-4ac3-bf92-bc47b56c5b8f')])
+        self.assertFalse(pg_line)
+
     def test_payment_gateway_line_fort(self):
         for chunk in self.source.get_lines():
             self.record.set_data(chunk)
@@ -66,20 +83,10 @@ class TestPaymentGatewayFortImport(common.TransactionComponentRegistryCase):
                 importer.run(self.record)
 
         # First Payment Gateway Fort test
-        first_line = self.payment_gateway_line_model.search(
-            [('name', '=', '156192239100009000')])
-        self.assertTrue(first_line)
-        self.assertEquals(len(first_line), 1)
-
-        self.assertEquals(first_line.name, '156192239100009000')
-        self.assertEquals(first_line.provider, 'fort')
-        self.assertEquals(first_line.acquirer_bank, 'mashreq')
-        self.assertEquals(first_line.track_id, '59f253e1-79d9-4ac9-a4b7-66846e18b051')
-        self.assertEquals(first_line.auth_code, '753080')
-        self.assertEquals(first_line.payment_method, 'Visa')
-        self.assertEquals(first_line.currency_id.id, self.env.ref('base.AED').id)
-        self.assertEquals(first_line.payment_status, 'auth')
-        self.assertEquals(first_line.payment_id, '156192387100015000')
-        self.assertEquals(first_line.entity, 'tajawal')
-
-
+        lines = self.payment_gateway_line_model.search(
+            [('track_id', '=', '59f253e1-79d9-4ac9-a4b7-66846e18b051')])
+        self.assertTrue(lines)
+        self.assertEqual(len(lines), 2)
+        pg_record = lines.mapped('payment_gateway_id')
+        self.assertTrue(pg_record)
+        self.assertEqual(len(pg_record), 1)

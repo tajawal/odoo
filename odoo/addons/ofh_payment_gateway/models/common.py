@@ -162,9 +162,16 @@ class PaymentGatewayLineRecordImporter(Component):
             values {dict} -- Mapped values
             origin_values {dict} -- Original raw data.
         """
+        # TODO: logically this should be put in coresponding modules not here.
+        # but somehow the inheritance didn't work for me, I may be missing
+        # something, we will fix it later on.
         response_code = origin_values.get('Response Code', '111111')
+        provider = values.get('provider')
+        acquirer_bank = values.get('acquirer_bank')
 
-        if response_code[0][:1] != '1':
+        if provider == 'checkout' and response_code[0][:1] != '1':
+            return {'message': "Payment Gateway not applicable for import"}
+        if provider == 'fort' and acquirer_bank == 'cib':
             return {'message': "Payment Gateway not applicable for import"}
         return {}
 
