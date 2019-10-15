@@ -188,7 +188,7 @@ class PaymentGatewayLineMapper(Component):
 
     def _get_is_card_mada(self, record):
         card_type = record.get('UDF1')
-        return card_type.lower() == 'MADA'
+        return card_type.lower() == 'mada'
 
     @mapping
     def is_apple_pay(self, record):
