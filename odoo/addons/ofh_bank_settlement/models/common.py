@@ -91,6 +91,10 @@ class BankSettlementRecordImporter(Component):
 
     odoo_unique_key = 'name'
 
+    def skip_it(self, values, origin_values) -> dict:
+        """ Return True if the response code does not starts with 1."""
+        return {}
+
     def required_keys(self, create=False):
         """Keys that are mandatory to import a line."""
         return {}
