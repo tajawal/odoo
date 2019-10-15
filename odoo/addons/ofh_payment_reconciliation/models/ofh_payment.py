@@ -97,7 +97,7 @@ class OfhPayment(models.Model):
 
     @api.multi
     def _search_reconciliation_status(self, operator, value):
-        return [('reconciliation_status', operator, value)]
+        return [('payment_gateway_id.reconciliation_status', operator, value)]
 
     @api.multi
     @api.depends('order_id')
