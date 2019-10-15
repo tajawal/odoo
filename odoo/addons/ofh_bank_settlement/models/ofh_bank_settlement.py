@@ -13,6 +13,7 @@ class OfhBankSettlement(models.Model):
         string="ARN",
         readonly=True,
         required=True,
+        index=True,
     )
     settlement_date = fields.Date(
         string="Settlement Date",
@@ -112,6 +113,6 @@ class OfhBankSettlement(models.Model):
     )
 
     _sql_constraints = [
-        ('unique_bank_settlement', 'unique(name, bank_name)',
+        ('unique_bank_settlement', 'unique(name)',
          _("This line has been uploaded"))
     ]
