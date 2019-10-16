@@ -258,18 +258,15 @@ class OfhPaymentGateway(models.Model):
             rec.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
             rec.entity = rec.payment_gateway_line_ids[0].entity
 
-            if rec.auth_code == '000000':
-                # Pick auth code from the Authorised one
-                try:
-                    rec.auth_code = rec.payment_gateway_line_ids[1].auth_code
-                except:
-                    rec.auth_code = rec.payment_gateway_line_ids[0].auth_code
+            pg_line = rec.payment_gateway_line_ids.filtered(
+                lambda rec: rec.auth_code and rec.auth_code != '000000')
+            if pg_line:
+                rec.auth_code = pg_line[0].auth_code
 
-            if not rec.arn:
-                # Pick arn from the Authorised one
-                try:
-                    rec.arn = rec.payment_gateway_line_ids[1].arn
-                except:
-                    rec.arn = rec.payment_gateway_line_ids[0].arn
+            # Pick arn from the Authorised one
+            pg_line = rec.payment_gateway_line_ids.filtered(
+                lambda rec: rec.arn)
+            if pg_line:
+                rec.arn = pg_line[0].arn
 
 
