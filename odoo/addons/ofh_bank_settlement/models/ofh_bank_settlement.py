@@ -1,7 +1,7 @@
 # Copyright 2019 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models, api
+from odoo import fields, models, _
 
 
 class OfhBankSettlement(models.Model):
@@ -13,6 +13,7 @@ class OfhBankSettlement(models.Model):
         string="ARN",
         readonly=True,
         required=True,
+        index=True,
     )
     settlement_date = fields.Date(
         string="Settlement Date",
@@ -110,3 +111,8 @@ class OfhBankSettlement(models.Model):
         string="Posting Date",
         readonly=True,
     )
+
+    _sql_constraints = [
+        ('unique_bank_settlement', 'unique(name)',
+         _("This line has been uploaded"))
+    ]

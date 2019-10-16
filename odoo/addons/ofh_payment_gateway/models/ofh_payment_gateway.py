@@ -257,3 +257,16 @@ class OfhPaymentGateway(models.Model):
             rec.reported_mid = rec.payment_gateway_line_ids[0].reported_mid
             rec.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
             rec.entity = rec.payment_gateway_line_ids[0].entity
+
+            pg_line = rec.payment_gateway_line_ids.filtered(
+                lambda rec: rec.auth_code and rec.auth_code != '000000')
+            if pg_line:
+                rec.auth_code = pg_line[0].auth_code
+
+            # Pick arn from the Authorised one
+            pg_line = rec.payment_gateway_line_ids.filtered(
+                lambda rec: rec.arn)
+            if pg_line:
+                rec.arn = pg_line[0].arn
+
+

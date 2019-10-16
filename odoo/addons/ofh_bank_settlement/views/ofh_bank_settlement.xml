@@ -30,7 +30,7 @@
                         <field name="card_number"/>
                         <field name="transaction_date"/>
                         <field name="is_mada"/>
-                        <field name="is_3d_secure"/>
+                        <field name="is_3d_secure" attrs="{'invisible': [('bank_name', '!=', 'sabb')]}" />
                         <field name="auth_code"/>
                     </group>
                     <group name="finance_info" string="Finance Details" col="4">

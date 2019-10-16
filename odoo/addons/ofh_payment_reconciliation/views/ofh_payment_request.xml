@@ -73,7 +73,6 @@
             </search>
         </field>
     </record>
-
     <record model="ir.ui.view" id="ofh_payment_request_tree_view">
         <field name="name">ofh.payment.request.tree (in ofh_payment_request)</field>
         <field name="model">ofh.payment.request</field>
