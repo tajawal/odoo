@@ -1,5 +1,9 @@
 Changes
 -------
+2.6.20 (2019-10-16)
+------------------
+- Fixes Imports and Increased Timeouts
+
 2.6.19 (2019-09-30)
 ------------------
 - Revert - Reducing Memory
