@@ -7,7 +7,7 @@ metadata:
   name: finance-hub
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
-    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: 500
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: 600
 spec:
   type: LoadBalancer
   selector:

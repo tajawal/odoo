@@ -7,7 +7,7 @@
     'author': 'ACSONE SA/NV',
     'website': "http://acsone.eu",
     'category': 'odoo_finance_hub',
-    'version': '11.0.2.6.19',
+    'version': '11.0.2.6.20',
     'license': 'AGPL-3',
     'depends': [
         # odoo_finance_hub open source addons
