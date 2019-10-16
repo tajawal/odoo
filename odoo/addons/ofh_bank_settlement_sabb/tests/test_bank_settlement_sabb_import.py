@@ -13,10 +13,10 @@ from ..models.common import (BankSettlementHandler,
                              BankSettlementMapper)
 
 
-class TestBankSettlementRajhiImport(common.TransactionComponentRegistryCase):
+class TestBankSettlementSabbImport(common.TransactionComponentRegistryCase):
 
     def setUp(self):
-        super(TestBankSettlementRajhiImport, self).setUp()
+        super(TestBankSettlementSabbImport, self).setUp()
         self._setup_records()
         self._load_module_components('connector_importer')
         self._build_components(
@@ -28,13 +28,13 @@ class TestBankSettlementRajhiImport(common.TransactionComponentRegistryCase):
 
     def _setup_records(self):
         self.import_type = self.env.ref(
-            'ofh_bank_settlement_rajhi.rajhi_bank_settlement_import_type')
+            'ofh_bank_settlement_sabb.sab_bank_settlement_import_type')
         self.backend = self.env.ref(
-            'ofh_bank_settlement_rajhi.rajhi_bank_settlement_import_backend')
+            'ofh_bank_settlement_sabb.sab_bank_settlement_import_backend')
 
         path = get_resource_path(
-            'ofh_bank_settlement_rajhi',
-            'tests/test_files/rajhi_test.csv')
+            'ofh_bank_settlement_sabb',
+            'tests/test_files/sabb_test.csv')
         with open(path, 'rb') as fl:
             self.source = self.env['import.source.csv'].create({
                 'csv_file': base64.encodestring(fl.read()),
@@ -52,7 +52,7 @@ class TestBankSettlementRajhiImport(common.TransactionComponentRegistryCase):
         })
         self.backend.debug_mode = True
 
-    def test_bank_settlement_rajhi_capture_and_mada(self):
+    def test_bank_settlement_sabb_capture(self):
         for chunk in self.source.get_lines():
             self.record.set_data(chunk)
             with self.backend.work_on(
@@ -67,24 +67,24 @@ class TestBankSettlementRajhiImport(common.TransactionComponentRegistryCase):
 
         # First Payment Gateway Knet test
         first_line = self.bank_settlement_model.search(
-            [('name', '=', '923022024150')])
+            [('name', '=', '923102283922')])
         self.assertTrue(first_line)
         self.assertEquals(len(first_line), 1)
 
-        self.assertEquals(first_line.name, '923022024150')
+        self.assertEquals(first_line.name, '923102283922')
         self.assertEquals(first_line.settlement_date, '2019-08-19')
-        self.assertEquals(first_line.bank_name, 'rajhi')
-        self.assertEquals(first_line.reported_mid, 'ARBS2I010849')
-        self.assertEquals(first_line.account_number, '296000010006080000000')
+        self.assertEquals(first_line.bank_name, 'sabb')
+        self.assertEquals(first_line.reported_mid, '6344211445180210')
+        self.assertEquals(first_line.account_number, '11499555001')
         self.assertEquals(first_line.payment_method, 'none')
         self.assertTrue(first_line.is_mada)
         self.assertEquals(first_line.transaction_date, '2019-08-19')
-        self.assertEquals(first_line.card_number, '535825******9878')
-        self.assertEquals(first_line.gross_amount, 1385.7)
+        self.assertEquals(first_line.card_number, '432328******9740')
+        self.assertEquals(first_line.gross_amount, 5000.0)
         self.assertEquals(first_line.payment_status, 'capture')
-        self.assertEquals(first_line.auth_code, '720296')
+        self.assertEquals(first_line.auth_code, '522871')
 
-    def test_bank_settlement_rajhi_refund_and_mada(self):
+    def test_bank_settlement_sabb_refund(self):
         for chunk in self.source.get_lines():
             self.record.set_data(chunk)
             with self.backend.work_on(
@@ -99,21 +99,21 @@ class TestBankSettlementRajhiImport(common.TransactionComponentRegistryCase):
 
         # First Payment Gateway Knet test
         first_line = self.bank_settlement_model.search(
-            [('name', '=', '923022027269')])
+            [('name', '=', '923116473929')])
         self.assertTrue(first_line)
         self.assertEquals(len(first_line), 1)
 
-        self.assertEquals(first_line.name, '923022027269')
+        self.assertEquals(first_line.name, '923116473929')
         self.assertEquals(first_line.settlement_date, '2019-08-19')
-        self.assertEquals(first_line.bank_name, 'rajhi')
-        self.assertEquals(first_line.reported_mid, 'ARBS2I010849')
-        self.assertEquals(first_line.account_number, '296000010006080000000')
-        self.assertEquals(first_line.payment_method, 'none')
-        self.assertTrue(first_line.is_mada)
+        self.assertEquals(first_line.bank_name, 'sabb')
+        self.assertEquals(first_line.reported_mid, '6344211445180210')
+        self.assertEquals(first_line.account_number, '11499555001')
+        self.assertEquals(first_line.payment_method, 'master_card')
+        self.assertFalse(first_line.is_mada)
         self.assertEquals(first_line.transaction_date, '2019-08-19')
-        self.assertEquals(first_line.card_number, '537767******7424')
-        self.assertEquals(first_line.gross_amount, 2594.6)
+        self.assertEquals(first_line.card_number, '518694******5583')
+        self.assertEquals(first_line.gross_amount, 2820.0)
         self.assertEquals(first_line.payment_status, 'refund')
-        self.assertEquals(first_line.auth_code, '028837')
+        self.assertEquals(first_line.auth_code, '015734')
 
 
