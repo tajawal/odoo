@@ -33,7 +33,7 @@ class TestBankSettlementMashreqImport(common.TransactionComponentRegistryCase):
             'ofh_bank_settlement_mashreq.mashreq_bank_settlement_import_backend')
 
         path = get_resource_path(
-            'ofh_payment_gateway_knet',
+            'ofh_bank_settlement_mashreq',
             'tests/test_files/mashreq_test.csv')
         with open(path, 'rb') as fl:
             self.source = self.env['import.source.csv'].create({
@@ -52,7 +52,39 @@ class TestBankSettlementMashreqImport(common.TransactionComponentRegistryCase):
         })
         self.backend.debug_mode = True
 
-    def test_bank_settlement_mashreq(self):
+    def test_bank_settlement_mashreq_capture(self):
+        for chunk in self.source.get_lines():
+            self.record.set_data(chunk)
+            with self.backend.work_on(
+                'import.record',
+                components_registry=self.comp_registry
+            ) as work:
+                importer = work.component_by_name(
+                    'bank.settlement.record.importer',
+                    'ofh.bank.settlement')
+                self.assertTrue(importer)
+                importer.run(self.record)
+
+        # First Payment Gateway Knet test
+        first_line = self.bank_settlement_model.search(
+            [('name', '=', '923105342933')])
+        self.assertTrue(first_line)
+        self.assertEquals(len(first_line), 1)
+
+        self.assertEquals(first_line.name, '923105342933')
+        self.assertEquals(first_line.settlement_date, '2019-08-19')
+        self.assertEquals(first_line.bank_name, 'mashreq')
+        self.assertEquals(first_line.reported_mid, '8015588')
+        self.assertEquals(first_line.account_number, '784200037686')
+        self.assertEquals(first_line.payment_method, 'master_card')
+        self.assertFalse(first_line.is_mada)
+        self.assertEquals(first_line.transaction_date, False)
+        self.assertEquals(first_line.card_number, '522873******9477')
+        self.assertEquals(first_line.gross_amount, 1754.4)
+        self.assertEquals(first_line.payment_status, 'capture')
+        self.assertEquals(first_line.auth_code, '115489')
+
+    def test_bank_settlement_mashreq_refund(self):
         for chunk in self.source.get_lines():
             self.record.set_data(chunk)
             with self.backend.work_on(
@@ -72,13 +104,13 @@ class TestBankSettlementMashreqImport(common.TransactionComponentRegistryCase):
         self.assertEquals(len(first_line), 1)
 
         self.assertEquals(first_line.name, '923017453767')
-        self.assertEquals(first_line.settlement_date, '08/19/2019')
+        self.assertEquals(first_line.settlement_date, '2019-08-19')
         self.assertEquals(first_line.bank_name, 'mashreq')
         self.assertEquals(first_line.reported_mid, '8015588')
         self.assertEquals(first_line.account_number, '784200037686')
         self.assertEquals(first_line.payment_method, 'visa')
-        self.assertTrue(first_line.is_mada, False)
-        self.assertEquals(first_line.transaction_date, '')
+        self.assertFalse(first_line.is_mada)
+        self.assertEquals(first_line.transaction_date, False)
         self.assertEquals(first_line.card_number, '426610******0000')
         self.assertEquals(first_line.gross_amount, 974)
         self.assertEquals(first_line.payment_status, 'refund')
