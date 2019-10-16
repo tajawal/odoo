@@ -67,21 +67,21 @@ class TestBankSettlementMashreqImport(common.TransactionComponentRegistryCase):
 
         # First Payment Gateway Knet test
         first_line = self.bank_settlement_model.search(
-            [('name', '=', '73791879230913100000000')])
+            [('name', '=', '923017453767')])
         self.assertTrue(first_line)
         self.assertEquals(len(first_line), 1)
 
-        self.assertEquals(first_line.name, '73791879230913100000000')
-        self.assertEquals(first_line.settlement_date, '08/20/2019')
+        self.assertEquals(first_line.name, '923017453767')
+        self.assertEquals(first_line.settlement_date, '08/19/2019')
         self.assertEquals(first_line.bank_name, 'mashreq')
-        self.assertEquals(first_line.reported_mid, '')
-        self.assertEquals(first_line.account_number, '')
-        self.assertEquals(first_line.payment_method, '')
+        self.assertEquals(first_line.reported_mid, '8015588')
+        self.assertEquals(first_line.account_number, '784200037686')
+        self.assertEquals(first_line.payment_method, 'visa')
         self.assertTrue(first_line.is_mada, False)
-        self.assertEquals(first_line.transaction_date, '08/17/2019')
-        self.assertEquals(first_line.card_number, '3791-XXXXXXX-6102')
-        self.assertEquals(first_line.gross_amount, 5125.75)
-        self.assertEquals(first_line.payment_status, 'capture')
-        self.assertEquals(first_line.auth_code, '472181')
+        self.assertEquals(first_line.transaction_date, '')
+        self.assertEquals(first_line.card_number, '426610******0000')
+        self.assertEquals(first_line.gross_amount, 974)
+        self.assertEquals(first_line.payment_status, 'refund')
+        self.assertEquals(first_line.auth_code, '532872')
 
 

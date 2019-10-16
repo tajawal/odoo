@@ -33,7 +33,7 @@ class TestBankSettlementAmexImport(common.TransactionComponentRegistryCase):
             'ofh_bank_settlement_amex.amex_bank_settlement_import_backend')
 
         path = get_resource_path(
-            'ofh_payment_gateway_knet',
+            'ofh_bank_settlement_amex',
             'tests/test_files/amex_test.csv')
         with open(path, 'rb') as fl:
             self.source = self.env['import.source.csv'].create({
@@ -52,7 +52,7 @@ class TestBankSettlementAmexImport(common.TransactionComponentRegistryCase):
         })
         self.backend.debug_mode = True
 
-    def test_bank_settlement_amex(self):
+    def test_bank_settlement_amex_capture(self):
         for chunk in self.source.get_lines():
             self.record.set_data(chunk)
             with self.backend.work_on(
@@ -72,16 +72,78 @@ class TestBankSettlementAmexImport(common.TransactionComponentRegistryCase):
         self.assertEquals(len(first_line), 1)
 
         self.assertEquals(first_line.name, '73791879230913100000000')
-        self.assertEquals(first_line.settlement_date, '08/20/2019')
+        self.assertEquals(first_line.settlement_date, '2019-08-20')
         self.assertEquals(first_line.bank_name, 'amex')
         self.assertEquals(first_line.reported_mid, '')
         self.assertEquals(first_line.account_number, '')
-        self.assertEquals(first_line.payment_method, '')
-        self.assertTrue(first_line.is_mada, False)
-        self.assertEquals(first_line.transaction_date, '08/17/2019')
+        self.assertEquals(first_line.payment_method, False)
+        self.assertFalse(first_line.is_mada)
+        self.assertEquals(first_line.transaction_date, '2019-08-17')
         self.assertEquals(first_line.card_number, '3791-XXXXXXX-6102')
         self.assertEquals(first_line.gross_amount, 5125.75)
         self.assertEquals(first_line.payment_status, 'capture')
         self.assertEquals(first_line.auth_code, '472181')
+
+
+    def test_bank_settlement_amex_capture(self):
+        for chunk in self.source.get_lines():
+            self.record.set_data(chunk)
+            with self.backend.work_on(
+                'import.record',
+                components_registry=self.comp_registry
+            ) as work:
+                importer = work.component_by_name(
+                    'bank.settlement.record.importer',
+                    'ofh.bank.settlement')
+                self.assertTrue(importer)
+                importer.run(self.record)
+
+        # First Payment Gateway Knet test
+        first_line = self.bank_settlement_model.search(
+            [('name', '=', '73791879230913100000000')])
+        self.assertTrue(first_line)
+        self.assertEquals(len(first_line), 1)
+
+        self.assertEquals(first_line.name, '73791879230913100000000')
+        self.assertEquals(first_line.settlement_date, '2019-08-20')
+        self.assertEquals(first_line.bank_name, 'amex')
+        self.assertEquals(first_line.reported_mid, '')
+        self.assertEquals(first_line.account_number, '')
+        self.assertEquals(first_line.payment_method, False)
+        self.assertFalse(first_line.is_mada)
+        self.assertEquals(first_line.transaction_date, '2019-08-17')
+        self.assertEquals(first_line.card_number, '3791-XXXXXXX-6102')
+        self.assertEquals(first_line.gross_amount, 5125.75)
+        self.assertEquals(first_line.payment_status, 'capture')
+        self.assertEquals(first_line.auth_code, '472181')
+
+    def test_bank_settlement_amex_refund(self):
+        for chunk in self.source.get_lines():
+            self.record.set_data(chunk)
+            with self.backend.work_on(
+                'import.record',
+                components_registry=self.comp_registry
+            ) as work:
+                importer = work.component_by_name(
+                    'bank.settlement.record.importer',
+                    'ofh.bank.settlement')
+                self.assertTrue(importer)
+                importer.run(self.record)
+
+        # First Payment Gateway Knet test
+        first_line = self.bank_settlement_model.search(
+            [('name', '=', '73791879226183000000000')])
+        self.assertTrue(first_line)
+        self.assertEquals(len(first_line), 1)
+
+        self.assertEquals(first_line.name, '73791879226183000000000')
+        self.assertEquals(first_line.settlement_date, '2019-08-20')
+        self.assertEquals(first_line.bank_name, 'amex')
+        self.assertFalse(first_line.is_mada)
+        self.assertEquals(first_line.card_number, '3769-XXXXXXX-9918')
+        self.assertEquals(first_line.gross_amount, 437.71)
+        self.assertEquals(first_line.payment_status, 'refund')
+        self.assertEquals(first_line.auth_code, '000000')
+
 
 
