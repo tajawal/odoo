@@ -76,7 +76,8 @@ class OfhSaleOrderLine(models.Model):
             if rec.supplier_name != AIR_INDIA:
                 continue
             comm = commissions.get(rec.supplier_currency_id.name)
-            rec.air_india_commission = rec.segment_count * comm
+            if rec.segment_count and comm:
+                rec.air_india_commission = rec.segment_count * comm
 
     @api.multi
     @api.depends(
