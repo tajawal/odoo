@@ -4,8 +4,9 @@ from datetime import datetime
 
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector_importer.models.job_mixin import JobRelatedMixin
 
-from odoo import fields
+from odoo import fields, api, models
 
 ACQUIRER_BANK = {
     'Commercial International Bank (CIB)': 'cib',
@@ -163,3 +164,29 @@ class PaymentGatewayLineHandler(Component):
         return [
             ('provider', '=', 'fort'),
             (self.unique_key, '=', values.get('FORT ID'))]
+
+
+class ImportRecordSet(models.Model, JobRelatedMixin):
+    _inherit = 'import.recordset'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        amex_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_id == amex_backend:
+            return self._run_import(channel='root.import.fort')
+        return super(ImportRecordSet, self).run_import()
+
+
+class ImportRecord(models.Model, JobRelatedMixin):
+    _inherit = 'import.record'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        amex_backend = self.env.ref(
+            'ofh_payment_gateway_fort.fort_import_backend')
+        if self.backend_id == amex_backend:
+            return self._run_import(channel='root.import.fort')
+        return super(ImportRecord, self).run_import()

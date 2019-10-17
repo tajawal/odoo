@@ -19,6 +19,6 @@
         'views/ofh_payment_gateway.xml',
     ],
     'demo': [
-        'demo/ofh_payment_gateway.xml',
+        # 'demo/ofh_payment_gateway.xml',
     ],
 }
