@@ -4,9 +4,9 @@
 
 <odoo>
 
-    <record model="ir.model.access" id="ofh_payment_manager_access">
+    <record model="ir.model.access" id="ofh_payment_charge_manager_access">
         <field name="name">ofh.payment.manager.access</field>
-        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="model_id" ref="ofh_payment_charge.model_ofh_payment_charge"/>
         <field name="group_id" ref="ofh_payment_reconciliation.ofh_payment_reconciliation_manager"/>
         <field name="perm_read" eval="1"/>
         <field name="perm_create" eval="1"/>

@@ -5,12 +5,12 @@
 <odoo>
 
     <record model="ir.module.category" id="ofh_payment_reconciliation_module_category">
-        <field name="name">Payment Reconciliation</field>
+        <field name="name">Payments</field>
         <field name="sequence">50</field>
     </record>
 
     <record model="res.groups" id="ofh_payment_reconciliation_manager">
-        <field name="name">Payment Reconciliation Manager</field>
+        <field name="name">Payment Manager</field>
         <field name="category_id" ref="ofh_payment_reconciliation_module_category"/>
         <field name="users" eval="[(5, ref('base.user_root'))]"/>
         <field name="group_ids" eval="[(5, ref('base.group_user'))]"/>
