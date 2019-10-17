@@ -28,6 +28,7 @@
         'security/ofh_payment_charge.xml',
         'security/ofh_payment_request.xml',
         'security/ofh_payment_gateway.xml',
+        'security/ofh_sale_order_sap.xml',
         'security/ofh_bank_settlement.xml',
         'wizards/ofh_bank_settlement_force_match.xml',
         'wizards/ofh_payment_gateway_force_match.xml',
