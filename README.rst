@@ -36,28 +36,48 @@ run:
    ./freeze.sh
    git commit requirements.txt
 
+
+Configuration
+-------------------------
+
+Run the following command and update the config file with the proper credentials and values
+
+.. code:: bash
+
+   cp odoo-example.cfg odoo.cfg
+
 Run
 ---
+
+.. code:: bash
 
    odoo -c odoo.cfg -d {db_name}
 
 Update Module
 -------------
 
+.. code:: bash
+
    odoo -c odoo.cfg -d {db_name} -u {module_name}
 
 Update All DB
 -------------
+
+.. code:: bash
 
    odoo -c odoo.cfg -d {db_name} -u all
 
 Install New Module
 ------------------
 
+.. code:: bash
+
    odoo -c odoo.cfg -d {db_name} -i {module_name}
 
 Run Tests
 ---------
+
+.. code:: bash
 
    odoo -c odoo.cfg -d {db_name} [-i {module_name}] --test-enable [--stop-after-init]
 
@@ -66,6 +86,17 @@ Release
 
 First make sure you have been testing using the correct dependencies by
 running ``./freeze.sh`` and checking there is no change in ``requirements.txt``.
+
+Install via Docker
+------------------
+
+Download the latest changes from `dev-machine <www.github.com/tajawal/dev-machine>`_ and run the following command:
+
+.. code:: bash
+
+    make finance-hub-up
+
+And you will be able to access the application via http://finance-hub.tajawal.local:8080
 
 To release manually
 ...................
