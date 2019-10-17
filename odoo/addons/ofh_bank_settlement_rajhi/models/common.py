@@ -3,9 +3,10 @@
 
 from datetime import datetime
 
-from odoo import fields
+from odoo import fields, api, models
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector_importer.models.job_mixin import JobRelatedMixin
 
 PAYMENT_METHODS = {
     'VISA': 'visa',
@@ -209,3 +210,28 @@ class BankSettlementHandler(Component):
         return [
             ('bank_name', '=', 'rajhi'),
             (self.unique_key, '=', values.get('Transaction Reference No'))]
+
+class ImportRecordSet(models.Model, JobRelatedMixin):
+    _inherit = 'import.recordset'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        rajhi_backend = self.env.ref(
+            'ofh_bank_settlement_rajhi.rajhi_bank_settlement_import_backend')
+        if self.backend_id == rajhi_backend:
+            return self._run_import(channel='root.import.rajhi')
+        return super(ImportRecordSet, self).run_import()
+
+
+class ImportRecord(models.Model, JobRelatedMixin):
+    _inherit = 'import.record'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        rajhi_backend = self.env.ref(
+            'ofh_bank_settlement_rajhi.rajhi_bank_settlement_import_backend')
+        if self.backend_id == rajhi_backend:
+            return self._run_import(channel='root.import.rajhi')
+        return super(ImportRecord, self).run_import()
