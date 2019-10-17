@@ -25,6 +25,7 @@
     'data': [
         'security/groups.xml',
         'security/ofh_payment.xml',
+        'security/ofh_payment_sap.xml',
         'security/ofh_payment_charge.xml',
         'security/ofh_payment_request.xml',
         'security/ofh_payment_gateway.xml',
