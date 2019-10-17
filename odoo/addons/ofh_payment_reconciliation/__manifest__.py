@@ -23,6 +23,11 @@
         'ofh_sale_order_payment_request',
     ],
     'data': [
+        'security/groups.xml',
+        'security/ofh_payment.xml',
+        'security/ofh_payment_request.xml',
+        'security/ofh_payment_gateway.xml',
+        'security/ofh_bank_settlement.xml',
         'wizards/ofh_bank_settlement_force_match.xml',
         'wizards/ofh_payment_gateway_force_match.xml',
         'wizards/ofh_payment_reconciliation_tag.xml',

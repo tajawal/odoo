@@ -18,6 +18,6 @@
         'wizards/ofh_bank_settlement_import.xml',
     ],
     'demo': [
-        'demo/ofh_bank_settlement.xml',
+        # 'demo/ofh_bank_settlement.xml',
     ],
 }
