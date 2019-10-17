@@ -2,9 +2,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import datetime
 
-from odoo import fields
+from odoo import fields, api, models
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector_importer.models.job_mixin import JobRelatedMixin
 
 ACQUIRER_BANK = {
     'Al Rajhi': 'rajhi',
@@ -359,3 +360,29 @@ class PaymentGatewayLineHandler(Component):
         return [
             ('provider', '=', 'checkout'),
             (self.unique_key, '=', values.get('Action ID'))]
+
+
+class ImportRecordSet(models.Model, JobRelatedMixin):
+    _inherit = 'import.recordset'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        amex_backend = self.env.ref(
+            'ofh_payment_gateway_checkout.checkout_import_backend')
+        if self.backend_id == amex_backend:
+            return self._run_import(channel='root.import.checkout')
+        return super(ImportRecordSet, self).run_import()
+
+
+class ImportRecord(models.Model, JobRelatedMixin):
+    _inherit = 'import.record'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        amex_backend = self.env.ref(
+            'ofh_payment_gateway_checkout.checkout_import_backend')
+        if self.backend_id == amex_backend:
+            return self._run_import(channel='root.import.checkout')
+        return super(ImportRecord, self).run_import()
