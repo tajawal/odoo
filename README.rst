@@ -7,6 +7,24 @@ Odoo Odoo_finance_hub
 Development environment howto
 =============================
 
+Install virtualenvwrapper
+-------------------------
+
+.. code:: bash
+    pip3 install virtualenvwrapper
+
+Then add the following lines to your ~/.bashrc:
+
+.. code:: bash
+export VIRTUALENVWRAPPER_PYTHON=$(which python3)
+export VIRTUALENVWRAPPER_VIRTUALENV=$(dirname $VIRTUALENVWRAPPER_PYTHON)/virtualenv
+source $(dirname $VIRTUALENVWRAPPER_PYTHON)/virtualenvwrapper.sh
+
+Then
+
+.. code:: bash
+    source ~/.bashrc
+
 Initialize virtualenv
 ---------------------
 
@@ -38,7 +56,7 @@ run:
 
 
 Configuration
--------------------------
+-------------
 
 Run the following command and update the config file with the proper credentials and values
 
