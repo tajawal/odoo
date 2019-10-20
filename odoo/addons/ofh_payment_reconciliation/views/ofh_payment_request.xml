@@ -78,9 +78,10 @@
         <field name="model">ofh.payment.request</field>
         <field name="arch" type="xml">
             <tree duplicate="0" delete="0">
+                <field name="created_at"/>
+                <field name="updated_at"/>
                 <field name="entity"/>
                 <field name="track_id"/>
-                <field name="updated_at"/>
                 <field name="request_type"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="currency_id" invisible="1"/>
