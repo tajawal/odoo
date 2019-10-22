@@ -66,6 +66,20 @@ class OfhPaymentRequest(models.Model):
         index=True,
         readonly=True,
     )
+    assignment = fields.Char(
+        string="Assignment",
+        readonly=True,
+        store=True,
+        compute="_compute_assignment"
+    )
+
+    @api.multi
+    @api.depends('sap_payment_ids.state', 'sap_payment_ids.assignment')
+    def _compute_assignment(self):
+        for rec in self:
+            rec.integration_status = rec.sap_payment_ids.filtered(
+                lambda p: p.state == 'success') and \
+                                     rec.assignment
 
     @api.multi
     @api.depends('payment_gateway_id.reconciliation_status')
