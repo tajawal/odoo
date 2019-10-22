@@ -166,10 +166,13 @@ class PaymentGatewayLineRecordImporter(Component):
         # but somehow the inheritance didn't work for me, I may be missing
         # something, we will fix it later on.
         response_code = origin_values.get('Response Code', '111111')
+        response_message = origin_values.get('3rd Party Response Message', '')
         provider = values.get('provider')
         acquirer_bank = values.get('acquirer_bank')
 
         if provider == 'checkout' and response_code[0][:1] != '1':
+            return {'message': "Payment Gateway not applicable for import"}
+        if provider == 'fort' and response_message != 'Approved':
             return {'message': "Payment Gateway not applicable for import"}
         if provider == 'fort' and acquirer_bank == 'cib':
             return {'message': "Payment Gateway not applicable for import"}
