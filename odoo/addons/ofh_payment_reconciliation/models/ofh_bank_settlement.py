@@ -121,12 +121,12 @@ class OfhBankSettlement(models.Model):
             return
 
         self.write({
-            "payment_gateway_id": payment_gateway_id[0].id,
+            "payment_gateway_id": payment_gateway_id.id,
             "matching_status": 'matched'
         })
 
         # Updating the relation
-        payment_gateway_id[0].write({
+        payment_gateway_id.write({
             'bank_settlement_id': self.id,
             'settlement_matching_status': 'matched',
         })
