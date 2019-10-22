@@ -76,6 +76,7 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="created_at"/>
                 <field name="updated_at"/>
+                <field name="order_id"/>
                 <field name="payment_method"/>
                 <field name="provider"/>
                 <field name="auth_code"/>

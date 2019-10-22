@@ -80,6 +80,7 @@
             <tree duplicate="0" delete="0">
                 <field name="created_at"/>
                 <field name="updated_at"/>
+                <field name="order_reference"/>
                 <field name="entity"/>
                 <field name="track_id"/>
                 <field name="request_type"/>
