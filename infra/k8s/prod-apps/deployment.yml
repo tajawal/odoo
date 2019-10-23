@@ -114,6 +114,11 @@ spec:
             secretKeyRef:
               name: finance-hub-secret
               key: finance-hub-sap-xml-api-password
+        - name: redis_host
+          valueFrom:
+            secretKeyRef:
+              name: finance-hub-secret
+              key: finance-hub-redis-host
 
         - name: db_endpoint
           valueFrom:
@@ -140,6 +145,21 @@ spec:
             configMapKeyRef:
               name: finance-hub-config
               key: logging_json
+        - name: enable_redis
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: enable_redis
+        - name: redis_port
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: redis_port
+        - name: redis_dbindex
+          valueFrom:
+            configMapKeyRef:
+              name: finance-hub-config
+              key: redis_dbindex
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:
