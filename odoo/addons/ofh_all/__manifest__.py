@@ -53,6 +53,7 @@
         # Infra modules
         'logging_json',
         'monitoring_status',
+        'smile_redis_session_store',
         # OCA/Connector
         'base_import_async',
     ],
