@@ -10,6 +10,6 @@ data:
   worker: "9"
   hub_source : "hub-live"
   logging_json: "1"
-  enable_redis: "True"
+  enable_redis: "False"
   redis_port: "6379"
   redis_dbindex: "0"
