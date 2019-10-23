@@ -21,7 +21,9 @@ redis_dbindex = $redis_dbindex
 redis_pass =
 
 [queue_job]
-channels = root:4,root.hub:4:throttle=2,root.sap:4:throttle=2,root.import:1,root.import.gds:1,root.import.tf:1,root.import.sap:1,root.import.tv:1,root.import.amex:1,root.import.mashreq:1,root.import.rajhi:1,root.import.sabb:1,root.import.checkout:3,root.import.fort:1,root.import.knet:1
+channels = root:4,root.hub:4:throttle=2,root.sap:4:throttle=2,root.import:1,root.import.gds:1,root.import.tf:1,root.import.sap:1,root.import.tv:1,root.import.amex:1,root.import.mashreq:1,root.import.rajhi:1,root.import.sabb:1,root.import.checkout:1,root.import.fort:1,root.import.knet:1
+jobrunner_db_host = finance-hub
+jobrunner_db_port = 5432
 [hub_backend.$myenv-hub]
 hub_api_location=$hub_api_location
 hub_api_username=$hub_api_username
@@ -45,10 +47,6 @@ hub_source=$hub_source
 
 [ir.config_parameter]
 ir_attachment.location=db
-
-[options-connector]
-jobrunner_db_host = finance-hub
-jobrunner_db_port = 5432
 
 EOL
 
