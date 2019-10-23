@@ -114,7 +114,7 @@ spec:
         - name: redis_host
           valueFrom:
             secretKeyRef:
-              name: finance-hub-secret
+              name: finance-hub-config
               key: finance-hub-redis-host
 
         - name: db_endpoint
