@@ -13,4 +13,4 @@ data:
   enable_redis: "True"
   redis_port: "6379"
   redis_dbindex: "0"
-  redis_host: "hotel-api-dev-redis.hnk4p0.ng.0001.euw1.cache.amazonaws.com"
+  finance-hub-redis-host: "hotel-api-dev-redis.hnk4p0.ng.0001.euw1.cache.amazonaws.com"
