@@ -46,6 +46,10 @@ hub_source=$hub_source
 [ir.config_parameter]
 ir_attachment.location=db
 
+[options-connector]
+jobrunner_db_host = finance-hub
+jobrunner_db_port = 5432
+
 EOL
 
 export PGPASSWORD=${db_password}
