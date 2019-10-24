@@ -138,7 +138,7 @@ class PaymentGatewayLineMapper(Component):
 
         payment_gateway = pg_model.search(domain, limit=1)
 
-        if not payment_gateway:
+        if not payment_gateway and not payment_status in ('refund', 'void'):
             payment_gateway = pg_model.create({'name': track_id})
 
         return {'payment_gateway_id': payment_gateway.id}
