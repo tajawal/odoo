@@ -22,7 +22,8 @@ redis_pass =
 
 [queue_job]
 channels = root:4,root.hub:4:throttle=2,root.sap:4:throttle=2,root.import:1,root.import.gds:1,root.import.tf:1,root.import.sap:1,root.import.tv:1,root.import.amex:1,root.import.mashreq:1,root.import.rajhi:1,root.import.sabb:1,root.import.checkout:1,root.import.fort:1,root.import.knet:1
-host=http://finance-hub
+host=finance-hub.tajawal.io
+scheme = http
 port=80
 
 [hub_backend.$myenv-hub]
