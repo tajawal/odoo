@@ -117,8 +117,14 @@ class OfhBankSettlement(models.Model):
         if not payment_gateway_id:
             return
 
+        # In case of more than 1 PGs found. Match amounts as well.
         if len(payment_gateway_id) > 1:
-            return
+            for pg in payment_gateway_id:
+                _amount = \
+                    abs(pg.total - self.gross_amount)
+                if _amount <= 1:
+                    payment_gateway_id = pg
+                    break
 
         self.write({
             "payment_gateway_id": payment_gateway_id.id,
