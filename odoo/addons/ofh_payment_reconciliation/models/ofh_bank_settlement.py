@@ -84,6 +84,10 @@ class OfhBankSettlement(models.Model):
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
             self._get_payment_gateway_domain(['checkout']))
 
+        if not payment_gateway_ids and self.payment_status == 'refund':
+            payment_gateway_ids = self.env['ofh.payment.gateway'].search(
+                self._get_payment_gateway_domain_rajhi_refunds(['checkout']))
+
         self._set_payment_gateway_matching(payment_gateway_ids)
 
     @api.multi
@@ -109,6 +113,13 @@ class OfhBankSettlement(models.Model):
         return [('provider', 'in', provider),
                 ('acquirer_bank', '=', self.bank_name),
                 ('auth_code', '=', self.auth_code),
+                ('payment_status', '=', self.payment_status)]
+
+    @api.multi
+    def _get_payment_gateway_domain_rajhi_refunds(self, provider):
+        return [('provider', 'in', provider),
+                ('acquirer_bank', '=', self.bank_name),
+                ('arn', '=', self.name),
                 ('payment_status', '=', self.payment_status)]
 
     @api.multi
