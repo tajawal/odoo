@@ -134,7 +134,10 @@ class OfhPaymentGateway(models.Model):
 
         # In case of more than two matches, match with amounts as well
         if len(payment_id) > 1:
-            return False
+            for payment in payment_id:
+                if payment.total_amount == self.total:
+                    payment_id = payment
+                    break
 
         self.write({
             "hub_payment_id": payment_id.id,
@@ -169,7 +172,10 @@ class OfhPaymentGateway(models.Model):
 
         # In case of more than two matches, match with amounts as well
         if len(payment_request_id) > 1:
-            return False
+            for payment_request in payment_request_id:
+                if payment_request.total_amount == self.total:
+                    payment_request_id = payment_request
+                    break
 
         self.write({
             "hub_payment_request_id": payment_request_id.id,

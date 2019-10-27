@@ -172,6 +172,6 @@ class OfhPaymentGatewayLine(models.Model):
     )
 
     _sql_constraints = [
-        ('unique_payment_getway_line', 'unique(name)',
+        ('unique_payment_getway_line', 'unique(name, payment_status, total)',
          _("This line has been uploaded"))
     ]
