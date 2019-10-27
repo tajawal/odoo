@@ -127,9 +127,13 @@ class OfhPaymentGateway(models.Model):
 
         # Matching with Payment Logic
         payment_id = self.env['ofh.payment'].search(
-            self._get_payment_domain(), limit=1)
+            self._get_payment_domain())
 
         if not payment_id:
+            return False
+
+        # In case of more than two matches, match with amounts as well
+        if len(payment_id) > 1:
             return False
 
         self.write({
@@ -158,9 +162,13 @@ class OfhPaymentGateway(models.Model):
 
         # Matching with Payment Request Logic
         payment_request_id = self.env['ofh.payment.request'].search(
-            domain, limit=1)
+            domain)
 
         if not payment_request_id:
+            return False
+
+        # In case of more than two matches, match with amounts as well
+        if len(payment_request_id) > 1:
             return False
 
         self.write({
