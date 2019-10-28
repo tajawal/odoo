@@ -135,12 +135,10 @@ class OfhPaymentGateway(models.Model):
 
         # In case of more than two matches, match with amounts as well
         if len(payment_id) > 1:
-            for payment in payment_id:
-                if float_compare(
-                        payment.total_amount, self.total,
-                        precision_rounding=self.currency_id.rounding) > 0:
-                    payment_id = payment
-                    break
+            payment_id = payment_id.filtered(
+                lambda p: float_compare(
+                    p.total_amount, self.total,
+                    precision_rounding=self.currency_id.rounding) > 0)
 
         self.write({
             "hub_payment_id": payment_id.id,
@@ -175,12 +173,10 @@ class OfhPaymentGateway(models.Model):
 
         # In case of more than two matches, match with amounts as well
         if len(payment_request_id) > 1:
-            for payment_request in payment_request_id:
-                if float_compare(
-                        payment_request.total_amount, self.total,
-                        precision_rounding=self.currency_id.rounding) > 0:
-                    payment_request_id = payment_request
-                    break
+            payment_request_id = payment_request_id.filtered(
+                lambda pr: float_compare(
+                    pr.total_amount, self.total,
+                    precision_rounding=self.currency_id.rounding) > 0)
 
         self.write({
             "hub_payment_request_id": payment_request_id.id,
