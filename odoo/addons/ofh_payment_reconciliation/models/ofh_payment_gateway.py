@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.tools import float_compare
 
 
 class OfhPaymentGateway(models.Model):
@@ -135,7 +136,9 @@ class OfhPaymentGateway(models.Model):
         # In case of more than two matches, match with amounts as well
         if len(payment_id) > 1:
             for payment in payment_id:
-                if payment.total_amount == self.total:
+                if float_compare(
+                        payment.total_amount, self.total,
+                        precision_rounding=self.currency_id.rounding) > 0:
                     payment_id = payment
                     break
 
@@ -173,7 +176,9 @@ class OfhPaymentGateway(models.Model):
         # In case of more than two matches, match with amounts as well
         if len(payment_request_id) > 1:
             for payment_request in payment_request_id:
-                if payment_request.total_amount == self.total:
+                if float_compare(
+                        payment_request.total_amount, self.total,
+                        precision_rounding=self.currency_id.rounding) > 0:
                     payment_request_id = payment_request
                     break
 
@@ -207,7 +212,7 @@ class OfhPaymentGateway(models.Model):
     def _get_payment_request_domain_refund(self):
         self.ensure_one()
         return [
-            ('parent_track_id', '=', self.track_id),
+            ('parent_track_id', 'like', self.track_id),
             ('request_type', 'in', ('void', 'refund'))]
 
     def _force_match_payment(
