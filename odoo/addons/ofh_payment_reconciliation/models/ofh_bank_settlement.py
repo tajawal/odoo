@@ -3,6 +3,7 @@
 
 from odoo import fields, models, api
 from odoo.exceptions import MissingError
+from odoo.tools import float_compare
 
 
 class OfhBankSettlement(models.Model):
@@ -128,14 +129,12 @@ class OfhBankSettlement(models.Model):
         if not payment_gateway_id:
             return
 
-        # In case of more than 1 PGs found. Match amounts as well.
+        # In case of more than 1 PGs found. Match amounts as well with 1 diff tolerance.
         if len(payment_gateway_id) > 1:
-            for pg in payment_gateway_id:
-                _amount = \
-                    abs(pg.total - self.gross_amount)
-                if _amount <= 1:
-                    payment_gateway_id = pg
-                    break
+            payment_gateway_id = payment_gateway_id.filtered(
+                lambda pg: float_compare(
+                    pg.total, self.gross_amount,
+                    precision_rounding=self.currency_id.rounding) > 1)
 
         self.write({
             "payment_gateway_id": payment_gateway_id.id,
