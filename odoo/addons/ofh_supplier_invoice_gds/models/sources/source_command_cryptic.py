@@ -39,5 +39,12 @@ class SourceCommandCryptic(models.Model):
             oms_finance_api_url=backend.oms_finance_api_url
         )
 
-        return hub_api.get_gds_daily_report(
+        lines = hub_api.get_gds_daily_report(
             office_id=self.office_id, report_day=self.report_day)
+
+        if not lines:
+            return []
+
+        lines = sorted(lines, key=lambda l: l["Record locator"])
+
+        return lines
