@@ -136,7 +136,7 @@ class PaymentGatewayLineMapper(Component):
         else:
             domain.append(('payment_status', 'not in', ('refund', 'void')))
 
-        payment_gateway = pg_model.search(domain, limit=1)
+        payment_gateway = pg_model.search(domain)
 
         if payment_status in ('refund', 'void'):
             track_id = f"{track_id}_{len(payment_gateway) + 1}"
