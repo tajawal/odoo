@@ -129,12 +129,12 @@ class OfhBankSettlement(models.Model):
         if not payment_gateway_id:
             return
 
-        # In case of more than 1 PGs found. Match amounts as well with 1 diff tolerance.
+        # In case of more than 1 PGs found. Match amounts as well.
         if len(payment_gateway_id) > 1:
             payment_gateway_id = payment_gateway_id.filtered(
                 lambda pg: float_compare(
                     pg.total, self.gross_amount,
-                    precision_rounding=self.currency_id.rounding) > 1)
+                    precision_rounding=self.currency_id.rounding) > 0)
 
         self.write({
             "payment_gateway_id": payment_gateway_id.id,
