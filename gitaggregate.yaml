@@ -19,3 +19,13 @@
         - origin 11.0
         - origin 11-add-connector_importer_fix_zak # Migrating to 11.0 with bug fixes
     target: origin 11.0-connector_importer
+
+./src/queue:
+    remotes:
+        oca: https://github.com/OCA/queue
+        origin: git@github.com:zakiuu/queue.git
+    merges:
+        - oca 11.0
+        - origin 11.0
+        - origin remove-job-runner-from-queue
+    target: origin 11.0-queue
