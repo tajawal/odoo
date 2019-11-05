@@ -19,7 +19,7 @@
         'ofh_bank_settlement_mashreq',
         'ofh_bank_settlement_rajhi',
         'ofh_bank_settlement_amex',
-        'ofh_sale_order',
+        'ofh_sale_order_sap',
         'ofh_sale_order_payment_request',
     ],
     'data': [

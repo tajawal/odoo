@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.tools import float_compare
 
 
 class OfhPaymentGateway(models.Model):
@@ -127,10 +128,17 @@ class OfhPaymentGateway(models.Model):
 
         # Matching with Payment Logic
         payment_id = self.env['ofh.payment'].search(
-            self._get_payment_domain(), limit=1)
+            self._get_payment_domain())
 
         if not payment_id:
             return False
+
+        # In case of more than two matches, match with amounts as well
+        if len(payment_id) > 1:
+            payment_id = payment_id.filtered(
+                lambda p: float_compare(
+                    p.total_amount, self.total,
+                    precision_rounding=self.currency_id.rounding) > 0)
 
         self.write({
             "hub_payment_id": payment_id.id,
@@ -158,10 +166,17 @@ class OfhPaymentGateway(models.Model):
 
         # Matching with Payment Request Logic
         payment_request_id = self.env['ofh.payment.request'].search(
-            domain, limit=1)
+            domain)
 
         if not payment_request_id:
             return False
+
+        # In case of more than two matches, match with amounts as well
+        if len(payment_request_id) > 1:
+            payment_request_id = payment_request_id.filtered(
+                lambda pr: float_compare(
+                    pr.total_amount, self.total,
+                    precision_rounding=self.currency_id.rounding) > 0)
 
         self.write({
             "hub_payment_request_id": payment_request_id.id,
@@ -193,7 +208,7 @@ class OfhPaymentGateway(models.Model):
     def _get_payment_request_domain_refund(self):
         self.ensure_one()
         return [
-            ('parent_track_id', '=', self.track_id),
+            ('parent_track_id', 'like', self.track_id),
             ('request_type', 'in', ('void', 'refund'))]
 
     def _force_match_payment(

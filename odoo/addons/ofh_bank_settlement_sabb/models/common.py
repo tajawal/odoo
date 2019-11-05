@@ -118,6 +118,9 @@ class BankSettlementMapper(Component):
         if reported_mid == '80096' or reported_mid == '80000404' or reported_mid == '80000455':
             return {'currency_id': self.env.ref('base.SAR').id}
 
+        if reported_mid == '80001088':
+            return {'currency_id': self.env.ref('base.BHD').id}
+
         return {'currency_id': self.env.ref('base.SAR').id}
 
     @mapping

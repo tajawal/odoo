@@ -3,6 +3,7 @@
 
 from odoo import fields, models, api
 from odoo.exceptions import MissingError
+from odoo.tools import float_compare
 
 
 class OfhBankSettlement(models.Model):
@@ -55,7 +56,7 @@ class OfhBankSettlement(models.Model):
 
     @api.multi
     def _search_reconciliation_status(self, operator, value):
-        return [('reconciliation_status', operator, value)]
+        return [('payment_gateway_id.reconciliation_status', operator, value)]
 
     @api.multi
     def match_with_payment_gateway(self):
@@ -73,7 +74,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout', 'fort']), limit=1)
+            self._get_payment_gateway_domain(['checkout', 'fort']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -82,7 +83,11 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout']), limit=1)
+            self._get_payment_gateway_domain(['checkout']))
+
+        if not payment_gateway_ids and self.payment_status == 'refund':
+            payment_gateway_ids = self.env['ofh.payment.gateway'].search(
+                self._get_payment_gateway_domain_rajhi_refunds(['checkout']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -91,7 +96,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout and Fort Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout', 'fort']), limit=1)
+            self._get_payment_gateway_domain(['checkout', 'fort']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -100,7 +105,7 @@ class OfhBankSettlement(models.Model):
         self.ensure_one()
         # Matching with Payment Gateway Checkout Logic
         payment_gateway_ids = self.env['ofh.payment.gateway'].search(
-            self._get_payment_gateway_domain(['checkout']), limit=1)
+            self._get_payment_gateway_domain(['checkout']))
 
         self._set_payment_gateway_matching(payment_gateway_ids)
 
@@ -112,10 +117,24 @@ class OfhBankSettlement(models.Model):
                 ('payment_status', '=', self.payment_status)]
 
     @api.multi
+    def _get_payment_gateway_domain_rajhi_refunds(self, provider):
+        return [('provider', 'in', provider),
+                ('acquirer_bank', '=', self.bank_name),
+                ('arn', '=', self.name),
+                ('payment_status', '=', self.payment_status)]
+
+    @api.multi
     def _set_payment_gateway_matching(self, payment_gateway_id):
         self.ensure_one()
         if not payment_gateway_id:
             return
+
+        # In case of more than 1 PGs found. Match amounts as well.
+        if len(payment_gateway_id) > 1:
+            payment_gateway_id = payment_gateway_id.filtered(
+                lambda pg: abs(float_compare(
+                    pg.total, self.gross_amount,
+                    precision_rounding=self.currency_id.rounding)) == 0)
 
         self.write({
             "payment_gateway_id": payment_gateway_id.id,
