@@ -91,29 +91,6 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="ofh_payment_all_act_window">
-        <field name="name">All Payments</field>
-        <field name="res_model">ofh.payment</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
-        <field name="context">{}</field>
-        <field name="search_view_id" ref="ofh_payment_search_view"/>
-    </record>
-
-    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_tree_view">
-        <field name="sequence" eval="1"/>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="ofh_payment_tree_view"/>
-        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
-    </record>
-
-    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_form_view">
-        <field name="sequence" eval="2"/>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="ofh_payment_form_view"/>
-        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
-    </record>
-
     <record model="ir.ui.view" id="ofh_payment_search_view">
         <field name="name">ofh.payment.search (in ofh_payment)</field>
         <field name="model">ofh.payment</field>
@@ -137,6 +114,29 @@
                 <filter name="is_void" string="Is Void?" domain="[('is_voided', '=', True)]"/>
             </search>
         </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_all_act_window">
+        <field name="name">All Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_tree_view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="ofh_payment_tree_view"/>
+        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_form_view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="ofh_payment_form_view"/>
+        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
     </record>
 
     <record model="ir.actions.server" id="ofh_applicable">
