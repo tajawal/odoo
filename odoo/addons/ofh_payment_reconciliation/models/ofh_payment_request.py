@@ -78,11 +78,10 @@ class OfhPaymentRequest(models.Model):
     def _compute_assignment(self):
         for rec in self:
             rec.assignment = ''
-            sap_record = rec.sap_payment_ids.filtered(
+            sap_records = rec.sap_payment_ids.filtered(
                 lambda p: p.state == 'success')
-            if sap_record:
-                rec.assignment = sap_record.assignment
-
+            if sap_records:
+                rec.assignment = sap_records[-1].assignment
 
     @api.multi
     @api.depends('payment_gateway_id.reconciliation_status')
