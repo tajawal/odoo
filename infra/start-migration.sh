@@ -46,4 +46,4 @@ ir_attachment.location=db
 
 EOL
 
-odoo -c /opt/finance_hub/odoo.cfg -d $db_name -r $db_user -w $db_password --db_host $db_endpoint -u all --without-demo=WITHOUT_DEMO
+odoo -c /opt/finance_hub/odoo.cfg -d $DB_NAME -r $DB_USER -w $DB_PASSWORD --db_host $DB_HOST -u all --without-demo=WITHOUT_DEMO
