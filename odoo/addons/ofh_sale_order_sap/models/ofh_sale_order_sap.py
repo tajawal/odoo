@@ -202,6 +202,7 @@ class OfhSaleOrderSap(models.Model):
         string="File ID",
         readonly=True,
         compute="_compute_sap_header_detail",
+        index=True,
         help="File ID must be stored bc it will be used to check if the order "
              "is in SAP or not.",
     )

@@ -230,7 +230,8 @@ class OfhPaymentSap(models.Model):
         string="Assignment",
         readonly=True,
         store=True,
-        compute="_compute_sap_payment_detail"
+        compute="_compute_sap_payment_detail",
+        index=True,
     )
     line_item_text = fields.Char(
         string="Line Item Text",
