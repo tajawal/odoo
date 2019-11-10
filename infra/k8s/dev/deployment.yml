@@ -5,7 +5,7 @@ metadata:
   name: finance-hub-deployment
   namespace: default
 spec:
-  replicas: 3
+  replicas: 1
   revisionHistoryLimit: 1
   minReadySeconds: 80
   selector:
