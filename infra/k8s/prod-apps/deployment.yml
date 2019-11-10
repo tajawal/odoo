@@ -149,7 +149,7 @@ spec:
             configMapKeyRef:
               name: finance-hub-config
               key: redis_port
-        - name: finance-hub-redis-host
+        - name: redis_host
           valueFrom:
             configMapKeyRef:
               name: finance-hub-config
