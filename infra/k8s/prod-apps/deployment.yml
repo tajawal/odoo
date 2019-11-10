@@ -116,7 +116,7 @@ spec:
               key: finance-hub-sap-xml-api-password
         - name: redis_host
           valueFrom:
-            secretKeyRef:
+            configMapKeyRef:
               name: finance-hub-secret
               key: finance-hub-redis-host
 
