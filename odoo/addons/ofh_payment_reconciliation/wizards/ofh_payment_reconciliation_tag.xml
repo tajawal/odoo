@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_reconciliation_tag_form_view">
+        <field name="name">ofh.payment.reconciliation.tag.form (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.reconciliation.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="payment_gateway_ids" invisible="1"/>
+                    <field name="reconciliation_tag"/>
+                </group>
+                <footer>
+                    <button name="action_update_reconciliation_tag"
+                            string="Save"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_reconciliation_tag_act_window">
+        <field name="name">Reconciliation Tag</field>
+        <field name="res_model">ofh.payment.reconciliation.tag</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="ofh_payment_reconciliation_tag_form_view"/>
+        <field name="binding_model_id" ref="model_ofh_payment_gateway"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

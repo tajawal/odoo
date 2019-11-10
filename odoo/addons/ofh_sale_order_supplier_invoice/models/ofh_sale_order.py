@@ -31,19 +31,6 @@ class OfhSaleOrder(models.Model):
         store=True,
         index=True,
     )
-    payment_request_reconciliation_status = fields.Selection(
-        string="PR Reconciliation Status",
-        selection=[
-            ('reconciled', 'Reconciled'),
-            ('unreconciled', 'Unreconciled'),
-            ('not_applicable', 'Not Applicable'),
-        ],
-        compute='_compute_payment_request_reconciliation_status',
-        default='unreconciled',
-        readonly=True,
-        store=True,
-        index=True,
-    )
     invoice_currency_id = fields.Many2one(
         string="Invoice Currency",
         comodel_name='res.currency',
@@ -97,20 +84,6 @@ class OfhSaleOrder(models.Model):
                 rec.order_reconciliation_status = 'reconciled'
                 continue
             rec.order_reconciliation_status = 'unreconciled'
-
-    @api.multi
-    @api.depends('payment_request_ids.reconciliation_status')
-    def _compute_payment_request_reconciliation_status(self):
-        for rec in self:
-            if all([l.reconciliation_status == 'not_applicable'
-                    for l in rec.payment_request_ids]):
-                rec.payment_request_reconciliation_status = 'not_applicable'
-                continue
-            if all([l.reconciliation_status in ('reconciled', 'not_applicable')
-                    for l in rec.payment_request_ids]):
-                rec.payment_request_reconciliation_status = 'reconciled'
-                continue
-            rec.payment_request_reconciliation_status = 'unreconciled'
 
     @api.multi
     @api.depends('invoice_line_ids.total', 'invoice_line_ids.currency_id')

@@ -10,3 +10,7 @@ data:
   worker: "9"
   hub_source : "hub-live"
   logging_json: "1"
+  enable_redis: "True"
+  redis_port: "6379"
+  redis_dbindex: "0"
+  finance-hub-redis-host: "finance.fgtocu.ng.0001.euw1.cache.amazonaws.com"

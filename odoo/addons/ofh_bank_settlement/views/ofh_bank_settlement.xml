@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_bank_settlement_form_view">
+        <field name="name">ofh.bank.settlement.form (in ofh_bank_settlement)</field>
+        <field name="model">ofh.bank.settlement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header></header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group name="general_info" col="4">
+                        <field name="bank_name"/>
+                        <field name="name"/>
+                        <field name="account_number"/>
+                        <field name="payment_method"/>
+                        <field name="reported_mid"/>
+                        <field name="payment_status"/>
+                        <field name="settlement_date"/>
+                        <field name="posting_date"/>
+                    </group>
+                    <group name="card_info" string="Card Details" col="4">
+                        <field name="card_number"/>
+                        <field name="transaction_date"/>
+                        <field name="is_mada"/>
+                        <field name="is_3d_secure" attrs="{'invisible': [('bank_name', '!=', 'sabb')]}" />
+                        <field name="auth_code"/>
+                    </group>
+                    <group name="finance_info" string="Finance Details" col="4">
+                        <field name="gross_amount"/>
+                        <field name="net_transaction_amount" widget="monetary"/>
+                        <field name="merchant_charge_amount" widget="monetary"/>
+                        <field name="merchant_charge_vat" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+     <record model="ir.ui.view" id="ofh_bank_settlement_search_view">
+        <field name="name">ofh.bank.settlement.search (in ofh_bank_settlement)</field>
+        <field name="model">ofh.bank.settlement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="settlement_date" />
+                <field name="bank_name" />
+                <field name="reported_mid" />
+                <field name="auth_code" />
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_bank_settlement_tree_view">
+        <field name="name">ofh.bank.settlement.tree (in ofh_bank_settlement)</field>
+        <field name="model">ofh.bank.settlement</field>
+        <field name="arch" type="xml">
+            <tree delete="0">
+                <field name="bank_name"/>
+                <field name="name"/>
+                <field name="account_number"/>
+                <field name="settlement_date"/>
+                <field name="posting_date"/>
+                <field name="auth_code"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="gross_amount" widget="monetary"/>
+                <field name="payment_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_bank_settlement_all_act_window">
+        <field name="name">Bank Settlements</field>
+        <field name="res_model">ofh.bank.settlement</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

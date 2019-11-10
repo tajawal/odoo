@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="rajhi_bank_settlement_import_backend" model="import.backend">
+        <field name="name">Rajhi Report Importer</field>
+        <field name="version">1.0</field>
+        <field name="cron_cleanup_keep">1</field>
+    </record>
+
+    <record id="rajhi_bank_settlement_import_type" model="import.type">
+        <field name="name">Rajhi Report</field>
+        <field name="key">Rajhi</field>
+        <field name="settings">
+            ofh.bank.settlement::bank.settlement.record.importer
+        </field>
+    </record>
+
+</odoo>

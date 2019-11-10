@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_form_view">
+        <field name="name">ofh.payment.form (in ofh_payment_reconciliation)</field>
+        <field name="model">ofh.payment</field>
+        <field name="arch" type="xml">
+            <form create="0" duplicate="0" delete="0">
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="track_id"/>
+                        </h1>
+                    </div>
+                    <group name="main_info" col="4">
+                        <field name="created_at"/>
+                        <field name="updated_at"/>
+                        <field name="provider"/>
+                        <field name="auth_code"/>
+                        <field name="card_type"/>
+                        <field name="card_name"/>
+                        <field name="payment_method"/>
+                        <field name="card_bin"/>
+                        <field name="last_four"/>
+                        <field name="mid"/>
+                        <field name="reference_id"/>
+                        <field name="is_3d_secure"/>
+                        <field name="is_installment"/>
+                        <field name="bank_name"/>
+                        <field name="booking_source"/>
+                        <field name="total_amount" widget="monetary"/>
+                        <field name="payment_status"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="settlement_date" invisible="1"/>
+                        <field name="order_id"/>
+                        <field name="assignment"/>
+                    </group>
+                    <group name="status" string="Statuses" col="4">
+                        <field name="pg_matching_status"/>
+                        <field name="reconciliation_status"/>
+                    </group>
+                    <notebook>
+                        <page name="payment_gateway_detail" string="Payment Gateway &amp; Bank Settlement">
+                            <group col="4" string="Payment Gateway">
+                                <field name="payment_gateway_id"/>
+                                <field name="response_description"/>
+                                <field name="is_apple_pay"/>
+                                <field name="pg_payment_status"/>
+                            </group>
+                            <group col="4" string="Bank Settlement">
+                                <field name="bank_settlement_id"/>
+                                <field name="bank_name"/>
+                                <field name="settlement_date"/>
+                                <field name="gross_amount"/>
+                                <field name="net_transaction_amount"/>
+                            </group>
+                        </page>
+                        <page name="charges_detail" string="Charges">
+                            <field name="charge_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_tree_view">
+        <field name="name">ofh.payment.tree (in ofh_payment_reconciliation)</field>
+        <field name="model">ofh.payment</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0" delete="0">
+                <field name="currency_id" invisible="1"/>
+                <field name="created_at"/>
+                <field name="updated_at"/>
+                <field name="order_id"/>
+                <field name="assignment"/>
+                <field name="payment_method"/>
+                <field name="provider"/>
+                <field name="auth_code"/>
+                <field name="card_type"/>
+                <field name="total_amount" widget="monetary"/>
+                <field name="payment_status"/>
+                <field name="pg_matching_status"/>
+                <field name="reconciliation_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_search_view">
+        <field name="name">ofh.payment.search (in ofh_payment)</field>
+        <field name="model">ofh.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ticketing_office_id"/>
+                <field name="order_id"/>
+                <field name="pg_matching_status"/>
+                <field name="track_id"/>
+                <field name="auth_code"/>
+                <field name="arn"/>
+                <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_id.entity', '=', 'tajawal')]"/>
+                <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_id.entity', '=', 'almosafer')]"/>
+                <separator/>
+                <filter name="updated_this_month" string="Updated This month" domain="[('updated_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_this_month" string="Created this month" domain="[('created_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="updated_last_month" string="Updated last month" domain="['&amp;', ('updated_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('updated_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter name="created_last_month" string="Created last month" domain="['&amp;', ('created_at', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('created_at', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter name="not_captured_in_48_hours" string="Not Captured in 48 Hours" domain="['&amp;', ('created_at', '&lt;=', (context_today() - relativedelta(days=2)).strftime('%%Y-%%m-%%d')), ('payment_status', '=', '10000')]"/>
+                <filter name="is_void" string="Is Void?" domain="[('is_voided', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_all_act_window">
+        <field name="name">All Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_tree_view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="ofh_payment_tree_view"/>
+        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_form_view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="ofh_payment_form_view"/>
+        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_applicable">
+        <field name="name">PG matching Applicable</field>
+        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name = "binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_pg_matching_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_not_applicable">
+        <field name="name">PG Matching not Applicable</field>
+        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_pg_matching_not_applicable()
+        </field>
+    </record>
+
+</odoo>

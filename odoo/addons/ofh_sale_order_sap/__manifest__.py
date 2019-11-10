@@ -10,7 +10,7 @@
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
     'depends': [
-        'connector',
+        'ofh_connector_importer',
         'ofh_sale_order_supplier_invoice',
         'ofh_payment_request_sap',
     ],

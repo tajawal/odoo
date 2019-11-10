@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.menu" id="ofh_payment_main_menu">
+        <field name="name">Payments</field>
+        <field name="sequence" eval="70"/>
+    </record>
+
+    <!-- Payment menus-->
+    <record model="ir.ui.menu" id="ofh_payment_menu">
+        <field name="name">Payments</field>
+        <field name="parent_id" ref="ofh_payment_main_menu"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_all_payment_menu">
+        <field name="name">All Payments</field>
+        <field name="parent_id" ref="ofh_payment_menu"/>
+        <field name="action" ref="ofh_payment_reconciliation.ofh_payment_all_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_all_payment__request_menu">
+        <field name="name">All Payment Requests</field>
+        <field name="parent_id" ref="ofh_payment_menu"/>
+        <field name="action" ref="ofh_payment_reconciliation.ofh_payment_request_all_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <!-- END OF PAYMENT MENUS-->
+
+    <!-- Payment Gateway Menus -->
+    <record model="ir.ui.menu" id="ofh_payment_gateway_menu">
+        <field name="name">Payment Gateways</field>
+        <field name="parent_id" ref="ofh_payment_main_menu"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="all_payment_gateway_menu">
+        <field name="name">All Payments</field>
+        <field name="parent_id" ref="ofh_payment_gateway_menu"/>
+        <field name="action" ref="ofh_payment_gateway.ofh_payment_gateway_all_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_checkout_payment_gateway_line_menu">
+        <field name="name">Checkout Payments</field>
+        <field name="parent_id" ref="ofh_payment_gateway_menu"/>
+        <field name="action" ref="ofh_payment_gateway_checkout.ofh_payment_gateway_menu"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_fort_payment_gateway_line_menu">
+        <field name="name">Fort Payments</field>
+        <field name="parent_id" ref="ofh_payment_gateway_menu"/>
+        <field name="action" ref="ofh_payment_gateway_fort.ofh_payment_gateway_menu"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_knet_payment_gateway_line_menu">
+        <field name="name">Knet Payments</field>
+        <field name="parent_id" ref="ofh_payment_gateway_menu"/>
+        <field name="action" ref="ofh_payment_gateway_knet.ofh_payment_gateway_menu"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <!-- END Payment Gateway Menus -->
+
+    <!-- Bank Settlements Menus -->
+    <record model="ir.ui.menu" id="ofh_bank_settlement_main_menu">
+        <field name="name">Bank Settlements</field>
+        <field name="parent_id" ref="ofh_payment_main_menu"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_bank_settlement_menu">
+        <field name="name">All Settlements</field>
+        <field name="parent_id" ref="ofh_bank_settlement_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement.ofh_bank_settlement_all_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="sabb_bank_settlement_menu">
+        <field name="name">SABB Settlement</field>
+        <field name="parent_id" ref="ofh_bank_settlement_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_sabb.ofh_bank_settlement_sabb_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="mashreq_bank_settlement_menu">
+        <field name="name">Mashreq Settlement</field>
+        <field name="parent_id" ref="ofh_bank_settlement_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_mashreq.ofh_bank_settlement_mashreq_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="rajhi_bank_settlement_menu">
+        <field name="name">Rajhi Settlement</field>
+        <field name="parent_id" ref="ofh_bank_settlement_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_rajhi.ofh_bank_settlement_rajhi_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="amex_bank_settlement_menu">
+        <field name="name">Amex Settlement</field>
+        <field name="parent_id" ref="ofh_bank_settlement_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_amex.ofh_bank_settlement_amex_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <!-- END Bank Settlements Menus -->
+
+    <!-- Import Menus -->
+
+    <record model="ir.ui.menu" id="ofh_payment_import_main_menu">
+        <field name="name">Import reports</field>
+        <field name="parent_id" ref="ofh_payment_main_menu"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_checkout_payment_gateway_import_menu">
+        <field name="name">Checkout Report</field>
+        <field name="parent_id" ref="ofh_payment_import_main_menu"/>
+        <field name="action" ref="ofh_payment_gateway_checkout.ofh_payment_gateway_import_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_fort_payment_gateway_import_menu">
+        <field name="name">Fort Report</field>
+        <field name="parent_id" ref="ofh_payment_import_main_menu"/>
+        <field name="action" ref="ofh_payment_gateway_fort.ofh_payment_gateway_import_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_knet_payment_gateway_import_menu">
+        <field name="name">Knet Report</field>
+        <field name="parent_id" ref="ofh_payment_import_main_menu"/>
+        <field name="action" ref="ofh_payment_gateway_knet.ofh_payment_gateway_import_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sabb_bank_settlement_import_menu">
+        <field name="name">SABB Report</field>
+        <field name="parent_id" ref="ofh_payment_import_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_sabb.ofh_bank_settlement_import_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_mashreq_bank_settlement_import_menu">
+        <field name="name">Mashreq Report</field>
+        <field name="parent_id" ref="ofh_payment_import_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_mashreq.ofh_bank_settlement_import_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_rajhi_bank_settlement_import_menu">
+        <field name="name">Rajhi Report</field>
+        <field name="parent_id" ref="ofh_payment_import_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_rajhi.ofh_bank_settlement_import_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_amex_bank_settlement_import_menu">
+        <field name="name">Amex Report</field>
+        <field name="parent_id" ref="ofh_payment_import_main_menu"/>
+        <field name="action" ref="ofh_bank_settlement_amex.ofh_bank_settlement_import_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <!-- END Import Menus -->
+
+</odoo>

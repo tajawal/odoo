@@ -1,9 +1,11 @@
 # Copyright 2018 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo import api, fields, models
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 from odoo.addons.connector_importer.log import logger
+from odoo.addons.connector_importer.models.job_mixin import JobRelatedMixin
 
 
 class SaleOrderSAPMapper(Component):
@@ -214,3 +216,33 @@ class PaymentSAPHandler(Component):
             ('state', '=', 'success'),
             (self.unique_key, '=',
              orig_values.get('Assignment'))]
+
+
+class ImportRecordSet(models.Model, JobRelatedMixin):
+    _inherit = 'import.recordset'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        va05_backend = self.env.ref(
+            'ofh_sale_order_sap.sap_sale_import_backend')
+        fbl5n_backend = self.env.ref(
+            'ofh_sale_order_sap.sap_payment_import_backend')
+        if self.backend_id in (va05_backend, fbl5n_backend):
+            return self._run_import(channel='root.import.sap')
+        return super(ImportRecordSet, self).run_import()
+
+
+class ImportRecord(models.Model, JobRelatedMixin):
+    _inherit = 'import.record'
+
+    @api.multi
+    def run_import(self):
+        self.ensure_one()
+        va05_backend = self.env.ref(
+            'ofh_sale_order_sap.sap_sale_import_backend')
+        fbl5n_backend = self.env.ref(
+            'ofh_sale_order_sap.sap_payment_import_backend')
+        if self.backend_id in (va05_backend, fbl5n_backend):
+            return self._run_import(channel='root.import.sap')
+        return super(ImportRecord, self).run_import()

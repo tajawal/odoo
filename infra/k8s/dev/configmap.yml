@@ -5,8 +5,12 @@ metadata:
   name: finance-hub-config
   namespace: default
 data:
-  db_endpoint: "finance-hub-dev.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"
+  db_endpoint: "financehub-dev-restore.cgdrbvkghjok.eu-west-1.rds.amazonaws.com"
   myenv: "dev"
   worker: "2"
   hub_source : "hub-dev"
   logging_json: "1"
+  enable_redis: "True"
+  redis_port: "6379"
+  redis_dbindex: "0"
+  finance-hub-redis-host: "hotel-api-dev-redis.hnk4p0.ng.0001.euw1.cache.amazonaws.com"

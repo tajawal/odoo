@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record model="ir.ui.view" id="ofh_payment_gateway_form_view">
+        <field name="name">ofh.payment.gateway.from (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+        <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_form_view"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="%(ofh_payment_gateway_force_match_act_window)d"
+                        type="action"
+                        string="Force match with Payment/Payment Request"
+                        class="btn-success"/>
+                <button name="action_unlink_payment"
+                        type="object"
+                        class="btn-danger"
+                        string="Unlink"/>
+            </header>
+            <group position="after">
+                <group name="statuses" string="Statuses" col="4">
+                    <field name="hub_matching_status"/>
+                    <field name="settlement_matching_status"/>
+                    <field name="reconciliation_status"/>
+                    <field name="reconciliation_tag"/>
+                </group>
+            </group>
+            <group name="references" position="inside">
+                <field name="hub_payment_id" context="{'form_view_ref':'ofh_payment_reconciliation.ofh_payment_form_view'}"/>
+                <field name="hub_payment_request_id" context="{'form_view_ref':'ofh_payment_reconciliation.ofh_payment_request_form_view'}"/>
+                <field name="bank_settlement_id"/>
+            </group>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_gateway_tree_view">
+        <field name="name">ofh.payment.gateway.tree (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+        <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="decoration-danger">payment_status=='void'</attribute>
+            </tree>
+            <tree position="inside">
+                <field name="hub_matching_status"/>
+                <field name="settlement_matching_status"/>
+                <field name="reconciliation_status"/>
+                <field name="reconciliation_amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_gateway_search_view">
+        <field name="name">ofh.payment.gateway.search (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.gateway</field>
+       <field name="inherit_id" ref="ofh_payment_gateway.ofh_payment_gateway_search_view"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <filter name="not_captured_in_24_hours" string="Not Captured in 24 Hours" domain="['&amp;', ('transaction_date', '&lt;=', (context_today() - relativedelta(days=1)).strftime('%%Y-%%m-%%d')), ('payment_status', '=', 'auth')]"/>
+                <filter name="is_void" string="Is Void" domain="[('payment_status', '=', 'void')]"/>
+                <filter name="not_void_in_hub" string="Not Void in Hub" domain="['&amp;', ('hub_matching_status', '=', 'matched'), ('payment_status', '=', 'void'), '|',('hub_payment_id.is_voided', '=', False), ('hub_payment_request_id.request_type', '!=', 'void')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_unlink">
+        <field name="name">Unlink from Hub Payment/Payment Request</field>
+        <field name="model_id" ref="ofh_payment_gateway.model_ofh_payment_gateway"/>
+        <field name = "binding_model_id" ref="ofh_payment_gateway.model_ofh_payment_gateway"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_unlink_payment()
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.actions.act_window" id="ofh_payment_gateway_menu">
+        <field name="name">Checkout Payments</field>
+        <field name="res_model">ofh.payment.gateway</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('provider', '=', 'checkout')]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

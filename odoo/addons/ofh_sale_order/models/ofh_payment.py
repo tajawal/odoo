@@ -14,3 +14,6 @@ class OfhPayment(models.Model):
         ondelete='cascade',
         auto_join=True,
     )
+    ticketing_office_id = fields.Char(
+        related="order_id.ticketing_office_id",
+    )

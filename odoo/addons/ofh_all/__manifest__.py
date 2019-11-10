@@ -26,6 +26,20 @@
         'ofh_sale_order_sap_enett',
         'ofh_sale_order_sap_itl',
         'ofh_sale_order_sap_tv',
+        # Payment Gateway Addons
+        'ofh_payment_gateway',
+        'ofh_payment_gateway_checkout',
+        'ofh_payment_gateway_fort',
+        'ofh_payment_gateway_knet',
+        'ofh_payment_reconciliation',
+        # Bank Settlement
+        'ofh_bank_settlement',
+        'ofh_bank_settlement_sabb',
+        'ofh_bank_settlement_mashreq',
+        'ofh_bank_settlement_rajhi',
+        'ofh_bank_settlement_amex',
+        # Payment Reconciliation
+        'ofh_payment_reconciliation',
         # !!! no odoo enterprise addons dependencies !!!
         # OCA/server-tools
         'base_optional_quick_create',
@@ -39,6 +53,7 @@
         # Infra modules
         'logging_json',
         'monitoring_status',
+        'smile_redis_session_store',
         # OCA/Connector
         'base_import_async',
     ],

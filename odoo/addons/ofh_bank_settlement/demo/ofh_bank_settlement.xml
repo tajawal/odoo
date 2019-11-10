@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_bank_settlement_sabb_1" model="ofh.bank.settlement">
+        <field name="created_at">2019-08-02</field>
+        <field name="updated_at">2019-08-02</field>
+        <field name="name">sabb</field>
+        <field name="bank_name">sabb</field>
+        <field name="reported_mid">6344211445180215</field>
+        <field name="account_number">011499555001</field>
+        <field name="payment_method">VISA</field>
+        <field name="card_type">VISA</field>
+        <field name="transaction_date">2019-08-02</field>
+        <field name="card_number">412113******4004</field>
+        <field name="gross_transaction_amount">474</field>
+        <field name="currency_id" ref="base.KWD"/>
+        <field name="reported_merchant_charges">9.48</field>
+        <field name="reported_merchant_vat">0.47</field>
+        <field name="payment_status">Purchase</field>
+        <field name="arn">917406072738</field>
+        <field name="auth_code">68327</field>
+        <field name="is_3d_secure">False</field>
+        <field name="net_transaction_amount">0</field>
+        <field name="posting_date">2019-08-02</field>
+        <field name="reconciliation_reference_id"></field>
+        <field name="full_terminal_number"></field>
+        <field name="settlement_date">2019-08-04</field>
+    </record>
+
+</odoo>

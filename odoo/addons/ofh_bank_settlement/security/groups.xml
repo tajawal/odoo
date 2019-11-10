@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.module.category" id="ofh_bank_settlement_module_category">
+        <field name="name">Bank Settlements</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record model="res.groups" id="ofh_payment_gateway_manager">
+        <field name="name">Bank Settlement Manager</field>
+        <field name="category_id" ref="ofh_bank_settlement_module_category"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

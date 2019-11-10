@@ -32,6 +32,7 @@ class HubPaymentRequestImportMapper(Component):
         ('processed_by', 'processed_by'),
         ('reason', 'request_reason'),
         ('track_id', 'track_id'),
+        ('parent_track_id', 'parent_track_id'),
         ('auth_code', 'auth_code'),
         ('remarks', 'notes'),
         ('payment_mode', 'payment_mode'),

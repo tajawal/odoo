@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+    <record model="ir.ui.view" id="ofh_bank_settlement_form_view">
+        <field name="name">ofh.bank.settlement.from (in ofh_bank_settlement)</field>
+        <field name="model">ofh.bank.settlement</field>
+        <field name="inherit_id" ref="ofh_bank_settlement.ofh_bank_settlement_form_view"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="%(ofh_bank_settlement_force_match_act_window)d"
+                        type="action"
+                        string="Force match with Payment Gateway"
+                        class="btn-success"/>
+                <button name="action_unlink_payment_gateway"
+                        type="object"
+                        class="btn-danger"
+                        string="Unlink"/>
+            </header>
+            <sheet position="inside">
+                <group name="statuses" string="Statuses" col="4">
+                    <field name="matching_status"/>
+                    <field name="reconciliation_status"/>
+                </group>
+                <group name="references" string="References" col="4">
+                    <field name="payment_gateway_id" context="{'form_view_ref':'ofh_payment_reconciliation.ofh_payment_gateway_form_view'}"/>
+                </group>
+            </sheet>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_bank_settlement_tree_view">
+        <field name="name">ofh.bank.settlement.tree (in ofh_bank_settlement)</field>
+        <field name="model">ofh.bank.settlement</field>
+        <field name="inherit_id" ref="ofh_bank_settlement.ofh_bank_settlement_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="matching_status"/>
+                <field name="reconciliation_status"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
