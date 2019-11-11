@@ -32,7 +32,7 @@ odoo11-addon-base-optional-quick-create==11.0.1.0.0.99.dev2
 odoo11-addon-component==11.0.1.1.0.99.dev10
 odoo11-addon-component-event==11.0.1.0.0.99.dev7
 odoo11-addon-connector==11.0.1.0.0.99.dev19
--e git+https://github.com/zakiuu/connector-interfaces.git@eb4eeca448336165c117357155bc041b0e79b69f#egg=odoo11_addon_connector_importer&subdirectory=setup/connector_importer
+-e git+https://github.com/zakiuu/connector-interfaces.git@658550c5ec3f57617a3d086e2ccc74a785519b32#egg=odoo11_addon_connector_importer&subdirectory=setup/connector_importer
 odoo11-addon-mail-environment==11.0.1.1.0.99.dev2
 odoo11-addon-module-auto-update==11.0.2.0.4.99.dev4
 -e git+https://github.com/zakiuu/queue.git@260fc678063e53c3f3d712cabca99dad654e07e3#egg=odoo11_addon_queue_job&subdirectory=setup/queue_job
