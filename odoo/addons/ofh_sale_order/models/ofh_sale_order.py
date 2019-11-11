@@ -62,6 +62,7 @@ class OfhSaleOrder(models.Model):
         string="Order ID",
         readonly=True,
         required=True,
+        index=True,
     )
     created_at = fields.Datetime(
         string="Created At",
