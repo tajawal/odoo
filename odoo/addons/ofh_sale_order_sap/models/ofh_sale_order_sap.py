@@ -181,6 +181,7 @@ class OfhSaleOrderSap(models.Model):
         string="Booking Number",
         readonly=True,
         store=True,
+        index=True,
         compute="_compute_sap_header_detail"
     )
     sales_office = fields.Char(

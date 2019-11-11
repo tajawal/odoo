@@ -138,8 +138,8 @@ class OfhSupplierInvoiceLine(models.Model):
         return [
             ('order_type', '=', 'flight'),
             '|',
-            ('supplier_reference', 'like', self.locator),
-            ('vendor_reference', 'like', self.locator)]
+            ('supplier_reference', '=', self.locator.strip()),
+            ('vendor_reference', '=', self.locator.strip())]
 
     @api.multi
     def action_gds_record_locator(self):

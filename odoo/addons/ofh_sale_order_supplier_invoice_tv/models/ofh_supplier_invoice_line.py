@@ -66,5 +66,5 @@ class OfhSupplierInvoiceLine(models.Model):
             return [('name', '=', self.order_reference)]
 
         return [
-            ('vendor_reference', 'like', self.locator),
+            ('vendor_reference', '=', self.locator.strip()),
             ('order_type', '=', 'hotel')]
