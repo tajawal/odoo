@@ -104,5 +104,5 @@ class OfhSupplierInvoiceLine(models.Model):
             ('order_type', '=', 'flight'),
             ('ticketing_office_id', 'not in', offices),
             '|',
-            ('supplier_reference', 'like', self.locator),
-            ('vendor_reference', 'like', self.locator)]
+            ('supplier_reference', '=', self.locator.strip()),
+            ('vendor_reference', '=', self.locator.strip())]
