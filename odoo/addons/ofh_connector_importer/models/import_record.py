@@ -29,7 +29,7 @@ class ImportRecord(models.Model, JobRelatedMixin):
                     item.recordset_id.available_models():
                 # TODO: grab component from config
                 result = job_method(
-                    importer, model, is_last_importer=is_last_importer)
+                    importer, model, is_last_importer=False)
                 _result[model] = result
                 if self.debug_mode():
                     # debug mode, no job here: reset it!
