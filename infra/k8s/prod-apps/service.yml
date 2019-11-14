@@ -6,10 +6,10 @@ kind: Service
 metadata:
   name: finance-hub
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-1:820808869900:certificate/717ac2ae-01bf-481b-b46b-79c60bda0afe
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
-    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: 600
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:820808869900:certificate/717ac2ae-01bf-481b-b46b-79c60bda0afe"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "600"
 spec:
   type: LoadBalancer
   selector:
@@ -17,4 +17,7 @@ spec:
   ports:
   - name: finance-hub
     port: 80
+    targetPort: finance-hub
+  - name: finance-hub-https
+    port: 443
     targetPort: finance-hub
