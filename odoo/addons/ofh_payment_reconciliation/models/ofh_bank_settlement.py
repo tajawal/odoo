@@ -179,7 +179,7 @@ class OfhBankSettlement(models.Model):
         })
         self.write({
             'payment_gateway_id': False,
-            'settlement_matching_status': 'unmatched',
+            'matching_status': 'unmatched',
         })
         return
 
