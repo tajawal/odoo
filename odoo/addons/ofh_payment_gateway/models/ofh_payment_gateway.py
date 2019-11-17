@@ -226,37 +226,46 @@ class OfhPaymentGateway(models.Model):
         for rec in self:
             if not rec.payment_gateway_line_ids:
                 continue
-            rec.provider = rec.payment_gateway_line_ids[0].provider
-            rec.acquirer_bank = rec.payment_gateway_line_ids[0].acquirer_bank
-            rec.track_id = rec.payment_gateway_line_ids[0].track_id
-            rec.auth_code = rec.payment_gateway_line_ids[0].auth_code
-            rec.payment_method = rec.payment_gateway_line_ids[0].payment_method
-            rec.payment_by = rec.payment_gateway_line_ids[0].payment_by
+
+            pg_line = rec.payment_gateway_line_ids.filtered(
+                lambda rec: rec.payment_status and rec.payment_status == 'capture')
+
+            if pg_line:
+                pg_line = pg_line[0]
+            else:
+                pg_line = rec.payment_gateway_line_ids[0]
+
+            rec.provider = pg_line.provider
+            rec.acquirer_bank = pg_line.acquirer_bank
+            rec.track_id = pg_line.track_id
+            rec.auth_code = pg_line.auth_code
+            rec.payment_method = pg_line.payment_method
+            rec.payment_by = pg_line.payment_by
             rec.transaction_date = \
-                rec.payment_gateway_line_ids[0].transaction_date
-            rec.total = rec.payment_gateway_line_ids[0].total
-            rec.currency_id = rec.payment_gateway_line_ids[0].currency_id
-            rec.payment_status = rec.payment_gateway_line_ids[0].payment_status
-            rec.card_name = rec.payment_gateway_line_ids[0].card_name
-            rec.card_number = rec.payment_gateway_line_ids[0].card_number
-            rec.card_bin = rec.payment_gateway_line_ids[0].card_bin
-            rec.card_bank = rec.payment_gateway_line_ids[0].card_bank
-            rec.is_card_mada = rec.payment_gateway_line_ids[0].is_card_mada
-            rec.is_apple_pay = rec.payment_gateway_line_ids[0].is_apple_pay
+                pg_line.transaction_date
+            rec.total = pg_line.total
+            rec.currency_id = pg_line.currency_id
+            rec.payment_status = pg_line.payment_status
+            rec.card_name = pg_line.card_name
+            rec.card_number = pg_line.card_number
+            rec.card_bin = pg_line.card_bin
+            rec.card_bank = pg_line.card_bank
+            rec.is_card_mada = pg_line.is_card_mada
+            rec.is_apple_pay = pg_line.is_apple_pay
             rec.card_expiry_year = \
-                rec.payment_gateway_line_ids[0].card_expiry_year
+                pg_line.card_expiry_year
             rec.card_expiry_month = \
-                rec.payment_gateway_line_ids[0].card_expiry_month
+                pg_line.card_expiry_month
             rec.response_description = \
-                rec.payment_gateway_line_ids[0].response_description
-            rec.customer_email = rec.payment_gateway_line_ids[0].customer_email
-            rec.cvv_check = rec.payment_gateway_line_ids[0].cvv_check
-            rec.arn = rec.payment_gateway_line_ids[0].arn
-            rec.payment_id = rec.payment_gateway_line_ids[0].payment_id
-            rec.server_ip = rec.payment_gateway_line_ids[0].server_ip
-            rec.reported_mid = rec.payment_gateway_line_ids[0].reported_mid
-            rec.is_3d_secure = rec.payment_gateway_line_ids[0].is_3d_secure
-            rec.entity = rec.payment_gateway_line_ids[0].entity
+                pg_line.response_description
+            rec.customer_email = pg_line.customer_email
+            rec.cvv_check = pg_line.cvv_check
+            rec.arn = pg_line.arn
+            rec.payment_id = pg_line.payment_id
+            rec.server_ip = pg_line.server_ip
+            rec.reported_mid = pg_line.reported_mid
+            rec.is_3d_secure = pg_line.is_3d_secure
+            rec.entity = pg_line.entity
 
             pg_line = rec.payment_gateway_line_ids.filtered(
                 lambda rec: rec.auth_code and rec.auth_code != '000000')
@@ -268,5 +277,3 @@ class OfhPaymentGateway(models.Model):
                 lambda rec: rec.arn)
             if pg_line:
                 rec.arn = pg_line[0].arn
-
-
