@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
 from ..components.backend_adapter import SapXmlApi
 
 
@@ -53,13 +52,11 @@ class OfhPaymentLoader(models.TransientModel):
     @api.multi
     def generate_loader(self):
         payments = self._get_eligible_payments()
+        response = []
         if payments:
             params = self._prepare_loader_params(payments)
             sap_api = SapXmlApi()
             response = sap_api.generate_loader(params)
-            print("---------------------------")
-            print(response)
-            print("---------------------------")
 
         return response
 

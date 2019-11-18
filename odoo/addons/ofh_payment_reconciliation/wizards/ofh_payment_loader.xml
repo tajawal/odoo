@@ -9,14 +9,15 @@
         <field name="model">ofh.payment.loader</field>
         <field name="arch" type="xml">
             <form>
-                <group name="main_group">
+                <group col="4" name="inner_group">
                     <field name="entity"/>
                     <field name="bank_name"/>
                     <field name="provider"/>
                     <field name="settlement_date"/>
-                    <field name="is_apple_pay"/>
                     <field name="currency_id"/>
+                    <field name="is_apple_pay"/>
                 </group>
+
                 <footer>
                     <button name="generate_loader"
                             string="Generate Loader"
