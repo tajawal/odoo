@@ -173,16 +173,16 @@
     <!-- END Import Menus -->
 
     <!-- Loader menus-->
-    <record model="ir.ui.menu" id="ofh_loader_menu">
+    <record model="ir.ui.menu" id="ofh_payment_loader_menu">
         <field name="name">Loaders</field>
         <field name="parent_id" ref="ofh_payment_main_menu"/>
         <field name="sequence" eval="10"/>
     </record>
 
-    <record model="ir.ui.menu" id="ofh_all_loaders_menu">
+    <record model="ir.ui.menu" id="ofh_all_payment_loaders_menu">
         <field name="name">All Loaders</field>
-        <field name="parent_id" ref="ofh_loader_menu"/>
-        <field name="action" ref="ofh_loader_all_act_window"/>
+        <field name="parent_id" ref="ofh_payment_loader_menu"/>
+        <field name="action" ref="ofh_payment_loader_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
     <!-- END Loader Menus -->

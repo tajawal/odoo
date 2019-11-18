@@ -32,6 +32,7 @@
         'security/ofh_payment_gateway_line.xml',
         'security/ofh_sale_order_sap.xml',
         'security/ofh_bank_settlement.xml',
+        'wizards/ofh_payment_loader.xml',
         'wizards/ofh_bank_settlement_force_match.xml',
         'wizards/ofh_payment_gateway_force_match.xml',
         'wizards/ofh_payment_reconciliation_tag.xml',
