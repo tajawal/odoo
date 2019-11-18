@@ -15,7 +15,7 @@
                     <field name="provider"/>
                     <field name="settlement_date"/>
                     <field name="is_apple_pay"/>
-                    <field name="currency"/>
+                    <field name="currency_id"/>
                 </group>
                 <footer>
                     <button name="generate_loader"
