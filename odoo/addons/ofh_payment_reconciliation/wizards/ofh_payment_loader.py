@@ -57,6 +57,9 @@ class OfhPaymentLoader(models.TransientModel):
             params = self._prepare_loader_params(payments)
             sap_api = SapXmlApi()
             response = sap_api.generate_loader(params)
+            print("---------------------------")
+            print(response)
+            print("---------------------------")
 
         return response
 
@@ -68,7 +71,8 @@ class OfhPaymentLoader(models.TransientModel):
 
         self.env.cr.execute(f"""
                     SELECT pg.*, 
-                           p.mid, 
+                           p.mid,
+                           p.total_amount, 
                            p.assignment       AS assignment, 
                            bs.settlement_date AS settlement_date, 
                            so.name            AS order_number 
@@ -106,7 +110,7 @@ class OfhPaymentLoader(models.TransientModel):
             p_params = {
                 "order_number": payment["order_number"],
                 "payment_status": payment["payment_status"],
-                "total": payment["total"],
+                "total": payment["total_amount"],
                 "assignment": payment["assignment"],
                 "auth_code": payment["auth_code"],
                 "mid": payment["mid"]

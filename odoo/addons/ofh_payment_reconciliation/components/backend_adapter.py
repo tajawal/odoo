@@ -25,4 +25,4 @@ class SapXmlApi:
         url = f"{self.sap_xml_api_url}payment_loader/generate"
         response = requests.post(url, json=payload, headers=self.headers)
         response.raise_for_status()
-        return response
+        return response.json()
