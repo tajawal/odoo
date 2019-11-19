@@ -33,7 +33,6 @@ class OfhBankSettlement(models.Model):
     )
     account_number = fields.Char(
         string="Account Number",
-        required=True,
         readonly=True,
         index=True,
     )

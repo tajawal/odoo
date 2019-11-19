@@ -55,8 +55,15 @@ class OfhBankSettlement(models.Model):
                 continue
 
     @api.multi
+    @api.depends(
+        'payment_gateway_id.reconciliation_status', 'matching_status')
     def _search_reconciliation_status(self, operator, value):
-        return [('payment_gateway_id.reconciliation_status', operator, value)]
+        if operator == '=' and value == 'unreconciled':
+            return ['|',
+                    ('payment_gateway_id.reconciliation_status', operator, value),
+                    ('matching_status', '=', 'unmatched')]
+        else:
+            return [('payment_gateway_id.reconciliation_status', operator, value)]
 
     @api.multi
     def match_with_payment_gateway(self):
@@ -179,7 +186,7 @@ class OfhBankSettlement(models.Model):
         })
         self.write({
             'payment_gateway_id': False,
-            'settlement_matching_status': 'unmatched',
+            'matching_status': 'unmatched',
         })
         return
 
