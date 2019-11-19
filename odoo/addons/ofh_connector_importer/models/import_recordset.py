@@ -4,11 +4,16 @@
 from odoo import api, models
 from odoo.addons.connector_importer.log import logger
 from odoo.addons.connector_importer.models.job_mixin import JobRelatedMixin
+from odoo.addons.queue_job.job import job
 
 
 class ImportRecordset(models.Model, JobRelatedMixin):
-
     _inherit = 'import.recordset'
+
+    @api.multi
+    @job(default_channel='root.import.report')
+    def set_report(self, values, reset=False):
+        return super(ImportRecordset, self).set_report(values, reset)
 
     @api.multi
     def _run_import(self, channel=''):
