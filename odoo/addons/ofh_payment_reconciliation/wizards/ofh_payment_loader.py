@@ -2,10 +2,12 @@
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, _
-from ..components.backend_adapter import SapXmlApi
-
+import base64
 import csv
+
+from odoo import _, api, fields, models
+
+from ..components.backend_adapter import SapXmlApi
 
 
 class OfhPaymentLoader(models.TransientModel):
@@ -50,6 +52,12 @@ class OfhPaymentLoader(models.TransientModel):
         comodel_name='res.currency',
         required=True
     )
+    download_file = fields.Binary(
+        string="Upload File",
+    )
+    file_name = fields.Char(
+        string="File Name",
+    )
 
     @api.multi
     def generate_loader(self):
@@ -74,29 +82,29 @@ class OfhPaymentLoader(models.TransientModel):
                 apply_pay_condition = f"AND pg.is_apple_pay=False"
 
         query = f"""
-                    SELECT pg.*, 
+                    SELECT pg.*,
                            p.mid,
-                           p.total_amount, 
-                           p.assignment       AS assignment, 
+                           p.total_amount,
+                           p.assignment       AS assignment,
                            bs.settlement_date AS settlement_date,
-                           bs.net_transaction_amount AS net_transaction_amount, 
-                           bs.merchant_charge_amount AS merchant_charge_amount, 
-                           bs.merchant_charge_vat AS merchant_charge_vat, 
-                           so.name            AS order_number 
-                    FROM   ofh_payment_gateway AS pg 
-                           JOIN ofh_payment AS p 
-                             ON pg.hub_payment_id = p.id 
-                           JOIN ofh_bank_settlement AS bs 
-                             ON pg.bank_settlement_id = bs.id 
-                           JOIN ofh_sale_order AS so 
-                             ON p.order_id = so.id 
-                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched' 
-                           AND pg.reconciliation_status = 'reconciled' 
-                           AND pg.entity = '{self.entity}' 
-                           AND pg.acquirer_bank = '{self.bank_name}' 
+                           bs.net_transaction_amount AS net_transaction_amount,
+                           bs.merchant_charge_amount AS merchant_charge_amount,
+                           bs.merchant_charge_vat AS merchant_charge_vat,
+                           so.name            AS order_number
+                    FROM   ofh_payment_gateway AS pg
+                           JOIN ofh_payment AS p
+                             ON pg.hub_payment_id = p.id
+                           JOIN ofh_bank_settlement AS bs
+                             ON pg.bank_settlement_id = bs.id
+                           JOIN ofh_sale_order AS so
+                             ON p.order_id = so.id
+                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched'
+                           AND pg.reconciliation_status = 'reconciled'
+                           AND pg.entity = '{self.entity}'
+                           AND pg.acquirer_bank = '{self.bank_name}'
                            AND pg.provider = '{self.provider}'
-                           {apply_pay_condition} 
-                           AND p.currency_id = {self.currency_id.id} 
+                           {apply_pay_condition}
+                           AND p.currency_id = {self.currency_id.id}
                            AND bs.settlement_date = '{self.settlement_date}'
                 """
         self.env.cr.execute(query)
@@ -112,31 +120,31 @@ class OfhPaymentLoader(models.TransientModel):
                 apply_pay_condition = f"AND pg.is_apple_pay=False"
 
         query = f"""
-                    SELECT pg.*, 
+                    SELECT pg.*,
                            c.mid,
-                           p.total_amount, 
-                           p.assignment       AS assignment, 
-                           bs.settlement_date AS settlement_date, 
-                           bs.net_transaction_amount AS net_transaction_amount, 
-                           bs.merchant_charge_amount AS merchant_charge_amount, 
+                           p.total_amount,
+                           p.assignment       AS assignment,
+                           bs.settlement_date AS settlement_date,
+                           bs.net_transaction_amount AS net_transaction_amount,
+                           bs.merchant_charge_amount AS merchant_charge_amount,
                            bs.merchant_charge_vat AS merchant_charge_vat,
-                           so.name            AS order_number 
-                    FROM   ofh_payment_gateway AS pg 
-                           JOIN ofh_payment_request AS p 
+                           so.name            AS order_number
+                    FROM   ofh_payment_gateway AS pg
+                           JOIN ofh_payment_request AS p
                              ON pg.hub_payment_request_id = p.id
-                           JOIN ofh_payment_charge AS c 
-                             ON pg.hub_payment_request_id = c.payment_request_id 
-                           JOIN ofh_bank_settlement AS bs 
-                             ON pg.bank_settlement_id = bs.id 
-                           JOIN ofh_sale_order AS so 
-                             ON p.order_id = so.id 
-                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched' 
-                           AND pg.reconciliation_status = 'reconciled' 
-                           AND pg.entity = '{self.entity}' 
-                           AND pg.acquirer_bank = '{self.bank_name}' 
+                           JOIN ofh_payment_charge AS c
+                             ON pg.hub_payment_request_id = c.payment_request_id
+                           JOIN ofh_bank_settlement AS bs
+                             ON pg.bank_settlement_id = bs.id
+                           JOIN ofh_sale_order AS so
+                             ON p.order_id = so.id
+                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched'
+                           AND pg.reconciliation_status = 'reconciled'
+                           AND pg.entity = '{self.entity}'
+                           AND pg.acquirer_bank = '{self.bank_name}'
                            AND pg.provider = '{self.provider}'
-                           {apply_pay_condition} 
-                           AND p.currency_id = {self.currency_id.id} 
+                           {apply_pay_condition}
+                           AND p.currency_id = {self.currency_id.id}
                            AND bs.settlement_date = '{self.settlement_date}'
                 """
         self.env.cr.execute(query)
@@ -187,6 +195,7 @@ class OfhPaymentLoader(models.TransientModel):
 
     @api.multi
     def generate_loader_csv(self, response):
+        self.ensure_one()
         csv_columns = self.get_csv_headers()
 
         csv_file = f"{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
@@ -199,11 +208,16 @@ class OfhPaymentLoader(models.TransientModel):
         except IOError:
             print("I/O error")
 
+        self.write({
+            'download_file': base64.encodestring(csvfile),
+            'file_name': csv_file,
+        })
+
         return {
             'name': 'Report',
             'type': 'ir.actions.act_url',
             'url': "web/content/?model=" + self._name + "&id=" + str(
-                self.id) + "&filename_field=file_name&field=data_file&download=true&filename=" + csv_file,
+                self.id) + "&filename_field=file_name&field=download_file&download=true&filename=" + self.file_name,
             'target': 'self',
         }
 
