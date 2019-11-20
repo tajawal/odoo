@@ -60,24 +60,28 @@ class OfhPaymentLoader(models.TransientModel):
             params = self._prepare_loader_params(payments, payment_requests)
             sap_api = SapXmlApi()
             response = sap_api.generate_loader(params)
-            print(response)
             if response:
                 self.generate_loader_csv(response['payment_loader'])
 
         return response
 
     def _get_eligible_payments(self):
-        if self.is_apple_pay:
-            apply_pay_condition = f"AND pg.is_apple_pay={self.is_apple_pay}"
-        else:
-            apply_pay_condition = ""
+        apply_pay_condition = ""
+        if self.entity == 'tajawal':
+            if self.is_apple_pay:
+                apply_pay_condition = f"AND pg.is_apple_pay={self.is_apple_pay}"
+            else:
+                apply_pay_condition = f"AND pg.is_apple_pay=False"
 
         query = f"""
                     SELECT pg.*, 
                            p.mid,
                            p.total_amount, 
                            p.assignment       AS assignment, 
-                           bs.settlement_date AS settlement_date, 
+                           bs.settlement_date AS settlement_date,
+                           bs.net_transaction_amount AS net_transaction_amount, 
+                           bs.merchant_charge_amount AS merchant_charge_amount, 
+                           bs.merchant_charge_vat AS merchant_charge_vat, 
                            so.name            AS order_number 
                     FROM   ofh_payment_gateway AS pg 
                            JOIN ofh_payment AS p 
@@ -100,10 +104,12 @@ class OfhPaymentLoader(models.TransientModel):
         return payments
 
     def _get_eligible_payment_requests(self):
-        if self.is_apple_pay:
-            apply_pay_condition = f"AND pg.is_apple_pay={self.is_apple_pay}"
-        else:
-            apply_pay_condition = ""
+        apply_pay_condition = ""
+        if self.entity == 'tajawal':
+            if self.is_apple_pay:
+                apply_pay_condition = f"AND pg.is_apple_pay={self.is_apple_pay}"
+            else:
+                apply_pay_condition = f"AND pg.is_apple_pay=False"
 
         query = f"""
                     SELECT pg.*, 
@@ -111,6 +117,9 @@ class OfhPaymentLoader(models.TransientModel):
                            p.total_amount, 
                            p.assignment       AS assignment, 
                            bs.settlement_date AS settlement_date, 
+                           bs.net_transaction_amount AS net_transaction_amount, 
+                           bs.merchant_charge_amount AS merchant_charge_amount, 
+                           bs.merchant_charge_vat AS merchant_charge_vat,
                            so.name            AS order_number 
                     FROM   ofh_payment_gateway AS pg 
                            JOIN ofh_payment_request AS p 
@@ -152,7 +161,10 @@ class OfhPaymentLoader(models.TransientModel):
                 "total": payment["total_amount"],
                 "assignment": payment["assignment"],
                 "auth_code": payment["auth_code"],
-                "mid": payment["mid"]
+                "mid": payment["mid"],
+                "net_transaction_amount": payment["net_transaction_amount"],
+                "merchant_charge_amount": payment["merchant_charge_amount"],
+                "merchant_charge_vat": payment["merchant_charge_vat"]
             }
             data.append(p_params)
 
@@ -163,7 +175,10 @@ class OfhPaymentLoader(models.TransientModel):
                 "total": payment_request["total_amount"],
                 "assignment": payment_request["assignment"],
                 "auth_code": payment_request["auth_code"],
-                "mid": payment_request["mid"]
+                "mid": payment_request["mid"],
+                "net_transaction_amount": payment_request["net_transaction_amount"],
+                "merchant_charge_amount": payment_request["merchant_charge_amount"],
+                "merchant_charge_vat": payment_request["merchant_charge_vat"]
             }
             data.append(p_params)
 
@@ -194,29 +209,31 @@ class OfhPaymentLoader(models.TransientModel):
 
     def get_csv_headers(self):
         return [
-            "SequencenumberHeader",
-            "CompanyCode",
-            "DocumentType",
-            "DocumentDate",
-            "PostingDate",
-            "DocumentHeaderText",
-            "CurrencyCode",
-            "Headerreference",
-            "SequencenumberItem",
+            "HEADER",
+            "Sequence number",
+            "Company Code",
+            "Document Type",
+            "Document Date",
+            "Posting Date",
+            "Document Header Text",
+            "Currency Code",
+            "Header reference",
+            "AP ITEM",
+            "Sequence number",
             "Vendor",
-            "DebitCreditPostingKey",
-            "DocumentCurrencyAmount",
-            "LocalCurrencyAmount",
-            "CostCenter",
-            "ProfitCenter",
-            "InternalOrder",
-            "WBSElement",
-            "Taxcode",
-            "LineItemText",
-            "Referencekey1",
-            "Referencekey2",
-            "Referencekey3",
+            "Debit/Credit (Posting Key)",
+            "Document Currency Amount",
+            "Local Currency Amount",
+            "Cost Center",
+            "Profit Center",
+            "Internal Order",
+            "WBS Element",
+            "Tax code",
+            "Line Item Text",
+            "Reference key 1",
+            "Reference key 2",
+            "Reference key 3",
             "Assignment",
-            "PaymentMethod",
-            "Paymentblock"
+            "Payment Method (ZLSCH)",
+            "Payment block (ZAHLS)"
         ]
