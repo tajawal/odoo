@@ -54,11 +54,13 @@ class OfhPaymentLoader(models.TransientModel):
     @api.multi
     def generate_loader(self):
         payments = self._get_eligible_payments()
+        payment_requests = self._get_eligible_payment_requests()
         response = []
         if payments:
-            params = self._prepare_loader_params(payments)
+            params = self._prepare_loader_params(payments, payment_requests)
             sap_api = SapXmlApi()
             response = sap_api.generate_loader(params)
+            print(response)
             if response:
                 self.generate_loader_csv(response['payment_loader'])
 
@@ -70,7 +72,7 @@ class OfhPaymentLoader(models.TransientModel):
         else:
             apply_pay_condition = ""
 
-        self.env.cr.execute(f"""
+        query = f"""
                     SELECT pg.*, 
                            p.mid,
                            p.total_amount, 
@@ -84,7 +86,7 @@ class OfhPaymentLoader(models.TransientModel):
                              ON pg.bank_settlement_id = bs.id 
                            JOIN ofh_sale_order AS so 
                              ON p.order_id = so.id 
-                    WHERE  pg.settlement_matching_status = 'matched' 
+                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched' 
                            AND pg.reconciliation_status = 'reconciled' 
                            AND pg.entity = '{self.entity}' 
                            AND pg.acquirer_bank = '{self.bank_name}' 
@@ -92,11 +94,47 @@ class OfhPaymentLoader(models.TransientModel):
                            {apply_pay_condition} 
                            AND p.currency_id = {self.currency_id.id} 
                            AND bs.settlement_date = '{self.settlement_date}' limit 5
-                """)
+                """
+        self.env.cr.execute(query)
         payments = self.env.cr.dictfetchall()
         return payments
 
-    def _prepare_loader_params(self, payments):
+    def _get_eligible_payment_requests(self):
+        if self.is_apple_pay:
+            apply_pay_condition = f"AND pg.is_apple_pay={self.is_apple_pay}"
+        else:
+            apply_pay_condition = ""
+
+        query = f"""
+                    SELECT pg.*, 
+                           c.mid,
+                           p.total_amount, 
+                           p.assignment       AS assignment, 
+                           bs.settlement_date AS settlement_date, 
+                           so.name            AS order_number 
+                    FROM   ofh_payment_gateway AS pg 
+                           JOIN ofh_payment_request AS p 
+                             ON pg.hub_payment_request_id = p.id
+                           JOIN ofh_payment_charge AS c 
+                             ON pg.hub_payment_request_id = c.payment_request_id 
+                           JOIN ofh_bank_settlement AS bs 
+                             ON pg.bank_settlement_id = bs.id 
+                           JOIN ofh_sale_order AS so 
+                             ON p.order_id = so.id 
+                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched' 
+                           AND pg.reconciliation_status = 'reconciled' 
+                           AND pg.entity = '{self.entity}' 
+                           AND pg.acquirer_bank = '{self.bank_name}' 
+                           AND pg.provider = '{self.provider}'
+                           {apply_pay_condition} 
+                           AND p.currency_id = {self.currency_id.id} 
+                           AND bs.settlement_date = '{self.settlement_date}' limit 5
+                """
+        self.env.cr.execute(query)
+        payments = self.env.cr.dictfetchall()
+        return payments
+
+    def _prepare_loader_params(self, payments, payment_requests):
         params = {
             "entity": self.entity,
             "bank_name": self.bank_name,
@@ -115,6 +153,17 @@ class OfhPaymentLoader(models.TransientModel):
                 "assignment": payment["assignment"],
                 "auth_code": payment["auth_code"],
                 "mid": payment["mid"]
+            }
+            data.append(p_params)
+
+        for payment_request in payment_requests:
+            p_params = {
+                "order_number": payment_request["order_number"],
+                "payment_status": payment_request["payment_status"],
+                "total": payment_request["total_amount"],
+                "assignment": payment_request["assignment"],
+                "auth_code": payment_request["auth_code"],
+                "mid": payment_request["mid"]
             }
             data.append(p_params)
 
