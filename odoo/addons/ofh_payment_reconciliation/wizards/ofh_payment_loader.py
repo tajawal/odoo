@@ -6,11 +6,6 @@ from odoo import api, fields, models, _
 from ..components.backend_adapter import SapXmlApi
 
 import csv
-from openerp import http
-from openerp.http import request
-from openerp.addons.web.controllers.main import serialize_exception, content_disposition
-import base64
-import json
 
 
 class OfhPaymentLoader(models.TransientModel):
@@ -149,28 +144,30 @@ class OfhPaymentLoader(models.TransientModel):
         }
 
     def get_csv_headers(self):
-        return ["SequencenumberHeader",
-                "CompanyCode",
-                "DocumentType",
-                "DocumentDate",
-                "PostingDate",
-                "DocumentHeaderText",
-                "CurrencyCode",
-                "Headerreference",
-                "SequencenumberItem",
-                "Vendor",
-                "DebitCreditPostingKey",
-                "DocumentCurrencyAmount",
-                "LocalCurrencyAmount",
-                "CostCenter",
-                "ProfitCenter",
-                "InternalOrder",
-                "WBSElement",
-                "Taxcode",
-                "LineItemText",
-                "Referencekey1",
-                "Referencekey2",
-                "Referencekey3",
-                "Assignment",
-                "PaymentMethod",
-                "Paymentblock"]
+        return [
+            "SequencenumberHeader",
+            "CompanyCode",
+            "DocumentType",
+            "DocumentDate",
+            "PostingDate",
+            "DocumentHeaderText",
+            "CurrencyCode",
+            "Headerreference",
+            "SequencenumberItem",
+            "Vendor",
+            "DebitCreditPostingKey",
+            "DocumentCurrencyAmount",
+            "LocalCurrencyAmount",
+            "CostCenter",
+            "ProfitCenter",
+            "InternalOrder",
+            "WBSElement",
+            "Taxcode",
+            "LineItemText",
+            "Referencekey1",
+            "Referencekey2",
+            "Referencekey3",
+            "Assignment",
+            "PaymentMethod",
+            "Paymentblock"
+        ]
