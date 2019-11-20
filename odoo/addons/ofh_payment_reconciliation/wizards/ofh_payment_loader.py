@@ -5,6 +5,13 @@
 from odoo import api, fields, models, _
 from ..components.backend_adapter import SapXmlApi
 
+import csv
+from openerp import http
+from openerp.http import request
+from openerp.addons.web.controllers.main import serialize_exception, content_disposition
+import base64
+import json
+
 
 class OfhPaymentLoader(models.TransientModel):
     _name = 'ofh.payment.loader'
@@ -57,6 +64,8 @@ class OfhPaymentLoader(models.TransientModel):
             params = self._prepare_loader_params(payments)
             sap_api = SapXmlApi()
             response = sap_api.generate_loader(params)
+            if response:
+                self.generate_loader_csv(response['payment_loader'])
 
         return response
 
@@ -87,7 +96,7 @@ class OfhPaymentLoader(models.TransientModel):
                            AND pg.provider = '{self.provider}'
                            {apply_pay_condition} 
                            AND p.currency_id = {self.currency_id.id} 
-                           AND bs.settlement_date = '{self.settlement_date}' 
+                           AND bs.settlement_date = '{self.settlement_date}' limit 5
                 """)
         payments = self.env.cr.dictfetchall()
         return payments
@@ -116,3 +125,52 @@ class OfhPaymentLoader(models.TransientModel):
 
         params.update({"data": data})
         return params
+
+    @api.multi
+    def generate_loader_csv(self, response):
+        csv_columns = self.get_csv_headers()
+
+        csv_file = f"{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id}.csv"
+        try:
+            with open(csv_file, 'w') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+                writer.writeheader()
+                for row_data in response:
+                    writer.writerow(row_data)
+        except IOError:
+            print("I/O error")
+
+        return {
+            'name': 'Report',
+            'type': 'ir.actions.act_url',
+            'url': "web/content/?model=" + self._name + "&id=" + str(
+                self.id) + "&filename_field=file_name&field=data_file&download=true&filename=" + csv_file,
+            'target': 'self',
+        }
+
+    def get_csv_headers(self):
+        return ["SequencenumberHeader",
+                "CompanyCode",
+                "DocumentType",
+                "DocumentDate",
+                "PostingDate",
+                "DocumentHeaderText",
+                "CurrencyCode",
+                "Headerreference",
+                "SequencenumberItem",
+                "Vendor",
+                "DebitCreditPostingKey",
+                "DocumentCurrencyAmount",
+                "LocalCurrencyAmount",
+                "CostCenter",
+                "ProfitCenter",
+                "InternalOrder",
+                "WBSElement",
+                "Taxcode",
+                "LineItemText",
+                "Referencekey1",
+                "Referencekey2",
+                "Referencekey3",
+                "Assignment",
+                "PaymentMethod",
+                "Paymentblock"]

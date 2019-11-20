@@ -1,0 +1,7 @@
+SequencenumberHeader,CompanyCode,DocumentType,DocumentDate,PostingDate,DocumentHeaderText,CurrencyCode,Headerreference,SequencenumberItem,Vendor,DebitCreditPostingKey,DocumentCurrencyAmount,LocalCurrencyAmount,CostCenter,ProfitCenter,InternalOrder,WBSElement,Taxcode,LineItemText,Referencekey1,Referencekey2,Referencekey3,Assignment,PaymentMethod,Paymentblock
+1,1009,SA,,,Raj  1,SAR,Raj  1,1,10240375,50,1367.0,,,,,,,capture,900000000883,,068208,,,
+1,1009,SA,,,Raj  1,SAR,Raj  1,1,10240375,50,2804.18,,,,,,,capture,900000000883,,043386,,,
+1,1009,SA,,,Raj  1,SAR,Raj  1,1,10240375,50,1437.78,,,,,,,capture,900000000883,,068437,,,
+1,1009,SA,,,Raj  1,SAR,Raj  1,1,10240375,50,1275.0,,,,,,,capture,900000000883,,016834,,,
+1,1009,SA,,,Raj  1,SAR,Raj  1,1,10240375,50,461.64,,,,,,,capture,900000000883,,882298,,,
+1,1009,SA,,,Raj  1,SAR,Raj  1,1,10240371,40,461.64,,,,,,,Bank Clearing,Bank Clearing,,Bank Clearing,BKCL ,,
