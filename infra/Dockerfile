@@ -1,4 +1,4 @@
-FROM tajawalcom/odoo:11.0
+FROM tajawalcom/odoo:11.0-0
 RUN mkdir -p /opt/finance_hub/src
 RUN mv /tmp/odoo /opt/finance_hub/src/odoo
 WORKDIR /opt/finance_hub
