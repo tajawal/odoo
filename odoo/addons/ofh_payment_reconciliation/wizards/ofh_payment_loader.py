@@ -93,7 +93,7 @@ class OfhPaymentLoader(models.TransientModel):
                            AND pg.provider = '{self.provider}'
                            {apply_pay_condition} 
                            AND p.currency_id = {self.currency_id.id} 
-                           AND bs.settlement_date = '{self.settlement_date}' limit 5
+                           AND bs.settlement_date = '{self.settlement_date}'
                 """
         self.env.cr.execute(query)
         payments = self.env.cr.dictfetchall()
@@ -128,7 +128,7 @@ class OfhPaymentLoader(models.TransientModel):
                            AND pg.provider = '{self.provider}'
                            {apply_pay_condition} 
                            AND p.currency_id = {self.currency_id.id} 
-                           AND bs.settlement_date = '{self.settlement_date}' limit 5
+                           AND bs.settlement_date = '{self.settlement_date}'
                 """
         self.env.cr.execute(query)
         payments = self.env.cr.dictfetchall()
@@ -174,7 +174,7 @@ class OfhPaymentLoader(models.TransientModel):
     def generate_loader_csv(self, response):
         csv_columns = self.get_csv_headers()
 
-        csv_file = f"{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id}.csv"
+        csv_file = f"{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
         try:
             with open(csv_file, 'w') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
