@@ -2,7 +2,8 @@ FROM tajawalcom/odoo:11.0-1
 
 RUN mkdir -p /opt/finance_hub/src
 WORKDIR /opt/finance_hub
-RUN source /usr/local/bin/virtualenvwrapper.sh && mkvirtualenv odoo-odoo_finance_hub -a . --python=$(which python3)
+RUN /bin/bash -c "source /usr/local/bin/virtualenvwrapper.sh \
+                  mkvirtualenv odoo-odoo_finance_hub -a . --python=$(which python3)"
 
 ADD requirements.txt .
 RUN pip install --exists-action i --src src -r requirements.txt
