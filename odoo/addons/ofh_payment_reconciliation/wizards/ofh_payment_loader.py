@@ -70,7 +70,6 @@ class OfhPaymentLoader(models.TransientModel):
             response = sap_api.generate_loader(params)
             if response:
                 self.generate_loader_csv(response['payment_loader'])
-
         return response
 
     def _get_eligible_payments(self):
@@ -209,15 +208,15 @@ class OfhPaymentLoader(models.TransientModel):
             print("I/O error")
 
         self.write({
-            'download_file': base64.encodestring(csvfile),
+            'download_file': base64.b64encode(bytes(csv_file, 'utf-8')),
             'file_name': csv_file,
         })
 
+        url = f"/web/binary/download_document?model=ofh.payment.loader&field=download_file&id={self.id}&filename={csv_file}"
+
         return {
-            'name': 'Report',
             'type': 'ir.actions.act_url',
-            'url': "web/content/?model=" + self._name + "&id=" + str(
-                self.id) + "&filename_field=file_name&field=download_file&download=true&filename=" + self.file_name,
+            'url': url,
             'target': 'self',
         }
 
