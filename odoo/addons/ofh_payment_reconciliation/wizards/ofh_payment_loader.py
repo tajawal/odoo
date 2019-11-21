@@ -63,14 +63,22 @@ class OfhPaymentLoader(models.TransientModel):
     def generate_loader(self):
         payments = self._get_eligible_payments()
         payment_requests = self._get_eligible_payment_requests()
-        response = []
+        url = ''
         if payments:
             params = self._prepare_loader_params(payments, payment_requests)
             sap_api = SapXmlApi()
             response = sap_api.generate_loader(params)
             if response:
-                self.generate_loader_csv(response['payment_loader'])
-        return response
+                url = self.generate_loader_csv(response['payment_loader'])
+
+        action = {
+            'name': 'Go to Download URL',
+            'res_model': 'ir.actions.act_url',
+            'type': 'ir.actions.act_url',
+            'target': 'self',
+            'url': url,
+        }
+        return action
 
     def _get_eligible_payments(self):
         apply_pay_condition = ""
@@ -199,7 +207,7 @@ class OfhPaymentLoader(models.TransientModel):
         self.ensure_one()
         csv_columns = self.get_csv_headers()
 
-        csv_file = f"{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
+        csv_file = f"4234242{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
         try:
             with open(csv_file, 'w') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
@@ -210,17 +218,12 @@ class OfhPaymentLoader(models.TransientModel):
             print("I/O error")
 
         self.write({
-            'download_file': base64.b64encode(bytes(csv_file, 'utf-8')),
+            'download_file': base64.encodestring(csv_file.encode()),
             'file_name': csv_file,
         })
 
-        url = f"/web/binary/download_document?model=ofh.payment.loader&field=download_file&id={self.id}&filename={csv_file}"
-
-        return {
-            'type': 'ir.actions.act_url',
-            'url': url,
-            'target': 'self',
-        }
+        url = f"web/content/?model=ofh.payment.loader&id={self.id}&filename_field=file_name&field=download_file&download=true&filename={csv_file}"
+        return url
 
     def get_csv_headers(self):
         return [
