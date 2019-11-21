@@ -81,7 +81,8 @@ class OfhPaymentLoader(models.TransientModel):
                 apply_pay_condition = f"AND pg.is_apple_pay=False"
 
         query = f"""
-                    SELECT pg.*,
+                    SELECT pg.payment_status as payment_status,
+                           pg.auth_code as auth_code,
                            p.mid,
                            p.total_amount,
                            p.assignment       AS assignment,
@@ -119,7 +120,8 @@ class OfhPaymentLoader(models.TransientModel):
                 apply_pay_condition = f"AND pg.is_apple_pay=False"
 
         query = f"""
-                    SELECT pg.*,
+                    SELECT pg.payment_status as payment_status,
+                           pg.auth_code as auth_code,
                            c.mid,
                            p.total_amount,
                            p.assignment       AS assignment,
