@@ -15,5 +15,8 @@ spec:
     app: finance-hub
   ports:
   - name: finance-hub
+    port: 80
+    targetPort: finance-hub
+  - name: finance-hub-https
     port: 443
     targetPort: finance-hub
