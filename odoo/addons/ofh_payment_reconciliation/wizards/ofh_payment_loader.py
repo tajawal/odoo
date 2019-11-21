@@ -207,51 +207,86 @@ class OfhPaymentLoader(models.TransientModel):
         self.ensure_one()
         csv_columns = self.get_csv_headers()
 
-        csv_file = f"4234242{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
-        try:
-            with open(csv_file, 'w') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                writer.writeheader()
-                for row_data in response:
-                    writer.writerow(row_data)
-        except IOError:
-            print("I/O error")
+        csv_file = f"{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
+        import io
+        import csv
+        output = io.StringIO()
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+        writer.writerow(csv_columns)
+        for row_data in response:
+            row = self.get_dict_values(row_data)
+            writer.writerow(row)
+
+        data = output.getvalue()
 
         self.write({
-            'download_file': base64.encodestring(csv_file.encode()),
+            'download_file': base64.encodestring(data.encode()),
             'file_name': csv_file,
         })
 
         url = f"web/content/?model=ofh.payment.loader&id={self.id}&filename_field=file_name&field=download_file&download=true&filename={csv_file}"
         return url
 
+    @api.multi
+    def get_dict_values(self, row_data):
+        return [
+            row_data.get('HEADER'),
+            row_data.get('Sequence number Header'),
+            row_data.get('Company Code'),
+            row_data.get('Document Type'),
+            row_data.get('Document Date'),
+            row_data.get('Posting Date'),
+            row_data.get('Document Header Text'),
+            row_data.get('Currency Code'),
+            row_data.get('Header reference'),
+            row_data.get('AP ITEM'),
+            row_data.get('Sequence number Item'),
+            row_data.get('Vendor'),
+            row_data.get('Debit Credit Posting Key'),
+            row_data.get('Document Currency Amount'),
+            row_data.get('Local Currency Amount'),
+            row_data.get('Cost Center'),
+            row_data.get('Profit Center'),
+            row_data.get('Internal Order'),
+            row_data.get('WBS Element'),
+            row_data.get('Tax code'),
+            row_data.get('Line Item Text'),
+            row_data.get('Reference key 1'),
+            row_data.get('Reference key 2'),
+            row_data.get('Reference key 3'),
+            row_data.get('Assignment'),
+            row_data.get('Payment Method'),
+            row_data.get('Payment block')
+        ]
+
+    @api.multi
     def get_csv_headers(self):
         return [
-            "HEADER",
-            "Sequence number",
-            "Company Code",
-            "Document Type",
-            "Document Date",
-            "Posting Date",
-            "Document Header Text",
-            "Currency Code",
-            "Header reference",
-            "AP ITEM",
-            "Sequence number",
-            "Vendor",
-            "Debit Credit Posting Key",
-            "Document Currency Amount",
-            "Local Currency Amount",
-            "Cost Center",
-            "Profit Center",
-            "Internal Order",
-            "WBS Element",
-            "Tax code",
-            "Line Item Text",
-            "Reference key 1",
-            "Reference key 2",
-            "Reference key 3",
-            "Assignment",
-            "Payment Method",
-            "Payment block"
+            'HEADER',
+            'Sequence number',
+            'Company Code',
+            'Document Type',
+            'Document Date',
+            'Posting Date',
+            'Document Header Text',
+            'Currency Code',
+            'Header reference',
+            'AP ITEM',
+            'Sequence number',
+            'Vendor',
+            'Debit Credit Posting Key',
+            'Document Currency Amount',
+            'Local Currency Amount',
+            'Cost Center',
+            'Profit Center',
+            'Internal Order',
+            'WBS Element',
+            'Tax code',
+            'Line Item Text',
+            'Reference key 1',
+            'Reference key 2',
+            'Reference key 3',
+            'Assignment',
+            'Payment Method',
+            'Payment block'
         ]
