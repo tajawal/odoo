@@ -71,14 +71,14 @@ class OfhPaymentLoader(models.TransientModel):
             if response:
                 url = self.generate_loader_csv(response['payment_loader'])
 
-        action = {
-            'name': 'Go to Download URL',
-            'res_model': 'ir.actions.act_url',
-            'type': 'ir.actions.act_url',
-            'target': 'self',
-            'url': url,
-        }
-        return action
+            action = {
+                'name': 'Go to Download URL',
+                'res_model': 'ir.actions.act_url',
+                'type': 'ir.actions.act_url',
+                'target': 'self',
+                'url': url,
+            }
+            return action
 
     def _get_eligible_payments(self):
         apply_pay_condition = ""
