@@ -114,6 +114,7 @@ class OfhPaymentLoader(models.TransientModel):
                            {apply_pay_condition}
                            AND p.currency_id = {self.currency_id.id}
                            AND bs.settlement_date = '{self.settlement_date}'
+                           AND p.assignment <> '' 
                 """
         self.env.cr.execute(query)
         payments = self.env.cr.dictfetchall()
@@ -155,6 +156,7 @@ class OfhPaymentLoader(models.TransientModel):
                            {apply_pay_condition}
                            AND p.currency_id = {self.currency_id.id}
                            AND bs.settlement_date = '{self.settlement_date}'
+                           AND p.assignment <> '' 
                 """
         self.env.cr.execute(query)
         payments = self.env.cr.dictfetchall()
