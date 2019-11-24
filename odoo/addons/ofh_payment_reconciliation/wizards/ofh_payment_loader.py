@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # Copyright 2018 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
 import base64
-import csv
-
 from odoo import _, api, fields, models
+from odoo.addons.ofh_sale_order_sap.components.backend_adapter import \
+    SapXmlApi
 
-from ..components.backend_adapter import SapXmlApi
+from odoo.addons.server_environment import serv_config
 
 
 class OfhPaymentLoader(models.TransientModel):
@@ -63,22 +62,22 @@ class OfhPaymentLoader(models.TransientModel):
     def generate_loader(self):
         payments = self._get_eligible_payments()
         payment_requests = self._get_eligible_payment_requests()
-        url = ''
         if payments:
             params = self._prepare_loader_params(payments, payment_requests)
-            sap_api = SapXmlApi()
+            sap_xml_api_url = serv_config.get('sap_backend.live-sap', 'sap_xml_api_url')
+            sap_api = SapXmlApi(sap_xml_api_url)
             response = sap_api.generate_loader(params)
             if response:
-                url = self.generate_loader_csv(response['payment_loader'])
-
-            action = {
-                'name': 'Go to Download URL',
-                'res_model': 'ir.actions.act_url',
-                'type': 'ir.actions.act_url',
-                'target': 'self',
-                'url': url,
-            }
-            return action
+                self.generate_loader_csv(response['payment_loader'])
+                url = f"web/content/?model=ofh.payment.loader&id={self.id}&filename_field=file_name&field=download_file&download=true&filename={self.file_name}"
+                action = {
+                    'name': 'Go to Download URL',
+                    'res_model': 'ir.actions.act_url',
+                    'type': 'ir.actions.act_url',
+                    'target': 'self',
+                    'url': url,
+                }
+                return action
 
     def _get_eligible_payments(self):
         apply_pay_condition = ""
@@ -225,9 +224,6 @@ class OfhPaymentLoader(models.TransientModel):
             'download_file': base64.encodestring(data.encode()),
             'file_name': csv_file,
         })
-
-        url = f"web/content/?model=ofh.payment.loader&id={self.id}&filename_field=file_name&field=download_file&download=true&filename={csv_file}"
-        return url
 
     @api.multi
     def get_dict_values(self, row_data):
