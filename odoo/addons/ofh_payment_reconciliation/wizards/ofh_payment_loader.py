@@ -7,6 +7,7 @@ from odoo.addons.ofh_sale_order_sap.components.backend_adapter import \
     SapXmlApi
 
 from odoo.addons.server_environment import serv_config
+from odoo.exceptions import ValidationError
 
 
 class OfhPaymentLoader(models.TransientModel):
@@ -62,7 +63,7 @@ class OfhPaymentLoader(models.TransientModel):
     def generate_loader(self):
         payments = self._get_eligible_payments()
         payment_requests = self._get_eligible_payment_requests()
-        if payments:
+        if payments or payment_requests:
             params = self._prepare_loader_params(payments, payment_requests)
             sap_xml_api_url = serv_config.get('sap_backend.live-sap', 'sap_xml_api_url')
             sap_api = SapXmlApi(sap_xml_api_url)
@@ -78,6 +79,9 @@ class OfhPaymentLoader(models.TransientModel):
                     'url': url,
                 }
                 return action
+        else:
+            raise ValidationError(_(
+                "Payments not found for related search."))
 
     def _get_eligible_payments(self):
         apply_pay_condition = ""
