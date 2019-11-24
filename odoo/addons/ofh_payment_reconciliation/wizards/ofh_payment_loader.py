@@ -109,7 +109,7 @@ class OfhPaymentLoader(models.TransientModel):
                              ON pg.bank_settlement_id = bs.id
                            JOIN ofh_sale_order AS so
                              ON p.order_id = so.id
-                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched'
+                    WHERE  p.pg_matching_status = 'matched' AND pg.settlement_matching_status = 'matched'
                            AND pg.reconciliation_status = 'reconciled'
                            AND pg.entity = '{self.entity}'
                            AND pg.acquirer_bank = '{self.bank_name}'
@@ -151,7 +151,7 @@ class OfhPaymentLoader(models.TransientModel):
                              ON pg.bank_settlement_id = bs.id
                            JOIN ofh_sale_order AS so
                              ON p.order_id = so.id
-                    WHERE  p.pg_matching_status = 'matched' and pg.settlement_matching_status = 'matched'
+                    WHERE  p.pg_matching_status = 'matched' AND pg.settlement_matching_status = 'matched'
                            AND pg.reconciliation_status = 'reconciled'
                            AND pg.entity = '{self.entity}'
                            AND pg.acquirer_bank = '{self.bank_name}'
