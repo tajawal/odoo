@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: finance-hub-ingress
+  labels:
+    app.kubernetes.io/name: finance-hub
+  annotations:
+    kubernetes.io/ingress.class: "ingress-nginx-public"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+    - host: finance-hub.tajawal.io
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: finance-hub-service
+            servicePort: 80
