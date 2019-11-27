@@ -21,6 +21,7 @@ class OfhSaleOrderAutoSend(models.Model):
                     created_at <= (date(CURRENT_DATE::date - '1 day'::interval) || ' 23:59:59')::timestamp AND
                     created_at >= (date(CURRENT_DATE::date - '4 day'::interval) || ' 00:00:00')::timestamp AND
                     order_type = 'flight' AND
+                    paid_at is not null AND
 
                     -- Only applicable office ids.
                     upper(ticketing_office_id) not in
