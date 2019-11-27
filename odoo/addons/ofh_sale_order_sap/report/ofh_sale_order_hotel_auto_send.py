@@ -22,7 +22,7 @@ class OfhSaleOrderAutoSend(models.Model):
                     updated_at >= (date(CURRENT_DATE::date - '4 day'::interval) || ' 00:00:00')::timestamp AND
                     order_type = 'hotel' AND
                     is_voided = false AND
-                    paid_at is not null
+                    paid_at is not null AND
                     -- Booking must have lines.
                     EXISTS (
                         SELECT order_id
