@@ -193,7 +193,7 @@ class OfhPaymentLoader(models.TransientModel):
         for payment_request in payment_requests:
             p_params = {
                 "order_number": payment_request["order_number"],
-                "payment_status": payment_request["request_type"],
+                "payment_status": payment_request["payment_status"],
                 "total": payment_request["total_amount"],
                 "assignment": payment_request["assignment"],
                 "auth_code": payment_request["auth_code"],
@@ -212,7 +212,7 @@ class OfhPaymentLoader(models.TransientModel):
         self.ensure_one()
         csv_columns = self.get_csv_headers()
 
-        csv_file = f"{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
+        csv_file = f"GL_Loader_{self.entity}_{self.provider}_{self.bank_name}_{self.currency_id.name}.csv"
         import io
         import csv
         output = io.StringIO()
