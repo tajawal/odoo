@@ -193,7 +193,7 @@ class OfhPaymentLoader(models.TransientModel):
         for payment_request in payment_requests:
             p_params = {
                 "order_number": payment_request["order_number"],
-                "payment_status": payment_request["payment_status"],
+                "payment_status": payment_request["request_type"],
                 "total": payment_request["total_amount"],
                 "assignment": payment_request["assignment"],
                 "auth_code": payment_request["auth_code"],
