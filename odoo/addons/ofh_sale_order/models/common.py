@@ -21,11 +21,11 @@ class HubSaleOrder(models.Model):
         inverse_name='hub_order_id',
         string="Hub Order Lines",
     )
-    hub_payment_ids = fields.One2many(
-        comodel_name='hub.payment',
-        inverse_name='hub_order_id',
-        string="HUB Payments",
-    )
+    # hub_payment_ids = fields.One2many(
+    #     comodel_name='hub.payment',
+    #     inverse_name='hub_order_id',
+    #     string="HUB Payments",
+    # )
 
     _sql_constraints = [
         ('hub_uniq', 'unique(backend_id, external_id)',
