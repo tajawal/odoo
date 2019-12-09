@@ -4,6 +4,8 @@ from odoo import api, fields, models, _
 from odoo.addons.component.core import Component
 from datetime import datetime
 
+UNIFY_STORE_ID = 1000
+
 
 class HubSaleOrder(models.Model):
     _name = 'hub.sale.order'
@@ -81,6 +83,10 @@ class HubPayment(models.Model):
         return binding
 
 
+class PaymentAdapter(Component):
+    _inherit = 'ofh.payment.adapter'
+
+
 class SaleOrderAdapter(Component):
     _name = 'ofh.sale.order.adapter'
     _inherit = 'hub.adapter'
@@ -112,4 +118,13 @@ class SaleOrderAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
-        return hub_api.get_raw_order(external_id)
+
+        result = hub_api.get_raw_order(external_id)
+        # Getting Payments in case of Online Sale Order
+        store_id = result.get('store_id')
+        track_id = result.get('track_id')
+
+        if store_id != UNIFY_STORE_ID:
+            result['payments'] = self.env['ofh.payment.adapter'].read(track_id)
+
+        return result

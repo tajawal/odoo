@@ -42,8 +42,7 @@ class HubSaleOrderImportMapper(Component):
         ('agent_email', 'agent_email'),
     ]
     children = [
-        ('line_items', 'hub_line_ids', 'hub.sale.order.line'),
-        ('payments', 'hub_payment_ids', 'hub.payment')]
+        ('line_items', 'hub_line_ids', 'hub.sale.order.line')]
 
     @mapping
     def backend_id(self, record):

@@ -96,7 +96,8 @@ class OfhSaleOrder(models.Model):
     entity = fields.Selection(
         selection=[
             ('almosafer', 'Almosafer'),
-            ('tajawal', 'Tajawal')],
+            ('tajawal', 'Tajawal'),
+            ('almosafer_branch', 'Almosafer Branch')],
         required=True,
         readonly=True,
         index=True,
