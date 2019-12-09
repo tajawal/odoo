@@ -52,6 +52,16 @@ class HubAPI:
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get payment details")
 
+    # Get payment details using oms-finance-api by Order Mongo Id
+    def get_payment_by_order_id(self, order_id) -> dict:
+        url = f"{self.oms_finance_api_url}payment/detail?id={order_id}"
+        try:
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not get payment details")
+
     def get_raw_order(self, order_id: str) -> dict:
         # TODO: this is purely manual for test purpose only
         url = f"{self.oms_finance_api_url}sale_orders/detail?order_id={order_id}&type=initial"

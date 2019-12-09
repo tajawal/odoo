@@ -114,3 +114,21 @@ class SaleOrderAdapter(Component):
                 'Backend Adapter.'
             )
         return hub_api.get_raw_order(external_id)
+
+
+class PaymentAdapter(Component):
+
+    _name = 'ofh.payment.adapter'
+    _inherit = 'hub.adapter'
+    _apply_on = 'hub.payment'
+
+    def read(self, external_id, attributes={}) -> dict:
+        try:
+            hub_api = getattr(self.work, 'hub_api')
+        except AttributeError:
+            raise AttributeError(
+                'You must provide a hub_api attribute with a '
+                'HubAPI instance to be able to use the '
+                'Backend Adapter.'
+            )
+        return hub_api.get_payment_by_order_id(external_id)
