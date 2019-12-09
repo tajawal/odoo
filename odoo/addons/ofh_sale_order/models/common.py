@@ -21,11 +21,11 @@ class HubSaleOrder(models.Model):
         inverse_name='hub_order_id',
         string="Hub Order Lines",
     )
-    # hub_payment_ids = fields.One2many(
-    #     comodel_name='hub.payment',
-    #     inverse_name='hub_order_id',
-    #     string="HUB Payments",
-    # )
+    hub_payment_ids = fields.One2many(
+        comodel_name='hub.payment',
+        inverse_name='hub_order_id',
+        string="HUB Payments",
+    )
 
     _sql_constraints = [
         ('hub_uniq', 'unique(backend_id, external_id)',
@@ -67,7 +67,7 @@ class HubPayment(models.Model):
     hub_order_id = fields.Many2one(
         string="HUB Sale order",
         comodel_name='hub.sale.order',
-        required=True,
+        required=False,
         ondelete='cascade',
         index=True,
     )
@@ -82,7 +82,6 @@ class HubPayment(models.Model):
 
 
 class SaleOrderAdapter(Component):
-
     _name = 'ofh.sale.order.adapter'
     _inherit = 'hub.adapter'
     _apply_on = 'hub.sale.order'
@@ -114,21 +113,3 @@ class SaleOrderAdapter(Component):
                 'Backend Adapter.'
             )
         return hub_api.get_raw_order(external_id)
-
-
-class PaymentAdapter(Component):
-
-    _name = 'ofh.payment.adapter'
-    _inherit = 'hub.adapter'
-    _apply_on = 'hub.payment'
-
-    def read(self, external_id, attributes={}) -> dict:
-        try:
-            hub_api = getattr(self.work, 'hub_api')
-        except AttributeError:
-            raise AttributeError(
-                'You must provide a hub_api attribute with a '
-                'HubAPI instance to be able to use the '
-                'Backend Adapter.'
-            )
-        return hub_api.get_payment_by_order_id(external_id)
