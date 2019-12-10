@@ -92,7 +92,7 @@ class HubPayment(models.Model):
         if 'hub_payment_request_id' in vals:
             hub_payment_request_id = vals['hub_payment_request_id']
             binding = self.env['hub.payment.request'].browse(hub_payment_request_id)
-            vals['order_id'] = binding.odoo_id.id
+            vals['hub_payment_request_id'] = binding.odoo_id.id
 
         binding = super(HubPayment, self).create(vals)
         return binding
