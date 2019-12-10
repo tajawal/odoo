@@ -2,10 +2,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models, _
 from odoo.addons.component.core import Component
+from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
 from datetime import datetime
 
-from odoo.addons.ofh_payment.models.common import PaymentAdapter
-from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAdapter
+from odoo.addons.ofh_hub_connector.models.ofh_hub_backend import HubBackend
+from odoo.addons.server_environment import serv_config
 
 UNIFY_STORE_ID = 1000
 
@@ -124,8 +125,8 @@ class SaleOrderAdapter(Component):
         track_id = result.get('track_id')
 
         if store_id != UNIFY_STORE_ID:
-            binding = self.env['hub.payment']
             backend = self.env['hub.backend'].search([], limit=1)
-            result['payments'] = binding.import_record(backend, track_id)
+            hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
+            result['payments'] = hub_api.get_payment_by_track_id(track_id=track_id)
 
         return result
