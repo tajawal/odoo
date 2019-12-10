@@ -124,7 +124,8 @@ class SaleOrderAdapter(Component):
         track_id = result.get('track_id')
 
         if store_id != UNIFY_STORE_ID:
-            payment_adapter = PaymentAdapter(HubPayment)
-            result['payments'] = PaymentAdapter.read(payment_adapter, track_id)
+            binding = self.env['hub.payment']
+            backend = self.env['hub.backend'].search([], limit=1)
+            result['payments'] = binding.import_record(backend, track_id)
 
         return result

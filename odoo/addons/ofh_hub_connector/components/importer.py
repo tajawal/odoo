@@ -214,7 +214,7 @@ class HubBatchImporter(AbstractComponent):
         for record in records:
             self._import_record(record)
 
-    def _import_record(self, external_id, job_options=None, **kwargs):
+    def _import_record(self, external_id, model, job_options=None, **kwargs):
         """ Delay the import of the records"""
-        delayable = self.model.with_delay(**job_options or {})
+        delayable = model.with_delay(**job_options or {})
         delayable.import_record(self.backend_record, external_id)

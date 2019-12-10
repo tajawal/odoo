@@ -90,9 +90,22 @@ class HubPaymentRequestBatchImporter(Component):
     def run(self, filters=None):
         """ Run the synchronization """
         records = self.backend_adapter.search(filters)
-        tracking_ids = [r['additionalData']['trackId'] for r in records]
-        for external_id in tracking_ids:
-            self._import_record(external_id)
+        for record in records:
+            store_id = record['additionalData'].get('storeId', '')
+            track_id = record['additionalData'].get('trackId', '')
+            type = record.get('type', '')
+
+            # Online Charge Payment Request => Create Sale Order and payment
+            if store_id != UNIFY_STORE_ID and type == 'charge':
+                self._import_record(track_id)
+
+            # Unify Charge Payment Request => Create payment only
+            if store_id == UNIFY_STORE_ID and type == 'charge':
+                self._import_record(track_id)
+
+            # Online and Unify Refund Payment Request => Create payment request
+            if type == 'refund':
+                self._import_record(track_id)
 
 
 class HubPaymentRequestImporter(Component):
@@ -110,7 +123,7 @@ class HubPaymentRequestImporter(Component):
             bool -- Return True if the import should be skipped else False
         """
         if not binding:
-            return False    # The record has never been synchronised.
+            return False  # The record has never been synchronised.
 
         assert self.hub_record
 
@@ -119,18 +132,6 @@ class HubPaymentRequestImporter(Component):
             self.hub_record.get('updated_at'))
 
         return hub_date < sync_date
-
-    def _must_skip(self) -> bool:
-        """ For payment request we process only records that are already
-        been processed.
-
-        Returns:
-            bool -- True if the record should be skipped else False
-        """
-
-        return self.hub_record.get('store_id') == UNIFY_STORE_ID and \
-               self.hub_record.get('group_id') == UNIFY_GROUP_ID and \
-               self.hub_record.get('status') not in PROCESSED_HUB_STATUSES
 
     def _get_hub_data(self):
         """ Return the raw hub data for ``self.external_id `` """
