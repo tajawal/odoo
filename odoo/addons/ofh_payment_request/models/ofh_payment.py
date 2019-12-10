@@ -4,8 +4,8 @@
 from odoo import fields, models
 
 
-class OfhPaymentCharge(models.Model):
-    _inherit = 'ofh.payment.charge'
+class OfhPayment(models.Model):
+    _inherit = 'ofh.payment'
 
     payment_request_id = fields.Many2one(
         comodel_name="ofh.payment.request",

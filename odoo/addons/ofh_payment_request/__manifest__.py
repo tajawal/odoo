@@ -13,7 +13,7 @@
         'ofh_hub_connector',
         'ofh_mail_activity',
         'ofh_base_currency',
-        'ofh_payment_charge',
+        'ofh_payment',
     ],
     'data': [
         'security/groups.xml',
@@ -21,13 +21,12 @@
         'security/ofh_payment_request.xml',
         'security/ofh_hub_backend.xml',
         'security/queue_job.xml',
-        'security/ofh_payment_charge.xml',
-        'security/hub_payment_charge.xml',
+        'security/ofh_payment.xml',
+        'security/hub_payment.xml',
         'views/ofh_payment_request.xml',
         'data/mail_activity_type.xml',
     ],
     'demo': [
         'demo/ofh_payment_request.xml',
-        'demo/ofh_payment_charge.xml',
     ],
 }

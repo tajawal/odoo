@@ -18,10 +18,10 @@ class HubPaymentRequest(models.Model):
         required=True,
         ondelete='cascade'
     )
-    hub_charge_ids = fields.One2many(
-        comodel_name='hub.payment.charge',
+    hub_payment_ids = fields.One2many(
+        comodel_name='hub.payment',
         inverse_name='hub_payment_request_id',
-        string="Hub Charges",
+        string="Hub Payments",
     )
 
 
@@ -61,8 +61,8 @@ class PaymentRequestAdapter(Component):
         return hub_api.get_payment_request_by_track_id(external_id)
 
 
-class HubPaymentCharge(models.Model):
-    _inherit = 'hub.payment.charge'
+class HubPayment(models.Model):
+    _inherit = 'hub.payment'
 
     hub_payment_request_id = fields.Many2one(
         string="HUB Payment Charge",
@@ -78,5 +78,5 @@ class HubPaymentCharge(models.Model):
             binding = self.env['hub.payment.request'].browse(
                 hub_payment_request_id)
             vals['payment_request_id'] = binding.odoo_id.id
-        binding = super(HubPaymentCharge, self).create(vals)
+        binding = super(HubPayment, self).create(vals)
         return binding

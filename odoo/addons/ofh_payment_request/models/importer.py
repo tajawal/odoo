@@ -40,7 +40,7 @@ class HubPaymentRequestImportMapper(Component):
     ]
 
     children = [
-        ('charges', 'hub_charge_ids', 'hub.payment.charge')]
+        ('payments', 'hub_payment_ids', 'hub.payment')]
 
     @mapping
     def created_at(self, record) -> dict:

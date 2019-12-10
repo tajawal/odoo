@@ -193,11 +193,11 @@ class OfhPaymentRequest(models.Model):
         string="Provider",
         readonly=True,
     )
-    charge_ids = fields.One2many(
-        comodel_name="ofh.payment.charge",
-        string="Charge IDs",
+    payment_ids = fields.One2many(
+        string="Payment IDs",
+        comodel_name='ofh.payment',
         inverse_name='payment_request_id',
-        readonly=True,
+        readonly=True
     )
     track_id = fields.Char(
         required=True,
@@ -356,14 +356,14 @@ class OfhPaymentRequest(models.Model):
 
     # TODO: check how to
     @api.multi
-    @api.depends('manual_payment_reference', 'charge_ids')
+    @api.depends('manual_payment_reference', 'payment_ids')
     def _compute_payment_reference(self):
         for rec in self:
             if rec.manual_payment_reference:
                 rec.payment_reference = rec.manual_payment_reference
                 continue
-            if rec.charge_ids:
-                rec.payment_reference = rec.charge_ids[0].charge_id
+            if rec.payment_ids:
+                rec.payment_reference = rec.payment_ids.charge_ids[0].charge_id
                 continue
             else:
                 rec.payment_reference = ""
