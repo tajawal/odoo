@@ -98,3 +98,9 @@ class HubPaymentImportMapChild(Component):
                 items.append((0, 0, values))
 
         return items
+
+
+class HubPaymentImporter(Component):
+    _name = 'hub.payment.importer'
+    _inherit = 'hub.importer'
+    _apply_on = ['hub.payment']

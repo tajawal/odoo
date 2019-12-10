@@ -8,7 +8,6 @@ from odoo.addons.component.core import AbstractComponent
 from odoo.addons.connector.exception import IDMissingInBackend
 from odoo.addons.queue_job.exception import NothingToDoJob
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -60,7 +59,7 @@ class HubImporter(AbstractComponent):
             bool -- Return True if the import should be skipped else False
         """
         if not binding:
-            return False    # The record has never been synchronised.
+            return False  # The record has never been synchronised.
 
         assert self.hub_record
 
@@ -214,7 +213,7 @@ class HubBatchImporter(AbstractComponent):
         for record in records:
             self._import_record(record)
 
-    def _import_record(self, external_id, model, job_options=None, **kwargs):
+    def _import_record(self, external_id, job_options=None, **kwargs):
         """ Delay the import of the records"""
-        delayable = model.with_delay(**job_options or {})
+        delayable = self.model.with_delay(**job_options or {})
         delayable.import_record(self.backend_record, external_id)

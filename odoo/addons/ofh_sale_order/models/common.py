@@ -5,9 +5,6 @@ from odoo.addons.component.core import Component
 from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
 from datetime import datetime
 
-from odoo.addons.ofh_hub_connector.models.ofh_hub_backend import HubBackend
-from odoo.addons.server_environment import serv_config
-
 UNIFY_STORE_ID = 1000
 
 
@@ -118,8 +115,11 @@ class SaleOrderAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
+        r_type = 'initial'
+        if external_id.find('pr-') != -1 or external_id.find('mp-') != -1:
+            r_type = 'amendment'
 
-        result = hub_api.get_raw_order(external_id)
+        result = hub_api.get_raw_order(external_id, r_type)
         # Getting Payments in case of Online Sale Order
         store_id = result.get('store_id')
         track_id = result.get('track_id')
