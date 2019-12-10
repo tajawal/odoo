@@ -4,6 +4,9 @@ from odoo import api, fields, models, _
 from odoo.addons.component.core import Component
 from datetime import datetime
 
+from odoo.addons.ofh_payment.models.common import PaymentAdapter
+from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAdapter
+
 UNIFY_STORE_ID = 1000
 
 
@@ -83,10 +86,6 @@ class HubPayment(models.Model):
         return binding
 
 
-class PaymentAdapter(Component):
-    _inherit = 'ofh.payment.adapter'
-
-
 class SaleOrderAdapter(Component):
     _name = 'ofh.sale.order.adapter'
     _inherit = 'hub.adapter'
@@ -125,6 +124,7 @@ class SaleOrderAdapter(Component):
         track_id = result.get('track_id')
 
         if store_id != UNIFY_STORE_ID:
-            result['payments'] = self.env['ofh.payment.adapter'].read(track_id)
+            payment_adapter = PaymentAdapter(HubPayment)
+            result['payments'] = PaymentAdapter.read(payment_adapter, track_id)
 
         return result
