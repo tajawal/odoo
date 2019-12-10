@@ -74,12 +74,26 @@ class HubPayment(models.Model):
         ondelete='cascade',
         index=True,
     )
+    hub_payment_request_id = fields.Many2one(
+        string="HUB Payment Request",
+        comodel_name='hub.payment.request',
+        required=False,
+        ondelete='cascade',
+        index=True,
+    )
 
     @api.model
     def create(self, vals):
-        hub_order_id = vals['hub_order_id']
-        binding = self.env['hub.sale.order'].browse(hub_order_id)
-        vals['order_id'] = binding.odoo_id.id
+        if 'hub_order_id' in vals:
+            hub_order_id = vals['hub_order_id']
+            binding = self.env['hub.sale.order'].browse(hub_order_id)
+            vals['order_id'] = binding.odoo_id.id
+
+        if 'hub_payment_request_id' in vals:
+            hub_payment_request_id = vals['hub_payment_request_id']
+            binding = self.env['hub.payment.request'].browse(hub_payment_request_id)
+            vals['order_id'] = binding.odoo_id.id
+
         binding = super(HubPayment, self).create(vals)
         return binding
 
