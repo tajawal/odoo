@@ -93,18 +93,18 @@ class HubPaymentRequestBatchImporter(Component):
         for record in records:
             store_id = record['additionalData'].get('storeId', '')
             track_id = record['additionalData'].get('trackId', '')
-            type = record.get('type', '')
+            pr_type = record.get('type', '')
 
             # Online Charge Payment Request => Create Sale Order and payment
-            if store_id != UNIFY_STORE_ID and type == 'charge':
+            if store_id != UNIFY_STORE_ID and pr_type == 'charge':
                 self._import_record(track_id)
 
             # Unify Charge Payment Request => Create payment only
-            if store_id == UNIFY_STORE_ID and type == 'charge':
+            if store_id == UNIFY_STORE_ID and pr_type == 'charge':
                 self._import_record(track_id)
 
             # Online and Unify Refund Payment Request => Create payment request
-            if type == 'refund':
+            if pr_type == 'refund':
                 self._import_record(track_id)
 
 
