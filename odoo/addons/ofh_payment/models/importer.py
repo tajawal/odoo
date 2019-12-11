@@ -104,3 +104,7 @@ class HubPaymentImporter(Component):
     _name = 'hub.payment.importer'
     _inherit = 'hub.importer'
     _apply_on = ['hub.payment']
+
+    def _is_uptodate(self, binding) -> bool:
+        if not binding:
+            return False    # The record has never been synchronised.
