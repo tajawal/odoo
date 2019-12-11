@@ -94,29 +94,37 @@ class HubPaymentRequestBatchImporter(Component):
             store_id = record['additionalData'].get('storeId', '')
             track_id = record['additionalData'].get('trackId', '')
             pr_type = record.get('type', '')
+            order_id = record.get('orderId', '')
             backend = self.env['hub.backend'].search([], limit=1)
 
             # Online Charge Payment Request => Create Sale Order and payment
             if store_id != UNIFY_STORE_ID and pr_type == 'charge':
-                # If payment request starts with mp- only sync payment
-                if track_id.find('mp-') == -1:
-                    with backend.work_on('hub.sale.order') as work:
-                        importer = work.component(usage='record.importer')
-                        importer.run(track_id, force=False)
-                else:
-                    with backend.work_on('hub.payment') as work:
-                        importer = work.component(usage='record.importer')
-                        importer.run(track_id, force=False)
+                self._run_online_charge_payment_request(order_id, track_id, backend)
+                return
 
             # Unify Charge Payment Request => Create payment only
             if store_id == UNIFY_STORE_ID and pr_type == 'charge':
-                with backend.work_on('hub.payment') as work:
-                    importer = work.component(usage='record.importer')
-                    importer.run(track_id, force=False)
+                self._run_unify_charge_payment_request(track_id, backend)
+                return
 
             # Online and Unify Refund Payment Request => Create payment request
             if pr_type == 'refund':
                 self._import_record(track_id)
+
+    def _run_online_charge_payment_request(self, order_id, track_id, backend):
+        if order_id:
+            with backend.work_on('hub.sale.order') as work:
+                importer = work.component(usage='record.importer')
+                importer.run(track_id, force=False)
+        else:
+            with backend.work_on('hub.payment') as work:
+                importer = work.component(usage='record.importer')
+                importer.run(track_id, force=False)
+
+    def _run_unify_charge_payment_request(self, track_id, backend):
+        with backend.work_on('hub.payment') as work:
+            importer = work.component(usage='record.importer')
+            importer.run(track_id, force=False)
 
 
 class HubPaymentRequestImporter(Component):

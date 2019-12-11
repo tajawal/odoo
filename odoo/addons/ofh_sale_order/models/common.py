@@ -81,9 +81,10 @@ class HubPayment(models.Model):
             hub_order_id = vals['hub_order_id']
             binding = self.env['hub.sale.order'].browse(hub_order_id)
             vals['order_id'] = binding.odoo_id.id
-            binding = super(HubPayment, self).create(vals)
-            return binding
-        
+
+        binding = super(HubPayment, self).create(vals)
+        return binding
+
 
 class SaleOrderAdapter(Component):
     _name = 'ofh.sale.order.adapter'

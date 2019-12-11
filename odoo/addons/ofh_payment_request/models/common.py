@@ -7,7 +7,6 @@ from odoo.addons.component.core import Component
 
 
 class HubPaymentRequest(models.Model):
-
     _name = 'hub.payment.request'
     _inherit = 'hub.binding'
     _inherits = {'ofh.payment.request': 'odoo_id'}
@@ -26,7 +25,6 @@ class HubPaymentRequest(models.Model):
 
 
 class PaymentRequestAdapter(Component):
-
     _name = 'ofh.payment.request.adapter'
     _inherit = 'hub.adapter'
     _apply_on = 'hub.payment.request'
@@ -78,5 +76,6 @@ class HubPayment(models.Model):
             binding = self.env['hub.payment.request'].browse(
                 hub_payment_request_id)
             vals['payment_request_id'] = binding.odoo_id.id
+
         binding = super(HubPayment, self).create(vals)
         return binding
