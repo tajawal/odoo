@@ -8,6 +8,7 @@ from odoo.addons.component.core import AbstractComponent
 from odoo.addons.connector.exception import IDMissingInBackend
 from odoo.addons.queue_job.exception import NothingToDoJob
 
+
 _logger = logging.getLogger(__name__)
 
 
@@ -59,7 +60,7 @@ class HubImporter(AbstractComponent):
             bool -- Return True if the import should be skipped else False
         """
         if not binding:
-            return False  # The record has never been synchronised.
+            return False    # The record has never been synchronised.
 
         assert self.hub_record
 

@@ -37,7 +37,8 @@ class PaymentAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
-        return hub_api.get_payment_by_track_id(external_id)
+        result = hub_api.get_payment_by_track_id(external_id)[0]
+        return result
 
 
 class HubPaymentCharge(models.Model):
