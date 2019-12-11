@@ -98,9 +98,13 @@ class HubPaymentRequestBatchImporter(Component):
 
             # Online Charge Payment Request => Create Sale Order and payment
             if store_id != UNIFY_STORE_ID and pr_type == 'charge':
-                # TODO: Temporary condition to avoid exception
+                # If payment request starts with mp- only sync payment
                 if track_id.find('mp-') == -1:
                     with backend.work_on('hub.sale.order') as work:
+                        importer = work.component(usage='record.importer')
+                        importer.run(track_id, force=False)
+                else:
+                    with backend.work_on('hub.payment') as work:
                         importer = work.component(usage='record.importer')
                         importer.run(track_id, force=False)
 

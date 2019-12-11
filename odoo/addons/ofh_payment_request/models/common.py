@@ -65,7 +65,7 @@ class HubPayment(models.Model):
     _inherit = 'hub.payment'
 
     hub_payment_request_id = fields.Many2one(
-        string="HUB Payment Charge",
+        string="HUB Payment",
         comodel_name='hub.payment.request',
         ondelete='cascade',
         index=True,
