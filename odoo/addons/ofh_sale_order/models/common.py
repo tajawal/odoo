@@ -126,6 +126,7 @@ class SaleOrderAdapter(Component):
         store_id = result.get('store_id')
         track_id = result.get('track_id')
 
+        result['payments'] = {}
         if store_id != UNIFY_STORE_ID:
             backend = self.env['hub.backend'].search([], limit=1)
             hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
