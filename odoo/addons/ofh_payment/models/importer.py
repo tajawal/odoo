@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 from datetime import datetime
+from odoo import fields
 
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
@@ -108,3 +109,11 @@ class HubPaymentImporter(Component):
     def _is_uptodate(self, binding) -> bool:
         if not binding:
             return False    # The record has never been synchronised.
+
+        assert self.hub_record
+
+        sync_date = fields.Datetime.from_string(binding.sync_date)
+        hub_date = fields.Datetime.from_string(
+            self.hub_record.get('updated_at'))
+
+        return hub_date < sync_date
