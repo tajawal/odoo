@@ -199,6 +199,12 @@ class OfhPaymentRequest(models.Model):
         inverse_name='payment_request_id',
         readonly=True
     )
+    charge_ids = fields.One2many(
+        string="Payment IDs",
+        comodel_name='ofh.payment.charge',
+        inverse_name='payment_request_id',
+        readonly=True
+    )
     track_id = fields.Char(
         required=True,
         readonly=True,
@@ -363,7 +369,10 @@ class OfhPaymentRequest(models.Model):
                 rec.payment_reference = rec.manual_payment_reference
                 continue
             if rec.payment_ids:
-                rec.payment_reference = rec.payment_ids.charge_ids[0].charge_id
+                rec.payment_reference = rec.payment_ids[0].charge_ids[0].charge_id
+                continue
+            if rec.charge_ids:
+                rec.payment_reference = rec.charge_ids[0].charge_id
                 continue
             else:
                 rec.payment_reference = ""

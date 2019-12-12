@@ -1,4 +1,5 @@
 from . import ofh_payment_request
+from . import ofh_payment_charge
 from . import ofh_payment
 from . import common
 from . import importer

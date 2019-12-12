@@ -22,6 +22,11 @@ class HubPaymentRequest(models.Model):
         inverse_name='hub_payment_request_id',
         string="Hub Payments",
     )
+    hub_charge_ids = fields.One2many(
+        comodel_name='hub.payment.charge',
+        inverse_name='hub_payment_request_id',
+        string="Hub Payment Charges",
+    )
 
 
 class PaymentRequestAdapter(Component):
@@ -78,4 +83,24 @@ class HubPayment(models.Model):
             vals['payment_request_id'] = binding.odoo_id.id
 
         binding = super(HubPayment, self).create(vals)
+        return binding
+
+
+class HubPaymentCharge(models.Model):
+    _inherit = 'hub.payment.charge'
+
+    hub_payment_request_id = fields.Many2one(
+        string="HUB Payment Charge",
+        comodel_name='hub.payment.request',
+        required=False,
+        ondelete='cascade',
+        index=True,
+    )
+
+    @api.model
+    def create(self, vals):
+        hub_payment_request_id = vals['hub_payment_request_id']
+        binding = self.env['hub.payment.request'].browse(hub_payment_request_id)
+        vals['payment_request_id'] = binding.odoo_id.id
+        binding = super(HubPaymentCharge, self).create(vals)
         return binding
