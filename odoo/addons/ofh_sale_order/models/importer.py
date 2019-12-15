@@ -617,15 +617,6 @@ class HubSaleOrderImporter(Component):
 
         return hub_date < sync_date
 
-    def _must_skip(self) -> bool:
-        """ Skip Unify Sale Orders.
-
-        Returns:
-            bool -- True if the record should be skipped else False
-        """
-        return self.hub_record.get('store_id') == UNIFY_STORE_ID and \
-               self.hub_record.get('group_id') == UNIFY_GROUP_ID
-
 
 class HubSaleOrderLineImportMapChild(Component):
     _name = 'map.child.hub.sale.order.line.import'

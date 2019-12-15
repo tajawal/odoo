@@ -186,13 +186,13 @@ class OfhPaymentRequest(models.Model):
                     l.supplier_name for l in rec.order_id.line_ids]))
 
     @api.multi
-    @api.depends('charge_ids.provider')
+    @api.depends('payment_ids.provider')
     def _compute_provider(self):
         for rec in self:
             rec.provider = ''
-            if rec.charge_ids:
+            if rec.payment_ids:
                 rec.provider = ', '.join(
-                    set([c.provider for c in rec.charge_ids]))
+                    set([c.provider for c in rec.payment_ids]))
 
     @api.multi
     @api.depends('order_id.payment_request_ids')

@@ -34,9 +34,9 @@ class TestOfhPaymentRequestImport(SavepointComponentCase):
 
         self.assertEquals(len(binding), 1)
         self.assertEquals(binding.external_id, 'pr-A90126214952-1548581919557')
-        self.assertEquals(len(binding.hub_charge_ids), 1)
+        self.assertEquals(len(binding.hub_payment_ids), 1)
         self.assertEquals(
-            binding.hub_charge_ids.external_id, 'charge_0B7B5E170H1C427A41FA')
+            binding.hub_payment_ids.external_id, 'charge_0B7B5E170H1C427A41FA')
         self.assertEquals(binding.request_type, 'refund')
         self.assertEquals(binding.matching_status, 'unmatched')
         self.assertEquals(binding.order_reference, 'A90126214952')

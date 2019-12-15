@@ -306,7 +306,7 @@ class OfhPaymentRequest(models.Model):
         else:
             validating_carrier = ''
 
-        charges = self.charge_ids.sorted(lambda c: c.created_at, reverse=True)
+        charges = self.payment_ids.charge_ids.sorted(lambda c: c.created_at, reverse=True)
         payment_dict = {
             "id": self.order_id.hub_bind_ids.external_id,
             "name": self.order_id.name,

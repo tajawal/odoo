@@ -84,6 +84,7 @@
                                 <field name="payment_reference"/>
                                 <field name="manual_payment_reference"/>
                             </group>
+                            <field name="payment_ids" nolabel="1"/>
                             <field name="charge_ids" nolabel="1"/>
                         </page>
                         <page name="binding_details" string="Bidings">
