@@ -44,7 +44,7 @@ class HubAPI:
 
     # Get payment details using oms-finance-api
     def get_payment_by_track_id(self, track_id) -> list:
-        url = f"{self.oms_finance_api_url}payment/detail?track_id{track_id}&type=initial"
+        url = f"{self.oms_finance_api_url}payment/detail?track_id={track_id}&type=initial"
         try:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
