@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LLC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="ofh_payment_loader_form_view">
+        <field name="name">ofh.payment.loader.form (in ofh_payment_gateway)</field>
+        <field name="model">ofh.payment.loader</field>
+        <field name="arch" type="xml">
+            <form>
+                <group col="4" name="inner_group">
+                    <field name="entity"/>
+                    <field name="bank_name"/>
+                    <field name="provider"/>
+                    <field name="settlement_date"/>
+                    <field name="currency_id"/>
+                    <field name="is_apple_pay"/>
+                </group>
+
+                <footer>
+                    <button name="generate_loader"
+                            string="Generate Loader"
+                            class="btn-primary"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-default"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_loader_act_window">
+        <field name="name">Generate Loader</field>
+        <field name="res_model">ofh.payment.loader</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
