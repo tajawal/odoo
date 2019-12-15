@@ -117,19 +117,29 @@ class SaleOrderAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
-        r_type = 'initial'
-        if external_id.find('pr-') != -1 or external_id.find('mp-') != -1:
-            r_type = 'amendment'
 
-        result = hub_api.get_raw_order(external_id, r_type)
+        request_type = self._get_request_type(external_id)
+        result = hub_api.get_raw_order(external_id, request_type)
+        
         # Getting Payments in case of Online Sale Order
         store_id = result.get('store_id')
         track_id = result.get('track_id')
 
-        result['payments'] = {}
+        result['payments'] = self._get_payments(store_id, track_id)
+        return result
+
+    def _get_request_type(self, external_id):
+        r_type = 'initial'
+        if external_id.find('pr-') != -1 or external_id.find('mp-') != -1:
+            r_type = 'amendment'
+
+        return r_type
+
+    def _get_payments(self, store_id, track_id):
+        _payments = {}
         if store_id != UNIFY_STORE_ID:
             backend = self.env['hub.backend'].search([], limit=1)
             hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
-            result['payments'] = hub_api.get_payment_by_track_id(track_id=track_id)
+            _payments = hub_api.get_payment_by_track_id(track_id=track_id, ptype='initial')
 
-        return result
+        return _payments
