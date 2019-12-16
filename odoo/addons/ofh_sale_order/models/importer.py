@@ -40,6 +40,9 @@ class HubSaleOrderImportMapper(Component):
         ('customer_email', 'customer_email'),
         ('customer_number', 'customer_number'),
         ('agent_email', 'agent_email'),
+        ('file_id', 'file_id'),
+        ('ticket_sub_type', 'ticket_sub_type'),
+        ('booking_category', 'booking_category'),
     ]
     children = [
         ('line_items', 'hub_line_ids', 'hub.sale.order.line'),
@@ -616,15 +619,6 @@ class HubSaleOrderImporter(Component):
             self.hub_record.get('updated_at'))
 
         return hub_date < sync_date
-
-    def _must_skip(self) -> bool:
-        """ Skip Unify Sale Orders.
-
-        Returns:
-            bool -- True if the record should be skipped else False
-        """
-        return self.hub_record.get('store_id') == UNIFY_STORE_ID and \
-               self.hub_record.get('group_id') == UNIFY_GROUP_ID
 
 
 class HubSaleOrderLineImportMapChild(Component):

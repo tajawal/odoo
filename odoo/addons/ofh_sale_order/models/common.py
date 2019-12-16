@@ -2,7 +2,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models, _
 from odoo.addons.component.core import Component
+from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
 from datetime import datetime
+
+UNIFY_STORE_ID = 1000
 
 
 class HubSaleOrder(models.Model):
@@ -67,22 +70,23 @@ class HubPayment(models.Model):
     hub_order_id = fields.Many2one(
         string="HUB Sale order",
         comodel_name='hub.sale.order',
-        required=True,
+        required=False,
         ondelete='cascade',
         index=True,
     )
 
     @api.model
     def create(self, vals):
-        hub_order_id = vals['hub_order_id']
-        binding = self.env['hub.sale.order'].browse(hub_order_id)
-        vals['order_id'] = binding.odoo_id.id
+        if 'hub_order_id' in vals:
+            hub_order_id = vals['hub_order_id']
+            binding = self.env['hub.sale.order'].browse(hub_order_id)
+            vals['order_id'] = binding.odoo_id.id
+
         binding = super(HubPayment, self).create(vals)
         return binding
 
 
 class SaleOrderAdapter(Component):
-
     _name = 'ofh.sale.order.adapter'
     _inherit = 'hub.adapter'
     _apply_on = 'hub.sale.order'
@@ -113,4 +117,29 @@ class SaleOrderAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
-        return hub_api.get_raw_order(external_id)
+
+        request_type = self._get_request_type(external_id)
+        result = hub_api.get_raw_order(external_id, request_type)
+        
+        # Getting Payments in case of Online Sale Order
+        store_id = result.get('store_id')
+        track_id = result.get('track_id')
+
+        result['payments'] = self._get_payments(store_id, track_id)
+        return result
+
+    def _get_request_type(self, external_id):
+        r_type = 'initial'
+        if external_id.find('pr-') != -1 or external_id.find('mp-') != -1:
+            r_type = 'amendment'
+
+        return r_type
+
+    def _get_payments(self, store_id, track_id):
+        _payments = {}
+        if store_id != UNIFY_STORE_ID:
+            backend = self.env['hub.backend'].search([], limit=1)
+            hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
+            _payments = hub_api.get_payment_by_track_id(track_id=track_id, ptype='initial')
+
+        return _payments

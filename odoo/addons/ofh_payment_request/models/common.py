@@ -7,7 +7,6 @@ from odoo.addons.component.core import Component
 
 
 class HubPaymentRequest(models.Model):
-
     _name = 'hub.payment.request'
     _inherit = 'hub.binding'
     _inherits = {'ofh.payment.request': 'odoo_id'}
@@ -18,15 +17,19 @@ class HubPaymentRequest(models.Model):
         required=True,
         ondelete='cascade'
     )
+    hub_payment_ids = fields.One2many(
+        comodel_name='hub.payment',
+        inverse_name='hub_payment_request_id',
+        string="Hub Payments",
+    )
     hub_charge_ids = fields.One2many(
         comodel_name='hub.payment.charge',
         inverse_name='hub_payment_request_id',
-        string="Hub Charges",
+        string="Hub Payment Charges",
     )
 
 
 class PaymentRequestAdapter(Component):
-
     _name = 'ofh.payment.request.adapter'
     _inherit = 'hub.adapter'
     _apply_on = 'hub.payment.request'
@@ -61,11 +64,11 @@ class PaymentRequestAdapter(Component):
         return hub_api.get_payment_request_by_track_id(external_id)
 
 
-class HubPaymentCharge(models.Model):
-    _inherit = 'hub.payment.charge'
+class HubPayment(models.Model):
+    _inherit = 'hub.payment'
 
     hub_payment_request_id = fields.Many2one(
-        string="HUB Payment Charge",
+        string="HUB Payment",
         comodel_name='hub.payment.request',
         ondelete='cascade',
         index=True,
@@ -77,6 +80,28 @@ class HubPaymentCharge(models.Model):
             hub_payment_request_id = vals['hub_payment_request_id']
             binding = self.env['hub.payment.request'].browse(
                 hub_payment_request_id)
+            vals['payment_request_id'] = binding.odoo_id.id
+
+        binding = super(HubPayment, self).create(vals)
+        return binding
+
+
+class HubPaymentCharge(models.Model):
+    _inherit = 'hub.payment.charge'
+
+    hub_payment_request_id = fields.Many2one(
+        string="HUB Payment Charge",
+        comodel_name='hub.payment.request',
+        required=False,
+        ondelete='cascade',
+        index=True,
+    )
+
+    @api.model
+    def create(self, vals):
+        if 'hub_payment_request_id' in vals:
+            hub_payment_request_id = vals['hub_payment_request_id']
+            binding = self.env['hub.payment.request'].browse(hub_payment_request_id)
             vals['payment_request_id'] = binding.odoo_id.id
         binding = super(HubPaymentCharge, self).create(vals)
         return binding
