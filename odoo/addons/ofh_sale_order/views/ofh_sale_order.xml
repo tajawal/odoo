@@ -215,11 +215,19 @@ if records:
         <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
-    <record model="ir.actions.act_window" id="ofh_sale_order_almosafer_act_window">
+    <record model="ir.actions.act_window" id="ofh_sale_order_almosafer_online_act_window">
         <field name="name">Sales Orders</field>
         <field name="res_model">ofh.sale.order</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('entity', '=', 'almosafer')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
+    </record>
+
+     <record model="ir.actions.act_window" id="ofh_sale_order_almosafer_retail_act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">ofh.sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('entity', '=', 'almosafer_branch')]</field>
         <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
@@ -252,7 +260,20 @@ if records:
     <record model="ir.ui.menu" id="ofh_sale_order_almosafer_menu">
         <field name="name">Almosafer Sales Orders</field>
         <field name="parent_id" ref="ofh_sale_order_menu"/>
-        <field name="action" ref="ofh_sale_order_almosafer_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_almosafer_online_menu">
+        <field name="name">Online</field>
+        <field name="parent_id" ref="ofh_sale_order_almosafer_menu"/>
+        <field name="action" ref="ofh_sale_order_almosafer_online_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_almosafer_retail_menu">
+        <field name="name">Retail</field>
+        <field name="parent_id" ref="ofh_sale_order_almosafer_menu"/>
+        <field name="action" ref="ofh_sale_order_almosafer_retail_act_window"/>
         <field name="sequence" eval="20"/>
     </record>
 
