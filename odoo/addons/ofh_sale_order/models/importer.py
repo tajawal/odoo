@@ -40,6 +40,9 @@ class HubSaleOrderImportMapper(Component):
         ('customer_email', 'customer_email'),
         ('customer_number', 'customer_number'),
         ('agent_email', 'agent_email'),
+        ('file_id', 'file_id'),
+        ('ticket_sub_type', 'ticket_sub_type'),
+        ('booking_category', 'booking_category'),
     ]
     children = [
         ('line_items', 'hub_line_ids', 'hub.sale.order.line'),

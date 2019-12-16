@@ -389,6 +389,22 @@ class OfhSaleOrderLine(models.Model):
         string="Segments",
         readonly=True,
     )
+    file_id = fields.Char(
+        string="File Id",
+        related='order_id.file_id',
+    )
+    ticket_sub_type=fields.Char(
+        string="Ticket Sub Type",
+        related='order_id.ticket_sub_type',
+    )
+    is_unify = fields.Boolean(
+        string="Is Unify",
+        related='order_id.is_unify'
+    )
+    booking_category = fields.Selection(
+        string="Is Amendment?",
+        related='order_id.booking_category',
+    )
 
     @api.multi
     @api.depends('line_reference')

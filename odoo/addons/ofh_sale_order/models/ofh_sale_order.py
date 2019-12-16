@@ -6,7 +6,6 @@ from odoo.addons.queue_job.job import job
 
 
 class OfhSaleOrder(models.Model):
-
     _name = 'ofh.sale.order'
     _description = 'Ofh Sale Order'
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -377,6 +376,39 @@ class OfhSaleOrder(models.Model):
         track_visibility='onchange',
         compute="_compute_payment_status"
     )
+    file_id = fields.Char(
+        string="File ID",
+        readonly=True,
+    )
+
+    ticket_sub_type = fields.Char(
+        string="Ticket Sub Type",
+        readonly=True,
+    )
+
+    is_unify = fields.Boolean(
+        string="Is Unify",
+        compute='_compute_unify',
+        readonly=True,
+        default=False,
+    )
+    booking_category = fields.Selection(
+        selection=[
+            ('amendment', 'Amendment'),
+            ('initial', 'Initial')],
+        index=True,
+        readonly=True,
+        default='initial',
+    )
+
+    @api.multi
+    @api.depends('store_id')
+    def _compute_unify(self):
+        # For offline store_id is 1000
+        for rec in self:
+            rec.is_unify = False
+            if rec.store_id == UNIFY_STORE_ID:
+                rec.is_unify = True
 
     @api.multi
     @api.depends(
@@ -541,4 +573,3 @@ class OfhSaleOrder(models.Model):
             if not rec.payment_ids:
                 continue
             rec.computed_payment_status = rec.payment_ids[-1].payment_status
-

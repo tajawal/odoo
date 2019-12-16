@@ -42,7 +42,6 @@ if records:
                         <field name="sales_office"/>
                         <field name="channel"/>
                         <field name="customer"/>
-                        <field name="file_id"/>
                         <field name="booking_date"/>
                         <field name="fe_indicator"/>
                         <field name="invoice_currency"/>
