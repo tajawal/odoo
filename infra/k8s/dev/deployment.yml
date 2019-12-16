@@ -13,7 +13,7 @@ spec:
       service: finance-hub
   template:
     metadata:
-      annotation:
+      annotations:
         sidecar.istio.io/inject: "true"
       labels:
         app: finance-hub
