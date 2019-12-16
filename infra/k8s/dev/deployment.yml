@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        sidecar.istio.io/inject: "true"
+        sidecar.istio.io/inject: "false"
       labels:
         app: finance-hub
         service: finance-hub #labels for the pods e.g kubectl get pod -l "service in (http-server)"
