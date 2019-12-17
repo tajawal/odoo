@@ -95,6 +95,11 @@ Install New Module
 
    odoo -c odoo.cfg -d {db_name} -i {module_name}
 
+Install "odoo_finance_hub" App
+------------------------------
+
+Just go to the apps tap from UI and install it.
+
 Run Tests
 ---------
 
