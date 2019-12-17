@@ -36,6 +36,8 @@
                         <field name="is_egypt"/>
                         <field name="point_of_sale"/>
                         <field name="ahs_group_name"/>
+                        <field name="sales_office"/>
+                        <field name="branch_region"/>
                         <field name="customer_email" />
                         <field name="customer_number" />
                         <field name="agent_email" />

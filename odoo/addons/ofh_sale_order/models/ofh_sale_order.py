@@ -4,6 +4,9 @@
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
 
+BRANCH_REGIONS = ['CR', 'WR', 'ER', 'SR', 'NR']
+UNIFY_STORE_ID = 1000
+
 
 class OfhSaleOrder(models.Model):
     _name = 'ofh.sale.order'
@@ -400,6 +403,24 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         default='initial',
     )
+    sales_office = fields.Char(
+        string="Sales Office",
+        compute='_compute_sales_office',
+        readonly=True,
+        store=True,
+    )
+    branch_region = fields.Selection(
+        string="Branch Region",
+        selection=[('cr', 'CR'),
+                   ('wr', 'WR'),
+                   ('er', 'ER'),
+                   ('sr', 'SR'),
+                   ('nr', 'NR')],
+        readonly=True,
+        default='cr',
+        compute='_compute_sales_office',
+        store=True
+    )
 
     @api.multi
     @api.depends('store_id')
@@ -573,3 +594,15 @@ class OfhSaleOrder(models.Model):
             if not rec.payment_ids:
                 continue
             rec.computed_payment_status = rec.payment_ids[-1].payment_status
+
+    @api.multi
+    @api.depends('ahs_group_name')
+    def _compute_sales_office(self):
+        for rec in self:
+            rec.sales_office = ''
+            if rec.ahs_group_name and rec.ahs_group_name[:2] in BRANCH_REGIONS:
+                rec.sales_office = rec.ahs_group_name[:4]
+                rec.branch_region = rec.ahs_group_name[:2].lower()
+
+
+ 
