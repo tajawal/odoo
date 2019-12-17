@@ -335,6 +335,14 @@ class OfhPaymentRequest(models.Model):
         store=True,
         compute="_compute_booking_source"
     )
+    file_id = fields.Char(
+        string="File ID",
+        readonly=True,
+    )
+    file_reference = fields.Char(
+        string="File Reference",
+        readonly=True,
+    )
 
     @api.multi
     @api.depends('track_id')

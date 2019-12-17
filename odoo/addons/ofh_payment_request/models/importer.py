@@ -37,6 +37,8 @@ class HubPaymentRequestImportMapper(Component):
         ('remarks', 'notes'),
         ('payment_mode', 'payment_mode'),
         ('total_amount', 'total_amount'),
+        ('file_id', 'file_id'),
+        ('file_reference', 'file_reference'),
     ]
 
     children = [
