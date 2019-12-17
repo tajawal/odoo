@@ -124,6 +124,33 @@ class OfhPayment(models.Model):
         store=True,
         compute="_compute_booking_source"
     )
+    file_id = fields.Char(
+        string="File ID",
+        readonly=True,
+    )
+    payment_category = fields.Selection(
+        selection=[
+            ('charge', 'Charge'),
+            ('refund', 'Refund')],
+        index=True,
+        readonly=True,
+    )
+    rrn_no = fields.Char(
+        string="RRN NO.",
+        readonly=True,
+    )
+    iban = fields.Char(
+        string="IBAN",
+        readonly=True,
+    )
+    cashier_id = fields.Char(
+        string="Branch Cashier ID",
+        readonly=True,
+    )
+    successfactors_id = fields.Char(
+        string="Successfactors ID",
+        readonly=True,
+    )
 
     @api.multi
     @api.depends('track_id')

@@ -37,6 +37,13 @@
                         <field name="total_amount" widget="monetary"/>
                         <field name="payment_status"/>
                         <field name="currency_id" invisible="1"/>
+                        <field name="file_id"/>
+                        <field name="payment_category"/>
+                        <field name="rrn_no"/>
+                        <field name="iban"/>
+                        <field name="cashier_id"/>
+                        <field name="successfactors_id"/>
+
                     </group>
                     <notebook>
                         <page name="charges_detail" string="Charges">
@@ -56,6 +63,8 @@
                 <field name="currency_id" invisible="1"/>
                 <field name="created_at"/>
                 <field name="updated_at"/>
+                <field name="file_id"/>
+                <field name="payment_category"/>
                 <field name="payment_mode"/>
                 <field name="provider"/>
                 <field name="auth_code"/>
