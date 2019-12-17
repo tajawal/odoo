@@ -28,12 +28,6 @@
                         class="btn-info"
                         type="object"/>
             </header>
-            <group name="main_info" position="after">
-                <group name="statuses" col="4">
-                    <field name="integration_status"/>
-                    <field name="sap_status"/>
-                </group>
-            </group>
             <notebook position="inside">
                 <page name="sap_details" string="SAP Details">
                     <field name="sap_payment_ids" nolabel="1"/>
@@ -48,8 +42,6 @@
         <field name="inherit_id" ref="ofh_payment.ofh_payment_tree_view"/>
         <field name="arch" type="xml">
             <tree position="inside">
-                <field name="integration_status"/>
-                <field name="sap_status"/>
                 <button name="send_payment_to_sap"
                         string="Send Payment to SAP"
                         class="btn-success"

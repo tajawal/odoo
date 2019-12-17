@@ -1,7 +1,8 @@
 # Copyright 2019 Tajawal LCC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
+import json
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
 class OfhPayment(models.Model):
@@ -78,6 +79,7 @@ class OfhPayment(models.Model):
         compute="_compute_assignment"
     )
 
+
     @api.multi
     @api.depends('sap_payment_ids.state', 'sap_payment_ids.assignment')
     def _compute_assignment(self):
@@ -125,3 +127,50 @@ class OfhPayment(models.Model):
             if rec.order_id.payment_request_ids[0].request_type != 'void':
                 continue
             rec.is_voided = True
+
+    @api.multi
+    def action_payment_not_applicable(self):
+        if self.filtered(lambda o: o.payment_integration_status):
+            raise ValidationError("Payment already sent to SAP.")
+        return self.write({
+            'is_payment_applicable': False,
+        })
+
+    @api.multi
+    def action_payment_applicable(self):
+        return self.write({
+            'is_payment_applicable': True,
+        })
+
+    @api.multi
+    @api.depends('is_payment_applicable')
+    def action_payment_sent_sap(self):
+        for rec in self:
+            if rec.is_payment_applicable:
+                return self.write({
+                    'payment_integration_status': True,
+                })
+
+    @api.multi
+    def send_payment_to_sap(self):
+        """Create and Send SAP Sale Order Record."""
+        self.ensure_one()
+
+        values = self._prepare_payment_values()
+        return self.env['ofh.payment.sap'].create(values)
+
+    @api.multi
+    def _prepare_payment_values(self, visualize=False):
+        self.ensure_one()
+        dt = fields.Datetime.now()
+        backend = self.env['sap.backend'].search([], limit=1)
+        values = {
+            'send_date': dt,
+            'backend_id': backend.id,
+            'payment_detail': json.dumps(self.to_dict()),
+            'payment_id': self.id
+        }
+        if visualize:
+            values['state'] = 'visualize'
+
+        return values   

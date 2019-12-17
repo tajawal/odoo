@@ -24,13 +24,7 @@ class OfhSaleOrder(models.Model):
         index=True,
         track_visibility='onchange',
     )
-    is_payment_applicable = fields.Boolean(
-        string="Is Payment Applicable?",
-        default=True,
-        readonly=True,
-        index=True,
-        track_visibility='onchange',
-    )
+
     integration_status = fields.Boolean(
         string="Is Sent?",
         readonly=True,
@@ -40,15 +34,7 @@ class OfhSaleOrder(models.Model):
         compute='_compute_integration_status',
         search='_search_integration_status',
     )
-    payment_integration_status = fields.Boolean(
-        string="Is Payment Sent?",
-        readonly=True,
-        index=True,
-        default=False,
-        store=False,
-        compute='_compute_payment_integration_status',
-        search='_search_payment_integration_status',
-    )
+
     sap_status = fields.Boolean(
         string="In SAP?",
         readonly=True,
@@ -57,15 +43,7 @@ class OfhSaleOrder(models.Model):
         compute='_compute_sap_status',
         search='_search_sap_status',
     )
-    payment_sap_status = fields.Boolean(
-        string="Is Payment in SAP?",
-        readonly=True,
-        index=True,
-        default=False,
-        store=False,
-        compute='_compute_payment_sap_status',
-        search='_search_payment_sap_status',
-    )
+
     sale_not_payment_sap_status = fields.Boolean(
         string="Sale not Payment in SAP?",
         readonly=True,
@@ -114,37 +92,9 @@ class OfhSaleOrder(models.Model):
 
         return [('id', 'in', order_ids)]
 
-    @api.multi
-    @api.depends('payment_ids.sap_payment_ids', 'is_payment_applicable')
-    def _compute_payment_integration_status(self):
-        for rec in self:
-            sap_payments = rec.payment_ids.mapped('sap_payment_ids')
-            rec.payment_integration_status = sap_payments.filtered(
-                lambda p: p.state == 'success' and p.payment_id) and \
-                rec.is_payment_applicable
 
-    @api.model
-    def _search_payment_integration_status(self, operator, value):
-        if operator == '!=':
-            self.env.cr.execute("""
-                select id as sale_order_id from ofh_sale_order
-                except
-                select sale_order_id
-                FROM ofh_payment_sap WHERE
-                state = 'success' AND sale_order_id > 0;
-            """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
-        else:
-            self.env.cr.execute("""
-                SELECT sale_order_id FROM ofh_payment_sap WHERE
-                state = 'success' AND sale_order_id > 0
-            """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
 
-        if not order_ids:
-            return [('id', '=', 0)]
 
-        return [('id', 'in', order_ids)]
 
     @api.multi
     @api.depends('sap_order_ids.state', 'is_sale_applicable')
@@ -180,40 +130,9 @@ class OfhSaleOrder(models.Model):
 
         return [('id', 'in', order_ids)]
 
-    @api.multi
-    @api.depends('payment_ids.sap_payment_ids', 'is_payment_applicable')
-    def _compute_payment_sap_status(self):
-        for rec in self:
-            sap_payments = rec.payment_ids.mapped('sap_payment_ids')
-            rec.payment_sap_status = sap_payments.filtered(
-                lambda p: p.state == 'success' and p.payment_id and
-                p.sap_status == 'in_sap') and rec.is_payment_applicable
 
-    @api.model
-    def _search_payment_sap_status(self, operator, value):
-        if operator == '!=':
-            self.env.cr.execute("""
-                SELECT sale_order_id
-                FROM ofh_payment_sap WHERE
-                    state = 'success' AND
-                    sale_order_id > 0 AND
-                    sap_status != 'in_sap';
-            """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
-        else:
-            self.env.cr.execute("""
-                SELECT sale_order_id
-                FROM ofh_payment_sap WHERE
-                    state = 'success' AND
-                    sale_order_id > 0 AND
-                    sap_status = 'in_sap';
-            """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
 
-        if not order_ids:
-            return [('id', '=', 0)]
 
-        return [('id', 'in', order_ids)]
 
     @api.model
     def _search_sale_not_payment_sap_status(self, operator, value):
@@ -367,23 +286,12 @@ class OfhSaleOrder(models.Model):
             self.payment_ids[0].provider if self.payment_ids else '',
         }
 
-    @api.multi
-    def action_not_applicable(self):
-        if self.filtered(
-                lambda o:
-                o.integration_status or o.payment_integration_status):
-            raise ValidationError(
-                "Sale Order or Payment already sent to SAP.")
-        return self.write({
-            'is_sale_applicable': False,
-            'is_payment_applicable': False,
-        })
+
 
     @api.multi
     def action_applicable(self):
         return self.write({
             'is_sale_applicable': True,
-            'is_payment_applicable': True,
         })
 
     @api.multi
@@ -400,19 +308,9 @@ class OfhSaleOrder(models.Model):
             'is_sale_applicable': True,
         })
 
-    @api.multi
-    def action_payment_not_applicable(self):
-        if self.filtered(lambda o: o.payment_integration_status):
-            raise ValidationError("Payment already sent to SAP.")
-        return self.write({
-            'is_payment_applicable': False,
-        })
+    
 
-    @api.multi
-    def action_payment_applicable(self):
-        return self.write({
-            'is_payment_applicable': True,
-        })
+
 
     @api.model
     def _auto_send_flight_orders_to_sap(self):

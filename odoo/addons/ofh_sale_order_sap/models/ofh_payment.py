@@ -13,38 +13,98 @@ class OfhPayment(models.Model):
         inverse_name='payment_id',
         readonly=True,
     )
-    integration_status = fields.Boolean(
-        string="Is Sent?",
+    is_payment_applicable = fields.Boolean(
+        string="Is Payment Applicable?",
+        default=True,
+        readonly=True,
+        index=True,
+        track_visibility='onchange',
+    )
+    payment_integration_status = fields.Boolean(
+        string="Is Payment Sent?",
         readonly=True,
         index=True,
         default=False,
         store=False,
-        compute='_compute_integration_status',
+        compute='_compute_payment_integration_status',
+        Zsearch='_search_payment_integration_status',
     )
-    sap_status = fields.Boolean(
-        string="In SAP?",
+    payment_sap_status = fields.Boolean(
+        string="Is Payment in SAP?",
         readonly=True,
         index=True,
         default=False,
-        compute='_compute_sap_status',
+        store=False,
+        compute='_compute_payment_sap_status',
+        search='_search_payment_sap_status',
     )
 
     @api.multi
-    @api.depends('sap_payment_ids.state', 'order_id.is_payment_applicable')
-    def _compute_integration_status(self):
+    @api.depends('sap_payment_ids.state', 'is_payment_applicable')
+    def _compute_payment_integration_status(self):
         for rec in self:
-            rec.integration_status = rec.sap_payment_ids.filtered(
+            rec.payment_integration_status = rec.sap_payment_ids.filtered(
                 lambda p: p.state == 'success') and \
-                rec.order_id.is_payment_applicable
+                    rec.is_payment_applicable
+
+
+    @api.model
+    def _search_payment_integration_status(self, operator, value):
+        if operator == '!=':
+            self.env.cr.execute("""
+                   select id as sale_order_id from ofh_sale_order
+                   except
+                   select sale_order_id
+                   FROM ofh_payment_sap WHERE
+                   state = 'success' AND sale_order_id > 0;
+               """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+        else:
+            self.env.cr.execute("""
+                   SELECT sale_order_id FROM ofh_payment_sap WHERE
+                   state = 'success' AND sale_order_id > 0
+               """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
 
     @api.multi
-    @api.depends('sap_payment_ids.state', 'order_id.is_payment_applicable')
-    def _compute_sap_status(self):
+    @api.depends('sap_payment_ids.state', 'is_payment_applicable')
+    def _compute_payment_sap_status(self):
         for rec in self:
-            rec.sap_status = rec.sap_payment_ids.filtered(
-                lambda p: p.state == 'success' and
-                p.sap_status == 'in_sap') and \
-                rec.order_id.is_payment_applicable
+            rec.payment_integration_status = rec.sap_payment_ids.filtered(
+                lambda p: p.state == 'success' and p.sap_status == 'in_sap') and \
+                                             rec.is_payment_applicable
+
+
+    @api.model
+    def _search_payment_sap_status(self, operator, value):
+        if operator == '!=':
+            self.env.cr.execute("""
+                    SELECT sale_order_id
+                    FROM ofh_payment_sap WHERE
+                        state = 'success' AND
+                        sale_order_id > 0 AND
+                        sap_status != 'in_sap';
+                """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+        else:
+            self.env.cr.execute("""
+                    SELECT sale_order_id
+                    FROM ofh_payment_sap WHERE
+                        state = 'success' AND
+                        sale_order_id > 0 AND
+                        sap_status = 'in_sap';
+                """)
+            order_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', order_ids)]
 
     @api.multi
     def _prepare_payment_values(self, visualize=False):
