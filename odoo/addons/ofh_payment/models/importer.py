@@ -35,6 +35,12 @@ class HubPaymentImportMapper(Component):
         ('is_3d_secure', 'is_3d_secure'),
         ('is_installment', 'is_installment'),
         ('id', 'external_id'),
+        ('file_id', 'file_id'),
+        ('payment_category', 'payment_category'),
+        ('rrn_no', 'rrn_no'),
+        ('iban', 'iban'),
+        ('cashier_id', 'cashier_id'),
+        ('successfactors_id', 'successfactors_id'),
     ]
 
     children = [
@@ -108,7 +114,7 @@ class HubPaymentImporter(Component):
 
     def _is_uptodate(self, binding) -> bool:
         if not binding:
-            return False    # The record has never been synchronised.
+            return False  # The record has never been synchronised.
 
         assert self.hub_record
 
