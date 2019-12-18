@@ -57,11 +57,13 @@
                         <field name="order_id"/>
                         <field name="assignment"/>
                         <field name="file_id"/>
+                        <field name="file_reference"/>
                         <field name="payment_category"/>
                         <field name="rrn_no"/>
                         <field name="iban"/>
                         <field name="cashier_id"/>
                         <field name="successfactors_id"/>
+                        <field name="ahs_group_name"/>
                     </group>
                     <group name="status" string="Statuses" col="4">
                         <field name="pg_matching_status"/>

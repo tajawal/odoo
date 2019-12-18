@@ -47,6 +47,7 @@
                         <field name="is_pay_later"/>
                         <field name="is_pay_later"/>
                         <field name="file_id"/>
+                        <field name="file_reference"/>
                         <field name="ticket_sub_type"/>
                         <field name="booking_category"/>
                     </group>
@@ -67,13 +68,13 @@
                                 <field name="ticketing_office_id"/>
                                 <field name="vendor_reference"/>
                                 <field name="supplier_reference"/>
-                                <field name="file_id"/>
                             </group>
                             <group name="sale_lines">
                                 <field name="line_ids" nolabel="1">
                                     <tree delete="0" create="0">
                                         <field name="name" invisible="1"/>
                                         <field name="order_id" invisible="1"/>
+                                        <field name="file_reference"/>
                                         <field name="currency_id" invisible="1"/>
                                         <field name="supplier_currency_id" invisible="1"/>
                                         <field name="vendor_currency_id" invisible="1"/>
@@ -141,7 +142,7 @@
                 <field name="ticketing_office_id"/>
                 <field name="office_id"/>
                 <field name="supplier_name"/>
-                <field name="file_id"/>
+                <field name="file_reference"/>
                 <field name="booking_category"/>
                 <separator/>
                 <filter name="domestic_ksa" string="Domestic KSA" domain="[('line_ids.is_domestic_ksa', '=', True)]"/>
@@ -178,7 +179,7 @@
         <field name="arch" type="xml">
             <tree delete="0">
                 <field name="entity"/>
-                <field name="file_id"/>
+                <field name="file_reference"/>
                 <field name="booking_category"/>
                 <field name="name"/>
                 <field name="updated_at"/>

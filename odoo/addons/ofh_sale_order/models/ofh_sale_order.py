@@ -383,7 +383,10 @@ class OfhSaleOrder(models.Model):
         string="File ID",
         readonly=True,
     )
-
+    file_reference = fields.Char(
+        string="File Reference",
+        readonly=True,
+    )
     ticket_sub_type = fields.Char(
         string="Ticket Sub Type",
         readonly=True,

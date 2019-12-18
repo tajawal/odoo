@@ -167,7 +167,7 @@
         <field name="arch" type="xml">
             <tree duplicate="0" delete="0">
                 <field name="entity"/>
-                <field name="file_id"/>
+                <field name="file_reference"/>
                 <field name="track_id"/>
                 <field name="updated_at"/>
                 <field name="request_type"/>

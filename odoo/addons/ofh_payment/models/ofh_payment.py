@@ -128,6 +128,10 @@ class OfhPayment(models.Model):
         string="File ID",
         readonly=True,
     )
+    file_reference = fields.Char(
+        string="File Reference",
+        readonly=True,
+    )
     payment_category = fields.Selection(
         selection=[
             ('charge', 'Charge'),
@@ -149,6 +153,10 @@ class OfhPayment(models.Model):
     )
     successfactors_id = fields.Char(
         string="Successfactors ID",
+        readonly=True,
+    )
+    ahs_group_name = fields.Char(
+        string="AHS Group Name",
         readonly=True,
     )
 

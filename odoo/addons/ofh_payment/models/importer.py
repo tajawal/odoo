@@ -36,11 +36,13 @@ class HubPaymentImportMapper(Component):
         ('is_installment', 'is_installment'),
         ('id', 'external_id'),
         ('file_id', 'file_id'),
+        ('file_reference', 'file_reference'),
         ('payment_category', 'payment_category'),
         ('rrn_no', 'rrn_no'),
         ('iban', 'iban'),
         ('cashier_id', 'cashier_id'),
         ('successfactors_id', 'successfactors_id'),
+        ('ahs_group_name', 'ahs_group_name'),
     ]
 
     children = [

@@ -393,6 +393,10 @@ class OfhSaleOrderLine(models.Model):
         string="File Id",
         related='order_id.file_id',
     )
+    file_reference = fields.Char(
+        string="File Reference",
+        related='order_id.file_reference',
+    )
     ticket_sub_type=fields.Char(
         string="Ticket Sub Type",
         related='order_id.ticket_sub_type',

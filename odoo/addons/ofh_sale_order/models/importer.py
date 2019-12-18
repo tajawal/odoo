@@ -41,6 +41,7 @@ class HubSaleOrderImportMapper(Component):
         ('customer_number', 'customer_number'),
         ('agent_email', 'agent_email'),
         ('file_id', 'file_id'),
+        ('file_reference', 'file_reference'),
         ('ticket_sub_type', 'ticket_sub_type'),
         ('booking_category', 'booking_category'),
     ]
