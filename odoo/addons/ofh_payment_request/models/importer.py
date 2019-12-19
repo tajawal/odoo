@@ -37,6 +37,7 @@ class HubPaymentRequestImportMapper(Component):
         ('remarks', 'notes'),
         ('payment_mode', 'payment_mode'),
         ('total_amount', 'total_amount'),
+        ('deal_amount','deal_amount'),
     ]
 
     children = [
