@@ -15,6 +15,21 @@ class OfhSaleOrderLine(models.Model):
         inverse_name='sale_order_line_id',
         readonly=True,
     )
+    sap_failing_reason = fields.Char(
+        string="Failing Reason",
+        compute="_compute_failing_reason",
+        readonly=True,
+        store=True
+    )
+
+    @api.multi
+    @api.depends('order_id')
+    def _compute_failing_reason(self):
+        for rec in self:
+            rec.sap_failing_reason = ''
+            failed_sap_orders = rec.order_id.sap_order_ids.filtered(
+                lambda p: p.failing_reason == 'skipped')
+            rec.sap_failing_reason = failed_sap_orders.failing_reason
 
     @api.multi
     def _get_sale_line_dict(self) -> dict:
