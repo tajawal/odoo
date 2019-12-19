@@ -9,6 +9,7 @@ from odoo.exceptions import MissingError, UserError
 from odoo.tools import float_is_zero
 from odoo.addons.queue_job.job import job
 
+NOT_ALLOWED_STATUSES = ['94', '91']
 
 _logger = logging.getLogger(__name__)
 
@@ -240,7 +241,12 @@ class OfhPaymentRequest(models.Model):
             return []
         if self.matching_status == 'not_applicable':
             sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
-            line_dict = self.order_id.line_ids[0].to_dict()[0]
+            if len(self.order_id.line_ids) > 1:
+                for rec in self.order_id:
+                    line_dict = rec.line_ids.filtered(
+                        lambda p: p.state not in NOT_ALLOWED_STATUSES).to_dict()[0]
+            else:
+                line_dict = self.order_id.line_ids[0].to_dict()[0]
 
             line_dict['custom1'] = self.updated_at
             line_dict['billing_date'] = self.updated_at
