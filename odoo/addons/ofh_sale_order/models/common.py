@@ -120,7 +120,7 @@ class SaleOrderAdapter(Component):
 
         request_type = self._get_request_type(external_id)
         result = hub_api.get_raw_order(external_id, request_type)
-        
+
         # Getting Payments in case of Online Sale Order
         store_id = result.get('store_id')
         track_id = result.get('track_id')
@@ -140,6 +140,7 @@ class SaleOrderAdapter(Component):
         if store_id != UNIFY_STORE_ID:
             backend = self.env['hub.backend'].search([], limit=1)
             hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
-            _payments = hub_api.get_payment_by_track_id(track_id=track_id, ptype='initial')
+            _payments = hub_api.get_payment_by_track_id(
+                track_id=track_id, ptype='initial')
 
         return _payments
