@@ -21,7 +21,6 @@
         'security/ofh_sap_binding.xml',
         'views/ofh_sale_order_sap.xml',
         'views/ofh_sale_order_line_sap.xml',
-        'views/ofh_sale_order_line.xml',
         'views/ofh_sale_order.xml',
         'views/ofh_payment_sap.xml',
         'views/ofh_payment.xml',
