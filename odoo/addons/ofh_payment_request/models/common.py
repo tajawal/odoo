@@ -4,6 +4,7 @@ from datetime import datetime
 
 from odoo import api, fields, models
 from odoo.addons.component.core import Component
+from odoo.addons.queue_job.job import job
 
 
 class HubPaymentRequest(models.Model):
@@ -27,6 +28,23 @@ class HubPaymentRequest(models.Model):
         inverse_name='hub_payment_request_id',
         string="Hub Payment Charges",
     )
+
+    @job(default_channel='root.hub')
+    def _run_online_charge_payment_request(self, order_id, track_id, backend):
+        if order_id:
+            with backend.work_on('hub.sale.order') as work:
+                importer = work.component(usage='record.importer')
+                importer.run(track_id, force=False)
+        else:
+            with backend.work_on('hub.payment') as work:
+                importer = work.component(usage='record.importer')
+                importer.run(track_id, force=False)
+
+    @job(default_channel='root.hub')
+    def _run_unify_charge_payment_request(self, track_id, backend):
+        with backend.work_on('hub.payment') as work:
+            importer = work.component(usage='record.importer')
+            importer.run(track_id, force=False)
 
 
 class PaymentRequestAdapter(Component):
@@ -101,7 +119,8 @@ class HubPaymentCharge(models.Model):
     def create(self, vals):
         if 'hub_payment_request_id' in vals:
             hub_payment_request_id = vals['hub_payment_request_id']
-            binding = self.env['hub.payment.request'].browse(hub_payment_request_id)
+            binding = self.env['hub.payment.request'].browse(
+                hub_payment_request_id)
             vals['payment_request_id'] = binding.odoo_id.id
         binding = super(HubPaymentCharge, self).create(vals)
         return binding
