@@ -618,6 +618,10 @@ class HubSaleOrderImporter(Component):
     _inherit = 'hub.importer'
     _apply_on = ['hub.sale.order']
 
+    def _must_skip(self) -> bool:
+        # Skip orders that are different than flight and hotel.
+        return self.hub_record.get('order_type', "") in ('other', '')
+
     def _is_uptodate(self, binding) -> bool:
         if not binding:
             return False    # The record has never been synchronised.
