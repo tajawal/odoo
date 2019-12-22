@@ -9,6 +9,7 @@ import json
 UNIFY_STORE_ID = 1000
 UNIFY_GROUP_ID = 7
 
+
 class HubSaleOrderImportMapper(Component):
     _name = 'hub.sale.order.import.mapper'
     _inherit = 'hub.import.mapper'
@@ -93,10 +94,17 @@ class HubSaleOrderImportMapper(Component):
 
     @mapping
     def vendor_currency_id(self, record):
-        if 'vendor_currency' in record:
-            currency = record.get('vendor_currency')
-            return {'vendor_currency_id': self.env.ref(f'base.{currency}').id}
-        return {}
+        if 'vendor_currency' not in record:
+            return {}
+        currency = record.get('vendor_currency')
+        if not currency:
+            return {}
+
+        if "," in currency:
+            split_curr = currency.split(",")
+            currency = split_curr[0]
+
+        return {'vendor_currency_id': self.env.ref(f'base.{currency}').id}
 
     @mapping
     def supplier_currency_id(self, record):
@@ -106,11 +114,12 @@ class HubSaleOrderImportMapper(Component):
         currency = record.get('supplier_currency')
         if not currency:
             return {}
+
         if "," in currency:
             split_curr = currency.split(",")
             currency = split_curr[0]
-        return {
-            'supplier_currency_id': self.env.ref(f'base.{currency}').id}
+
+        return {'supplier_currency_id': self.env.ref(f'base.{currency}').id}
 
 
 class HubSaleOrderLineImportMapper(Component):
