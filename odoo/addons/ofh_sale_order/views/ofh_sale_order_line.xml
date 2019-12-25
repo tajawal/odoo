@@ -25,7 +25,7 @@
                         <field name="validating_carrier"/>
                         <field name="is_domestic_ksa"/>
                         <field name="is_domestic_uae"/>
-                        <field name="file_id"/>
+                        <field name="file_id" invisible="1"/>
                         <field name="file_reference"/>
                         <field name="ticket_sub_type"/>
                         <field name="booking_category"/>

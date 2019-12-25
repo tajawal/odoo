@@ -380,11 +380,11 @@ class OfhSaleOrder(models.Model):
         compute="_compute_payment_status"
     )
     file_id = fields.Char(
-        string="File ID",
+        string="File Mongo ID",
         readonly=True,
     )
     file_reference = fields.Char(
-        string="File Reference",
+        string="File ID",
         readonly=True,
     )
     ticket_sub_type = fields.Char(

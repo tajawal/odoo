@@ -390,14 +390,14 @@ class OfhSaleOrderLine(models.Model):
         readonly=True,
     )
     file_id = fields.Char(
-        string="File Id",
+        string="File Mongo ID",
         related='order_id.file_id',
     )
     file_reference = fields.Char(
-        string="File Reference",
+        string="File ID",
         related='order_id.file_reference',
     )
-    ticket_sub_type=fields.Char(
+    ticket_sub_type = fields.Char(
         string="Ticket Sub Type",
         related='order_id.ticket_sub_type',
     )

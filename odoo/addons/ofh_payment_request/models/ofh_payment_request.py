@@ -336,11 +336,11 @@ class OfhPaymentRequest(models.Model):
         compute="_compute_booking_source"
     )
     file_id = fields.Char(
-        string="File ID",
+        string="File Mongo ID",
         readonly=True,
     )
     file_reference = fields.Char(
-        string="File Reference",
+        string="File ID",
         readonly=True,
     )
 

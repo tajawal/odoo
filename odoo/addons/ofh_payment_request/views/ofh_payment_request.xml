@@ -32,7 +32,7 @@
                         <field name="total_amount" widget="monetary"/>
                         <field name="entity"/>
                         <field name="is_egypt"/>
-                        <field name="file_id"/>
+                        <field name="file_id" invisible="1"/>
                         <field name="file_reference"/>
                     </group>
                     <group name="vendor_details" string="Vendor Details">

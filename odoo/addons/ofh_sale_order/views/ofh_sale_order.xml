@@ -46,7 +46,7 @@
                         <field name="order_owner"/>
                         <field name="is_pay_later"/>
                         <field name="is_pay_later"/>
-                        <field name="file_id"/>
+                        <field name="file_id" invisible="1"/>
                         <field name="file_reference"/>
                         <field name="ticket_sub_type"/>
                         <field name="booking_category"/>
