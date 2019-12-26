@@ -120,6 +120,10 @@ class HubSaleOrderImportMapper(Component):
             currency = split_curr[0]
 
         return {'supplier_currency_id': self.env.ref(f'base.{currency}').id}
+    @mapping
+    def amendment_fees(self, record) -> dict:
+        if 'amendment_fees' in record:
+            return {'amendment_fees': json.dumps(record.get('amendment_fees'))}     
 
 
 class HubSaleOrderLineImportMapper(Component):

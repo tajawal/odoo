@@ -1,11 +1,14 @@
 # Copyright 2019 Tajawal LLC
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import json
 
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
+from odoo.tools import float_compare, float_is_zero
 
 BRANCH_REGIONS = ['CR', 'WR', 'ER', 'SR', 'NR']
-UNIFY_STORE_ID = 1000
+UNIFY_STORE_ID = "1000"
+GROUP_ID = "7"
 
 
 class OfhSaleOrder(models.Model):
@@ -430,13 +433,156 @@ class OfhSaleOrder(models.Model):
         compute='_compute_sales_office',
         store=True
     )
+    amendment_fees = fields.Char(
+        readonly=True,
+    )
+    fare_difference = fields.Monetary(
+        string="Fare Difference",
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    change_fee = fields.Monetary(
+        string="Change Fee",
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    booking_fee = fields.Monetary(
+        string="Booking Fee",
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    insurance = fields.Monetary(
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    discount = fields.Monetary(
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    penalty = fields.Monetary(
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    adm_amount = fields.Monetary(
+        string="ADM",
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    loss_amount = fields.Monetary(
+        string="Losses",
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    loss_type = fields.Char(
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    input_vat_amount = fields.Monetary(
+        string="Input VAT",
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    output_vat_amount = fields.Monetary(
+        string="Output VAT",
+        currency_field='currency_id',
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    manual_output_vat_amount = fields.Monetary(
+        string="Manual Output VAT",
+        currency_field='currency_id',
+        help="Technical field to ajust VAT when neeeded",
+        track_visibility='onchange',
+    )
+    total_amount = fields.Monetary(
+        string="Total",
+        currency_field='currency_id',
+        readonly=True,
+    )
+    tax_code = fields.Selection(
+        string='Tax code',
+        selection=[('ss', 'SS'), ('sz', 'SZ')],
+        compute='_compute_amendment_fees',
+        readonly=True,
+        store=False,
+    )
+    # newly added VAT fields
+    change_fee_vat_amount = fields.Monetary(
+        string="Change Fee VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+    fare_difference_vat_amount = fields.Monetary(
+        string="Fare Difference VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+    penalty_vat_amount = fields.Monetary(
+        string="Penalty VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+    adm_vat_amount = fields.Monetary(
+        string="ADM VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+    booking_fee_vat_amount = fields.Monetary(
+        string="Booking Fee VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+    deals_vat_amount = fields.Monetary(
+        string="Deals VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
+    discount_vat_amount = fields.Monetary(
+        string="Discount VAT",
+        currency_field='currency_id',
+        compute='_compute_fees',
+        readonly=True,
+        store=False,
+    )
 
     @api.multi
     @api.depends('store_id')
     def _compute_unify(self):
         # For offline store_id is 1000
         for rec in self:
-            rec.is_unify = bool(rec.store_id == UNIFY_STORE_ID)
+            rec.is_unify = bool(rec.store_id == UNIFY_STORE_ID)   
 
     @api.multi
     @api.depends(
@@ -612,3 +758,53 @@ class OfhSaleOrder(models.Model):
             if rec.ahs_group_name and rec.ahs_group_name[:2] in BRANCH_REGIONS:
                 rec.sales_office = rec.ahs_group_name[:4]
                 rec.branch_region = rec.ahs_group_name[:2].lower()
+
+    @api.multi
+    @api.depends('amendment_fees', 'manual_output_vat_amount')
+    def _compute_amendment_fees(self):
+        for rec in self:
+            fees = rec.amendment_fees
+            if not fees:
+                fees = '{}'
+
+            fees_dict = json.loads(fees)
+            if not fees_dict:
+                rec.fare_difference = rec.change_fee = rec.penalty = \
+                    rec.booking_fee = rec.discount = rec.input_vat_amount = \
+                    rec.output_vat_amount = rec.adm_amount = 0.0
+                rec.loss_type = ''
+                rec.tax_code = 'sz'
+            rec.fare_difference = fees_dict.get('fareDifference')
+            rec.change_fee = fees_dict.get('changeFee')
+            rec.penalty = fees_dict.get('penalty')
+            rec.booking_fee = fees_dict.get('bookingFee')
+            rec.discount = fees_dict.get('discount')
+            rec.input_vat_amount = fees_dict.get('inputVat')
+
+            # Sometimes the user correct manual the output vat amount.
+            # For this reason we use the manual field instead the one fetched
+            # from hub.
+            if not float_is_zero(
+                    rec.manual_output_vat_amount,
+                    precision_rounding=rec.currency_id.rounding):
+                rec.output_vat_amount = rec.manual_output_vat_amount
+            else:
+                rec.output_vat_amount = fees_dict.get('outputVat')
+
+            rec.adm_amount = fees_dict.get('adm')
+            rec.loss_type = fees_dict.get('lossType')
+            # newly added vat fields
+            rec.change_fee_vat_amount = fees_dict.get('changeFeeVat')
+            rec.fare_difference_vat_amount = fees_dict.get('fareDifferenceVat')
+            rec.penalty_vat_amount = fees_dict.get('penaltyVat')
+            rec.adm_vat_amount = fees_dict.get('admVat')
+            rec.booking_fee_vat_amount = fees_dict.get('bookingFeeVat')
+            rec.deals_vat_amount = fees_dict.get('dealsVat')
+            rec.discount_vat_amount = fees_dict.get('discountVat')
+            if float_compare(
+                    rec.output_vat_amount, 0.0,
+                    precision_rounding=rec.currency_id.rounding) > 0:
+                rec.tax_code = 'ss'
+            else:
+                rec.tax_code = 'sz' 
+            

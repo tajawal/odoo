@@ -112,6 +112,29 @@
                                 <field name="payment_ids" nolabel="1"/>
                             </group>
                         </page>
+                        <page name="order_details" string="Sale Details" attrs="{'invisible': [('entity', '=', 'almosafer_branch')]}"> 
+                            <group col="4" name="sale_pr_details">
+                                <field name="fare_difference" widget="monetary"/>
+                                <field name="change_fee" widget="monetary"/>
+                                <field name="booking_fee" widget="monetary"/>
+                                <field name="insurance" widget="monetary"/>
+                                <field name="discount" widget="monetary"/>
+                                <field name="penalty" widget="monetary"/>
+                                <field name="loss_amount" widget="monetary"/>
+                                <field name="input_vat_amount" widget="monetary"/>
+                                <field name="output_vat_amount" widget="monetary"/>
+                                <field name="manual_output_vat_amount" widget="monetary"/>
+                                <field name="change_fee_vat_amount" widget="monetary"/>
+                                <field name="fare_difference_vat_amount" widget="monetary"/>
+                                <field name="penalty_vat_amount" widget="monetary"/>
+                                <field name="adm_vat_amount" widget="monetary"/>
+                                <field name="booking_fee_vat_amount" widget="monetary"/>
+                                <field name="deals_vat_amount" widget="monetary"/>
+                                <field name="discount_vat_amount" widget="monetary"/>
+                                <field name="tax_code"/>
+                                <field name="loss_type"/>
+                            </group>
+                        </page>
                         <page name="costs" string="Cost">
                             <group col="4" name="cost_totals" string="Cost Totals">
                                 <field name="total_vendor_cost" widget="monetary"/>
