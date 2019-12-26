@@ -292,6 +292,13 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         store=False,
     )
+    lines_total_supplier_cost = fields.Monetary(
+        string="Total computed supplier cost",
+        compute='_compute_total_amounts',
+        currency_field='supplier_currency_id',
+        readonly=True,
+        store=False,
+    )
     lines_total_service_fee = fields.Monetary(
         string="Total computed service fee",
         compute='_compute_total_amounts',
@@ -490,9 +497,11 @@ class OfhSaleOrder(models.Model):
         for rec in self:
             rec.lines_total_vendor_cost = rec.lines_total_service_fee = \
                 rec.lines_total_sale_price = rec.lines_total_discount = \
-                rec.lines_total_tax = rec.lines_total_amount = 0.0
+                rec.lines_total_tax = rec.lines_total_amount = \
+                rec.total_supplier_cost = 0.0
             for line in rec.line_ids:
                 rec.lines_total_vendor_cost += line.vendor_cost_amount
+                rec.lines_total_supplier_cost += line.supplier_cost_amount
                 rec.lines_total_service_fee += line.service_fee_amount
                 rec.lines_total_sale_price += line.sale_price
                 rec.lines_total_discount += line.discount_amount
@@ -606,6 +615,3 @@ class OfhSaleOrder(models.Model):
             if rec.ahs_group_name and rec.ahs_group_name[:2] in BRANCH_REGIONS:
                 rec.sales_office = rec.ahs_group_name[:4]
                 rec.branch_region = rec.ahs_group_name[:2].lower()
-
-
- 

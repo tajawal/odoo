@@ -92,10 +92,6 @@ class OfhSaleOrder(models.Model):
 
         return [('id', 'in', order_ids)]
 
-
-
-
-
     @api.multi
     @api.depends('sap_order_ids.state', 'is_sale_applicable')
     def _compute_sap_status(self):
@@ -129,10 +125,6 @@ class OfhSaleOrder(models.Model):
             return [('id', '=', 0)]
 
         return [('id', 'in', order_ids)]
-
-
-
-
 
     @api.model
     def _search_sale_not_payment_sap_status(self, operator, value):
@@ -286,8 +278,6 @@ class OfhSaleOrder(models.Model):
             self.payment_ids[0].provider if self.payment_ids else '',
         }
 
-
-
     @api.multi
     def action_applicable(self):
         return self.write({
@@ -307,10 +297,6 @@ class OfhSaleOrder(models.Model):
         return self.write({
             'is_sale_applicable': True,
         })
-
-    
-
-
 
     @api.model
     def _auto_send_flight_orders_to_sap(self):
