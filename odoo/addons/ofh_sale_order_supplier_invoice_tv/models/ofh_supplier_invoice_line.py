@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
 
+BOOKING_CAT_INIT = 'initial'
+
 
 class OfhSupplierInvoiceLine(models.Model):
     _inherit = 'ofh.supplier.invoice.line'
@@ -19,8 +21,13 @@ class OfhSupplierInvoiceLine(models.Model):
             self.message_post("No match found.")
             return
 
-        if len(order_ids) == 1:
-            self.order_id = order_ids[0]
+        initial_orders = order_ids.filtered(
+            lambda p: p.booking_category == BOOKING_CAT_INIT)
+
+        # Matching with Initial Orders
+        if len(initial_orders) == 1:
+            self.order_id = initial_orders[0]
+            self._match_tv_with_sale_order_line()
             return
 
         order_names = ', '.join([o.name for o in order_ids])
