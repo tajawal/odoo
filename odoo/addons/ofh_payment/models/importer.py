@@ -2,10 +2,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 from datetime import datetime
-from odoo import fields
+from odoo import fields, _
 
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector.exception import IDMissingInBackend
 
 _logger = logging.getLogger(__name__)
 
@@ -125,3 +126,61 @@ class HubPaymentImporter(Component):
             self.hub_record.get('updated_at'))
 
         return hub_date < sync_date
+
+    def run(self, external_id, payment_type='amendment', force=False):
+        """[summary]
+
+        Arguments:
+            external_id {[type]} -- [description]
+
+        Keyword Arguments:
+            force {bool} -- [description] (default: {False})
+        """
+        self.external_id = external_id
+        lock_name = 'import({}, {}, {}, {})'.format(
+            self.backend_record._name,
+            self.backend_record.id,
+            self.work.model_name,
+            external_id,
+        )
+        try:
+            self.hub_record = self._get_hub_data(payment_type)
+        except IDMissingInBackend:
+            return _('Record does no longer exist in HUB.')
+
+        skip = self._must_skip()
+        if skip:
+            return skip
+        binding = self._get_binding()
+
+        if not force and self._is_uptodate(binding):
+            return _('Already up-to-date.')
+
+        block = self._must_block(binding)
+        if block:
+            return block
+
+        # Keep a lock on this import until the transaction is committed
+        # The lock is kept since we have detected that the informations
+        # will be updated into Odoo
+        self.advisory_lock_or_retry(lock_name)
+        self._before_import()
+
+        # import the missing linked resources
+        self._import_dependencies()
+        map_record = self._map_data()
+
+        if binding:
+            record = self._update_data(map_record)
+            self._update(binding, record)
+        else:
+            record = self._create_data(map_record)
+            binding = self._create(record)
+
+        self.binder.bind(self.external_id, binding)
+
+        self._after_import(binding)
+
+    def _get_hub_data(self, payment_type='amendment'):
+        """ Return the raw hub data for ``self.external_id `` """
+        return self.backend_adapter.read(self.external_id, {'payment_type': payment_type})

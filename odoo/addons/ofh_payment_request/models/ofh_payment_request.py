@@ -3,9 +3,10 @@
 
 import json
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.addons.queue_job.job import job
 from odoo.tools import float_compare, float_is_zero
+from odoo.exceptions import ValidationError
 
 
 class OfhPaymentRequest(models.Model):

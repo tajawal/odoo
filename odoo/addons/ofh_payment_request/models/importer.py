@@ -3,9 +3,10 @@
 import json
 import logging
 
-from odoo import fields
+from odoo import fields, _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector.exception import IDMissingInBackend
 
 PROCESSED_HUB_STATUSES = \
     ('Processed', 'Processed Manually', 'Customer Processed')
@@ -39,10 +40,8 @@ class HubPaymentRequestImportMapper(Component):
         ('total_amount', 'total_amount'),
         ('file_id', 'file_id'),
         ('file_reference', 'file_reference'),
+        ('product_id', 'product_id'),
     ]
-
-    children = [
-        ('payments', 'hub_payment_ids', 'hub.payment')]
 
     @mapping
     def created_at(self, record) -> dict:
@@ -112,6 +111,8 @@ class HubPaymentRequestBatchImporter(Component):
             # Online and Unify Refund Payment Request => Create payment request
             if pr_type == 'refund':
                 self._import_record(track_id)
+                self.model.with_delay()._run_refund_payment(
+                    track_id, backend)
 
 
 class HubPaymentRequestImporter(Component):
@@ -159,3 +160,59 @@ class HubPaymentRequestImporter(Component):
                 record['app_details'] = hub_api.get_raw_store(int(store_id))
 
         return record
+
+    def run(self, external_id, force=False):
+        """[summary]
+
+        Arguments:
+            external_id {[type]} -- [description]
+
+        Keyword Arguments:
+            force {bool} -- [description] (default: {False})
+        """
+        self.external_id = external_id
+        lock_name = 'import({}, {}, {}, {})'.format(
+            self.backend_record._name,
+            self.backend_record.id,
+            self.work.model_name,
+            external_id,
+        )
+        try:
+            for record in self._get_hub_data():
+                self.hub_record = record
+
+        except IDMissingInBackend:
+            return _('Record does no longer exist in HUB.')
+
+        skip = self._must_skip()
+        if skip:
+            return skip
+        binding = self._get_binding()
+
+        if not force and self._is_uptodate(binding):
+            return _('Already up-to-date.')
+
+        block = self._must_block(binding)
+        if block:
+            return block
+
+        # Keep a lock on this import until the transaction is committed
+        # The lock is kept since we have detected that the informations
+        # will be updated into Odoo
+        self.advisory_lock_or_retry(lock_name)
+        self._before_import()
+
+        # import the missing linked resources
+        self._import_dependencies()
+        map_record = self._map_data()
+
+        if binding:
+            record = self._update_data(map_record)
+            self._update(binding, record)
+        else:
+            record = self._create_data(map_record)
+            binding = self._create(record)
+
+        self.binder.bind(self.external_id, binding)
+
+        self._after_import(binding)

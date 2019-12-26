@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import datetime
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.addons.component.core import Component
 from odoo.addons.queue_job.job import job
 
@@ -18,6 +18,14 @@ class HubPaymentRequest(models.Model):
         required=True,
         ondelete='cascade'
     )
+    product_id = fields.Char(
+        string="Product Id",
+        readonly=True,
+    )
+    group_id = fields.Char(
+        string="Group Id",
+        readonly=True,
+    )
     hub_payment_ids = fields.One2many(
         comodel_name='hub.payment',
         inverse_name='hub_payment_request_id',
@@ -29,6 +37,20 @@ class HubPaymentRequest(models.Model):
         string="Hub Payment Charges",
     )
 
+    _sql_constraints = [
+        ('hub_payment_request_uniq', 'unique(backend_id, group_id, product_id)',
+         _("A binding already exists with the same Hub ID.")),
+    ]
+
+    @job(default_channel='root.hub')
+    @api.model
+    def import_record(self, backend, external_id, force=False):
+        """ Import a Hub record """
+        with backend.work_on(self._name) as work:
+            importer = work.component(usage='record.importer')
+            self._run_refund_payment(track_id=external_id, backend=backend)
+            return importer.run(external_id, force=force)
+
     @job(default_channel='root.hub')
     def _run_online_charge_payment_request(self, order_id, track_id, backend):
         if order_id:
@@ -38,13 +60,19 @@ class HubPaymentRequest(models.Model):
         else:
             with backend.work_on('hub.payment') as work:
                 importer = work.component(usage='record.importer')
-                importer.run(track_id, force=False)
+                importer.run(track_id, payment_type='initial', force=False)
 
     @job(default_channel='root.hub')
     def _run_unify_charge_payment_request(self, track_id, backend):
         with backend.work_on('hub.payment') as work:
             importer = work.component(usage='record.importer')
-            importer.run(track_id, force=False)
+            importer.run(track_id, payment_type='amendment', force=False)
+
+    @job(default_channel='root.hub')
+    def _run_refund_payment(self, track_id, backend):
+        with backend.work_on('hub.payment') as work:
+            importer = work.component(usage='record.importer')
+            importer.run(track_id, payment_type='refund', force=False)
 
 
 class PaymentRequestAdapter(Component):
@@ -79,6 +107,7 @@ class PaymentRequestAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
+
         return hub_api.get_payment_request_by_track_id(external_id)
 
 
