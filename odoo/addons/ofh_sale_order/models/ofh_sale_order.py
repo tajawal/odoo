@@ -398,7 +398,6 @@ class OfhSaleOrder(models.Model):
         string="Ticket Sub Type",
         readonly=True,
     )
-
     is_unify = fields.Boolean(
         string="Is Unify",
         compute='_compute_unify',
@@ -437,9 +436,7 @@ class OfhSaleOrder(models.Model):
     def _compute_unify(self):
         # For offline store_id is 1000
         for rec in self:
-            rec.is_unify = False
-            if rec.store_id == UNIFY_STORE_ID:
-                rec.is_unify = True
+            rec.is_unify = bool(rec.store_id == UNIFY_STORE_ID)
 
     @api.multi
     @api.depends(

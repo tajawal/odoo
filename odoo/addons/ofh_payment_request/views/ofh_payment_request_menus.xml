@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.menu" id="ofh_payment_request_main_menu">
+        <field name="name">Refunds</field>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_payment_request_menu">
+        <field name="name">Refunds</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_all_act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="all_payment_request_menu">
+        <field name="name">All Refunds</field>
+        <field name="parent_id" ref="ofh_payment_request_menu"/>
+        <field name="action" ref="ofh_payment_request_all_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_incomplete_act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_request_status', '=', 'incomplete')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="incomplete_payment_request_menu">
+        <field name="name">Incomplete Refunds</field>
+        <field name="parent_id" ref="ofh_payment_request_menu"/>
+        <field name="action" ref="ofh_payment_request_incomplete_act_window"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <!-- REFUNDS BY SOURCE -->
+
+    <record model="ir.ui.menu" id="ofh_payment_request_by_source_menu">
+        <field name="name">Refunds by Source</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_online_almosafer_act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('entity', '=', 'almosafer')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="online_almosafer_payment_request_menu">
+        <field name="name">Online Almosafer Refunds</field>
+        <field name="parent_id" ref="ofh_payment_request_by_source_menu"/>
+        <field name="action" ref="ofh_payment_request_online_almosafer_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_request_online_tajawal_act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('entity', '=', 'tajawal')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="tajawal_payment_request_menu">
+        <field name="name">Online Tajawal Refunds</field>
+        <field name="parent_id" ref="ofh_payment_request_by_source_menu"/>
+        <field name="action" ref="ofh_payment_request_online_tajawal_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <!-- END REFUNDS BY SOURCE -->
+
+    <record model="ir.ui.menu" id="ofh_payment_request_currencies_main_menu">
+        <field name="name">Currencies</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="100"/>
+    </record>
+
+    <record model="ir.ui.menu" id="res_currency_menu">
+        <field name="name">Currencies</field>
+        <field name="parent_id" ref="ofh_payment_request_currencies_main_menu"/>
+        <field name="action" ref="base.action_currency_form"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.ui.menu" id="res_currency_rate_menu">
+        <field name="name">Currency Rates</field>
+        <field name="parent_id" ref="ofh_payment_request_currencies_main_menu"/>
+        <field name="action" ref="ofh_base_currency.res_currency_rate_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record id="action_payment_request_queue_job" model="ir.actions.act_window">
+        <field name="name">Jobs</field>
+        <field name="res_model">queue.job</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {'search_default_pending': 1, 'search_default_enqueued': 1, 'search_default_started': 1, 'search_default_failed': 1}
+        </field>
+        <field name="domain">[('model_name', '=', 'hub.payment.request')]</field>
+        <field name="view_id" ref="queue_job.view_queue_job_tree"/>
+        <field name="search_view_id" ref="queue_job.view_queue_job_search"/>
+    </record>
+
+    <record model="ir.ui.menu" id="queue_job_main_menu">
+        <field name="name">Background Jobs</field>
+        <field name="parent_id" ref="ofh_payment_request_main_menu"/>
+        <field name="sequence" eval="90"/>
+    </record>
+
+    <record model="ir.ui.menu" id="payment_request_queue_job_menu">
+        <field name="name">Payment Request Jobs</field>
+        <field name="parent_id" ref="queue_job_main_menu"/>
+        <field name="action" ref="action_payment_request_queue_job"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+</odoo>

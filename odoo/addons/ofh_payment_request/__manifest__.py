@@ -27,6 +27,7 @@
         'security/hub_payment.xml',
         'views/ofh_payment_request.xml',
         'data/mail_activity_type.xml',
+        'views/ofh_payment_request_menus.xml',
     ],
     'demo': [
         'demo/ofh_payment_request.xml',

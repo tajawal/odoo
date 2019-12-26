@@ -42,7 +42,7 @@
         <field name="name">Sales Orders</field>
         <field name="res_model">ofh.sale.order</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('entity', '=', 'almosafer')]</field>
+        <field name="domain">[('entity', '=', 'almosafer'), ('store_id', '!=', '1000')]</field>
         <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
@@ -57,7 +57,7 @@
         <field name="name">Sales Orders</field>
         <field name="res_model">ofh.sale.order</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('entity', '=', 'almosafer_branch')]</field>
+        <field name="domain">[('store_id', '=', '1000')]</field>
         <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
@@ -72,7 +72,7 @@
         <field name="name">Sales Orders</field>
         <field name="res_model">ofh.sale.order</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('entity', '=', 'tajawal')]</field>
+        <field name="domain">[('entity', '=', 'tajawal'), ('store_id', '!=', '1000')]</field>
         <field name="context">{'search_default_updated_this_month': 1}</field>
     </record>
 
