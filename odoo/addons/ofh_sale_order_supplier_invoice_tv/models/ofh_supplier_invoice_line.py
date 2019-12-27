@@ -21,12 +21,9 @@ class OfhSupplierInvoiceLine(models.Model):
             self.message_post("No match found.")
             return
 
-        initial_orders = order_ids.filtered(
-            lambda p: p.booking_category == BOOKING_CAT_INIT)
-
         # Matching with Initial Orders
-        if len(initial_orders) == 1:
-            self.order_id = initial_orders[0]
+        if len(order_ids) == 1:
+            self.order_id = order_ids[0]
             self._match_tv_with_sale_order_line()
             return
 
@@ -74,4 +71,5 @@ class OfhSupplierInvoiceLine(models.Model):
 
         return [
             ('vendor_reference', '=', self.locator.strip()),
-            ('order_type', '=', 'hotel')]
+            ('order_type', '=', 'hotel'),
+            ('booking_category', '=', 'initial')]

@@ -181,38 +181,38 @@ class HubPaymentRequestImporter(Component):
             for record in self._get_hub_data():
                 self.hub_record = record
 
+                skip = self._must_skip()
+                if skip:
+                    return skip
+                binding = self._get_binding()
+
+                if not force and self._is_uptodate(binding):
+                    return _('Already up-to-date.')
+
+                block = self._must_block(binding)
+                if block:
+                    return block
+
+                # Keep a lock on this import until the transaction is committed
+                # The lock is kept since we have detected that the informations
+                # will be updated into Odoo
+                self.advisory_lock_or_retry(lock_name)
+                self._before_import()
+
+                # import the missing linked resources
+                self._import_dependencies()
+                map_record = self._map_data()
+
+                if binding:
+                    record = self._update_data(map_record)
+                    self._update(binding, record)
+                else:
+                    record = self._create_data(map_record)
+                    binding = self._create(record)
+
+                self.binder.bind(self.external_id, binding)
+
+                self._after_import(binding)
+
         except IDMissingInBackend:
             return _('Record does no longer exist in HUB.')
-
-        skip = self._must_skip()
-        if skip:
-            return skip
-        binding = self._get_binding()
-
-        if not force and self._is_uptodate(binding):
-            return _('Already up-to-date.')
-
-        block = self._must_block(binding)
-        if block:
-            return block
-
-        # Keep a lock on this import until the transaction is committed
-        # The lock is kept since we have detected that the informations
-        # will be updated into Odoo
-        self.advisory_lock_or_retry(lock_name)
-        self._before_import()
-
-        # import the missing linked resources
-        self._import_dependencies()
-        map_record = self._map_data()
-
-        if binding:
-            record = self._update_data(map_record)
-            self._update(binding, record)
-        else:
-            record = self._create_data(map_record)
-            binding = self._create(record)
-
-        self.binder.bind(self.external_id, binding)
-
-        self._after_import(binding)

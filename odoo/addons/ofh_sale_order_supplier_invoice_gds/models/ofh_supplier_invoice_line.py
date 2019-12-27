@@ -75,22 +75,13 @@ class OfhSupplierInvoiceLine(models.Model):
     def _match_gds_with_sale_order_line(self):
         # Refund an Amendments never matches with Initial Booking.
         self.ensure_one()
-        if self.invoice_status in ('RFND'):
-            return
-
-        # Match initial with only TKTT
-        if self.order_id.booking_category == BOOKING_CAT_INIT and \
-                self.invoice_status != 'TKTT':
-            return
-
-        # Match amendment with only AMND
-        if self.order_id.booking_category == BOOKING_CAT_AMND and \
-                self.invoice_status != 'AMND':
+        if self.invoice_status == 'RFND':
             return
 
         from_str = fields.Date.from_string
 
         for line in self.order_id.line_ids:
+            match = False
             if self.order_id.booking_category == BOOKING_CAT_INIT and \
                     line.matching_status in ('matched', 'not_applicable'):
                 continue
@@ -101,8 +92,15 @@ class OfhSupplierInvoiceLine(models.Model):
             if day_diff > 2:
                 continue
 
+            if (line.line_reference and
+                    self.ticket_number in line.line_reference) or \
+                    (line.manual_line_reference and
+                     self.ticket_number in line.manual_line_reference):
+                match = True
+
             # Adding amount check in case of Amendment
-            if self.order_id.booking_category == BOOKING_CAT_AMND:
+            if self.order_id.booking_category == BOOKING_CAT_AMND and \
+                    self.order_id.store_id != '1000' and not match:
                 total_supplier_cost = self.order_id.total_supplier_cost
 
                 supplier_cost = sum([
@@ -114,11 +112,10 @@ class OfhSupplierInvoiceLine(models.Model):
                     total_supplier_cost)
                 if diff > 1.35:
                     continue
+                else:
+                    match = True
 
-            if (line.line_reference and
-                    self.ticket_number in line.line_reference) or \
-                    (line.manual_line_reference and
-                     self.ticket_number in line.manual_line_reference):
+            if match:
                 line.write({
                     'invoice_line_ids': [(4, self.id)],
                     'matching_status': 'matched',

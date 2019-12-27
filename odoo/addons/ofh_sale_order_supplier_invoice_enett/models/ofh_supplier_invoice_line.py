@@ -53,16 +53,6 @@ class OfhSupplierInvoiceLine(models.Model):
         # Refund an Amendments never matches with Initial Booking.
         self.ensure_one()
 
-        # Match initial with only TKTT
-        if self.order_id.booking_category == BOOKING_CAT_INIT and \
-                self.invoice_status != 'TKTT':
-            return
-
-        # Match amendment with only AMND
-        if self.order_id.booking_category == BOOKING_CAT_AMND and \
-                self.invoice_status != 'AMND':
-            return
-
         from_str = fields.Date.from_string
 
         for line in self.order_id.line_ids:

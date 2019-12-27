@@ -25,6 +25,7 @@ class HubPaymentRequest(models.Model):
     group_id = fields.Char(
         string="Group Id",
         readonly=True,
+        required=True,
     )
     hub_payment_ids = fields.One2many(
         comodel_name='hub.payment',
