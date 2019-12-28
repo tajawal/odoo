@@ -78,7 +78,7 @@
         <field name="search_view_id" ref="ofh_payment_search_view"/>
     </record>
 
-    <record model="ir.ui.menu" id="ofh_online_payment_menu">
+    <record model="ir.ui.menu" id="ofh_charge_payment_menu">
         <field name="name">Charge Payments</field>
         <field name="parent_id" ref="ofh_payment_by_category_menu"/>
         <field name="action" ref="ofh_payment_charge_act_window"/>
