@@ -19,7 +19,6 @@ class HubPaymentImportMapper(Component):
     direct = [
         ('track_id', 'track_id'),
         ('auth_code', 'auth_code'),
-        ('payment_mode', 'payment_mode'),
         ('amount', 'total_amount'),
         ('payment_status', 'payment_status'),
         ('provider', 'provider'),
@@ -31,9 +30,10 @@ class HubPaymentImportMapper(Component):
         ('last_four', 'last_four'),
         ('payment_method', 'payment_method'),
         ('bank_name', 'bank_name'),
-        ('source', 'source'),
         ('reference_id', 'reference_id'),
         ('is_3d_secure', 'is_3d_secure'),
+        ('is_mada', 'is_mada'),
+        ('is_apple_pay', 'is_apple_pay'),
         ('is_installment', 'is_installment'),
         ('id', 'external_id'),
         ('file_id', 'file_id'),
@@ -183,4 +183,5 @@ class HubPaymentImporter(Component):
 
     def _get_hub_data(self, payment_type='amendment'):
         """ Return the raw hub data for ``self.external_id `` """
-        return self.backend_adapter.read(self.external_id, {'payment_type': payment_type})
+        return self.backend_adapter.read(
+            self.external_id, {'payment_type': payment_type})

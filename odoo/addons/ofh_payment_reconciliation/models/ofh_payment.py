@@ -79,7 +79,6 @@ class OfhPayment(models.Model):
         compute="_compute_assignment"
     )
 
-
     @api.multi
     @api.depends('sap_payment_ids.state', 'sap_payment_ids.assignment')
     def _compute_assignment(self):
@@ -173,4 +172,4 @@ class OfhPayment(models.Model):
         if visualize:
             values['state'] = 'visualize'
 
-        return values   
+        return values

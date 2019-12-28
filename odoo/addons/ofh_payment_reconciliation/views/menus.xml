@@ -16,6 +16,15 @@
         <field name="sequence" eval="10"/>
     </record>
 
+    <record model="ir.actions.act_window" id="ofh_payment_all_act_window">
+        <field name="name">All Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
     <record model="ir.ui.menu" id="ofh_all_payment_menu">
         <field name="name">All Payments</field>
         <field name="parent_id" ref="ofh_payment_menu"/>
@@ -23,20 +32,261 @@
         <field name="sequence" eval="10"/>
     </record>
 
-    <record model="ir.ui.menu" id="ofh_all_payment__request_menu">
+    <record model="ir.actions.act_window" id="ofh_payment_request_all_act_window">
+        <field name="name">All Payment Requests</field>
+        <field name="res_model">ofh.payment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_request_search_view"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_request_all_act_window_tree_view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="ofh_payment_request_tree_view"/>
+        <field name="act_window_id" ref="ofh_payment_request_all_act_window"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="ofh_payment_request_all_act_window_form_view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="ofh_payment_request_form_view"/>
+        <field name="act_window_id" ref="ofh_payment_request_all_act_window"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_all_payment_request_menu">
         <field name="name">All Payment Requests</field>
         <field name="parent_id" ref="ofh_payment_menu"/>
         <field name="action" ref="ofh_payment_reconciliation.ofh_payment_request_all_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
 
+    <!-- PAYMENT BY CATEGORY -->
+    <record model="ir.ui.menu" id="ofh_payment_by_category_menu">
+        <field name="name">Payments By Category</field>
+        <field name="parent_id" ref="ofh_payment_main_menu"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_charge_act_window">
+        <field name="name">Charge Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_category', '=', 'charge')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_online_payment_menu">
+        <field name="name">Charge Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_category_menu"/>
+        <field name="action" ref="ofh_payment_charge_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_refund_act_window">
+        <field name="name">Refund Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_category', '=', 'refund')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_refund_payment_menu">
+        <field name="name">Refund Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_category_menu"/>
+        <field name="action" ref="ofh_payment_refund_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <!-- END PAYMENT BY CATEGORY -->
+
+    <!-- PAYMENT BY METHOD -->
+    <record model="ir.ui.menu" id="ofh_payment_by_method_menu">
+        <field name="name">Payments By Method</field>
+        <field name="parent_id" ref="ofh_payment_main_menu"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_online_act_window">
+        <field name="name">Online Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_method', '=', 'online')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_online_payment_menu">
+        <field name="name">Online Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_method_menu"/>
+        <field name="action" ref="ofh_payment_online_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_bank_act_window">
+        <field name="name">Online Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_method', '=', 'bank_transfer')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_bank_payment_menu">
+        <field name="name">Bank Transfer Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_method_menu"/>
+        <field name="action" ref="ofh_payment_bank_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_cash_act_window">
+        <field name="name">Cash Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_method', '=', 'cash')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_cash_payment_menu">
+        <field name="name">Cash Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_method_menu"/>
+        <field name="action" ref="ofh_payment_cash_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_span_act_window">
+        <field name="name">Cash Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_method', '=', 'span')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_span_payment_menu">
+        <field name="name">SPAN Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_method_menu"/>
+        <field name="action" ref="ofh_payment_span_act_window"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_loyalty_act_window">
+        <field name="name">Loyalty Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_method', '=', 'loyalty')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_loyalty_payment_menu">
+        <field name="name">Loyalty Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_method_menu"/>
+        <field name="action" ref="ofh_payment_loyalty_act_window"/>
+        <field name="sequence" eval="50"/>
+    </record>
+
+    <!-- END PAYMENT BY METHOD -->
+
+    <!-- PAYMENT BY PROVIDER -->
+    <record model="ir.ui.menu" id="ofh_payment_by_provider_menu">
+        <field name="name">Payments By Provider</field>
+        <field name="parent_id" ref="ofh_payment_main_menu"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_checkout_act_window">
+        <field name="name">Checkout Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('provider', '=', 'checkout')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_checkout_payment_menu">
+        <field name="name">Checkout Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_provider_menu"/>
+        <field name="action" ref="ofh_payment_checkout_act_window"/>
+        <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_fort_act_window">
+        <field name="name">Fort Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('provider', '=', 'fort')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_fort_payment_menu">
+        <field name="name">Fort Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_provider_menu"/>
+        <field name="action" ref="ofh_payment_fort_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_knet_act_window">
+        <field name="name">Knet Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('provider', '=', 'knet')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_knet_payment_menu">
+        <field name="name">Knet Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_provider_menu"/>
+        <field name="action" ref="ofh_payment_knet_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_qitaf_act_window">
+        <field name="name">Qitaf Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('provider', '=', 'knet')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_fort_payment_menu">
+        <field name="name">Qitaf Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_provider_menu"/>
+        <field name="action" ref="ofh_payment_qitaf_act_window"/>
+        <field name="sequence" eval="40"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_payment_wallet_act_window">
+        <field name="name">Wallet Payments</field>
+        <field name="res_model">ofh.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('provider', '=', 'wallet')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="ofh_payment_search_view"/>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_wallet_payment_menu">
+        <field name="name">Wallet Payments</field>
+        <field name="parent_id" ref="ofh_payment_by_provider_menu"/>
+        <field name="action" ref="ofh_payment_wallet_act_window"/>
+        <field name="sequence" eval="50"/>
+    </record>
+
+    <!-- END PAYMENT BY PROVIDER -->
     <!-- END OF PAYMENT MENUS-->
 
     <!-- Payment Gateway Menus -->
     <record model="ir.ui.menu" id="ofh_payment_gateway_menu">
         <field name="name">Payment Gateways</field>
         <field name="parent_id" ref="ofh_payment_main_menu"/>
-        <field name="sequence" eval="20"/>
+        <field name="sequence" eval="50"/>
     </record>
 
     <record model="ir.ui.menu" id="all_payment_gateway_menu">
@@ -73,7 +323,7 @@
     <record model="ir.ui.menu" id="ofh_bank_settlement_main_menu">
         <field name="name">Bank Settlements</field>
         <field name="parent_id" ref="ofh_payment_main_menu"/>
-        <field name="sequence" eval="30"/>
+        <field name="sequence" eval="60"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_bank_settlement_menu">
@@ -118,7 +368,7 @@
     <record model="ir.ui.menu" id="ofh_payment_import_main_menu">
         <field name="name">Import reports</field>
         <field name="parent_id" ref="ofh_payment_main_menu"/>
-        <field name="sequence" eval="40"/>
+        <field name="sequence" eval="70"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_checkout_payment_gateway_import_menu">
@@ -176,7 +426,7 @@
     <record model="ir.ui.menu" id="ofh_payment_loader_menu">
         <field name="name">Loaders</field>
         <field name="parent_id" ref="ofh_payment_main_menu"/>
-        <field name="sequence" eval="10"/>
+        <field name="sequence" eval="80"/>
     </record>
 
     <record model="ir.ui.menu" id="ofh_all_payment_loaders_menu">

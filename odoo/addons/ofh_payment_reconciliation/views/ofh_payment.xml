@@ -7,123 +7,34 @@
     <record model="ir.ui.view" id="ofh_payment_form_view">
         <field name="name">ofh.payment.form (in ofh_payment_reconciliation)</field>
         <field name="model">ofh.payment</field>
+        <field name="inherit_id" ref="ofh_payment.ofh_payment_form_view"/>
         <field name="arch" type="xml">
-            <form create="0" duplicate="0" delete="0">
-                <header position="inside">
-                    <button name="send_payment_to_sap"
-                            string="Send Payment to SAP"
-                            class="btn-success"
-                            help="Send to Sap-xml-api and get and object in return."
-                            confirm="You are about to send this Payemnt to SAP. Are you sure?"
-                            type="object"/>
-                    <button name="force_send_payment_to_sap"
-                            string="Force Send Payment to SAP"
-                            class="btn-danger"
-                            help="Send to Sap-xml-api and get and object in return."
-                            confirm="You are about to force send this payment (ONLY PAYMENT PART). Are you sure?"
-                            type="object"/>
-                    <button name="visualize_sap_payment"
-                            string="Visualize SAP Payment"
-                            help="Simualate the sending of an Payment to SAP."
-                            class="btn-info"
-                            type="object"/>
-                </header>
-                <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="track_id"/>
-                        </h1>
-                    </div>
-                    <group name="main_info" col="4">
-                        <field name="created_at"/>
-                        <field name="updated_at"/>
-                        <field name="provider"/>
-                        <field name="auth_code"/>
-                        <field name="card_type"/>
-                        <field name="card_name"/>
-                        <field name="payment_method"/>
-                        <field name="card_bin"/>
-                        <field name="last_four"/>
-                        <field name="mid"/>
-                        <field name="reference_id"/>
-                        <field name="is_3d_secure"/>
-                        <field name="is_installment"/>
+            <notebook position="before">
+                <group name="status" string="Statuses" col="4">
+                    <field name="pg_matching_status"/>
+                    <field name="reconciliation_status"/>
+                    <field name="is_payment_applicable"/>
+                    <field name="payment_integration_status"/>
+                    <field name="payment_sap_status"/>
+                </group>
+            </notebook>
+            <page name="charges_detail" position="after">
+                <page name="payment_gateway_detail" string="Payment Gateway &amp; Bank Settlement">
+                    <group col="4" string="Payment Gateway">
+                        <field name="payment_gateway_id"/>
+                        <field name="response_description"/>
+                        <field name="is_apple_pay"/>
+                        <field name="pg_payment_status"/>
+                    </group>
+                    <group col="4" string="Bank Settlement">
+                        <field name="bank_settlement_id"/>
                         <field name="bank_name"/>
-                        <field name="booking_source"/>
-                        <field name="total_amount" widget="monetary"/>
-                        <field name="payment_status"/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="settlement_date" invisible="1"/>
-                        <field name="order_id"/>
-                        <field name="assignment"/>
-                        <field name="file_id"/>
-                        <field name="file_reference"/>
-                        <field name="payment_category"/>
-                        <field name="rrn_no"/>
-                        <field name="iban"/>
-                        <field name="cashier_id"/>
-                        <field name="successfactors_id"/>
-                        <field name="ahs_group_name"/>
+                        <field name="settlement_date"/>
+                        <field name="gross_amount"/>
+                        <field name="net_transaction_amount"/>
                     </group>
-                    <group name="status" string="Statuses" col="4">
-                        <field name="pg_matching_status"/>
-                        <field name="reconciliation_status"/>
-                        <field name="is_payment_applicable"/>
-                        <field name="payment_integration_status"/>
-                        <field name="payment_sap_status"/>
-                    </group>
-                    <notebook>
-                        <page name="sap_details" string="SAP Details">
-                            <field name="sap_payment_ids" nolabel="1"/>
-                        </page>
-                        <page name="payment_gateway_detail" string="Payment Gateway &amp; Bank Settlement">
-                            <group col="4" string="Payment Gateway">
-                                <field name="payment_gateway_id"/>
-                                <field name="response_description"/>
-                                <field name="is_apple_pay"/>
-                                <field name="pg_payment_status"/>
-                            </group>
-                            <group col="4" string="Bank Settlement">
-                                <field name="bank_settlement_id"/>
-                                <field name="bank_name"/>
-                                <field name="settlement_date"/>
-                                <field name="gross_amount"/>
-                                <field name="net_transaction_amount"/>
-                            </group>
-                        </page>
-                        <page name="charges_detail" string="Charges">
-                            <field name="charge_ids" nolabel="1"/>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <record model="ir.ui.view" id="ofh_payment_tree_view">
-        <field name="name">ofh.payment.tree (in ofh_payment_reconciliation)</field>
-        <field name="model">ofh.payment</field>
-        <field name="arch" type="xml">
-            <tree duplicate="0" delete="0">
-                <field name="currency_id" invisible="1"/>
-                <field name="created_at"/>
-                <field name="updated_at"/>
-                <field name="file_id"/>
-                <field name="payment_category"/>
-                <field name="order_id"/>
-                <field name="assignment"/>
-                <field name="payment_method"/>
-                <field name="provider"/>
-                <field name="auth_code"/>
-                <field name="card_type"/>
-                <field name="total_amount" widget="monetary"/>
-                <field name="payment_status"/>
-                <field name="pg_matching_status"/>
-                <field name="reconciliation_status"/>
-                <field name="is_payment_applicable"/>
-                <field name="payment_integration_status"/>
-                <field name="payment_sap_status"/>
-            </tree>
+                </page>
+            </page>
         </field>
     </record>
 
@@ -155,29 +66,6 @@
                 <filter name="is_void" string="Is Void?" domain="[('is_voided', '=', True)]"/>
             </search>
         </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_payment_all_act_window">
-        <field name="name">All Payments</field>
-        <field name="res_model">ofh.payment</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
-        <field name="context">{}</field>
-        <field name="search_view_id" ref="ofh_payment_search_view"/>
-    </record>
-
-    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_tree_view">
-        <field name="sequence" eval="1"/>
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="ofh_payment_tree_view"/>
-        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
-    </record>
-
-    <record model="ir.actions.act_window.view" id="ofh_payment_all_act_window_form_view">
-        <field name="sequence" eval="2"/>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="ofh_payment_form_view"/>
-        <field name="act_window_id" ref="ofh_payment_all_act_window"/>
     </record>
 
     <record model="ir.actions.server" id="ofh_applicable">

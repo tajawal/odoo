@@ -18,34 +18,42 @@
                         </h1>
                     </div>
                     <group name="main_info" col="4">
+                        <field name="file_id"/>
+                        <field name="file_reference"/>
+                        <field name="payment_method"/>
+                        <field name="provider"/>
                         <field name="created_at"/>
                         <field name="updated_at"/>
-                        <field name="payment_mode"/>
-                        <field name="provider"/>
-                        <field name="auth_code"/>
-                        <field name="card_type"/>
-                        <field name="card_name"/>
-                        <field name="payment_method"/>
-                        <field name="card_bin"/>
-                        <field name="last_four"/>
+                        <field name="payment_status"/>
+                        <field name="payment_category"/>
+                        <field name="ahs_group_name"/>
+                        <field name="total_amount" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group name="references_info" string="References" col="4">
                         <field name="mid"/>
                         <field name="reference_id"/>
-                        <field name="is_3d_secure"/>
-                        <field name="is_installment"/>
+                        <field name="auth_code"/>
                         <field name="bank_name"/>
                         <field name="source"/>
-                        <field name="total_amount" widget="monetary"/>
-                        <field name="payment_status"/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="file_id" invisible="1"/>
-                        <field name="file_reference"/>
-                        <field name="payment_category"/>
                         <field name="rrn_no"/>
                         <field name="iban"/>
                         <field name="cashier_id"/>
                         <field name="successfactors_id"/>
-                        <field name="ahs_group_name"/>
-
+                    </group>
+                    <group>
+                        <group name="card_info" string="Card">
+                            <field name="card_type"/>
+                            <field name="card_name"/>
+                            <field name="card_bin"/>
+                            <field name="last_four"/>
+                        </group>
+                        <group name="checks_info" string="Checks">
+                            <field name="is_3d_secure"/>
+                            <field name="is_mada"/>
+                            <field name="is_apple_pay"/>
+                            <field name="is_installment"/>
+                        </group>
                     </group>
                     <notebook>
                         <page name="charges_detail" string="Charges">
@@ -63,11 +71,10 @@
         <field name="arch" type="xml">
             <tree duplicate="0" delete="0">
                 <field name="currency_id" invisible="1"/>
+                <field name="payment_category"/>
+                <field name="payment_method"/>
                 <field name="created_at"/>
                 <field name="updated_at"/>
-                <field name="file_reference"/>
-                <field name="payment_category"/>
-                <field name="payment_mode"/>
                 <field name="provider"/>
                 <field name="auth_code"/>
                 <field name="card_type"/>

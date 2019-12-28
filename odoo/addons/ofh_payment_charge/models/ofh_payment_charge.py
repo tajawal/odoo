@@ -61,21 +61,31 @@ class OfhPaymentCharge(models.Model):
         currency_field='currency_id',
         readonly=True,
     )
-    provider = fields.Char(
+    provider = fields.Selection(
         string="Provider",
+        selection=[
+            ('checkout', 'Checkout'),
+            ('fort', 'Fort'),
+            ('knet', 'Knet'),
+            ('qitaf', 'Qitaf'),
+            ('wallet', 'Wallet'),
+            ('not_applicable', 'Not Applicable')],
         readonly=True,
+        index=True,
     )
     source = fields.Char(
         string="Source",
         readonly=True,
     )
-    payment_mode = fields.Char(
-        string="Payment Mode",
-        readonly=True,
-    )
-    card_type = fields.Char(
+    card_type = fields.Selection(
         string="Card Type",
+        selection=[
+            ('visa', 'Visa'),
+            ('amex', 'Amex'),
+            ('mastercard', 'MasterCard'),
+            ('not_applicable', 'Not Applicable')],
         readonly=True,
+        index=True,
     )
     mid = fields.Char(
         string="Mid",
@@ -89,9 +99,16 @@ class OfhPaymentCharge(models.Model):
         string="Card Bin",
         readonly=True,
     )
-    payment_method = fields.Char(
-        string="Payment Method",
+    payment_method = fields.Selection(
+        string="Payment method",
         readonly=True,
+        selection=[
+            ('online', 'Online'),
+            ('cash', 'Cash'),
+            ('bank_transfer', 'Bank Transfer'),
+            ('loyalty', 'Loyalty'),
+            ('span', 'SPAN/POS'),
+        ],
     )
     reference_id = fields.Char(
         string="Reference ID",
@@ -105,10 +122,17 @@ class OfhPaymentCharge(models.Model):
         string="Card Owner",
         readonly=True,
     )
+    is_apple_pay = fields.Boolean(
+        string="Is Apple Pay?",
+        readonly=True,
+    )
+    is_mada = fields.Boolean(
+        string="Is Made?",
+        readonly=True,
+    )
     is_3d_secure = fields.Boolean(
         string="Is 3D Secure?",
         readonly=True,
-        default=False,
     )
     is_installment = fields.Boolean(
         string="Is Installment?",
