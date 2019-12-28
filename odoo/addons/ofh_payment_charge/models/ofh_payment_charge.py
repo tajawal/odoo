@@ -64,7 +64,7 @@ class OfhPaymentCharge(models.Model):
     provider = fields.Selection(
         string="Provider",
         selection=[
-            ('checkout', 'Checkout'),
+            ('checkoutcom', 'Checkout'),
             ('fort', 'Fort'),
             ('knet', 'Knet'),
             ('qitaf', 'Qitaf'),
