@@ -392,10 +392,12 @@ class OfhSaleOrder(models.Model):
     file_id = fields.Char(
         string="File Mongo ID",
         readonly=True,
+        index=True,
     )
     file_reference = fields.Char(
         string="File ID",
         readonly=True,
+        index=True,
     )
     ticket_sub_type = fields.Char(
         string="Ticket Sub Type",
@@ -582,7 +584,7 @@ class OfhSaleOrder(models.Model):
     def _compute_unify(self):
         # For offline store_id is 1000
         for rec in self:
-            rec.is_unify = bool(rec.store_id == UNIFY_STORE_ID)   
+            rec.is_unify = bool(rec.store_id == UNIFY_STORE_ID)
 
     @api.multi
     @api.depends(
@@ -806,5 +808,5 @@ class OfhSaleOrder(models.Model):
                     precision_rounding=rec.currency_id.rounding) > 0:
                 rec.tax_code = 'ss'
             else:
-                rec.tax_code = 'sz' 
-            
+                rec.tax_code = 'sz'
+

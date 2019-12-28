@@ -339,10 +339,12 @@ class OfhPaymentRequest(models.Model):
     file_id = fields.Char(
         string="File Mongo ID",
         readonly=True,
+        index=True,
     )
     file_reference = fields.Char(
         string="File ID",
         readonly=True,
+        index=True,
     )
 
     @api.multi
