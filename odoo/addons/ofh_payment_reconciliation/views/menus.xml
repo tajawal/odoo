@@ -251,12 +251,12 @@
         <field name="name">Qitaf Payments</field>
         <field name="res_model">ofh.payment</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('provider', '=', 'knet')]</field>
+        <field name="domain">[('provider', '=', 'qitaf')]</field>
         <field name="context">{}</field>
         <field name="search_view_id" ref="ofh_payment_search_view"/>
     </record>
 
-    <record model="ir.ui.menu" id="ofh_fort_payment_menu">
+    <record model="ir.ui.menu" id="ofh_qitaf_payment_menu">
         <field name="name">Qitaf Payments</field>
         <field name="parent_id" ref="ofh_payment_by_provider_menu"/>
         <field name="action" ref="ofh_payment_qitaf_act_window"/>
