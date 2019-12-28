@@ -148,6 +148,9 @@ class HubPaymentImporter(Component):
         except IDMissingInBackend:
             return _('Record does no longer exist in HUB.')
 
+        if not self.hub_record:
+            return True
+
         skip = self._must_skip()
         if skip:
             return skip
