@@ -183,7 +183,7 @@ class OfhPayment(models.Model):
         readonly=True,
     )
     is_mada = fields.Boolean(
-        string="Is Made?",
+        string="Is Mada?",
         readonly=True,
     )
     is_3d_secure = fields.Boolean(

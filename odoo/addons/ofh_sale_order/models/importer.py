@@ -123,7 +123,7 @@ class HubSaleOrderImportMapper(Component):
     @mapping
     def amendment_fees(self, record) -> dict:
         if 'amendment_fees' in record:
-            return {'amendment_fees': json.dumps(record.get('amendment_fees'))}     
+            return {'amendment_fees': json.dumps(record.get('amendment_fees', ''))}
 
 
 class HubSaleOrderLineImportMapper(Component):
