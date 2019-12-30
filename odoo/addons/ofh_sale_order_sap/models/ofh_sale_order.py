@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import json
+import xxhash
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
@@ -244,8 +245,9 @@ class OfhSaleOrder(models.Model):
         """
         self.ensure_one()
         return {
-            "name": self.name,
-            "id": self.hub_bind_ids.external_id,
+            "name": self._get_order_name(),
+            "file_number": self._get_file_number(),
+            "booking_id": self.name[:35],
             "order_type": self.order_type,
             "created_at": self.created_at,
             "currency": self.currency_id.name,
@@ -255,7 +257,33 @@ class OfhSaleOrder(models.Model):
             "is_egypt": self.is_egypt,
             "payment_provider":
             self.payment_ids[0].provider if self.payment_ids else '',
+            'is_payment_request': self.booking_category == 'amendment',
         }
+
+    @api.multi
+    def _get_file_number(self):
+        self.ensure_one()
+        if self.file_reference:
+            return self.file_reference
+
+        if self.booking_category == 'initial':
+            order_id = self.hub_bind_ids.external_id
+        else:
+            order_id = self.hub_bind_ids.initial_order_id
+
+        hash_order_id = format(xxhash.xxh32_intdigest(order_id), 'x')
+        return f"{hash_order_id}{int(order_id[-6:], 16)}"
+
+    @api.multi
+    def _get_order_name(self):
+        self.ensure_one()
+        if self.store_id == '1000':
+            return self.name
+
+        if self.booking_category == 'amendment':
+            return self.initial_order_number
+
+        return self.name
 
     @api.multi
     def action_applicable(self):

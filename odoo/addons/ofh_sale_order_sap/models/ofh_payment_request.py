@@ -135,11 +135,11 @@ class OfhPaymentRequest(models.Model):
     def _get_payment_request_order(self):
         self.ensure_one()
         order_detail = self.order_id.to_dict()
+        order_detail['booking_id'] = self.track_id[:35]
         order_detail['created_at'] = self.updated_at
         if self.request_type != 'charge':
             order_detail['is_refund'] = True
         order_detail['is_payment_request'] = True
-        order_detail['suffix'] = self._get_payment_request_suffix()
         return order_detail
 
     @api.multi

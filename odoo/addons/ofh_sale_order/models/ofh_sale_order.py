@@ -578,6 +578,11 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         store=False,
     )
+    initial_order_number = fields.Char(
+        string="Initial Order",
+        index=True,
+        readonly=True,
+    )
 
     @api.multi
     @api.depends('store_id')
@@ -809,4 +814,3 @@ class OfhSaleOrder(models.Model):
                 rec.tax_code = 'ss'
             else:
                 rec.tax_code = 'sz'
-

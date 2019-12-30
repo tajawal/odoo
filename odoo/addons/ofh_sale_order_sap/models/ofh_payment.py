@@ -3,6 +3,7 @@
 import json
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
+import xxhash
 
 
 class OfhPayment(models.Model):
@@ -46,7 +47,7 @@ class OfhPayment(models.Model):
         for rec in self:
             rec.payment_integration_status = rec.sap_payment_ids.filtered(
                 lambda p: p.state == 'success') and \
-                                             rec.is_payment_applicable
+                    rec.is_payment_applicable
 
     @api.model
     def _search_payment_integration_status(self, operator, value):
@@ -153,9 +154,8 @@ class OfhPayment(models.Model):
         self.ensure_one()
 
         adict = {
-            "id": self.file_id,
-            "name": '',
-            "file_reference": self.file_reference,
+            "file_id": self._get_file_number(),
+            "booking_number": self._get_booking_number(),
             "order_type": '',
             "order_status": '',
             "entity": '',
@@ -185,13 +185,51 @@ class OfhPayment(models.Model):
         }
 
         if self.order_id:
-            adict["id"] = self.order_id.hub_bind_ids.external_id
             adict["order_type"] = self.order_id.order_type
             adict["order_status"] = self.order_id.order_status
             adict["entity"] = self.order_id.entity
             adict["country_code"] = self.order_id.country_code
 
         return adict
+
+    @api.multi
+    def _get_file_number(self):
+        self.ensure_one()
+        if self.file_reference:
+            return self.file_reference
+
+        if self.order_id:
+            order = self.order_id
+        elif self.payment_request_id and self.payment_request_id.order_id:
+            order = self.payment_request_id.order_id
+        else:
+            return ''
+
+        if order.booking_category == 'initial':
+            order_id = order.hub_bind_ids.external_id
+        else:
+            order_id = order.hub_bind_ids.initial_order_id
+
+        hash_order_id = format(xxhash.xxh32_intdigest(order_id), 'x')
+        return f"{hash_order_id}{int(order_id[-6:], 16)}"
+
+    @api.multi
+    def _get_booking_number(self):
+        self.ensure_one()
+        if self.file_reference:
+            return self.file_reference
+
+        if self.order_id:
+            order = self.order_id
+        elif self.payment_request_id and self.payment_request_id.order_id:
+            order = self.payment_request_id.order_id
+        else:
+            return self.track_id[:25]
+
+        if order.booking_category == 'amendment':
+            return order.initial_order_number
+
+        return order.name
 
     @api.model
     def _auto_send_payments_to_sap(self):

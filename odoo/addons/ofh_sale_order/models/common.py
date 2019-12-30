@@ -19,6 +19,10 @@ class HubSaleOrder(models.Model):
         required=True,
         ondelete='cascade',
     )
+    initial_order_id = fields.Char(
+        string="Initial Order ID",
+        readonly=True,
+    )
     hub_line_ids = fields.One2many(
         comodel_name='hub.sale.order.line',
         inverse_name='hub_order_id',

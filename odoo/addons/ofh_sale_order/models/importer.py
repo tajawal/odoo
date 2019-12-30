@@ -45,6 +45,8 @@ class HubSaleOrderImportMapper(Component):
         ('file_reference', 'file_reference'),
         ('ticket_sub_type', 'ticket_sub_type'),
         ('booking_category', 'booking_category'),
+        ('order_id', 'initial_order_id'),
+        ('initial_order_number', 'initial_order_number'),
     ]
     children = [
         ('line_items', 'hub_line_ids', 'hub.sale.order.line'),
@@ -120,10 +122,13 @@ class HubSaleOrderImportMapper(Component):
             currency = split_curr[0]
 
         return {'supplier_currency_id': self.env.ref(f'base.{currency}').id}
+
     @mapping
     def amendment_fees(self, record) -> dict:
         if 'amendment_fees' in record:
-            return {'amendment_fees': json.dumps(record.get('amendment_fees', ''))}
+            return {
+                'amendment_fees': json.dumps(
+                    record.get('amendment_fees', ''))}
 
 
 class HubSaleOrderLineImportMapper(Component):

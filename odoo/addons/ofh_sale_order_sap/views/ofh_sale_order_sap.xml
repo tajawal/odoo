@@ -40,6 +40,7 @@ if records:
                         <field name="booking_entity"/>
                         <field name="booking_number"/>
                         <field name="sales_office"/>
+                        <field name="sap_file_id"/>
                         <field name="channel"/>
                         <field name="customer"/>
                         <field name="booking_date"/>

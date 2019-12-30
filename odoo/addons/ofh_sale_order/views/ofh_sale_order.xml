@@ -34,9 +34,10 @@
                         <field name="updated_at"/>
                         <field name="currency_id"/>
                         <field name="total_amount" widget="monetary"/>
+                        <field name="initial_order_number"/>
                     </group>
                     <group name="statuses" col="4" string="Statuses">
-                         <field name="order_status"/>
+                        <field name="order_status"/>
                         <field name="order_matching_status"/>
                     </group>
                     <group>
