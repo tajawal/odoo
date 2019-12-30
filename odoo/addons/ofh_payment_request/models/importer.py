@@ -42,6 +42,7 @@ class HubPaymentRequestImportMapper(Component):
         ('file_reference', 'file_reference'),
         ('product_id', 'product_id'),
         ('group_id', 'group_id'),
+        ('deal_amount','deal_amount'),
     ]
 
     @mapping

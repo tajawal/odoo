@@ -347,6 +347,12 @@ class OfhPaymentRequest(models.Model):
         index=True,
     )
 
+    deal_amount = fields.Monetary(
+        String="Deal Amount",
+        currency_field='currency_id',
+        readonly=True,
+    )
+
     @api.multi
     @api.depends('track_id')
     def _compute_booking_source(self):

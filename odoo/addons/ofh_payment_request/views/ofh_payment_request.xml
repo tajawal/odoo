@@ -67,6 +67,7 @@
                                 <field name="booking_fee_vat_amount" widget="monetary"/>
                                 <field name="deals_vat_amount" widget="monetary"/>
                                 <field name="discount_vat_amount" widget="monetary"/>
+                                <field name="deal_amount" widget="monetary"/>
                                 <field name="tax_code"/>
                                 <field name="loss_type"/>
                             </group>

@@ -9,6 +9,7 @@ from odoo.exceptions import MissingError, UserError
 from odoo.tools import float_is_zero
 from odoo.addons.queue_job.job import job
 
+NOT_ALLOWED_STATUSES = ['94', '91']
 
 _logger = logging.getLogger(__name__)
 
@@ -146,10 +147,17 @@ class OfhPaymentRequest(models.Model):
         self.ensure_one()
         # Case no matching required for payment request.
         if not self.order_id.line_ids:
-            return []
+            raise UserError("No available lines on the sale order.")
         if self.matching_status == 'not_applicable':
             sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
-            line_dict = self.order_id.line_ids[0].to_dict()[0]
+
+            # In case of more lines select one which is not canceled or failed
+            allowed_lines = self.order_id.line_ids.filtered(
+                lambda p: p.state not in NOT_ALLOWED_STATUSES)
+            if not allowed_lines:
+                raise UserError("No available lines on the sale order.")
+
+            line_dict = allowed_lines[0].to_dict()[0]
 
             line_dict['custom1'] = self.updated_at
             line_dict['billing_date'] = self.updated_at
