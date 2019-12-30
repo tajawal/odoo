@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 from odoo.addons.component.core import Component
+from odoo.addons.queue_job.job import job
 
 
 class HubPayment(models.Model):
@@ -21,6 +22,14 @@ class HubPayment(models.Model):
         inverse_name='hub_payment_id',
         string="Hub Charges",
     )
+
+    @job(default_channel='root.hub')
+    @api.model
+    def import_record(self, backend, external_id, payment_type, force=False):
+        """ Import a Hub record """
+        with backend.work_on('hub.payment') as work:
+            importer = work.component(usage='record.importer')
+            importer.run(external_id, payment_type=payment_type, force=False)
 
 
 class PaymentAdapter(Component):

@@ -10,6 +10,14 @@
         <field name="inherit_id" ref="ofh_payment.ofh_payment_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
+                <button name="open_payment_in_hub"
+                            string="Open in HUB"
+                            class="btn-primary"
+                            type="object"/>
+                 <button name="action_update_hub_data"
+                            string="Update from HUB"
+                            class="btn-warning"
+                            type="object"/>
                 <button name="send_payment_to_sap"
                         string="Send Payment to SAP"
                         class="btn-success"

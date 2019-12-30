@@ -46,8 +46,7 @@ class OfhPayment(models.Model):
         for rec in self:
             rec.payment_integration_status = rec.sap_payment_ids.filtered(
                 lambda p: p.state == 'success') and \
-                    rec.is_payment_applicable
-
+                                             rec.is_payment_applicable
 
     @api.model
     def _search_payment_integration_status(self, operator, value):
@@ -78,7 +77,7 @@ class OfhPayment(models.Model):
         for rec in self:
             rec.payment_integration_status = rec.sap_payment_ids.filtered(
                 lambda p: p.state == 'success' and
-                p.sap_status == 'in_sap') and rec.is_payment_applicable
+                          p.sap_status == 'in_sap') and rec.is_payment_applicable
 
     @api.model
     def _search_payment_sap_status(self, operator, value):
@@ -221,3 +220,48 @@ class OfhPayment(models.Model):
         if payment.payment_status in ('11111', '10000', '10100'):
             payment.send_payment_to_sap()
         return payment
+
+    @job(default_channel='root.hub')
+    @api.multi
+    def action_update_hub_data(self):
+        self.ensure_one()
+        if self.payment_category == 'charge':
+            payment_type = 'amendment'
+        elif self.payment_category == 'refund':
+            payment_type = 'refund'
+        elif self.order_id.booking_category:
+            payment_type = self.order_id.booking_category
+        else:
+            payment_type = 'amendment'
+
+        return self.hub_bind_ids.import_record(
+            backend=self.hub_bind_ids.backend_id,
+            external_id=self.hub_bind_ids.external_id,
+            payment_type=payment_type,
+            force=True)
+
+    @api.multi
+    def open_payment_in_hub(self):
+        """Open the order link to the payment request in hub using URL
+        Returns:
+            [dict] -- URL action dictionary
+        """
+
+        self.ensure_one()
+        hub_backend = self.env['hub.backend'].search([], limit=1)
+        if not hub_backend:
+            return
+
+        hub_url = ''
+        if self.file_id:
+            hub_url = "{}admin/unify/file/{}".format(
+                hub_backend.hub_api_location, self.file_id)
+        elif self.order_id:
+            hub_url = "{}admin/order/air/detail/{}".format(
+                hub_backend.hub_api_location, self.order_id.name)
+
+        return {
+            "type": "ir.actions.act_url",
+            "url": hub_url,
+            "target": "new",
+        }
