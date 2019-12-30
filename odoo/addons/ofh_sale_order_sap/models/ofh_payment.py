@@ -186,10 +186,11 @@ class OfhPayment(models.Model):
         }
 
         if self.order_id:
+            adict["id"] = self.order_id.hub_bind_ids.external_id
             adict["order_type"] = self.order_id.order_type
             adict["order_status"] = self.order_id.order_status
             adict["entity"] = self.order_id.entity
-            adict["country_code"] = self.order_id.country_code,
+            adict["country_code"] = self.order_id.country_code
 
         return adict
 
