@@ -196,24 +196,6 @@ class OfhSaleOrder(models.Model):
         return lines
 
     @api.multi
-    def _prepare_payment_values(self, visualize=False):
-        self.ensure_one()
-        payments = []
-        dt = fields.Datetime.now()
-        backend = self.env['sap.backend'].search([], limit=1)
-        for payment in self.payment_ids:
-            values = {
-                'send_date': dt,
-                'backend_id': backend.id,
-                'payment_detail': json.dumps(payment.to_dict()),
-                'payment_id': payment.id
-            }
-            if visualize:
-                values['state'] = 'visualize'
-            payments.append((0, 0, values))
-        return payments
-
-    @api.multi
     def _prepare_sap_order_values(self, visualize=False):
         backend = self.env['sap.backend'].search([], limit=1)
         values = {
@@ -222,7 +204,6 @@ class OfhSaleOrder(models.Model):
             'backend_id': backend.id,
             'order_detail': json.dumps(self.to_dict()),
             'sap_line_ids': self._prepare_sap_lines_values(),
-            'sap_payment_ids': self._prepare_payment_values(visualize)
         }
         if visualize:
             values['state'] = 'visualize'
@@ -243,8 +224,6 @@ class OfhSaleOrder(models.Model):
         self.ensure_one()
 
         values = self._prepare_sap_order_values()
-        # When force sending, for send only the sale part.
-        values.pop('sap_payment_ids')
 
         return self.env['ofh.sale.order.sap'].with_context(
             force_send=True).create(values)

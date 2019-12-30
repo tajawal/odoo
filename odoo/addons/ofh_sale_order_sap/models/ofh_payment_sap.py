@@ -307,7 +307,6 @@ class OfhPaymentSap(models.Model):
         readonly=True,
         compute="_compute_payment_detail"
     )
-    TODO: payment
     payment_mode = fields.Char(
         string="payment_mode",
         readonly=True,

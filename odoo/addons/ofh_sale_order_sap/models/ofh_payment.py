@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import json
 from odoo import api, fields, models
+from odoo.addons.queue_job.job import job
 
 
 class OfhPayment(models.Model):
@@ -191,3 +192,31 @@ class OfhPayment(models.Model):
             adict["country_code"] = self.order_id.country_code,
 
         return adict
+
+    @api.model
+    def _auto_send_payments_to_sap(self):
+        """Auto Send candidates Payments to SAP."""
+        self.env.cr.execute(
+            """select id from ofh_payment_auto_send""")
+        for record in self.env.cr.fetchall():
+            self.with_delay()._auto_send_payment_to_sap(payment_id=record[0])
+
+    @api.model
+    @job(default_channel='root.sap')
+    def _auto_send_payment_to_sap(self, payment_id):
+        """Auto Send a payment to SAP."""
+        if not payment_id:
+            return
+
+        payment = self.browse(payment_id)
+        return payment.send_payment_to_sap()
+
+    @api.model
+    def create(self, vals):
+        payment = super(OfhPayment, self).create(vals)
+
+        # Only Captured, Authorized, Flagged
+        # TODO: Add more status if needed
+        if payment.payment_status in ('11111', '10000', '10100'):
+            payment.send_payment_to_sap()
+        return payment

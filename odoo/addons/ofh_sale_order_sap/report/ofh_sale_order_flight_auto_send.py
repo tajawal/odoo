@@ -25,13 +25,7 @@ class OfhSaleOrderAutoSend(models.Model):
                     -- Only applicable office ids.
                     upper(ticketing_office_id) not in
                     ('CAI3T38EH', 'CAIEG21Q4', '87OF', '8RR9', 'GALILEO') AND
-                    is_voided = false AND
-
-                    -- flight booking should be paid.
-                    EXISTS (
-                        SELECT order_id
-                        FROM ofh_payment
-                        WHERE payment_status in ('11111', '10000', '10100'))
+                    is_voided = false
 
                 -- Not sent to SAP
                 EXCEPT
