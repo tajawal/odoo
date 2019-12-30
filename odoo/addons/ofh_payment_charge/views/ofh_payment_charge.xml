@@ -30,6 +30,8 @@
                         <field name="reference_id"/>
                         <field name="bank_name"/>
                         <field name="card_owner"/>
+                        <field name="is_apple_pay"/>
+                        <field name="is_mada"/>
                         <field name="is_3d_secure"/>
                         <field name="is_installment"/>
                     </group>

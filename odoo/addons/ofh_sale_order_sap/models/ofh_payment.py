@@ -27,7 +27,7 @@ class OfhPayment(models.Model):
         default=False,
         store=False,
         compute='_compute_payment_integration_status',
-        Zsearch='_search_payment_integration_status',
+        search='_search_payment_integration_status',
     )
     payment_sap_status = fields.Boolean(
         string="Is Payment in SAP?",
@@ -76,9 +76,8 @@ class OfhPayment(models.Model):
     def _compute_payment_sap_status(self):
         for rec in self:
             rec.payment_integration_status = rec.sap_payment_ids.filtered(
-                lambda p: p.state == 'success' and p.sap_status == 'in_sap') and \
-                                             rec.is_payment_applicable
-
+                lambda p: p.state == 'success' and
+                p.sap_status == 'in_sap') and rec.is_payment_applicable
 
     @api.model
     def _search_payment_sap_status(self, operator, value):
@@ -126,14 +125,12 @@ class OfhPayment(models.Model):
     def send_payment_to_sap(self):
         """Create and Send SAP Sale Order Record."""
         self.ensure_one()
-
         values = self._prepare_payment_values()
         return self.env['ofh.payment.sap'].create(values)
 
     @api.multi
     def force_send_payment_to_sap(self):
         self.ensure_one()
-
         values = self._prepare_payment_values()
 
         return self.env['ofh.payment.sap'].with_context(
@@ -154,38 +151,43 @@ class OfhPayment(models.Model):
             [dict] -- Sap Sale Order dictionary
         """
         self.ensure_one()
-        if self.order_id.line_ids:
-            validating_carrier = self.order_id.line_ids[0].validating_carrier
-        else:
-            validating_carrier = ''
 
-        return {
-            "id": self.order_id.hub_bind_ids.external_id,
-            "name": self.order_id.name,
-            "order_type": self.order_id.order_type,
-            "order_status": self.order_id.order_status,
-            "validating_carrier": validating_carrier,
-            "order_owner": self.order_id.order_owner,
-            "entity": self.order_id.entity,
-            "ahs_group_name": self.order_id.ahs_group_name,
-            "country_code": self.order_id.country_code,
+        adict = {
+            "id": self.file_id,
+            "name": '',
+            "file_reference": self.file_reference,
+            "order_type": '',
+            "order_status": '',
+            "entity": '',
+            "ahs_group_name": self.ahs_group_name,
+            "country_code": '',
             "payment_provider": self.provider,
             "payment_source": self.source,
             "payment_method": self.payment_method,
-            "payment_mode": self.payment_mode,
             "payment_status": self.payment_status,
             "reference_id": self.reference_id,
             "currency": self.currency_id.name,
             "amount": self.total_amount,
             "document_date": self.created_at,
             "mid": self.mid,
-            "bank_name": self.bank_name,
+            "successfactor_id": self.successfactors_id,
+            "cashier_id": self.cashier_id,
             "card_type": self.card_type,
             "card_bin": self.card_bin,
             "card_owner": self.card_name,
             "card_last_four": self.last_four,
             "auth_code": self.auth_code,
             "is_installment": self.is_installment,
+            "is_apple_pay": self.is_apple_pay,
+            "is_mada": self.is_mada,
             "is_3d_secure": self.is_3d_secure,
             "is_egypt": self.order_id.is_egypt,
         }
+
+        if self.order_id:
+            adict["order_type"] = self.order_id.order_type
+            adict["order_status"] = self.order_id.order_status
+            adict["entity"] = self.order_id.entity
+            adict["country_code"] = self.order_id.country_code,
+
+        return adict

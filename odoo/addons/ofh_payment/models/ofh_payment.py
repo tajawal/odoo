@@ -33,10 +33,6 @@ class OfhPayment(models.Model):
         currency_field='currency_id',
         readonly=True,
     )
-    payment_mode = fields.Char(
-        string="Payment Mode",
-        readonly=True,
-    )
     payment_status = fields.Selection(
         string="Payment Status",
         selection=_get_payment_status_selection,
@@ -187,7 +183,7 @@ class OfhPayment(models.Model):
         readonly=True,
     )
     is_3d_secure = fields.Boolean(
-        string="Is 3d Secure",
+        string="Is 3d Secure?",
         readonly=True,
     )
 

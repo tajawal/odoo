@@ -307,6 +307,7 @@ class OfhPaymentSap(models.Model):
         readonly=True,
         compute="_compute_payment_detail"
     )
+    TODO: payment
     payment_mode = fields.Char(
         string="payment_mode",
         readonly=True,
@@ -473,6 +474,8 @@ class OfhPaymentSap(models.Model):
             rec.auth_code = payment_detail.get('auth_code')
             rec.is_installment = payment_detail.get('is_installment')
             rec.is_3d_secure = payment_detail.get('is_3d_secure')
+            rec.is_apple_pay = payment_detail.get('is_apple_pay')
+            rec.is_mada = payment_detail.get('is_mada')
 
     @api.multi
     def _get_payment_payload(self):

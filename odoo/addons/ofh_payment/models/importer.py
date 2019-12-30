@@ -31,6 +31,8 @@ class HubPaymentImportMapper(Component):
         ('payment_method', 'payment_method'),
         ('bank_name', 'bank_name'),
         ('reference_id', 'reference_id'),
+        ('is_apple_pay', 'is_apple_pay'),
+        ('is_mada', 'is_mada'),
         ('is_3d_secure', 'is_3d_secure'),
         ('is_mada', 'is_mada'),
         ('is_apple_pay', 'is_apple_pay'),

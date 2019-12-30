@@ -324,7 +324,6 @@ class OfhPaymentRequest(models.Model):
             "auth_code": '',
             "payment_provider": '',
             "payment_source": '',
-            "payment_mode": '',
             "payment_status": charges[0].status if charges else '',
             "mid": '',
             "card_bin": '',
@@ -351,9 +350,6 @@ class OfhPaymentRequest(models.Model):
 
             if charge.source:
                 payment_dict['payment_source'] = charge.source
-
-            if charge.payment_mode:
-                payment_dict['payment_mode'] = charge.payment_mode
 
             if charge.mid:
                 payment_dict['mid'] = charge.mid
