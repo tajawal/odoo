@@ -241,7 +241,8 @@ class OfhSaleOrderSap(models.Model):
     entity = fields.Selection(
         selection=[
             ('almosafer', 'Almosafer'),
-            ('tajawal', 'Tajawal')],
+            ('tajawal', 'Tajawal'),
+            ('almosafer_branch', 'Almosafer Branch')],
         readonly=True,
         compute="_compute_order_detail"
     )
