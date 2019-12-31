@@ -47,6 +47,7 @@ class OfhPayment(models.Model):
             ('knet', 'Knet'),
             ('qitaf', 'Qitaf'),
             ('wallet', 'Wallet'),
+            ('tp', 'Tajawal Pay'),
             ('not_applicable', 'Not Applicable'), ],
         readonly=True,
         index=True,
