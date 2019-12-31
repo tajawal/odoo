@@ -78,7 +78,7 @@ class OfhPayment(models.Model):
         for rec in self:
             rec.payment_integration_status = rec.sap_payment_ids.filtered(
                 lambda p: p.state == 'success' and
-                          p.sap_status == 'in_sap') and rec.is_payment_applicable
+                p.sap_status == 'in_sap') and rec.is_payment_applicable
 
     @api.model
     def _search_payment_sap_status(self, operator, value):
@@ -248,16 +248,6 @@ class OfhPayment(models.Model):
 
         payment = self.browse(payment_id)
         return payment.send_payment_to_sap()
-
-    @api.model
-    def create(self, vals):
-        payment = super(OfhPayment, self).create(vals)
-
-        # Only Captured, Authorized, Flagged
-        # TODO: Add more status if needed
-        if payment.payment_status in ('11111', '10000', '10100'):
-            payment.send_payment_to_sap()
-        return payment
 
     @job(default_channel='root.hub')
     @api.multi
