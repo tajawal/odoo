@@ -243,7 +243,12 @@ class OfhSaleOrder(models.Model):
         Returns:
             [dict] -- Sap Sale Order dictionary
         """
+
         self.ensure_one()
+        ahs_group_name = self.ahs_group_name
+        if not ahs_group_name and self.line_ids:
+            ahs_group_name = self.line_ids.mapped('ahs_group_name')[0]
+
         return {
             "name": self._get_order_name(),
             "file_number": self._get_file_number(),
@@ -251,7 +256,7 @@ class OfhSaleOrder(models.Model):
             "order_type": self.order_type,
             "created_at": self.created_at,
             "currency": self.currency_id.name,
-            "ahs_group_name": self.ahs_group_name,
+            "ahs_group_name": ahs_group_name,
             "entity": self.entity,
             "country_code": self.country_code,
             "is_egypt": self.is_egypt,
