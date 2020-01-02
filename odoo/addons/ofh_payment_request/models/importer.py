@@ -7,6 +7,9 @@ from odoo import fields, _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 from odoo.addons.connector.exception import IDMissingInBackend
+from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
+
+UNIFY_STORE_ID = 1000
 
 PROCESSED_HUB_STATUSES = \
     ('Processed', 'Processed Manually', 'Customer Processed')
@@ -42,8 +45,11 @@ class HubPaymentRequestImportMapper(Component):
         ('file_reference', 'file_reference'),
         ('product_id', 'product_id'),
         ('group_id', 'group_id'),
-        ('deal_amount','deal_amount'),
+        ('deal_amount', 'deal_amount'),
     ]
+
+    children = [
+        ('payments', 'hub_payment_ids', 'hub.payment')]
 
     @mapping
     def created_at(self, record) -> dict:
@@ -113,8 +119,9 @@ class HubPaymentRequestBatchImporter(Component):
             # Online and Unify Refund Payment Request => Create payment request
             if pr_type == 'refund':
                 self._import_record(track_id)
-                self.model.with_delay()._run_refund_payment(
-                    track_id, backend)
+                if store_id == UNIFY_STORE_ID:
+                    self.model.with_delay()._run_refund_payment(
+                        track_id, backend)
 
 
 class HubPaymentRequestImporter(Component):
@@ -181,6 +188,11 @@ class HubPaymentRequestImporter(Component):
         )
         try:
             for record in self._get_hub_data():
+                # Getting Payments in case of Online Sale Order
+                store_id = record.get('store_id')
+                track_id = record.get('track_id')
+
+                record['payments'] = self._get_payments(store_id, track_id)
                 self.hub_record = record
 
                 skip = self._must_skip()
@@ -218,3 +230,13 @@ class HubPaymentRequestImporter(Component):
 
         except IDMissingInBackend:
             return _('Record does no longer exist in HUB.')
+
+    def _get_payments(self, store_id, track_id):
+        _payments = {}
+        if store_id != UNIFY_STORE_ID:
+            backend = self.env['hub.backend'].search([], limit=1)
+            hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
+            _payments = hub_api.get_payment_by_track_id(
+                track_id=track_id, ptype='refund')
+
+        return _payments

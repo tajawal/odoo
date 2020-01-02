@@ -46,6 +46,7 @@ class HubPaymentImportMapper(Component):
         ('cashier_id', 'cashier_id'),
         ('successfactors_id', 'successfactors_id'),
         ('ahs_group_name', 'ahs_group_name'),
+        ('store_id', 'store_id'),
     ]
 
     children = [

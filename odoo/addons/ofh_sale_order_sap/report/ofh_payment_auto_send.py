@@ -12,8 +12,16 @@ class OfhPaymentAutoSend(models.Model):
     def init(self):
         tools.drop_view_if_exists(self._cr, 'ofh_payment_auto_send')
         self._cr.execute("""
-            create view ofh_payment_auto_send as (
-                SELECT id
-                FROM ofh_payment
-                WHERE payment_status in ('11111', '10000', '10100'))
+            CREATE VIEW ofh_payment_auto_send AS (
+              SELECT 
+                id 
+              FROM 
+                ofh_payment 
+              WHERE 
+                (
+                  payment_method = 'online' 
+                  AND payment_status IN ('11111', '83027')
+                ) 
+                OR (payment_method <> 'online' AND store_id = '1000')
+            )
         """)

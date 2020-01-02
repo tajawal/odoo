@@ -49,7 +49,6 @@ class HubPaymentRequest(models.Model):
         """ Import a Hub record """
         with backend.work_on(self._name) as work:
             importer = work.component(usage='record.importer')
-            self._run_refund_payment(track_id=external_id, backend=backend)
             return importer.run(external_id, force=force)
 
     @job(default_channel='root.hub')

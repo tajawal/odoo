@@ -187,6 +187,11 @@ class OfhPayment(models.Model):
         string="Is 3d Secure?",
         readonly=True,
     )
+    store_id = fields.Char(
+        string="Store ID",
+        readonly=True,
+        index=True,
+    )
 
     @api.multi
     @api.depends('track_id')
