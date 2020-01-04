@@ -8,5 +8,6 @@ _logger = logging.getLogger(__name__)
 def migrate(cr, version):
     _logger.info("Updating Group Id for existing payment requests.")
     cr.execute("""
-        update hub_payment_request set group_id = track_id;
+        update hub_payment_request set group_id = external_id;
     """)
+    _logger.info("Done Updating Group Id for existing payment requests.")
