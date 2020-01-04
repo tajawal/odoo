@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 from odoo.addons.component.core import Component
+from odoo.addons.queue_job.job import job
 
 
 class HubPayment(models.Model):
@@ -22,6 +23,14 @@ class HubPayment(models.Model):
         string="Hub Charges",
     )
 
+    @job(default_channel='root.hub')
+    @api.model
+    def import_record(self, backend, external_id, payment_type, force=False):
+        """ Import a Hub record """
+        with backend.work_on('hub.payment') as work:
+            importer = work.component(usage='record.importer')
+            importer.run(external_id, payment_type=payment_type, force=False)
+
 
 class PaymentAdapter(Component):
     _name = 'ofh.payment.adapter'
@@ -37,7 +46,10 @@ class PaymentAdapter(Component):
                 'HubAPI instance to be able to use the '
                 'Backend Adapter.'
             )
-        return hub_api.get_payment_by_track_id(external_id)
+        payments = hub_api.get_payment_by_track_id(external_id, attributes.get('payment_type'))
+        if payments:
+            return payments[0]
+        return []
 
 
 class HubPaymentCharge(models.Model):

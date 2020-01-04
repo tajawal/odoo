@@ -278,7 +278,8 @@ class OfhPaymentSap(models.Model):
     entity = fields.Selection(
         selection=[
             ('almosafer', 'Almosafer'),
-            ('tajawal', 'Tajawal')],
+            ('tajawal', 'Tajawal'),
+            ('almosafer_branch', 'Almosafer Branch')],
         readonly=True,
         compute="_compute_payment_detail"
     )
@@ -473,6 +474,8 @@ class OfhPaymentSap(models.Model):
             rec.auth_code = payment_detail.get('auth_code')
             rec.is_installment = payment_detail.get('is_installment')
             rec.is_3d_secure = payment_detail.get('is_3d_secure')
+            rec.is_apple_pay = payment_detail.get('is_apple_pay')
+            rec.is_mada = payment_detail.get('is_mada')
 
     @api.multi
     def _get_payment_payload(self):

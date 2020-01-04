@@ -3,9 +3,13 @@
 import json
 import logging
 
-from odoo import fields
+from odoo import fields, _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector.exception import IDMissingInBackend
+from odoo.addons.ofh_hub_connector.components.backend_adapter import HubAPI
+
+UNIFY_STORE_ID = 1000
 
 PROCESSED_HUB_STATUSES = \
     ('Processed', 'Processed Manually', 'Customer Processed')
@@ -37,11 +41,15 @@ class HubPaymentRequestImportMapper(Component):
         ('remarks', 'notes'),
         ('payment_mode', 'payment_mode'),
         ('total_amount', 'total_amount'),
-        ('deal_amount','deal_amount'),
+        ('file_id', 'file_id'),
+        ('file_reference', 'file_reference'),
+        ('product_id', 'product_id'),
+        ('group_id', 'group_id'),
+        ('deal_amount', 'deal_amount'),
     ]
 
     children = [
-        ('charges', 'hub_charge_ids', 'hub.payment.charge')]
+        ('payments', 'hub_payment_ids', 'hub.payment')]
 
     @mapping
     def created_at(self, record) -> dict:
@@ -91,9 +99,29 @@ class HubPaymentRequestBatchImporter(Component):
     def run(self, filters=None):
         """ Run the synchronization """
         records = self.backend_adapter.search(filters)
-        tracking_ids = [r['additionalData']['trackId'] for r in records]
-        for external_id in tracking_ids:
-            self._import_record(external_id)
+        for record in records:
+            store_id = record['additionalData'].get('storeId', '')
+            track_id = record['additionalData'].get('trackId', '')
+            pr_type = record.get('type', '')
+            order_id = record.get('orderId', '')
+            backend = self.env['hub.backend'].search([], limit=1)
+
+            # Online Charge Payment Request => Create Sale Order and payment
+            if store_id != UNIFY_STORE_ID and pr_type == 'charge':
+                self.model.with_delay()._run_online_charge_payment_request(
+                    order_id, track_id, backend)
+
+            # Unify Charge Payment Request => Create payment only
+            if store_id == UNIFY_STORE_ID and pr_type == 'charge':
+                self.model.with_delay()._run_unify_charge_payment_request(
+                    track_id, backend)
+
+            # Online and Unify Refund Payment Request => Create payment request
+            if pr_type == 'refund':
+                self._import_record(track_id)
+                if store_id == UNIFY_STORE_ID:
+                    self.model.with_delay()._run_refund_payment(
+                        track_id, backend)
 
 
 class HubPaymentRequestImporter(Component):
@@ -111,7 +139,7 @@ class HubPaymentRequestImporter(Component):
             bool -- Return True if the import should be skipped else False
         """
         if not binding:
-            return False    # The record has never been synchronised.
+            return False  # The record has never been synchronised.
 
         assert self.hub_record
 
@@ -120,18 +148,6 @@ class HubPaymentRequestImporter(Component):
             self.hub_record.get('updated_at'))
 
         return hub_date < sync_date
-
-    def _must_skip(self) -> bool:
-        """ For payment request we process only records that are already
-        been processed.
-
-        Returns:
-            bool -- True if the record should be skipped else False
-        """
-
-        return self.hub_record.get('store_id') == UNIFY_STORE_ID and \
-               self.hub_record.get('group_id') == UNIFY_GROUP_ID and \
-               self.hub_record.get('status') not in PROCESSED_HUB_STATUSES
 
     def _get_hub_data(self):
         """ Return the raw hub data for ``self.external_id `` """
@@ -153,3 +169,74 @@ class HubPaymentRequestImporter(Component):
                 record['app_details'] = hub_api.get_raw_store(int(store_id))
 
         return record
+
+    def run(self, external_id, force=False):
+        """[summary]
+
+        Arguments:
+            external_id {[type]} -- [description]
+
+        Keyword Arguments:
+            force {bool} -- [description] (default: {False})
+        """
+        self.external_id = external_id
+        lock_name = 'import({}, {}, {}, {})'.format(
+            self.backend_record._name,
+            self.backend_record.id,
+            self.work.model_name,
+            external_id,
+        )
+        try:
+            for record in self._get_hub_data():
+                # Getting Payments in case of Online Sale Order
+                store_id = record.get('store_id')
+                track_id = record.get('track_id')
+
+                record['payments'] = self._get_payments(store_id, track_id)
+                self.hub_record = record
+
+                skip = self._must_skip()
+                if skip:
+                    return skip
+                binding = self._get_binding()
+
+                if not force and self._is_uptodate(binding):
+                    return _('Already up-to-date.')
+
+                block = self._must_block(binding)
+                if block:
+                    return block
+
+                # Keep a lock on this import until the transaction is committed
+                # The lock is kept since we have detected that the informations
+                # will be updated into Odoo
+                self.advisory_lock_or_retry(lock_name)
+                self._before_import()
+
+                # import the missing linked resources
+                self._import_dependencies()
+                map_record = self._map_data()
+
+                if binding:
+                    record = self._update_data(map_record)
+                    self._update(binding, record)
+                else:
+                    record = self._create_data(map_record)
+                    binding = self._create(record)
+
+                self.binder.bind(self.external_id, binding)
+
+                self._after_import(binding)
+
+        except IDMissingInBackend:
+            return _('Record does no longer exist in HUB.')
+
+    def _get_payments(self, store_id, track_id):
+        _payments = {}
+        if store_id != UNIFY_STORE_ID:
+            backend = self.env['hub.backend'].search([], limit=1)
+            hub_api = HubAPI(oms_finance_api_url=backend.oms_finance_api_url)
+            _payments = hub_api.get_payment_by_track_id(
+                track_id=track_id, ptype='refund')
+
+        return _payments

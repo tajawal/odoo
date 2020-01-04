@@ -38,6 +38,12 @@ class SapXmlApi:
         response.raise_for_status()
         return response
 
+    def generate_loader(self, payload: dict) -> dict:
+        url = f"{self.sap_xml_api_url}payment_loader/generate"
+        response = requests.post(url, json=payload, headers=self.headers)
+        response.raise_for_status()
+        return response.json()
+
 
 class SapAdapter(AbstractComponent):
     """[summary]."""

@@ -26,14 +26,7 @@ class OfhSaleOrderAutoSend(models.Model):
                     -- Booking must have lines.
                     EXISTS (
                         SELECT order_id
-                        FROM ofh_sale_order_line) AND
-
-                    -- Hotel booking should be paid.
-                    EXISTS (
-                        SELECT order_id
-                        FROM ofh_payment
-                        WHERE payment_status in ('11111', '10000', '10100'))
-
+                        FROM ofh_sale_order_line)
 
                 -- Not sent to SAP
                 EXCEPT

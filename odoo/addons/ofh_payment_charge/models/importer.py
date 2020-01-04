@@ -22,7 +22,6 @@ class HubPaymentChargeImportMapper(Component):
         ('value', 'total'),
         ('provider', 'provider'),
         ('source', 'source'),
-        ('payment_mode', 'payment_mode'),
         ('card_type', 'card_type'),
         ('mid', 'mid'),
         ('last_four', 'last_four'),
@@ -32,7 +31,11 @@ class HubPaymentChargeImportMapper(Component):
         ('reference_id', 'reference_id'),
         ('bank_name', 'bank_name'),
         ('card_owner', 'card_owner'),
+        ('is_apple_pay', 'is_apple_pay'),
+        ('is_mada', 'is_mada'),
         ('is_3d_secure', 'is_3d_secure'),
+        ('is_apple_pay', 'is_apple_pay'),
+        ('is_mada', 'is_mada'),
         ('is_installment', 'is_installment'),
     ]
 

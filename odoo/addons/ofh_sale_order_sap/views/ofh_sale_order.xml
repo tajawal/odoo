@@ -29,11 +29,8 @@
             </header>
             <group name="statuses" position="inside">
                 <field name="is_sale_applicable"/>
-                <field name="is_payment_applicable"/>
                 <field name="integration_status"/>
-                <field name="payment_integration_status"/>
                 <field name="sap_status"/>
-                <field name="payment_sap_status"/>
             </group>
             <notebook position="inside">
                 <page name="sap_details" string="SAP Details">
@@ -50,11 +47,8 @@
         <field name="arch" type="xml">
             <tree position="inside">
                 <field name="is_sale_applicable"/>
-                <field name="is_payment_applicable"/>
                 <field name="integration_status"/>
-                <field name="payment_integration_status"/>
                 <field name="sap_status"/>
-                <field name="payment_sap_status"/>
             </tree>
         </field>
     </record>
@@ -74,16 +68,6 @@
         </field>
     </record>
 
-    <record model="ir.actions.server" id="ofh_sap_not_applicable">
-        <field name="name">Sending to SAP not Applicable</field>
-        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_not_applicable()
-        </field>
-    </record>
 
     <record model="ir.actions.server" id="ofh_sale_sap_not_applicable">
         <field name="name">Sending Sale to SAP not Applicable</field>
@@ -96,27 +80,6 @@ if records:
         </field>
     </record>
 
-    <record model="ir.actions.server" id="ofh_payment_sap_not_applicable">
-        <field name="name">Sending Payment to SAP not Applicable</field>
-        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_payment_not_applicable()
-        </field>
-    </record>
-
-    <record model="ir.actions.server" id="ofh_sap_applicable">
-        <field name="name">Sending to SAP Applicable</field>
-        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_applicable()
-        </field>
-    </record>
 
     <record model="ir.actions.server" id="ofh_sale_sap_applicable">
         <field name="name">Sending Sale to SAP Applicable</field>
@@ -129,26 +92,16 @@ if records:
         </field>
     </record>
 
-    <record model="ir.actions.server" id="ofh_payment_sap_applicable">
-        <field name="name">Sending Payment to SAP Applicable</field>
+    <record model="ir.actions.server" id="ofh_sale_sent_sap">
+        <field name="name">Send Sale to SAP</field>
         <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
         <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
         <field name="state">code</field>
         <field name="code">
 if records:
-    records.action_payment_applicable()
+    records.send_order_to_sap()
         </field>
     </record>
 
-    <record model="ir.actions.server" id="ofh_sale_order_action_send_order_to_sap">
-        <field name="name">Send Order to SAP</field>
-        <field name="model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name = "binding_model_id" ref="ofh_sale_order.model_ofh_sale_order"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_send_order_to_sap()
-        </field>
-    </record>
 
 </odoo>

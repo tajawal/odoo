@@ -70,9 +70,6 @@
             <field name="matching_status" position="after">
                 <field name="payment_request_status"/>
             </field>
-            <field name="entity" position="after">
-                <field name="request_type"/>
-            </field>
         </field>
     </record>
 

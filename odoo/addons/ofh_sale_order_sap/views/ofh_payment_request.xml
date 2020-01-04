@@ -21,20 +21,11 @@
                         help="Send to Sap-xml-api and get and object in return."
                         confirm="You are about to force send this payment request (ONLY SALE PART). Are you sure?"
                         type="object"/>
-                <button name="force_send_payment_of_payment_request_to_sap"
-                        string="Force Send Payment to SAP"
-                        class="btn-warning"
-                        help="Send to Sap-xml-api and get and object in return."
-                        confirm="You are about to force send this payment request (ONLY PAYMENT PART). Are you sure?"
-                        type="object"/>
             </header>
             <group name="status_details" position="inside">
                 <field name="new_integration_status"/>
-                <field name="new_payment_integration_status"/>
                 <field name="new_sap_status"/>
-                <field name="new_payment_sap_status"/>
                 <field name="is_sale_applicable"/>
-                <field name="is_payment_applicable"/>
             </group>
             <notebook position="inside">
                 <page name="sap_details" string="SAP Details">
@@ -51,11 +42,8 @@
         <field name="arch" type="xml">
             <tree position="inside">
                 <field name="is_sale_applicable"/>
-                <field name="is_payment_applicable"/>
                 <field name="new_integration_status"/>
-                <field name="new_payment_integration_status"/>
                 <field name="new_sap_status"/>
-                <field name="new_payment_sap_status"/>
             </tree>
         </field>
     </record>
@@ -82,17 +70,6 @@ if records:
         </field>
     </record>
 
-    <record model="ir.actions.server" id="ofh_payment_sap_not_applicable_pr">
-        <field name="name">Sending Payment to SAP not Applicable</field>
-        <field name="model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
-        <field name = "binding_model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_payment_not_applicable()
-        </field>
-    </record>
-
     <record model="ir.actions.server" id="ofh_sap_applicable_pr">
         <field name="name">Sending to SAP Applicable</field>
         <field name="model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
@@ -112,17 +89,6 @@ if records:
         <field name="code">
 if records:
     records.action_sale_applicable()
-        </field>
-    </record>
-
-    <record model="ir.actions.server" id="ofh_payment_sap_applicable_pr">
-        <field name="name">Sending Payment to SAP Applicable</field>
-        <field name="model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
-        <field name = "binding_model_id" ref="ofh_payment_request.model_ofh_payment_request"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    records.action_payment_applicable()
         </field>
     </record>
 

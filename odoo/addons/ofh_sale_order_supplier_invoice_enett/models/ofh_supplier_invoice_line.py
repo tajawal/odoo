@@ -3,6 +3,9 @@
 
 from odoo import api, fields, models
 
+BOOKING_CAT_INIT = 'initial'
+BOOKING_CAT_AMND = 'amendment'
+
 
 class OfhSupplierInvoiceLine(models.Model):
 
@@ -21,8 +24,23 @@ class OfhSupplierInvoiceLine(models.Model):
             self.message_post(
                 f"Record not found in the system: {self.order_reference}")
 
-        if len(order_ids) == 1:
-            self.order_id = order_ids[0]
+        initial_orders = order_ids.filtered(
+            lambda p: p.booking_category == BOOKING_CAT_INIT)
+
+        amendment_orders = order_ids.filtered(
+            lambda p: p.booking_category == BOOKING_CAT_AMND)
+
+        # Matching with Initial Orders
+        if len(initial_orders) == 1:
+            self.order_id = initial_orders[0]
+            self._match_enett_with_sale_order_line()
+            return
+
+        # Matching with Amendment Orders
+        if amendment_orders:
+            for a_order in amendment_orders:
+                self.order_id = a_order
+                self._match_enett_with_sale_order_line()
             return
 
         order_names = ', '.join([o.name for o in order_ids])
@@ -43,6 +61,21 @@ class OfhSupplierInvoiceLine(models.Model):
                 from_str(self.invoice_date)).days)
             if day_diff > 2:
                 return
+
+            # Adding amount check in case of Amendment
+            if self.order_id.booking_category == BOOKING_CAT_AMND:
+                total_supplier_cost = self.order_id.total_supplier_cost
+
+                supplier_cost = sum([
+                    l.cost_amount for l in self.order_id.invoice_line_ids])
+                supplier_cost += self.cost_amount
+
+                diff = abs(
+                    supplier_cost /
+                    total_supplier_cost)
+                if diff > 1.35:
+                    continue
+
             line.write({
                 'invoice_line_ids': [(4, self.id)],
                 'matching_status': 'matched',
@@ -53,6 +86,10 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.multi
     def _match_enett_with_payment_request(self):
         self.ensure_one()
+
+        # Continue only in case of Refund
+        if self.invoice_status in ('TKTT', 'AMND'):
+            return
 
         # If the current line has already matched with an initial ticket
         if not self.order_id or self.order_line_id:

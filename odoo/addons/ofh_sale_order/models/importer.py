@@ -9,6 +9,7 @@ import json
 UNIFY_STORE_ID = 1000
 UNIFY_GROUP_ID = 7
 
+
 class HubSaleOrderImportMapper(Component):
     _name = 'hub.sale.order.import.mapper'
     _inherit = 'hub.import.mapper'
@@ -40,6 +41,12 @@ class HubSaleOrderImportMapper(Component):
         ('customer_email', 'customer_email'),
         ('customer_number', 'customer_number'),
         ('agent_email', 'agent_email'),
+        ('file_id', 'file_id'),
+        ('file_reference', 'file_reference'),
+        ('ticket_sub_type', 'ticket_sub_type'),
+        ('booking_category', 'booking_category'),
+        ('order_id', 'initial_order_id'),
+        ('initial_order_number', 'initial_order_number'),
     ]
     children = [
         ('line_items', 'hub_line_ids', 'hub.sale.order.line'),
@@ -89,10 +96,17 @@ class HubSaleOrderImportMapper(Component):
 
     @mapping
     def vendor_currency_id(self, record):
-        if 'vendor_currency' in record:
-            currency = record.get('vendor_currency')
-            return {'vendor_currency_id': self.env.ref(f'base.{currency}').id}
-        return {}
+        if 'vendor_currency' not in record:
+            return {}
+        currency = record.get('vendor_currency')
+        if not currency:
+            return {}
+
+        if "," in currency:
+            split_curr = currency.split(",")
+            currency = split_curr[0]
+
+        return {'vendor_currency_id': self.env.ref(f'base.{currency}').id}
 
     @mapping
     def supplier_currency_id(self, record):
@@ -102,11 +116,19 @@ class HubSaleOrderImportMapper(Component):
         currency = record.get('supplier_currency')
         if not currency:
             return {}
+
         if "," in currency:
             split_curr = currency.split(",")
             currency = split_curr[0]
-        return {
-            'supplier_currency_id': self.env.ref(f'base.{currency}').id}
+
+        return {'supplier_currency_id': self.env.ref(f'base.{currency}').id}
+
+    @mapping
+    def amendment_fees(self, record) -> dict:
+        if 'amendment_fees' in record:
+            return {
+                'amendment_fees': json.dumps(
+                    record.get('amendment_fees', ''))}
 
 
 class HubSaleOrderLineImportMapper(Component):
@@ -605,6 +627,10 @@ class HubSaleOrderImporter(Component):
     _inherit = 'hub.importer'
     _apply_on = ['hub.sale.order']
 
+    def _must_skip(self) -> bool:
+        # Skip orders that are different than flight and hotel.
+        return self.hub_record.get('order_type', "") in ('other', '')
+
     def _is_uptodate(self, binding) -> bool:
         if not binding:
             return False    # The record has never been synchronised.
@@ -616,15 +642,6 @@ class HubSaleOrderImporter(Component):
             self.hub_record.get('updated_at'))
 
         return hub_date < sync_date
-
-    def _must_skip(self) -> bool:
-        """ Skip Unify Sale Orders.
-
-        Returns:
-            bool -- True if the record should be skipped else False
-        """
-        return self.hub_record.get('store_id') == UNIFY_STORE_ID and \
-               self.hub_record.get('group_id') == UNIFY_GROUP_ID
 
 
 class HubSaleOrderLineImportMapChild(Component):

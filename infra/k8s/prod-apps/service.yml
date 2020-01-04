@@ -1,6 +1,4 @@
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -21,3 +19,18 @@ spec:
   - name: finance-hub-https
     port: 443
     targetPort: finance-hub
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finance-hub-service
+spec:
+  type: ClusterIP
+  selector:
+    app: finance-hub
+  ports:
+    - port: 80
+      targetPort: finance-hub
+      protocol: TCP
+      name: http

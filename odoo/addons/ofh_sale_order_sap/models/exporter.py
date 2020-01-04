@@ -60,7 +60,6 @@ class OfhSaleOrderSapExporter(Component):
     def run(self, sap_sale_order, force=False):
         sale_order = sap_sale_order.sale_order_id
         payment_request = sap_sale_order.payment_request_id
-
         if not sale_order and not payment_request:
             raise MissingError("Missing binding.")
         if sale_order:
@@ -265,21 +264,16 @@ class OfhPaymentSapExporter(Component):
         if binding.sap_payment_ids.filtered(lambda o: o.state == 'success'):
             return 'Already Sent'
 
-        if binding._name == 'ofh.payment' and \
-                not binding.order_id.is_payment_applicable:
+        if not binding.is_payment_applicable:
             return "Not Applicable for Sending"
-
-        if binding._name == 'ofh.payment.request' and \
-                not binding.is_payment_applicable:
-            return "Payment Not Applicable for Sending"
 
         return ''
 
     def run(self, sap_payment, force=False):
         binding = sap_payment.payment_id
 
-        if not binding:
-            binding = sap_payment.payment_request_id
+        # if not binding:
+        #     binding = sap_payment.payment_request_id
 
         if not binding:
             raise MissingError("Missing binding.")

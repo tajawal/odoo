@@ -3,9 +3,10 @@
 
 import json
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.addons.queue_job.job import job
 from odoo.tools import float_compare, float_is_zero
+from odoo.exceptions import ValidationError
 
 
 class OfhPaymentRequest(models.Model):
@@ -193,11 +194,17 @@ class OfhPaymentRequest(models.Model):
         string="Provider",
         readonly=True,
     )
-    charge_ids = fields.One2many(
-        comodel_name="ofh.payment.charge",
-        string="Charge IDs",
+    payment_ids = fields.One2many(
+        string="Payment IDs",
+        comodel_name='ofh.payment',
         inverse_name='payment_request_id',
-        readonly=True,
+        readonly=True
+    )
+    charge_ids = fields.One2many(
+        string="Payment IDs",
+        comodel_name='ofh.payment.charge',
+        inverse_name='payment_request_id',
+        readonly=True
     )
     track_id = fields.Char(
         required=True,
@@ -329,6 +336,16 @@ class OfhPaymentRequest(models.Model):
         store=True,
         compute="_compute_booking_source"
     )
+    file_id = fields.Char(
+        string="File Mongo ID",
+        readonly=True,
+        index=True,
+    )
+    file_reference = fields.Char(
+        string="File ID",
+        readonly=True,
+        index=True,
+    )
 
     deal_amount = fields.Monetary(
         String="Deal Amount",
@@ -362,11 +379,14 @@ class OfhPaymentRequest(models.Model):
 
     # TODO: check how to
     @api.multi
-    @api.depends('manual_payment_reference', 'charge_ids')
+    @api.depends('manual_payment_reference', 'payment_ids')
     def _compute_payment_reference(self):
         for rec in self:
             if rec.manual_payment_reference:
                 rec.payment_reference = rec.manual_payment_reference
+                continue
+            if rec.payment_ids:
+                rec.payment_reference = rec.payment_ids[0].charge_ids[0].charge_id
                 continue
             if rec.charge_ids:
                 rec.payment_reference = rec.charge_ids[0].charge_id

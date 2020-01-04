@@ -25,6 +25,11 @@
                         <field name="validating_carrier"/>
                         <field name="is_domestic_ksa"/>
                         <field name="is_domestic_uae"/>
+                        <field name="file_id" invisible="1"/>
+                        <field name="file_reference"/>
+                        <field name="ticket_sub_type"/>
+                        <field name="booking_category"/>
+
                     </group>
                     <group name="traveller_info" col="4" string="Traveller Details"
                            attrs="{'invisible': [('line_type', '!=', 'flight')]}">
@@ -129,6 +134,7 @@
                 <field name="supplier_name"/>
                 <field name="supplier_confirmation_number"/>
                 <field name="vendor_confirmation_number"/>
+                <field name="file_reference"/>
                 <separator/>
                 <filter name="tajawal" string="Tajawal" domain="[('order_id.entity', '=', 'tajawal')]"/>
                 <filter name="almosafer" string="Almosafer" domain="[('order_id.entity', '=', 'almosafer')]"/>
@@ -170,6 +176,8 @@
             <tree delete="0">
                 <field name="name" invisible="1"/>
                 <field name="order_id"/>
+                <field name="file_reference"/>
+                <field name="booking_category"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="supplier_currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>

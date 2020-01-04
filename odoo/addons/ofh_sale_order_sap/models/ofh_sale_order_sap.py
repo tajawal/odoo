@@ -199,7 +199,7 @@ class OfhSaleOrderSap(models.Model):
         readonly=True,
         compute="_compute_sap_header_detail"
     )
-    file_id = fields.Char(
+    sap_file_id = fields.Char(
         string="File ID",
         readonly=True,
         compute="_compute_sap_header_detail",
@@ -241,7 +241,8 @@ class OfhSaleOrderSap(models.Model):
     entity = fields.Selection(
         selection=[
             ('almosafer', 'Almosafer'),
-            ('tajawal', 'Tajawal')],
+            ('tajawal', 'Tajawal'),
+            ('almosafer_branch', 'Almosafer Branch')],
         readonly=True,
         compute="_compute_order_detail"
     )
@@ -329,7 +330,7 @@ class OfhSaleOrderSap(models.Model):
             rec.sales_office = sap_header_detail.get("SalesOffice")
             rec.channel = sap_header_detail.get("Channel")
             rec.customer = sap_header_detail.get("Customer")
-            rec.file_id = sap_header_detail.get("FileID")
+            rec.sap_file_id = sap_header_detail.get("FileID")
             rec.booking_date = sap_header_detail.get("BookingDate")
             rec.fe_indicator = sap_header_detail.get("FEIndicator")
             rec.invoice_currency = sap_header_detail.get("InvoiceCurrency")

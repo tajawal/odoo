@@ -26,33 +26,41 @@
                         </h1>
                     </div>
                     <group name="header" col="4">
-                        <field name="entity"/>
+                        <field name="file_id"/>
+                        <field name="file_reference"/>
+                        <field name="booking_category"/>
                         <field name="order_type"/>
                         <field name="created_at"/>
                         <field name="updated_at"/>
-                        <field name="order_status"/>
                         <field name="currency_id"/>
                         <field name="total_amount" widget="monetary"/>
-                        <field name="is_egypt"/>
-                        <field name="point_of_sale"/>
-                        <field name="ahs_group_name"/>
-                        <field name="customer_email" />
-                        <field name="customer_number" />
-                        <field name="agent_email" />
-                        <field name="country_code"/>
-                        <field name="booking_method"/>
-                        <field name="order_owner"/>
-                        <field name="is_pay_later"/>
+                        <field name="initial_order_number"/>
                     </group>
                     <group name="statuses" col="4" string="Statuses">
+                        <field name="order_status"/>
                         <field name="order_matching_status"/>
                     </group>
-                    <group name="customer_details" string="Customer Details" col="4">
-                        <field name="employee_discount_tag"/>
-                        <field name="customer_discount_tag"/>
-                        <field name="customer_email" />
-                        <field name="customer_number" />
-                        <field name="agent_email" />
+                    <group>
+                        <group name="source_details" string="Sources">
+                            <field name="entity"/>
+                            <field name="point_of_sale"/>
+                            <field name="ahs_group_name"/>
+                            <field name="sales_office"/>
+                            <field name="branch_region"/>
+                            <field name="country_code"/>
+                        </group>
+                        <group name="customer_agent_details" string="Customer/Agent Details">
+                            <field name="order_owner"/>
+                            <field name="employee_discount_tag"/>
+                            <field name="customer_discount_tag"/>
+                            <field name="customer_email" />
+                            <field name="customer_number" />
+                            <field name="agent_email" />
+                        </group>
+                    </group>
+                    <group name="checks_group" string="Checks" col="4">
+                        <field name="is_egypt"/>
+                        <field name="is_pay_later"/>
                     </group>
                     <notebook>
                         <page name="sale_lines" string="Lines">
@@ -67,6 +75,7 @@
                                     <tree delete="0" create="0">
                                         <field name="name" invisible="1"/>
                                         <field name="order_id" invisible="1"/>
+                                        <field name="file_reference"/>
                                         <field name="currency_id" invisible="1"/>
                                         <field name="supplier_currency_id" invisible="1"/>
                                         <field name="vendor_currency_id" invisible="1"/>
@@ -95,13 +104,36 @@
                                 <field name="total_amount" widget="monetary"/>
                             </group>
                         </page>
-                        <page name="payments" string="Payments">
+                        <page name="payments" string="Payments" attrs="{'invisible': [('entity', '=', 'almosafer_branch')]}">
                             <group name="payment_details" col="4">
                                 <field name="computed_payment_status"/>
                                 <field name="paid_at"/>
                             </group>
                             <group name="payment_lines">
                                 <field name="payment_ids" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page name="order_details" string="Sale Details" attrs="{'invisible': [('entity', '=', 'almosafer_branch')]}">
+                            <group col="4" name="sale_pr_details">
+                                <field name="fare_difference" widget="monetary"/>
+                                <field name="change_fee" widget="monetary"/>
+                                <field name="booking_fee" widget="monetary"/>
+                                <field name="insurance" widget="monetary"/>
+                                <field name="discount" widget="monetary"/>
+                                <field name="penalty" widget="monetary"/>
+                                <field name="loss_amount" widget="monetary"/>
+                                <field name="input_vat_amount" widget="monetary"/>
+                                <field name="output_vat_amount" widget="monetary"/>
+                                <field name="manual_output_vat_amount" widget="monetary"/>
+                                <field name="change_fee_vat_amount" widget="monetary"/>
+                                <field name="fare_difference_vat_amount" widget="monetary"/>
+                                <field name="penalty_vat_amount" widget="monetary"/>
+                                <field name="adm_vat_amount" widget="monetary"/>
+                                <field name="booking_fee_vat_amount" widget="monetary"/>
+                                <field name="deals_vat_amount" widget="monetary"/>
+                                <field name="discount_vat_amount" widget="monetary"/>
+                                <field name="tax_code"/>
+                                <field name="loss_type"/>
                             </group>
                         </page>
                         <page name="costs" string="Cost">
@@ -134,6 +166,8 @@
                 <field name="ticketing_office_id"/>
                 <field name="office_id"/>
                 <field name="supplier_name"/>
+                <field name="file_reference"/>
+                <field name="booking_category"/>
                 <separator/>
                 <filter name="domestic_ksa" string="Domestic KSA" domain="[('line_ids.is_domestic_ksa', '=', True)]"/>
                 <separator/>
@@ -169,6 +203,7 @@
         <field name="arch" type="xml">
             <tree delete="0">
                 <field name="entity"/>
+                <field name="booking_category"/>
                 <field name="name"/>
                 <field name="updated_at"/>
                 <field name="paid_at"/>
@@ -195,140 +230,6 @@
 if records:
     records.action_update_orders_from_hub()
         </field>
-    </record>
-
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_act_window">
-        <field name="name">Sales Orders</field>
-        <field name="res_model">ofh.sale.order</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
-        <field name="context">{'search_default_updated_this_month': 1}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_almosafer_act_window">
-        <field name="name">Sales Orders</field>
-        <field name="res_model">ofh.sale.order</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('entity', '=', 'almosafer')]</field>
-        <field name="context">{'search_default_updated_this_month': 1}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_tajawal_act_window">
-        <field name="name">Sales Orders</field>
-        <field name="res_model">ofh.sale.order</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('entity', '=', 'tajawal')]</field>
-        <field name="context">{'search_default_updated_this_month': 1}</field>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_main_menu">
-        <field name="name">Sales Orders</field>
-        <field name="sequence" eval="10"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_menu">
-        <field name="name">Sales Orders</field>
-        <field name="parent_id" ref="ofh_sale_order_main_menu"/>
-        <field name="sequence" eval="10"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_all_menu">
-        <field name="name">All Sales Orders</field>
-        <field name="parent_id" ref="ofh_sale_order_menu"/>
-        <field name="action" ref="ofh_sale_order_act_window"/>
-        <field name="sequence" eval="10"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_almosafer_menu">
-        <field name="name">Almosafer Sales Orders</field>
-        <field name="parent_id" ref="ofh_sale_order_menu"/>
-        <field name="action" ref="ofh_sale_order_almosafer_act_window"/>
-        <field name="sequence" eval="20"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_tajawal_menu">
-        <field name="name">Tajawal Sales Orders</field>
-        <field name="parent_id" ref="ofh_sale_order_menu"/>
-        <field name="action" ref="ofh_sale_order_tajawal_act_window"/>
-        <field name="sequence" eval="30"/>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_line_act_window">
-        <field name="name">Sales Order Lines</field>
-        <field name="res_model">ofh.sale.order.line</field>
-        <field name="view_mode">tree,form,pivot</field>
-        <field name="domain">[]</field>
-        <field name="context">{'search_default_updated_this_month': 1}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_line_almosafer_act_window">
-        <field name="name">Almosafer Lines</field>
-        <field name="res_model">ofh.sale.order.line</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('order_id.entity', '=', 'almosafer')]</field>
-        <field name="context">{'search_default_updated_this_month': 1}</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="ofh_sale_order_line_tajawal_act_window">
-        <field name="name">Tajawal Lines</field>
-        <field name="res_model">ofh.sale.order.line</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('order_id.entity', '=', 'tajawal')]</field>
-        <field name="context">{'search_default_updated_this_month': 1}</field>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_line_main_menu">
-        <field name="name">Sales Order lines</field>
-        <field name="parent_id" ref="ofh_sale_order_main_menu"/>
-        <field name="sequence" eval="10"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_line_all_menu">
-        <field name="name">All Lines</field>
-        <field name="parent_id" ref="ofh_sale_order_line_main_menu"/>
-        <field name="action" ref="ofh_sale_order_line_act_window"/>
-        <field name="sequence" eval="10"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_line_almosafer_menu">
-        <field name="name">Almosafer Lines</field>
-        <field name="parent_id" ref="ofh_sale_order_line_main_menu"/>
-        <field name="action" ref="ofh_sale_order_line_almosafer_act_window"/>
-        <field name="sequence" eval="20"/>
-    </record>
-
-    <record model="ir.ui.menu" id="ofh_sale_order_line_tajawal_menu">
-        <field name="name">Tajawal Lines</field>
-        <field name="parent_id" ref="ofh_sale_order_line_main_menu"/>
-        <field name="action" ref="ofh_sale_order_line_tajawal_act_window"/>
-        <field name="sequence" eval="30"/>
-    </record>
-
-    <record id="action_sale_order_queue_job" model="ir.actions.act_window">
-        <field name="name">Jobs</field>
-        <field name="res_model">queue.job</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="context">
-            {'search_default_pending': 1, 'search_default_enqueued': 1, 'search_default_started': 1, 'search_default_failed': 1}
-        </field>
-        <field name="domain">[('model_name', '=', 'hub.sale.order')]</field>
-        <field name="view_id" ref="queue_job.view_queue_job_tree"/>
-        <field name="search_view_id" ref="queue_job.view_queue_job_search"/>
-    </record>
-
-    <record model="ir.ui.menu" id="queue_job_main_menu">
-        <field name="name">Background Jobs</field>
-        <field name="parent_id" ref="ofh_sale_order_main_menu"/>
-        <field name="sequence" eval="90"/>
-    </record>
-
-    <record model="ir.ui.menu" id="sale_order_queue_job_menu">
-        <field name="name">Sale Order Jobs</field>
-        <field name="parent_id" ref="queue_job_main_menu"/>
-        <field name="action" ref="action_sale_order_queue_job"/>
-        <field name="sequence" eval="10"/>
     </record>
 
 </odoo>

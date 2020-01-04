@@ -3,6 +3,9 @@
 
 from odoo import api, fields, models
 
+BOOKING_CAT_INIT = 'initial'
+BOOKING_CAT_AMND = 'amendment'
+
 
 class OfhSupplierInvoiceLine(models.Model):
 
@@ -21,8 +24,23 @@ class OfhSupplierInvoiceLine(models.Model):
         if not order_ids:
             return
 
-        if len(order_ids) == 1:
-            self.order_id = order_ids[0]
+        initial_orders = order_ids.filtered(
+            lambda p: p.booking_category == BOOKING_CAT_INIT)
+
+        amendment_orders = order_ids.filtered(
+            lambda p: p.booking_category == BOOKING_CAT_AMND)
+
+        # Matching with Initial Orders
+        if len(initial_orders) == 1:
+            self.order_id = initial_orders[0]
+            self._match_nile_with_sale_order_line()
+            return
+
+        # Matching with Amendment Orders
+        if amendment_orders:
+            for a_order in amendment_orders:
+                self.order_id = a_order
+                self._match_nile_with_sale_order_line()
             return
 
         order_names = ', '.join([o.name for o in order_ids])
@@ -34,13 +52,15 @@ class OfhSupplierInvoiceLine(models.Model):
     def _match_nile_with_sale_order_line(self):
         # Refund an Amendments never matches with Initial Booking.
         self.ensure_one()
-        if self.invoice_status in ('AMND', 'RFND'):
+        if self.invoice_status == 'RFND':
             return
 
         from_str = fields.Date.from_string
 
         for line in self.order_id.line_ids:
-            if line.matching_status in ('matched', 'not_applicable'):
+            match = False
+            if self.order_id.booking_category == BOOKING_CAT_INIT and \
+                    line.matching_status in ('matched', 'not_applicable'):
                 continue
 
             day_diff = abs((
@@ -50,9 +70,28 @@ class OfhSupplierInvoiceLine(models.Model):
                 continue
 
             if (line.line_reference and
-                    self.ticket_number in line.line_reference) or \
+                self.ticket_number in line.line_reference) or \
                     (line.manual_line_reference and
                      self.ticket_number in line.manual_line_reference):
+                match = True
+
+            # Adding amount check in case of Amendment
+            if self.order_id.booking_category == BOOKING_CAT_AMND:
+                total_supplier_cost = self.order_id.total_supplier_cost
+
+                supplier_cost = sum([
+                    l.cost_amount for l in self.order_id.invoice_line_ids])
+                supplier_cost += self.cost_amount
+
+                diff = abs(
+                    supplier_cost /
+                    total_supplier_cost)
+                if diff > 1.35:
+                    continue
+                else:
+                    match = True
+
+            if match:
                 line.write({
                     'invoice_line_ids': [(4, self.id)],
                     'matching_status': 'matched',
@@ -62,6 +101,10 @@ class OfhSupplierInvoiceLine(models.Model):
     @api.multi
     def _match_nile_with_payment_request(self):
         self.ensure_one()
+
+        # Continue only in case of Refund
+        if self.invoice_status in ('TKTT', 'AMND'):
+            return
 
         # If the current line has already matched with an initial ticket
         if not self.order_id or self.order_line_id:

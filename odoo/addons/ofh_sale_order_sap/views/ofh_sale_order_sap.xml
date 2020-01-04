@@ -40,9 +40,9 @@ if records:
                         <field name="booking_entity"/>
                         <field name="booking_number"/>
                         <field name="sales_office"/>
+                        <field name="sap_file_id"/>
                         <field name="channel"/>
                         <field name="customer"/>
-                        <field name="file_id"/>
                         <field name="booking_date"/>
                         <field name="fe_indicator"/>
                         <field name="invoice_currency"/>
@@ -147,7 +147,7 @@ if records:
     <record model="ir.ui.menu" id="ofh_sale_order_sap_menu">
         <field name="name">Sales Orders SAP</field>
         <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
-        <field name="sequence" eval="40"/>
+        <field name="sequence" eval="60"/>
     </record>
 
     <record model="ir.actions.act_window" id="ofh_sale_order_sap_act_window">
@@ -209,7 +209,7 @@ if records:
     <record model="ir.ui.menu" id="ofh_action_sale_order_main_menu">
         <field name="name">Actions</field>
         <field name="parent_id" ref="ofh_sale_order.ofh_sale_order_main_menu"/>
-        <field name="sequence" eval="40"/>
+        <field name="sequence" eval="70"/>
     </record>
 
     <!-- Importer Menu -->

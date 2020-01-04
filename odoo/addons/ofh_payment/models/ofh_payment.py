@@ -33,18 +33,22 @@ class OfhPayment(models.Model):
         currency_field='currency_id',
         readonly=True,
     )
-    payment_mode = fields.Char(
-        string="Payment Method",
-        readonly=True,
-    )
     payment_status = fields.Selection(
         string="Payment Status",
         selection=_get_payment_status_selection,
         required=False,
         readonly=True,
     )
-    provider = fields.Char(
+    provider = fields.Selection(
         string="Provider",
+        selection=[
+            ('checkoutcom', 'Checkout'),
+            ('fort', 'Fort'),
+            ('knet', 'Knet'),
+            ('qitaf', 'Qitaf'),
+            ('wallet', 'Wallet'),
+            ('tp', 'Tajawal Pay'),
+            ('not_applicable', 'Not Applicable'), ],
         readonly=True,
         index=True,
     )
@@ -54,8 +58,8 @@ class OfhPayment(models.Model):
         index=True,
     )
     charge_ids = fields.One2many(
-        comodel_name="ofh.payment.charge",
         string="Charge IDs",
+        comodel_name="ofh.payment.charge",
         inverse_name='payment_id',
         readonly=True,
     )
@@ -69,9 +73,15 @@ class OfhPayment(models.Model):
         string="Auth Code",
         readonly=True,
     )
-    card_type = fields.Char(
+    card_type = fields.Selection(
         string="Card Type",
+        selection=[
+            ('visa', 'Visa'),
+            ('amex', 'Amex'),
+            ('mastercard', 'MasterCard'),
+            ('not_applicable', 'Not Applicable')],
         readonly=True,
+        index=True,
     )
     mid = fields.Char(
         string="MID",
@@ -89,9 +99,17 @@ class OfhPayment(models.Model):
         string="Last Four",
         readonly=True,
     )
-    payment_method = fields.Char(
-        string="Payment method",
+    payment_method = fields.Selection(
+        string="Payment Method",
         readonly=True,
+        selection=[
+            ('online', 'Online'),
+            ('cash', 'Cash'),
+            ('bank_transfer', 'Bank Transfer'),
+            ('loyalty', 'Loyalty'),
+            ('span', 'SPAN/POS'),
+        ],
+        index=True,
     )
     bank_name = fields.Char(
         string="Bank name",
@@ -99,10 +117,6 @@ class OfhPayment(models.Model):
     )
     reference_id = fields.Char(
         string="Reference ID",
-        readonly=True,
-    )
-    is_3d_secure = fields.Boolean(
-        string="Is 3d Secure",
         readonly=True,
     )
     is_installment = fields.Boolean(
@@ -123,6 +137,60 @@ class OfhPayment(models.Model):
         readonly=True,
         store=True,
         compute="_compute_booking_source"
+    )
+    file_id = fields.Char(
+        string="File Mongo ID",
+        readonly=True,
+        index=True,
+    )
+    file_reference = fields.Char(
+        string="File ID",
+        readonly=True,
+        index=True,
+    )
+    payment_category = fields.Selection(
+        selection=[
+            ('charge', 'Charge'),
+            ('refund', 'Refund')],
+        index=True,
+        readonly=True,
+    )
+    rrn_no = fields.Char(
+        string="RRN NO.",
+        readonly=True,
+    )
+    iban = fields.Char(
+        string="IBAN",
+        readonly=True,
+    )
+    cashier_id = fields.Char(
+        string="Branch Cashier ID",
+        readonly=True,
+    )
+    successfactors_id = fields.Char(
+        string="Successfactors ID",
+        readonly=True,
+    )
+    ahs_group_name = fields.Char(
+        string="AHS Group Name",
+        readonly=True,
+    )
+    is_apple_pay = fields.Boolean(
+        string="Is Apple Pay?",
+        readonly=True,
+    )
+    is_mada = fields.Boolean(
+        string="Is Mada?",
+        readonly=True,
+    )
+    is_3d_secure = fields.Boolean(
+        string="Is 3d Secure?",
+        readonly=True,
+    )
+    store_id = fields.Char(
+        string="Store ID",
+        readonly=True,
+        index=True,
     )
 
     @api.multi

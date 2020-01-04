@@ -10,6 +10,14 @@
         <field name="inherit_id" ref="ofh_payment.ofh_payment_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
+                <button name="open_payment_in_hub"
+                            string="Open in HUB"
+                            class="btn-primary"
+                            type="object"/>
+                 <button name="action_update_hub_data"
+                            string="Update from HUB"
+                            class="btn-warning"
+                            type="object"/>
                 <button name="send_payment_to_sap"
                         string="Send Payment to SAP"
                         class="btn-success"
@@ -28,46 +36,11 @@
                         class="btn-info"
                         type="object"/>
             </header>
-            <group name="main_info" position="after">
-                <group name="statuses" col="4">
-                    <field name="integration_status"/>
-                    <field name="sap_status"/>
-                </group>
-            </group>
             <notebook position="inside">
                 <page name="sap_details" string="SAP Details">
                     <field name="sap_payment_ids" nolabel="1"/>
                 </page>
             </notebook>
-        </field>
-    </record>
-
-    <record model="ir.ui.view" id="ofh_payment_tree_view">
-        <field name="name">ofh.payment.tree (in ofh_sale_order_sap)</field>
-        <field name="model">ofh.payment</field>
-        <field name="inherit_id" ref="ofh_payment.ofh_payment_tree_view"/>
-        <field name="arch" type="xml">
-            <tree position="inside">
-                <field name="integration_status"/>
-                <field name="sap_status"/>
-                <button name="send_payment_to_sap"
-                        string="Send Payment to SAP"
-                        class="btn-success"
-                        help="Send to Sap-xml-api and get and object in return."
-                        confirm="You are about to send this Payemnt to SAP. Are you sure?"
-                        type="object"/>
-                <button name="force_send_payment_to_sap"
-                        string="Force Send Payment to SAP"
-                        class="btn-danger"
-                        help="Send to Sap-xml-api and get and object in return."
-                        confirm="You are about to force send this payment (ONLY PAYMENT PART). Are you sure?"
-                        type="object"/>
-                <button name="visualize_sap_payment"
-                        string="Visualize SAP Payment"
-                        help="Simualate the sending of an Payment to SAP."
-                        class="btn-info"
-                        type="object"/>
-            </tree>
         </field>
     </record>
 
