@@ -110,10 +110,6 @@ class OfhPaymentRequest(models.Model):
         compute='_compute_vendor_id',
         store=True,
     )
-    provider = fields.Char(
-        compute='_compute_provider',
-        store=True,
-    )
     payment_request_status = fields.Selection(
         string="Payment Request Status",
         selection=[
@@ -184,15 +180,6 @@ class OfhPaymentRequest(models.Model):
             if rec.order_id:
                 rec.vendor_id = ', '.join(set([
                     l.supplier_name for l in rec.order_id.line_ids]))
-
-    @api.multi
-    @api.depends('payment_ids.provider')
-    def _compute_provider(self):
-        for rec in self:
-            rec.provider = ''
-            if rec.payment_ids:
-                rec.provider = ', '.join(
-                    set([c.provider for c in rec.payment_ids]))
 
     @api.multi
     @api.depends('order_id.payment_request_ids')

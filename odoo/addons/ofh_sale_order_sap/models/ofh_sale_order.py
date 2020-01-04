@@ -250,9 +250,9 @@ class OfhSaleOrder(models.Model):
             ahs_group_name = self.line_ids.mapped('ahs_group_name')[0]
 
         return {
-            "name": self._get_order_name(),
+            "name": self.name[:35],
             "file_number": self._get_file_number(),
-            "booking_id": self.name[:35],
+            "booking_id": self._get_order_name(),
             "order_type": self.order_type,
             "created_at": self.created_at,
             "currency": self.currency_id.name,
@@ -286,9 +286,31 @@ class OfhSaleOrder(models.Model):
             return self.name
 
         if self.booking_category == 'amendment':
-            return self.initial_order_number
+            return self._get_amendment_booking_number()
 
         return self.name
+
+    @api.multi
+    def _get_amendment_booking_number(self):
+        self.ensure_one()
+
+        _mongo_id = self.hub_bind_ids.initial_order_id
+        order_number = self.initial_order_number
+        suffix = self._get_amendment_suffix()
+
+        hash_mongo_id = format(xxhash.xxh32_intdigest(_mongo_id), 'x')
+        return f"{order_number}_{int(hash_mongo_id[-6:], 16)}_{suffix}"
+
+    @api.multi
+    def _get_amendment_suffix(self) -> str:
+        self.ensure_one()
+        amendments = self.env['hub.sale.order'].search(
+            [('initial_order_id', '=', self.hub_bind_ids.initial_order_id)])
+        amendment_ids = amendments.sorted(
+            lambda r: r.created_at).mapped('id')
+        suffix = 'A'
+        index = amendment_ids.index(self.id)
+        return f"{suffix}{index}"
 
     @api.multi
     def action_applicable(self):

@@ -8,6 +8,7 @@ from odoo import _, api, fields, models
 from odoo.exceptions import MissingError, UserError
 from odoo.tools import float_is_zero
 from odoo.addons.queue_job.job import job
+import xxhash
 
 NOT_ALLOWED_STATUSES = ['94', '91']
 
@@ -135,12 +136,44 @@ class OfhPaymentRequest(models.Model):
     def _get_payment_request_order(self):
         self.ensure_one()
         order_detail = self.order_id.to_dict()
-        order_detail['booking_id'] = self.track_id[:35]
+        order_detail['name'] = self.track_id[:35]
+        order_detail['booking_id'] = self._get_refund_booking_number()
         order_detail['created_at'] = self.updated_at
         if self.request_type != 'charge':
             order_detail['is_refund'] = True
         order_detail['is_payment_request'] = True
         return order_detail
+
+    @api.multi
+    def _get_refund_booking_number(self):
+        self.ensure_one()
+
+        if not self.order_id:
+            return ''
+
+        _mongo_id = self.order_id.hub_bind_ids.external_id
+        order_number = self.order_id.name
+
+        # Case of a refund on online amendment order
+        if self.order_id.store_id != '1000' and \
+                self.order_id.booking_category == 'amendment':
+            _mongo_id = self.order_id.hub_bind_ids.initial_order_id
+            order_number = self.order_id.initial_order_number
+
+        suffix = self._get_refund_suffix()
+
+        hash_mongo_id = format(xxhash.xxh32_intdigest(_mongo_id), 'x')
+        return f"{order_number}_{int(hash_mongo_id[-6:], 16)}_{suffix}"
+
+    @api.multi
+    def _get_refund_suffix(self) -> str:
+        self.ensure_one()
+        refund_ids = self.order_id.payment_request_ids.sorted(
+            lambda r: r.created_at).mapped('id')
+
+        suffix = 'R'
+        index = refund_ids.index(self.id)
+        return f"{suffix}{index}"
 
     @api.multi
     def _get_payment_request_lines(self) -> list:

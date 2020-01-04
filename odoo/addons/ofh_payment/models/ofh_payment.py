@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.addons.queue_job.job import job
 
 
 class OfhPayment(models.Model):
@@ -202,3 +203,46 @@ class OfhPayment(models.Model):
             if track_id.find('mp') != -1:
                 rec.booking_source = 'offline'
                 continue
+
+    @job(default_channel='root.hub')
+    @api.multi
+    def action_update_hub_data(self):
+        self.ensure_one()
+        if self.order_id.booking_category:
+            payment_type = self.order_id.booking_category
+        elif self.payment_category == 'refund':
+            payment_type = 'refund'
+        else:
+            payment_type = 'amendment'
+
+        return self.hub_bind_ids.import_record(
+            backend=self.hub_bind_ids.backend_id,
+            external_id=self.hub_bind_ids.track_id,
+            payment_type=payment_type,
+            force=True)
+
+    @api.multi
+    def open_payment_in_hub(self):
+        """Open the order link to the payment request in hub using URL
+        Returns:
+            [dict] -- URL action dictionary
+        """
+
+        self.ensure_one()
+        hub_backend = self.env['hub.backend'].search([], limit=1)
+        if not hub_backend:
+            return
+
+        hub_url = ''
+        if self.file_id:
+            hub_url = "{}admin/unify/file/{}".format(
+                hub_backend.hub_api_location, self.file_id)
+        elif self.order_id:
+            hub_url = "{}admin/order/air/detail/{}".format(
+                hub_backend.hub_api_location, self.order_id.name)
+
+        return {
+            "type": "ir.actions.act_url",
+            "url": hub_url,
+            "target": "new",
+        }

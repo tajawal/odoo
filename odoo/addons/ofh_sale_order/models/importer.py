@@ -16,6 +16,7 @@ class HubSaleOrderImportMapper(Component):
     _apply_on = 'hub.sale.order'
 
     direct = [
+        ('id', 'external_id'),
         ('name', 'name'),
         ('track_id', 'track_id'),
         ('order_type', 'order_type'),
