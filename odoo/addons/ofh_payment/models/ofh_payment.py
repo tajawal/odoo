@@ -17,17 +17,20 @@ class OfhPayment(models.Model):
     created_at = fields.Datetime(
         required=True,
         readonly=True,
+        index=True,
     )
     updated_at = fields.Datetime(
         required=True,
         readonly=True,
         track_visibility='always',
+        index=True,
     )
     currency_id = fields.Many2one(
         string='Currency',
         comodel_name='res.currency',
         required=True,
         readonly=True,
+        index=True,
     )
     total_amount = fields.Monetary(
         string="Total",
@@ -73,6 +76,7 @@ class OfhPayment(models.Model):
     auth_code = fields.Char(
         string="Auth Code",
         readonly=True,
+        index=True,
     )
     card_type = fields.Selection(
         string="Card Type",
@@ -175,18 +179,22 @@ class OfhPayment(models.Model):
     ahs_group_name = fields.Char(
         string="AHS Group Name",
         readonly=True,
+        index=True,
     )
     is_apple_pay = fields.Boolean(
         string="Is Apple Pay?",
         readonly=True,
+        default=False,
     )
     is_mada = fields.Boolean(
         string="Is Mada?",
         readonly=True,
+        default=False,
     )
     is_3d_secure = fields.Boolean(
         string="Is 3d Secure?",
         readonly=True,
+        default=False,
     )
     store_id = fields.Char(
         string="Store ID",
