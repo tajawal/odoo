@@ -184,11 +184,14 @@ class OfhPaymentRequest(models.Model):
         if self.matching_status == 'not_applicable':
             sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
 
-            # In case of more lines select one which is not canceled or failed
-            allowed_lines = self.order_id.line_ids.filtered(
-                lambda p: p.state not in NOT_ALLOWED_STATUSES)
-            if not allowed_lines:
-                raise UserError("No available lines on the sale order.")
+            allowed_lines = self.order_id.line_ids
+            # Only in case of hotel this condition should work
+            if self.order_id.order_type == 'hotel':
+                # In case of more lines select one which is not canceled or failed
+                allowed_lines = self.order_id.line_ids.filtered(
+                    lambda p: p.state not in NOT_ALLOWED_STATUSES)
+                if not allowed_lines:
+                    raise UserError("No available lines on the sale order.")
 
             line_dict = allowed_lines[0].to_dict()[0]
 
