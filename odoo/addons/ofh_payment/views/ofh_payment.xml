@@ -48,6 +48,8 @@
                         <field name="iban"/>
                         <field name="cashier_id"/>
                         <field name="successfactors_id"/>
+                        <field name="store_id" invisible="1"/>
+
                     </group>
                     <group>
                         <group name="card_info" string="Card">
@@ -82,9 +84,7 @@
                 <field name="payment_category"/>
                 <field name="payment_method"/>
                 <field name="created_at"/>
-                <field name="updated_at"/>
                 <field name="provider"/>
-                <field name="auth_code"/>
                 <field name="card_type"/>
                 <field name="total_amount" widget="monetary"/>
                 <field name="payment_status"/>

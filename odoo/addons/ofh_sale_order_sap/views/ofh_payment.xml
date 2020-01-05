@@ -36,4 +36,17 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ofh_payment_tree_view">
+       <field name="name">ofh.payment.form (in ofh_payment_reconciliation)</field>
+        <field name="model">ofh.payment</field>
+        <field name="inherit_id" ref="ofh_payment.ofh_payment_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="is_payment_applicable"/>
+                <field name="payment_integration_status"/>
+                <field name="payment_sap_status"/>
+            </tree>
+        </field>
+    </record>
+
 </odoo>
