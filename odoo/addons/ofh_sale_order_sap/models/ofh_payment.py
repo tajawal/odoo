@@ -183,6 +183,7 @@ class OfhPayment(models.Model):
             "is_mada": self.is_mada,
             "is_3d_secure": self.is_3d_secure,
             "is_egypt": self.order_id.is_egypt,
+            "is_refund": self.payment_category == 'refund',
         }
 
         if self.order_id:
