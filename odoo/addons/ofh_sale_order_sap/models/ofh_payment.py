@@ -182,6 +182,7 @@ class OfhPayment(models.Model):
             "is_mada": self.is_mada,
             "is_3d_secure": self.is_3d_secure,
             "is_egypt": self.order_id.is_egypt,
+            "is_refund": self._is_refund(),
         }
 
         if self.order_id:
@@ -230,6 +231,10 @@ class OfhPayment(models.Model):
             return order.initial_order_number
 
         return order.name
+
+    @api.multi
+    def _is_refund(self):
+        return True if self.payment_category != 'charge' else False
 
     @api.model
     def _auto_send_payments_to_sap(self):
