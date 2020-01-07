@@ -94,22 +94,11 @@ class OfhSupplierInvoiceLine(models.Model):
         """Match an invoice line with an order."""
         self.ensure_one()
         self._match_with_sale_order()
-        self._match_with_payment_request()
 
     @api.multi
     def _match_with_sale_order(self):
         self.ensure_one()
         match_function = f'_match_{self.invoice_type}_with_sale_order'
-        if hasattr(self, match_function):
-            getattr(self, match_function)()
-        else:
-            raise MissingError(_("Method not implemented."))
-
-    @api.multi
-    def _match_with_payment_request(self):
-        self.ensure_one()
-
-        match_function = f'_match_{self.invoice_type}_with_payment_request'
         if hasattr(self, match_function):
             getattr(self, match_function)()
         else:

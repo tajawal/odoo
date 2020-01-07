@@ -59,10 +59,6 @@ class OfhSupplierInvoiceLine(models.Model):
         return
 
     @api.multi
-    def _match_tv_with_payment_request(self):
-        pass
-
-    @api.multi
     def _get_tv_sale_order_domain(self):
         self.ensure_one()
 

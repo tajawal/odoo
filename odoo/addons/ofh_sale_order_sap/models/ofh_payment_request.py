@@ -185,7 +185,7 @@ class OfhPaymentRequest(models.Model):
             sap_zsel = abs(self.sap_zsel) - abs(self.sap_zdis)
 
             allowed_lines = self.order_id.line_ids
-            # Only in case of hotel this condition should work
+            # Only in case of hotel this condition will work
             if self.order_id.order_type == 'hotel':
                 # In case of more lines select one which is not canceled or failed
                 allowed_lines = self.order_id.line_ids.filtered(
