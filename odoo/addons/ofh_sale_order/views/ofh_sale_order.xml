@@ -18,6 +18,11 @@
                             string="Update from HUB"
                             class="btn-warning"
                             type="object"/>
+                   <button name="action_display_payments"
+                           string="Payments"
+                           class="btn-primary"
+                           attrs="{'invisible': [('store_id', '!=', '1000')]}"
+                           type="object"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -25,6 +30,7 @@
                             <field name="name"/>
                         </h1>
                     </div>
+                    <field name="store_id" invisible="1"/>
                     <group name="header" col="4">
                         <field name="file_id"/>
                         <field name="file_reference"/>
@@ -34,7 +40,8 @@
                         <field name="updated_at"/>
                         <field name="currency_id"/>
                         <field name="total_amount" widget="monetary"/>
-                        <field name="initial_order_number"/>
+                        <field name="initial_order"/>
+                        <field name="initial_order_number" invisible="1"/>
                     </group>
                     <group name="statuses" col="4" string="Statuses">
                         <field name="order_status"/>

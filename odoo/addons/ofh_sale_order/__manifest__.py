@@ -30,6 +30,7 @@
         'views/ofh_sale_order_line.xml',
         'views/ofh_hub_backend.xml',
         'views/ofh_sale_order_menu.xml',
+        'views/ofh_payment.xml',
     ],
     # 'demo': [
     #     'demo/ofh_sale_order_line.xml',

@@ -9,6 +9,8 @@
         <field name="sequence" eval="10"/>
     </record>
 
+    <!-- Sales Orders -->
+
     <record model="ir.ui.menu" id="ofh_sale_order_menu">
         <field name="name">Sales Orders</field>
         <field name="parent_id" ref="ofh_sale_order_main_menu"/>
@@ -28,6 +30,36 @@
         <field name="parent_id" ref="ofh_sale_order_menu"/>
         <field name="action" ref="ofh_sale_order_act_window"/>
         <field name="sequence" eval="10"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_online_act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">ofh.sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('store_id', '!=', '1000')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_online_menu">
+        <field name="name">All Online Sales</field>
+        <field name="parent_id" ref="ofh_sale_order_menu"/>
+        <field name="action" ref="ofh_sale_order_online_act_window"/>
+        <field name="sequence" eval="20"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="ofh_sale_order_retail_act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">ofh.sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('store_id', '=', '1000')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_retail_menu">
+        <field name="name">All Retail Sales</field>
+        <field name="parent_id" ref="ofh_sale_order_menu"/>
+        <field name="action" ref="ofh_sale_order_retail_act_window"/>
+        <field name="sequence" eval="30"/>
     </record>
 
     <!-- Sales By Source -->
