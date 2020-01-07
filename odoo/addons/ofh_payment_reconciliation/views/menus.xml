@@ -164,7 +164,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_bank_act_window">
-        <field name="name">Online Payments</field>
+        <field name="name">Bank Transfer Payments</field>
         <field name="res_model">ofh.payment</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('payment_method', '=', 'bank_transfer')]</field>
@@ -196,7 +196,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="ofh_payment_span_act_window">
-        <field name="name">Cash Payments</field>
+        <field name="name">SPAN Payments</field>
         <field name="res_model">ofh.payment</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('payment_method', '=', 'span')]</field>
