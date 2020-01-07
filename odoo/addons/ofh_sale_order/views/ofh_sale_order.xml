@@ -21,7 +21,7 @@
                    <button name="action_display_payments"
                            string="Payments"
                            class="btn-primary"
-                           attrs="{'invisible': [('store_id', '!=', '1000')]}"
+                           attrs="{'invisible': [('entity', '!=', 'almosafer_branch')]}"
                            type="object"/>
                 </header>
                 <sheet>

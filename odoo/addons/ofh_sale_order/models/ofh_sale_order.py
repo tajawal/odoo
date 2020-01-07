@@ -588,7 +588,7 @@ class OfhSaleOrder(models.Model):
         comodel_name='ofh.sale.order',
         inverse_name='initial_order_number',
         readonly=True,
-        compute='_compute_orders',
+        compute='_compute_initial_order',
         store=False,
     )
 
@@ -601,10 +601,10 @@ class OfhSaleOrder(models.Model):
 
     @api.multi
     @api.depends('initial_order_number')
-    def _compute_orders(self):
+    def _compute_initial_order(self):
         for rec in self:
             rec.initial_order = False
-            if self.booking_category == "amendment":
+            if self.booking_category == "amendment" and self.initial_order_number:
                 initial_order = self.search(
                     [("name", "=", self.initial_order_number)], limit=1)
                 rec.initial_order = initial_order
@@ -612,15 +612,13 @@ class OfhSaleOrder(models.Model):
     @api.multi
     def action_display_payments(self):
         self.ensure_one()
-
-        payment_ids = []
         if self.is_unify:
             payments = self.env['ofh.payment'].search(
                 [('file_id', '=', self.file_id)])
 
             payment_ids = [p.id for p in payments]
 
-            domain = [('track_id', 'in', payment_ids)]
+            domain = [('id', 'in', payment_ids)]
 
             return {
                 'type': 'ir.actions.act_window',
@@ -770,7 +768,7 @@ class OfhSaleOrder(models.Model):
     def action_update_hub_data(self):
         self.ensure_one()
 
-        if self.booking_category == 'amendment':
+        if self.booking_category == 'amendment' and not self.is_unify:
             order_id = self.track_id
         else:
             order_id = self.hub_bind_ids.external_id
