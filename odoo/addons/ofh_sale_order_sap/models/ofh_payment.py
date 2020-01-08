@@ -57,14 +57,14 @@ class OfhPayment(models.Model):
                     SELECT id AS payment_id FROM ofh_payment
                     EXCEPT
                         SELECT payment_id
-                        FROM ofh_payment_sap 
+                        FROM ofh_payment_sap
                         WHERE state = 'success' AND payment_id > 0;
                """)
             payment_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
             self.env.cr.execute("""
-                    SELECT payment_id 
-                    FROM ofh_payment_sap 
+                    SELECT payment_id
+                    FROM ofh_payment_sap
                     WHERE state = 'success' AND payment_id > 0
                """)
             payment_ids = [x[0] for x in self.env.cr.fetchall()]
@@ -86,19 +86,19 @@ class OfhPayment(models.Model):
     def _search_payment_sap_status(self, operator, value):
         if operator == '!=':
             self.env.cr.execute("""
-                    SELECT payment_id 
-                    FROM ofh_payment_sap 
-                    WHERE state = 'success' 
-                    AND payment_id > 0 
+                    SELECT payment_id
+                    FROM ofh_payment_sap
+                    WHERE state = 'success'
+                    AND payment_id > 0
                     AND sap_status != 'in_sap';
                 """)
             payment_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
             self.env.cr.execute("""
-                    SELECT payment_id 
-                    FROM ofh_payment_sap 
-                    WHERE state = 'success' 
-                    AND payment_id > 0 
+                    SELECT payment_id
+                    FROM ofh_payment_sap
+                    WHERE state = 'success'
+                    AND payment_id > 0
                     AND sap_status = 'in_sap';
                 """)
             payment_ids = [x[0] for x in self.env.cr.fetchall()]
@@ -125,6 +125,7 @@ class OfhPayment(models.Model):
         return values
 
     @api.multi
+    @job(default_channel='root.sap')
     def send_payment_to_sap(self):
         """Create and Send SAP Sale Order Record."""
         self.ensure_one()
@@ -319,12 +320,3 @@ class OfhPayment(models.Model):
     def action_payment_to_sap(self):
         for rec in self:
             rec.with_delay().send_payment_to_sap()
-
-    @api.multi
-    @job(default_channel='root.sap')
-    def send_payment_to_sap(self):
-        """Create and Send SAP Sale Order Record."""
-        self.ensure_one()
-
-        values = self._prepare_payment_values()
-        return self.env['ofh.payment.sap'].create(values)
