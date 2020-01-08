@@ -102,7 +102,6 @@ class OfhPayment(models.Model):
                     AND sap_status = 'in_sap';
                 """)
             payment_ids = [x[0] for x in self.env.cr.fetchall()]
-        print(len(payment_ids))
         if not payment_ids:
             return [('id', '=', 0)]
 
