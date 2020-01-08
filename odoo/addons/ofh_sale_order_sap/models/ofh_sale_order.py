@@ -307,7 +307,7 @@ class OfhSaleOrder(models.Model):
         amendments = self.search(
             [('initial_order_number', '=', self.initial_order_number)])
         amendment_ids = amendments.sorted(
-            lambda r: r.created_date).mapped('id')
+            lambda r: r.created_at).mapped('id')
         suffix = 'A'
         index = amendment_ids.index(self.id)
         return f"{suffix}{index}"
