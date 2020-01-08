@@ -33,6 +33,103 @@ class OfhSaleOrderLine(models.Model):
         ondelete='cascade',
         auto_join=True,
     )
+    fare_difference = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.fare_difference',
+        store=False,
+    )
+    change_fee = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.change_fee',
+        store=False,
+    )
+    booking_fee = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.booking_fee',
+        store=False,
+    )
+    insurance = fields.Monetary(
+        related='order_id.insurance',
+        store=False,
+    )
+    discount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.discount',
+        store=False,
+    )
+    penalty = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.penalty',
+        store=False,
+    )
+    adm_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.adm_amount',
+        store=False,
+    )
+    loss_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.loss_amount',
+        store=False,
+    )
+    loss_type = fields.Char(
+        related='order_id.loss_type',
+        store=False,
+    )
+    input_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.input_vat_amount',
+        store=False,
+    )
+    output_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.output_vat_amount',
+        store=False,
+    )
+    tax_code = fields.Selection(
+        related='order_id.tax_code',
+        store=False,
+    )
+    manual_output_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.manual_output_vat_amount',
+        track_visibility='onchange',
+    )
+    change_fee_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.change_fee_vat_amount',
+        store=False,
+    )
+    fare_difference_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.fare_difference_vat_amount',
+        store=False,
+    )
+    penalty_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.penalty_vat_amount',
+        store=False,
+    )
+    adm_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.adm_vat_amount',
+        store=False,
+    )
+    booking_fee_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.booking_fee_vat_amount',
+        store=False,
+    )
+    deals_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.deals_vat_amount',
+        store=False,
+    )
+    discount_vat_amount = fields.Monetary(
+        currency_field='currency_id',
+        related='order_id.discount_vat_amount',
+        store=False,
+    )
     created_at = fields.Datetime(
         string="Created At",
         required=True,

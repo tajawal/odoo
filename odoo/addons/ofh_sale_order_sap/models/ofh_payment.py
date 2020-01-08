@@ -54,24 +54,25 @@ class OfhPayment(models.Model):
     def _search_payment_integration_status(self, operator, value):
         if operator == '!=':
             self.env.cr.execute("""
-                   select id as sale_order_id from ofh_sale_order
-                   except
-                   select sale_order_id
-                   FROM ofh_payment_sap WHERE
-                   state = 'success' AND sale_order_id > 0;
+                    SELECT id AS payment_id FROM ofh_payment
+                    EXCEPT
+                        SELECT payment_id
+                        FROM ofh_payment_sap 
+                        WHERE state = 'success' AND payment_id > 0;
                """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
             self.env.cr.execute("""
-                   SELECT sale_order_id FROM ofh_payment_sap WHERE
-                   state = 'success' AND sale_order_id > 0
+                    SELECT payment_id 
+                    FROM ofh_payment_sap 
+                    WHERE state = 'success' AND payment_id > 0
                """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
 
-        if not order_ids:
+        if not payment_ids:
             return [('id', '=', 0)]
 
-        return [('id', 'in', order_ids)]
+        return [('id', 'in', payment_ids)]
 
     @api.multi
     @api.depends('sap_payment_ids.state', 'is_payment_applicable')
@@ -85,27 +86,27 @@ class OfhPayment(models.Model):
     def _search_payment_sap_status(self, operator, value):
         if operator == '!=':
             self.env.cr.execute("""
-                    SELECT sale_order_id
-                    FROM ofh_payment_sap WHERE
-                        state = 'success' AND
-                        sale_order_id > 0 AND
-                        sap_status != 'in_sap';
+                    SELECT payment_id 
+                    FROM ofh_payment_sap 
+                    WHERE state = 'success' 
+                    AND payment_id > 0 
+                    AND sap_status != 'in_sap';
                 """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
             self.env.cr.execute("""
-                    SELECT sale_order_id
-                    FROM ofh_payment_sap WHERE
-                        state = 'success' AND
-                        sale_order_id > 0 AND
-                        sap_status = 'in_sap';
+                    SELECT payment_id 
+                    FROM ofh_payment_sap 
+                    WHERE state = 'success' 
+                    AND payment_id > 0 
+                    AND sap_status = 'in_sap';
                 """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
-
-        if not order_ids:
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
+        print(len(payment_ids))
+        if not payment_ids:
             return [('id', '=', 0)]
 
-        return [('id', 'in', order_ids)]
+        return [('id', 'in', payment_ids)]
 
     @api.multi
     def _prepare_payment_values(self, visualize=False):
@@ -237,7 +238,7 @@ class OfhPayment(models.Model):
             return self.track_id[:25]
 
         if order.booking_category == 'amendment':
-            return self._get_amendment_booking_number()
+            return self._get_amendment_booking_number(order)
 
         return order.name
 
@@ -327,19 +328,3 @@ class OfhPayment(models.Model):
 
         values = self._prepare_payment_values()
         return self.env['ofh.payment.sap'].create(values)
-
-    @api.multi
-    def _prepare_payment_values(self, visualize=False):
-        self.ensure_one()
-        dt = fields.Datetime.now()
-        backend = self.env['sap.backend'].search([], limit=1)
-        values = {
-            'send_date': dt,
-            'backend_id': backend.id,
-            'payment_detail': json.dumps(self.to_dict()),
-            'payment_id': self.id
-        }
-        if visualize:
-            values['state'] = 'visualize'
-
-        return values

@@ -304,10 +304,10 @@ class OfhSaleOrder(models.Model):
     @api.multi
     def _get_amendment_suffix(self) -> str:
         self.ensure_one()
-        amendments = self.env['hub.sale.order'].search(
-            [('initial_order_id', '=', self.hub_bind_ids.initial_order_id)])
+        amendments = self.search(
+            [('initial_order_number', '=', self.initial_order_number)])
         amendment_ids = amendments.sorted(
-            lambda r: r.created_at).mapped('id')
+            lambda r: r.created_date).mapped('id')
         suffix = 'A'
         index = amendment_ids.index(self.id)
         return f"{suffix}{index}"
