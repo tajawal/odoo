@@ -591,6 +591,14 @@ class OfhSaleOrder(models.Model):
         compute='_compute_initial_order',
         store=False,
     )
+    payment_request_reason = fields.Char(
+        string="Payment Request Reason",
+        readonly=True,
+    )
+    payment_request_remarks = fields.Text(
+        string="Payment Request Notes",
+        readonly=True,
+    )
 
     @api.multi
     @api.depends('store_id')

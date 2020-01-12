@@ -48,6 +48,8 @@ class HubSaleOrderImportMapper(Component):
         ('booking_category', 'booking_category'),
         ('order_id', 'initial_order_id'),
         ('initial_order_number', 'initial_order_number'),
+        ('payment_request_reason', 'payment_request_reason'),
+        ('payment_request_remarks', 'payment_request_remarks'),
     ]
     children = [
         ('line_items', 'hub_line_ids', 'hub.sale.order.line'),

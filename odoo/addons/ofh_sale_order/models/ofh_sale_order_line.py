@@ -506,6 +506,12 @@ class OfhSaleOrderLine(models.Model):
         string="Is Amendment?",
         related='order_id.booking_category',
     )
+    payment_request_reason = fields.Char(
+        related='order_id.payment_request_reason',
+    )
+    payment_request_remarks = fields.Text(
+        related='order_id.payment_request_remarks',
+    )
 
     @api.multi
     @api.depends('line_reference')
