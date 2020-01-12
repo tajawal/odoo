@@ -240,7 +240,8 @@ class OfhPayment(models.Model):
         if order.booking_category == 'amendment':
             return self._get_amendment_booking_number(order)
 
-        return order.name
+        order_mongo_id = order.hub_bind_ids.external_id
+        return f"{order.name}_{int(order_mongo_id[-6:], 16)}"
 
     @api.multi
     def _get_amendment_booking_number(self, order):

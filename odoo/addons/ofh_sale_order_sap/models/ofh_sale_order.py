@@ -288,7 +288,8 @@ class OfhSaleOrder(models.Model):
         if self.booking_category == 'amendment':
             return self._get_amendment_booking_number()
 
-        return self.name
+        mongo_id = self.hub_bind_ids.external_id
+        return f"{self.name}_{int(mongo_id[-6:], 16)}"
 
     @api.multi
     def _get_amendment_booking_number(self):
