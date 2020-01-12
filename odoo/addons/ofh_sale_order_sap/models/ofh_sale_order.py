@@ -249,8 +249,12 @@ class OfhSaleOrder(models.Model):
         if not ahs_group_name and self.line_ids:
             ahs_group_name = self.line_ids.mapped('ahs_group_name')[0]
 
+        order_number = \
+            self.name if self.booking_category == 'initial' else \
+            self.initial_order_number
+
         return {
-            "name": self.name[:35],
+            "name": order_number,
             "file_number": self._get_file_number(),
             "booking_id": self._get_order_name(),
             "order_type": self.order_type,

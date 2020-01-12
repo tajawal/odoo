@@ -136,7 +136,10 @@ class OfhPaymentRequest(models.Model):
     def _get_payment_request_order(self):
         self.ensure_one()
         order_detail = self.order_id.to_dict()
-        order_detail['name'] = self.track_id[:35]
+        order_number = \
+            self.order_id.name if self.order_id.booking_category == 'initial' \
+            else self.order_id.initial_order_number
+        order_detail['name'] = order_number
         order_detail['booking_id'] = self._get_refund_booking_number()
         order_detail['created_at'] = self.updated_at
         if self.request_type != 'charge':
