@@ -117,7 +117,7 @@ class HubPaymentRequestBatchImporter(Component):
                     track_id, backend)
 
             # Online and Unify Refund Payment Request => Create payment request
-            if pr_type == 'refund':
+            if pr_type in ('refund', 'void'):
                 self._import_record(track_id)
                 if store_id == UNIFY_STORE_ID:
                     self.model.with_delay()._run_refund_payment(
