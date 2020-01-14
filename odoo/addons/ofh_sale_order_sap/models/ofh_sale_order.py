@@ -286,13 +286,13 @@ class OfhSaleOrder(models.Model):
     @api.multi
     def _get_order_name(self):
         self.ensure_one()
+        mongo_id = self.hub_bind_ids.external_id
         if self.store_id == '1000':
-            return self.name
+            return f"{self.name}_{int(mongo_id[-6:], 16)}"
 
         if self.booking_category == 'amendment':
             return self._get_amendment_booking_number()
 
-        mongo_id = self.hub_bind_ids.external_id
         return f"{self.name}_{int(mongo_id[-6:], 16)}"
 
     @api.multi
