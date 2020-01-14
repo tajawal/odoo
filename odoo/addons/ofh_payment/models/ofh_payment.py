@@ -201,6 +201,18 @@ class OfhPayment(models.Model):
         readonly=True,
         index=True,
     )
+    parent_track_id = fields.Char(
+        string="Parent Track ID",
+        readonly=True,
+        compute="_compute_parent_track_id",
+    )
+
+    @api.multi
+    @api.depends('charge_ids.track_id', 'payment_category')
+    def _compute_parent_track_id(self):
+        for rec in self:
+            if rec.charge_ids and rec.payment_category == "refund":
+                rec.parent_track_id = rec.charge_ids[0].track_id
 
     @api.multi
     @api.depends('track_id')

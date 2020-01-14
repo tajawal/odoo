@@ -49,6 +49,7 @@
                         <field name="cashier_id"/>
                         <field name="successfactors_id"/>
                         <field name="store_id" invisible="1"/>
+                        <field name="parent_track_id" attrs="{'invisible': [('payment_category', '!=', 'refund')]}"/>
 
                     </group>
                     <group>
