@@ -57,10 +57,6 @@ class OfhSupplierInvoiceLine(models.Model):
         from_str = fields.Date.from_string
 
         for line in order_id.line_ids:
-            if order_id.booking_category == BOOKING_CAT_INIT and \
-                    line.matching_status in ('matched', 'not_applicable'):
-                continue
-
             day_diff = abs((
                 from_str(line.created_at) -
                 from_str(self.invoice_date)).days)
