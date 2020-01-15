@@ -217,20 +217,15 @@ class OfhPayment(models.Model):
 
     @api.model
     def _search_parent_track_id(self, operator, value):
-        query = f"""SELECT 
-                          p.id 
-                        FROM 
-                          ofh_payment_charge AS c, 
-                          ofh_payment AS p 
-                        WHERE 
-                          p.id = c.payment_id 
-                          AND c.track_id='{value}';
+        query = f"""SELECT p.id  FROM 
+                      ofh_payment_charge AS c, 
+                      ofh_payment AS p 
+                    WHERE 
+                      p.id = c.payment_id 
+                      AND c.track_id='{value}';
                    """
         if operator == '!=':
-            query = f"""
-                        SELECT 
-                          p.id 
-                        FROM 
+            query = f"""SELECT p.id FROM 
                           ofh_payment_charge AS c, 
                           ofh_payment AS p 
                         WHERE 
