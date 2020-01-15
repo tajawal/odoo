@@ -217,8 +217,17 @@ class OfhPayment(models.Model):
 
     @api.model
     def _search_parent_track_id(self, operator, value):
+        query = f"""SELECT 
+                          p.id 
+                        FROM 
+                          ofh_payment_charge AS c, 
+                          ofh_payment AS p 
+                        WHERE 
+                          p.id = c.payment_id 
+                          AND c.track_id='{value}';
+                   """
         if operator == '!=':
-            self.env.cr.execute("""
+            query = f"""
                         SELECT 
                           p.id 
                         FROM 
@@ -226,21 +235,11 @@ class OfhPayment(models.Model):
                           ofh_payment AS p 
                         WHERE 
                           p.id = c.payment_id 
-                          AND c.track_id <> {value};
-                   """)
-            payment_ids = [x[0] for x in self.env.cr.fetchall()]
-        else:
-            self.env.cr.execute("""
-                        SELECT 
-                          p.id 
-                        FROM 
-                          ofh_payment_charge AS c, 
-                          ofh_payment AS p 
-                        WHERE 
-                          p.id = c.payment_id 
-                          AND c.track_id = {value};
-                   """)
-            payment_ids = [x[0] for x in self.env.cr.fetchall()]
+                          AND c.track_id <> '{value}';
+                   """
+
+        self.env.cr.execute(query)
+        payment_ids = [x[0] for x in self.env.cr.fetchall()]
 
         if not payment_ids:
             return [('id', '=', 0)]
