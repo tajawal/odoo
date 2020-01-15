@@ -117,7 +117,7 @@ class HubPaymentRequestBatchImporter(Component):
                     track_id, backend)
 
             # Online and Unify Refund Payment Request => Create payment request
-            if pr_type == 'refund':
+            if pr_type in ('refund', 'void'):
                 self._import_record(track_id)
                 if store_id == UNIFY_STORE_ID:
                     self.model.with_delay()._run_refund_payment(
@@ -128,6 +128,25 @@ class HubPaymentRequestImporter(Component):
     _name = 'hub.payment.request.importer'
     _inherit = 'hub.importer'
     _apply_on = ['hub.payment.request']
+
+    def _get_binding(self):
+        """Override the binding method to take in consideration the constraint
+        based on the group_id and the product_id for case of unify.
+        """
+        binding = self.env[self._apply_on[0]].browse()
+
+        # Explicitly apply this logic on unify refunds.
+        if self.hub_record.get('store_id', '') == 1000:
+            binding = self.env[self._apply_on[0]].search([
+                ('backend_id', '=', self.backend_record.id),
+                ('group_id', '=', self.hub_record.get('group_id')),
+                ('product_id', '=', self.hub_record.get('product_id'))],
+                limit=1)
+
+        if not binding:
+            binding = self.binder.to_internal(self.external_id)
+
+        return binding
 
     def _is_uptodate(self, binding) -> bool:
         """Check if record is already up-to-date.

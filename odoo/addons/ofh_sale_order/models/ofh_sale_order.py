@@ -583,6 +583,22 @@ class OfhSaleOrder(models.Model):
         index=True,
         readonly=True,
     )
+    initial_order = fields.Many2one(
+        string="Initial Order",
+        comodel_name='ofh.sale.order',
+        inverse_name='initial_order_number',
+        readonly=True,
+        compute='_compute_initial_order',
+        store=False,
+    )
+    payment_request_reason = fields.Char(
+        string="Payment Request Reason",
+        readonly=True,
+    )
+    payment_request_remarks = fields.Text(
+        string="Payment Request Notes",
+        readonly=True,
+    )
 
     @api.multi
     @api.depends('store_id')
@@ -590,6 +606,36 @@ class OfhSaleOrder(models.Model):
         # For offline store_id is 1000
         for rec in self:
             rec.is_unify = bool(rec.store_id == UNIFY_STORE_ID)
+
+    @api.multi
+    @api.depends('initial_order_number')
+    def _compute_initial_order(self):
+        for rec in self:
+            rec.initial_order = False
+            if self.booking_category == "amendment" and self.initial_order_number:
+                initial_order = self.search(
+                    [("name", "=", self.initial_order_number)], limit=1)
+                rec.initial_order = initial_order
+
+    @api.multi
+    def action_display_payments(self):
+        self.ensure_one()
+        if self.is_unify:
+            payments = self.env['ofh.payment'].search(
+                [('file_id', '=', self.file_id)])
+
+            payment_ids = [p.id for p in payments]
+
+            domain = [('id', 'in', payment_ids)]
+
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'ofh.payment',
+                'name': 'Payments',
+                'view_type': 'form',
+                'view_mode': 'tree,form',
+                'domain': domain,
+            }
 
     @api.multi
     @api.depends(
@@ -702,8 +748,18 @@ class OfhSaleOrder(models.Model):
         hub_backend = self.env['hub.backend'].search([], limit=1)
         if not hub_backend:
             return
-        hub_url = "{}admin/order/air/detail/{}".format(
-            hub_backend.hub_api_location, self.name)
+
+        if self.is_unify:
+            hub_url = "{}admin/unify/file/{}".format(
+                hub_backend.hub_api_location, self.file_id)
+        else:
+            if self.booking_category == 'amendment':
+                order_id = self.initial_order_number
+            else:
+                order_id = self.name
+
+            hub_url = "{}admin/order/air/detail/{}".format(
+                    hub_backend.hub_api_location, order_id)
         return {
             "type": "ir.actions.act_url",
             "url": hub_url,
@@ -719,9 +775,14 @@ class OfhSaleOrder(models.Model):
     @api.multi
     def action_update_hub_data(self):
         self.ensure_one()
+
+        if self.booking_category == 'amendment' and not self.is_unify:
+            order_id = self.track_id
+        else:
+            order_id = self.hub_bind_ids.external_id
         return self.hub_bind_ids.import_record(
             backend=self.hub_bind_ids.backend_id,
-            external_id=self.hub_bind_ids.external_id,
+            external_id=order_id,
             force=True)
 
     @api.multi

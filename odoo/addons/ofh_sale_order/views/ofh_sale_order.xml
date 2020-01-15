@@ -18,6 +18,11 @@
                             string="Update from HUB"
                             class="btn-warning"
                             type="object"/>
+                   <button name="action_display_payments"
+                           string="Payments"
+                           class="btn-primary"
+                           attrs="{'invisible': [('entity', '!=', 'almosafer_branch')]}"
+                           type="object"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -25,6 +30,7 @@
                             <field name="name"/>
                         </h1>
                     </div>
+                    <field name="store_id" invisible="1"/>
                     <group name="header" col="4">
                         <field name="file_id"/>
                         <field name="file_reference"/>
@@ -34,7 +40,8 @@
                         <field name="updated_at"/>
                         <field name="currency_id"/>
                         <field name="total_amount" widget="monetary"/>
-                        <field name="initial_order_number"/>
+                        <field name="initial_order"/>
+                        <field name="initial_order_number" invisible="1"/>
                     </group>
                     <group name="statuses" col="4" string="Statuses">
                         <field name="order_status"/>
@@ -171,9 +178,12 @@
                 <separator/>
                 <filter name="domestic_ksa" string="Domestic KSA" domain="[('line_ids.is_domestic_ksa', '=', True)]"/>
                 <separator/>
-                <filter name="tajawal" string="Tajawal" domain="[('entity', '=', 'tajawal')]"/>
-                <filter name="almosafer" string="Almosafer" domain="[('entity', '=', 'almosafer')]"/>
-                <filter name="egypt" string="Egypt" domain="[('is_egypt', '=', True)]"/>
+                <filter name="almosafer" string="Online Almosafer Sales" domain="[('entity', '=', 'almosafer')]"/>
+                <filter name="retail" string="Retail Almosafer Sales" domain="[('entity', '=', 'almosafer_branch')]"/>
+                <filter name="tajawal" string="Online Tajawal Sales" domain="[('entity', '=', 'tajawal')]"/>
+                <separator/>
+                <filter name="initail" string="Initial Sales" domain="[('booking_category', '=', 'initial')]"/>
+                <filter name="amendment" string="Amendment Sales" domain="[('booking_category', '=', 'amendment')]"/>
                 <separator/>
                 <filter name="updated_this_month" string="Updated This month" domain="[('updated_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
                 <filter name="created_this_month" string="Created this month" domain="[('created_at', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>

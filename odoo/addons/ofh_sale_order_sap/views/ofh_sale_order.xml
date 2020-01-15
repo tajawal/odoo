@@ -99,7 +99,7 @@ if records:
         <field name="state">code</field>
         <field name="code">
 if records:
-    records.send_order_to_sap()
+    records.action_send_order_to_sap()
         </field>
     </record>
 

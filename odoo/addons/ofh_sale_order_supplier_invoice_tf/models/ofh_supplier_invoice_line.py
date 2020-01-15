@@ -22,57 +22,63 @@ class OfhSupplierInvoiceLine(models.Model):
         initial_orders = order_ids.filtered(
             lambda p: p.booking_category == BOOKING_CAT_INIT)
 
-        amendment_orders = order_ids.filtered(
-            lambda p: p.booking_category == BOOKING_CAT_AMND)
+        if len(initial_orders) > 1:
+            order_names = ', '.join([o.name for o in order_ids])
+            self.message_post(
+                f"Line matches with multiple Sale orders: {order_names}")
+            return
 
         # Matching with Initial Orders
-        if len(initial_orders) == 1:
-            self.order_id = initial_orders[0]
-            self._match_tf_with_sale_order_line()
+        self._match_tf_with_sale_order_line(initial_orders)
+        if self.order_id:
             return
 
         # Matching with Amendment Orders
-        if amendment_orders:
-            for a_order in amendment_orders:
-                self.order_id = a_order
-                self._match_tf_with_sale_order_line()
+        amendment_orders = order_ids.filtered(
+            lambda p: p.booking_category == BOOKING_CAT_AMND)
+
+        if not amendment_orders:
             return
 
-        order_names = ', '.join([o.name for o in order_ids])
-        self.message_post(
-            f"Line matches with multiple Sale orders: {order_names}")
+        for a_order in amendment_orders:
+            self._match_tf_with_sale_order_line(a_order)
+            if self.order_id:
+                return
         return
 
     @api.multi
-    def _match_tf_with_sale_order_line(self):
+    def _match_tf_with_sale_order_line(self, order_id):
         # Refund an Amendments never matches with Initial Booking.
         self.ensure_one()
         if self.invoice_status == 'RFND':
+            self._match_tf_with_payment_request(order_id)
             return
 
         from_str = fields.Date.from_string
 
-        for line in self.order_id.line_ids:
+        for line in order_id.line_ids:
             day_diff = abs((
                 from_str(line.created_at) -
                 from_str(self.invoice_date)).days)
             if day_diff > 2:
-                return
+                continue
 
             # Adding amount check in case of Amendment
-            if self.order_id.booking_category == BOOKING_CAT_AMND:
-                total_supplier_cost = self.order_id.total_supplier_cost
+            if order_id.booking_category == BOOKING_CAT_AMND:
+                total_supplier_cost = order_id.total_supplier_cost
 
                 supplier_cost = sum([
-                    l.cost_amount for l in self.order_id.invoice_line_ids])
+                    l.cost_amount for l in order_id.invoice_line_ids])
                 supplier_cost += self.cost_amount
 
                 diff = abs(
                     supplier_cost /
                     total_supplier_cost)
+
                 if diff > 1.35:
                     continue
 
+            self.order_id = order_id
             line.write({
                 'invoice_line_ids': [(4, self.id)],
                 'matching_status': 'matched',
@@ -81,7 +87,7 @@ class OfhSupplierInvoiceLine(models.Model):
         return
 
     @api.multi
-    def _match_tf_with_payment_request(self):
+    def _match_tf_with_payment_request(self, order_id):
         self.ensure_one()
 
         # Continue only in case of Refund
@@ -89,16 +95,16 @@ class OfhSupplierInvoiceLine(models.Model):
             return
 
         # If the current line has already matched with an initial ticket
-        if not self.order_id or self.order_line_id:
+        if not order_id or self.order_line_id:
             return
 
         # If the order doesn't have any payment requests.
-        if not self.order_id.payment_request_ids:
+        if not order_id.payment_request_ids:
             return
 
         from_str = fields.Date.from_string
 
-        for payment_request in self.order_id.payment_request_ids:
+        for payment_request in order_id.payment_request_ids:
             day_diff = abs((
                 from_str(payment_request.updated_at) -
                 from_str(self.invoice_date)).days)
@@ -124,10 +130,14 @@ class OfhSupplierInvoiceLine(models.Model):
             if diff > 1.35:
                 continue
 
+            self.order_id = order_id
             payment_request.write({
                 'supplier_invoice_ids': [(4, self.id)],
                 'matching_status': 'matched',
             })
+
+            if self.payment_request_id:
+                break
         return
 
     @api.multi

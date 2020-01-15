@@ -10,14 +10,6 @@
         <field name="inherit_id" ref="ofh_payment.ofh_payment_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
-                <button name="open_payment_in_hub"
-                            string="Open in HUB"
-                            class="btn-primary"
-                            type="object"/>
-                 <button name="action_update_hub_data"
-                            string="Update from HUB"
-                            class="btn-warning"
-                            type="object"/>
                 <button name="send_payment_to_sap"
                         string="Send Payment to SAP"
                         class="btn-success"
@@ -41,6 +33,52 @@
                     <field name="sap_payment_ids" nolabel="1"/>
                 </page>
             </notebook>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ofh_payment_tree_view">
+       <field name="name">ofh.payment.form (in ofh_payment_reconciliation)</field>
+        <field name="model">ofh.payment</field>
+        <field name="inherit_id" ref="ofh_payment.ofh_payment_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="is_payment_applicable"/>
+                <field name="payment_integration_status"/>
+                <field name="payment_sap_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_payment_sap_not_applicable">
+        <field name="name">Sending Payment to SAP not Applicable</field>
+        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+            records.action_payment_not_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_payment_sap_applicable">
+        <field name="name">Sending Payment to SAP Applicable</field>
+        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+            records.action_payment_applicable()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ofh_payment_sap">
+        <field name="name">Send Payment to SAP</field>
+        <field name="model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="binding_model_id" ref="ofh_payment.model_ofh_payment"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+            records.action_payment_to_sap()
         </field>
     </record>
 

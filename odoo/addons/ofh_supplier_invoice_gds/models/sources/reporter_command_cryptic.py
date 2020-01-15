@@ -42,9 +42,9 @@ class CommandCrypticReporter(models.AbstractModel):
             return []
         lines = []
         for record in records:
-            if not record.jsondata:
+            if not record.jsondata_file:
                 continue
-            lines.extend(json.loads(record.jsondata))
+            lines.extend(record.get_data())
         return lines
 
     @api.model

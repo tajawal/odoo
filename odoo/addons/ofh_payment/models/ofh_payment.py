@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.addons.queue_job.job import job
 
 
 class OfhPayment(models.Model):
@@ -16,17 +17,20 @@ class OfhPayment(models.Model):
     created_at = fields.Datetime(
         required=True,
         readonly=True,
+        index=True,
     )
     updated_at = fields.Datetime(
         required=True,
         readonly=True,
         track_visibility='always',
+        index=True,
     )
     currency_id = fields.Many2one(
         string='Currency',
         comodel_name='res.currency',
         required=True,
         readonly=True,
+        index=True,
     )
     total_amount = fields.Monetary(
         string="Total",
@@ -72,6 +76,7 @@ class OfhPayment(models.Model):
     auth_code = fields.Char(
         string="Auth Code",
         readonly=True,
+        index=True,
     )
     card_type = fields.Selection(
         string="Card Type",
@@ -174,24 +179,40 @@ class OfhPayment(models.Model):
     ahs_group_name = fields.Char(
         string="AHS Group Name",
         readonly=True,
+        index=True,
     )
     is_apple_pay = fields.Boolean(
         string="Is Apple Pay?",
         readonly=True,
+        default=False,
     )
     is_mada = fields.Boolean(
         string="Is Mada?",
         readonly=True,
+        default=False,
     )
     is_3d_secure = fields.Boolean(
         string="Is 3d Secure?",
         readonly=True,
+        default=False,
     )
     store_id = fields.Char(
         string="Store ID",
         readonly=True,
         index=True,
     )
+    parent_track_id = fields.Char(
+        string="Parent Track ID",
+        readonly=True,
+        compute="_compute_parent_track_id",
+    )
+
+    @api.multi
+    @api.depends('charge_ids.track_id', 'payment_category')
+    def _compute_parent_track_id(self):
+        for rec in self:
+            if rec.charge_ids and rec.payment_category == "refund":
+                rec.parent_track_id = rec.charge_ids[0].track_id
 
     @api.multi
     @api.depends('track_id')
@@ -202,3 +223,46 @@ class OfhPayment(models.Model):
             if track_id.find('mp') != -1:
                 rec.booking_source = 'offline'
                 continue
+
+    @job(default_channel='root.hub')
+    @api.multi
+    def action_update_hub_data(self):
+        self.ensure_one()
+        if self.order_id.booking_category:
+            payment_type = self.order_id.booking_category
+        elif self.payment_category == 'refund':
+            payment_type = 'refund'
+        else:
+            payment_type = 'amendment'
+
+        return self.hub_bind_ids.import_record(
+            backend=self.hub_bind_ids.backend_id,
+            external_id=self.hub_bind_ids.track_id,
+            payment_type=payment_type,
+            force=True)
+
+    @api.multi
+    def open_payment_in_hub(self):
+        """Open the order link to the payment request in hub using URL
+        Returns:
+            [dict] -- URL action dictionary
+        """
+
+        self.ensure_one()
+        hub_backend = self.env['hub.backend'].search([], limit=1)
+        if not hub_backend:
+            return
+
+        hub_url = ''
+        if self.file_id:
+            hub_url = "{}admin/unify/file/{}".format(
+                hub_backend.hub_api_location, self.file_id)
+        elif self.order_id:
+            hub_url = "{}admin/order/air/detail/{}".format(
+                hub_backend.hub_api_location, self.order_id.name)
+
+        return {
+            "type": "ir.actions.act_url",
+            "url": hub_url,
+            "target": "new",
+        }

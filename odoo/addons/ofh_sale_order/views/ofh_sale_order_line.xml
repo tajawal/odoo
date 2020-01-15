@@ -71,6 +71,25 @@
                     <notebook>
                         <page name="sales_details" string="Sales Details">
                             <group name="sale_detail" string="Sale" col="4">
+                                <field name="fare_difference" widget="monetary"/>
+                                <field name="change_fee" widget="monetary"/>
+                                <field name="booking_fee" widget="monetary"/>
+                                <field name="insurance" widget="monetary"/>
+                                <field name="discount" widget="monetary"/>
+                                <field name="penalty" widget="monetary"/>
+                                <field name="loss_amount" widget="monetary"/>
+                                <field name="input_vat_amount" widget="monetary"/>
+                                <field name="output_vat_amount" widget="monetary"/>
+                                <field name="manual_output_vat_amount" widget="monetary"/>
+                                <field name="change_fee_vat_amount" widget="monetary"/>
+                                <field name="fare_difference_vat_amount" widget="monetary"/>
+                                <field name="penalty_vat_amount" widget="monetary"/>
+                                <field name="adm_vat_amount" widget="monetary"/>
+                                <field name="booking_fee_vat_amount" widget="monetary"/>
+                                <field name="deals_vat_amount" widget="monetary"/>
+                                <field name="discount_vat_amount" widget="monetary"/>
+                                <field name="tax_code"/>
+                                <field name="loss_type"/>
                                 <field name="service_fee_amount" widget="monetary"/>
                                 <field name="sale_price" widget="monetary"/>
                                 <field name="discount_amount" widget="monetary"/>

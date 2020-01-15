@@ -3,6 +3,7 @@
 import json
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
+from odoo.exceptions import ValidationError
 import xxhash
 
 
@@ -47,30 +48,31 @@ class OfhPayment(models.Model):
         for rec in self:
             rec.payment_integration_status = rec.sap_payment_ids.filtered(
                 lambda p: p.state == 'success') and \
-                    rec.is_payment_applicable
+                                             rec.is_payment_applicable
 
     @api.model
     def _search_payment_integration_status(self, operator, value):
         if operator == '!=':
             self.env.cr.execute("""
-                   select id as sale_order_id from ofh_sale_order
-                   except
-                   select sale_order_id
-                   FROM ofh_payment_sap WHERE
-                   state = 'success' AND sale_order_id > 0;
+                    SELECT id AS payment_id FROM ofh_payment
+                    EXCEPT
+                        SELECT payment_id
+                        FROM ofh_payment_sap
+                        WHERE state = 'success' AND payment_id > 0;
                """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
             self.env.cr.execute("""
-                   SELECT sale_order_id FROM ofh_payment_sap WHERE
-                   state = 'success' AND sale_order_id > 0
+                    SELECT payment_id
+                    FROM ofh_payment_sap
+                    WHERE state = 'success' AND payment_id > 0
                """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
 
-        if not order_ids:
+        if not payment_ids:
             return [('id', '=', 0)]
 
-        return [('id', 'in', order_ids)]
+        return [('id', 'in', payment_ids)]
 
     @api.multi
     @api.depends('sap_payment_ids.state', 'is_payment_applicable')
@@ -84,27 +86,26 @@ class OfhPayment(models.Model):
     def _search_payment_sap_status(self, operator, value):
         if operator == '!=':
             self.env.cr.execute("""
-                    SELECT sale_order_id
-                    FROM ofh_payment_sap WHERE
-                        state = 'success' AND
-                        sale_order_id > 0 AND
-                        sap_status != 'in_sap';
+                    SELECT payment_id
+                    FROM ofh_payment_sap
+                    WHERE state = 'success'
+                    AND payment_id > 0
+                    AND sap_status != 'in_sap';
                 """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
         else:
             self.env.cr.execute("""
-                    SELECT sale_order_id
-                    FROM ofh_payment_sap WHERE
-                        state = 'success' AND
-                        sale_order_id > 0 AND
-                        sap_status = 'in_sap';
+                    SELECT payment_id
+                    FROM ofh_payment_sap
+                    WHERE state = 'success'
+                    AND payment_id > 0
+                    AND sap_status = 'in_sap';
                 """)
-            order_ids = [x[0] for x in self.env.cr.fetchall()]
-
-        if not order_ids:
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
+        if not payment_ids:
             return [('id', '=', 0)]
 
-        return [('id', 'in', order_ids)]
+        return [('id', 'in', payment_ids)]
 
     @api.multi
     def _prepare_payment_values(self, visualize=False):
@@ -123,6 +124,7 @@ class OfhPayment(models.Model):
         return values
 
     @api.multi
+    @job(default_channel='root.sap')
     def send_payment_to_sap(self):
         """Create and Send SAP Sale Order Record."""
         self.ensure_one()
@@ -182,7 +184,7 @@ class OfhPayment(models.Model):
             "is_mada": self.is_mada,
             "is_3d_secure": self.is_3d_secure,
             "is_egypt": self.order_id.is_egypt,
-            "is_refund": self._is_refund(),
+            "is_refund": self.payment_category == 'refund',
         }
 
         if self.order_id:
@@ -190,6 +192,13 @@ class OfhPayment(models.Model):
             adict["order_status"] = self.order_id.order_status
             adict["entity"] = self.order_id.entity
             adict["country_code"] = self.order_id.country_code
+
+        if self.payment_request_id and self.payment_request_id.order_id:
+            order = self.payment_request_id.order_id
+            adict["order_type"] = order.order_type
+            adict["order_status"] = order.order_status
+            adict["entity"] = order.entity
+            adict["country_code"] = order.country_code
 
         return adict
 
@@ -218,19 +227,41 @@ class OfhPayment(models.Model):
     def _get_booking_number(self):
         self.ensure_one()
         if self.file_reference:
-            return self.file_reference
+            return f"{self.file_reference}_{self._get_file_payment_suffix()}"
+
+        if self.payment_request_id:
+            return self.payment_request_id._get_refund_booking_number()
 
         if self.order_id:
             order = self.order_id
-        elif self.payment_request_id and self.payment_request_id.order_id:
-            order = self.payment_request_id.order_id
         else:
             return self.track_id[:25]
 
         if order.booking_category == 'amendment':
-            return order.initial_order_number
+            return self._get_amendment_booking_number(order)
 
-        return order.name
+        order_mongo_id = order.hub_bind_ids.external_id
+        return f"{order.name}_{int(order_mongo_id[-6:], 16)}"
+
+    @api.multi
+    def _get_amendment_booking_number(self, order):
+        self.ensure_one()
+        if not order or order.booking_category != 'amendment':
+            return ''
+
+        _mongo_id = order.hub_bind_ids.initial_order_id
+        order_number = order.initial_order_number
+        suffix = order._get_amendment_suffix()
+
+        hash_mongo_id = format(xxhash.xxh32_intdigest(_mongo_id), 'x')
+        return f"{order_number}{int(hash_mongo_id[-6:], 16)}{suffix}"
+
+    @api.multi
+    def _get_file_payment_suffix(self):
+        self.ensure_one()
+        payments = self.search([('file_reference', '=', self.file_reference)])
+        payment_ids = payments.sorted(lambda r: r.created_at).mapped('id')
+        return payment_ids.index(self.id)
 
     @api.multi
     def _is_refund(self):
@@ -254,47 +285,42 @@ class OfhPayment(models.Model):
         payment = self.browse(payment_id)
         return payment.send_payment_to_sap()
 
-    @job(default_channel='root.hub')
-    @api.multi
-    def action_update_hub_data(self):
-        self.ensure_one()
-        if self.payment_category == 'charge':
-            payment_type = 'amendment'
-        elif self.payment_category == 'refund':
-            payment_type = 'refund'
-        elif self.order_id.booking_category:
-            payment_type = self.order_id.booking_category
-        else:
-            payment_type = 'amendment'
+    # @api.model
+    # def create(self, vals):
+    #     payment = super(OfhPayment, self).create(vals)
 
-        return self.hub_bind_ids.import_record(
-            backend=self.hub_bind_ids.backend_id,
-            external_id=self.hub_bind_ids.external_id,
-            payment_type=payment_type,
-            force=True)
+    #     # Only Captured, Refunded
+    #     if (payment.payment_method == 'online' and
+    #         payment.payment_status in ('11111', '83027')) or \
+    #             (payment.payment_method != 'online' and
+    #              payment.payment_method == '1000'):
+    #         payment.send_payment_to_sap()
+    #     return payment
 
     @api.multi
-    def open_payment_in_hub(self):
-        """Open the order link to the payment request in hub using URL
-        Returns:
-            [dict] -- URL action dictionary
-        """
+    def action_payment_not_applicable(self):
+        if self.filtered(lambda o: o.payment_integration_status):
+            raise ValidationError("Payment already sent to SAP.")
+        return self.write({
+            'is_payment_applicable': False,
+        })
 
-        self.ensure_one()
-        hub_backend = self.env['hub.backend'].search([], limit=1)
-        if not hub_backend:
-            return
+    @api.multi
+    def action_payment_applicable(self):
+        return self.write({
+            'is_payment_applicable': True,
+        })
 
-        hub_url = ''
-        if self.file_id:
-            hub_url = "{}admin/unify/file/{}".format(
-                hub_backend.hub_api_location, self.file_id)
-        elif self.order_id:
-            hub_url = "{}admin/order/air/detail/{}".format(
-                hub_backend.hub_api_location, self.order_id.name)
+    @api.multi
+    @api.depends('is_payment_applicable')
+    def action_payment_sent_sap(self):
+        for rec in self:
+            if rec.is_payment_applicable:
+                return self.write({
+                    'payment_integration_status': True,
+                })
 
-        return {
-            "type": "ir.actions.act_url",
-            "url": hub_url,
-            "target": "new",
-        }
+    @api.multi
+    def action_payment_to_sap(self):
+        for rec in self:
+            rec.with_delay().send_payment_to_sap()
