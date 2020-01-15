@@ -205,6 +205,7 @@ class OfhPayment(models.Model):
         string="Parent Track ID",
         readonly=True,
         compute="_compute_parent_track_id",
+        search="_search_parent_track_id",
     )
 
     @api.multi
@@ -213,6 +214,38 @@ class OfhPayment(models.Model):
         for rec in self:
             if rec.charge_ids and rec.payment_category == "refund":
                 rec.parent_track_id = rec.charge_ids[0].track_id
+
+    @api.model
+    def _search_parent_track_id(self, operator, value):
+        if operator == '!=':
+            self.env.cr.execute("""
+                        SELECT 
+                          p.id 
+                        FROM 
+                          ofh_payment_charge AS c, 
+                          ofh_payment AS p 
+                        WHERE 
+                          p.id = c.payment_id 
+                          AND c.track_id <> {value};
+                   """)
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
+        else:
+            self.env.cr.execute("""
+                        SELECT 
+                          p.id 
+                        FROM 
+                          ofh_payment_charge AS c, 
+                          ofh_payment AS p 
+                        WHERE 
+                          p.id = c.payment_id 
+                          AND c.track_id = {value};
+                   """)
+            payment_ids = [x[0] for x in self.env.cr.fetchall()]
+
+        if not payment_ids:
+            return [('id', '=', 0)]
+
+        return [('id', 'in', payment_ids)]
 
     @api.multi
     @api.depends('track_id')
