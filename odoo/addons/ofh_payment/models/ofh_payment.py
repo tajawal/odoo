@@ -217,29 +217,7 @@ class OfhPayment(models.Model):
 
     @api.model
     def _search_parent_track_id(self, operator, value):
-        query = f"""SELECT p.id  FROM 
-                      ofh_payment_charge AS c, 
-                      ofh_payment AS p 
-                    WHERE 
-                      p.id = c.payment_id 
-                      AND c.track_id='{value}';
-                   """
-        if operator == '!=':
-            query = f"""SELECT p.id FROM 
-                          ofh_payment_charge AS c, 
-                          ofh_payment AS p 
-                        WHERE 
-                          p.id = c.payment_id 
-                          AND c.track_id <> '{value}';
-                   """
-
-        self.env.cr.execute(query)
-        payment_ids = [x[0] for x in self.env.cr.fetchall()]
-
-        if not payment_ids:
-            return [('id', '=', 0)]
-
-        return [('id', 'in', payment_ids)]
+        return [('charge_ids.track_id', operator, value)]
 
     @api.multi
     @api.depends('track_id')
