@@ -20,7 +20,7 @@ class OfhPaymentAutoSend(models.Model):
               WHERE 
                 (
                   payment_method = 'online' 
-                  AND payment_status IN ('11111', '83027')
+                  AND payment_status IN ('11111', '10000', '83027')
                 ) 
                 OR (payment_method <> 'online' AND store_id = '1000')
             )
