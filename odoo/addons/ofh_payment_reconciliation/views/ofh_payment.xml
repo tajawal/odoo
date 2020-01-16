@@ -49,6 +49,7 @@
                 <field name="track_id"/>
                 <field name="auth_code"/>
                 <field name="arn"/>
+                <field name="parent_track_id"/>
                 <filter name="tajawal" string="Tajawal" domain="[('payment_gateway_id.entity', '=', 'tajawal')]"/>
                 <filter name="almosafer" string="Almosafer" domain="[('payment_gateway_id.entity', '=', 'almosafer')]"/>
                 <separator/>
