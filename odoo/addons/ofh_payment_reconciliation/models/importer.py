@@ -20,4 +20,4 @@ class HubPaymentImportMapper(Component):
     def pg_matching_status(self, record):
         if record['provider'] == PROVIDER_WALLET:
             return {'pg_matching_status': 'not_applicable'}
-        return {'pg_matching_status': 'unmatched'}
+        return {}
