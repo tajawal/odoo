@@ -19,6 +19,11 @@ class OfhSaleOrderLine(models.Model):
         # we will send the whole order to SAP.
         if self.order_id.is_pay_later:
             sale_line_dict['billing_date'] = self.order_id.paid_at
+
+        # In case pay now custom1 should be same as billing_date
+        if not self.order_id.is_pay_later:
+            sale_line_dict['custom1'] = sale_line_dict['billing_date']
+
         sale_line_dict['pnr'] = \
             f"{self.vendor_confirmation_number}.{self.line_reference}"
         sale_line_dict['supplier_ref'] = \
