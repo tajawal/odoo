@@ -43,7 +43,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="locator"/>
+                <field name="locators"/>
                 <field name="ticket_number"/>
             </search>
         </field>

@@ -168,12 +168,12 @@
         <field name="model">ofh.sale.order</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name"/>
+                <field name="order_ids"/>
                 <field name="vendor_reference" filter_domain="['|', ('vendor_reference','ilike',self), ('supplier_reference','ilike', self)]" string="Locator"/>
                 <field name="ticketing_office_id"/>
                 <field name="office_id"/>
                 <field name="supplier_name"/>
-                <field name="file_reference"/>
+                <field name="file_references"/>
                 <field name="booking_category"/>
                 <separator/>
                 <filter name="domestic_ksa" string="Domestic KSA" domain="[('line_ids.is_domestic_ksa', '=', True)]"/>

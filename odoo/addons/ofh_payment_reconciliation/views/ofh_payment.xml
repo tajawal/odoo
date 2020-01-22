@@ -46,7 +46,7 @@
                 <field name="ticketing_office_id"/>
                 <field name="order_id"/>
                 <field name="pg_matching_status"/>
-                <field name="track_id"/>
+                <field name="track_ids"/>
                 <field name="auth_code"/>
                 <field name="arn"/>
                 <field name="parent_track_id"/>

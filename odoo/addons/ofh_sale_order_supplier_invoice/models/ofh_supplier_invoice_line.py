@@ -17,6 +17,9 @@ class OfhSupplierInvoiceLine(models.Model):
         readonly=True,
         auto_join=True
     )
+    order_ids = fields.Char(
+       related='order_id.order_ids'
+    )
     entity = fields.Selection(
         selection=[
             ('almosafer', 'Almosafer'),

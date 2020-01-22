@@ -112,7 +112,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="order_reference"/>
-                <field name="track_id"/>
+                <field name="track_ids"/>
                 <field name="vendor_id"/>
                 <field name="file_id"/>
                 <field name="file_reference"/>
