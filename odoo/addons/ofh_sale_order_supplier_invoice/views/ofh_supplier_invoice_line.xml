@@ -48,7 +48,7 @@
         <field name="inherit_id" ref="ofh_supplier_invoice.ofh_supplier_invoice_line_search_view"/>
         <field name="arch" type="xml">
             <field name="ticket_number" position="after">
-                <field name="order_id"/>
+                <field name="order_ids"/>
                 <field name="order_line_id"/>
                 <field name="investigation_tag"/>
                 <separator/>

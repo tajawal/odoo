@@ -69,6 +69,13 @@ class OfhSaleOrder(models.Model):
         required=True,
         index=True,
     )
+    order_ids = fields.Char(
+        string="Order IDs",
+        compute='_compute_name',
+        search='_search_name',
+        store=False,
+        readonly=True,
+    )
     created_at = fields.Datetime(
         string="Created At",
         required=True,
@@ -399,6 +406,13 @@ class OfhSaleOrder(models.Model):
         readonly=True,
         index=True,
     )
+    file_references = fields.Char(
+        string="File IDs",
+        compute='_compute_file_reference',
+        search='_search_file_reference',
+        store=False,
+        readonly=True,
+    )
     ticket_sub_type = fields.Char(
         string="Ticket Sub Type",
         readonly=True,
@@ -599,6 +613,32 @@ class OfhSaleOrder(models.Model):
         string="Payment Request Notes",
         readonly=True,
     )
+
+    @api.model
+    def _search_name(self, operator, value):
+        if operator == 'ilike':
+            ids = value.replace(" ", "").split(",")
+            return [('name', 'in', ids)]
+        return [('name', operator, value)]
+
+    @api.multi
+    @api.depends('name')
+    def _compute_name(self):
+        for rec in self:
+            rec.order_ids = rec.name
+
+    @api.model
+    def _search_file_reference(self, operator, value):
+        if operator == 'ilike':
+            ids = value.replace(" ", "").split(",")
+            return [('file_reference', 'in', ids)]
+        return [('file_reference', operator, value)]
+
+    @api.multi
+    @api.depends('file_reference')
+    def _compute_file_reference(self):
+        for rec in self:
+            rec.file_references = rec.file_reference
 
     @api.multi
     @api.depends('store_id')

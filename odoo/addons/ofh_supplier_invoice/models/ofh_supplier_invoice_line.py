@@ -53,6 +53,13 @@ class OfhSupplierInvoiceLine(models.Model):
         required=True,
         readonly=True,
     )
+    locators = fields.Char(
+        string="Locators",
+        compute='_compute_locator',
+        search='_search_locator',
+        store=False,
+        readonly=True,
+    )
     office_id = fields.Char(
         string="Office ID",
         index=True,
@@ -98,6 +105,19 @@ class OfhSupplierInvoiceLine(models.Model):
         ('unique_invoice_line', 'unique(name)',
          _("This line has been uploaded"))
     ]
+
+    @api.model
+    def _search_locator(self, operator, value):
+        if operator == 'ilike':
+            ids = value.replace(" ", "").split(",")
+            return [('locator', 'in', ids)]
+        return [('locator', operator, value)]
+
+    @api.multi
+    @api.depends('locator')
+    def _compute_locator(self):
+        for rec in self:
+            rec.locators = rec.locator
 
     @api.multi
     @api.constrains('invoice_date')

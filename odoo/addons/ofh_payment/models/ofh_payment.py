@@ -73,6 +73,13 @@ class OfhPayment(models.Model):
         readonly=True,
         index=True,
     )
+    track_ids = fields.Char(
+        string="Track IDs",
+        compute='_compute_track_id',
+        search='_search_track_id',
+        store=False,
+        readonly=True,
+    )
     auth_code = fields.Char(
         string="Auth Code",
         readonly=True,
@@ -208,6 +215,19 @@ class OfhPayment(models.Model):
         search="_search_parent_track_id",
     )
 
+    @api.model
+    def _search_track_id(self, operator, value):
+        if operator == 'ilike':
+            ids = value.replace(" ", "").split(",")
+            return [('track_id', 'in', ids)]
+        return [('track_id', operator, value)]
+
+    @api.multi
+    @api.depends('track_id')
+    def _compute_track_id(self):
+        for rec in self:
+            rec.track_ids = rec.track_id
+
     @api.multi
     @api.depends('charge_ids.track_id', 'payment_category')
     def _compute_parent_track_id(self):
@@ -217,6 +237,9 @@ class OfhPayment(models.Model):
 
     @api.model
     def _search_parent_track_id(self, operator, value):
+        if operator == 'ilike':
+            ids = value.replace(" ", "").split(",")
+            return [('charge_ids.track_id', 'in', ids)]
         return [('charge_ids.track_id', operator, value)]
 
     @api.multi

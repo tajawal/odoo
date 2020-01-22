@@ -210,6 +210,13 @@ class OfhPaymentRequest(models.Model):
         required=True,
         readonly=True,
     )
+    track_ids = fields.Char(
+        string="Track IDs",
+        compute='_compute_track_id',
+        search='_search_track_id',
+        store=False,
+        readonly=True,
+    )
     parent_track_id = fields.Char(
         string="Parent Track ID",
         readonly=True,
@@ -352,6 +359,19 @@ class OfhPaymentRequest(models.Model):
         currency_field='currency_id',
         readonly=True,
     )
+
+    @api.model
+    def _search_track_id(self, operator, value):
+        if operator == 'ilike':
+            ids = value.replace(" ", "").split(",")
+            return [('track_id', 'in', ids)]
+        return [('track_id', operator, value)]
+
+    @api.multi
+    @api.depends('track_id')
+    def _compute_track_id(self):
+        for rec in self:
+            rec.track_ids = rec.track_id
 
     @api.multi
     @api.depends('track_id')

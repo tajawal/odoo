@@ -138,7 +138,7 @@
         <field name="model">ofh.sale.order.line</field>
         <field name="arch" type="xml">
             <search>
-                <field name="order_id"/>
+                <field name="order_ids"/>
                 <field name="line_reference"
                        filter_domain="['|', ('line_reference','ilike', self), ('manual_line_reference','ilike', self)]" string="Ticket/segment"/>
                 <field name="vendor_confirmation_number"

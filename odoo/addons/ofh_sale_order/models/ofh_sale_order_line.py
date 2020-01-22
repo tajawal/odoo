@@ -33,6 +33,9 @@ class OfhSaleOrderLine(models.Model):
         ondelete='cascade',
         auto_join=True,
     )
+    order_ids = fields.Char(
+        related='order_id.order_ids'
+    )
     fare_difference = fields.Monetary(
         currency_field='currency_id',
         related='order_id.fare_difference',
