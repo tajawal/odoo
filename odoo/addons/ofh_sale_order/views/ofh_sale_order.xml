@@ -169,7 +169,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="order_ids"/>
-                <field name="vendor_reference" filter_domain="['|', ('vendor_reference','ilike',self), ('supplier_reference','ilike', self)]" string="Locator"/>
+                <field name="locators"/>
                 <field name="ticketing_office_id"/>
                 <field name="office_id"/>
                 <field name="supplier_name"/>
