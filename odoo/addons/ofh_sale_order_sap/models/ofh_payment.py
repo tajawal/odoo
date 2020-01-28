@@ -263,6 +263,10 @@ class OfhPayment(models.Model):
         payment_ids = payments.sorted(lambda r: r.created_at).mapped('id')
         return payment_ids.index(self.id)
 
+    @api.multi
+    def _is_refund(self):
+        return True if self.payment_category != 'charge' else False
+
     @api.model
     def _auto_send_payments_to_sap(self):
         """Auto Send candidates Payments to SAP."""

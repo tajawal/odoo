@@ -264,6 +264,13 @@ class OfhSaleOrder(models.Model):
         index=True,
         track_visibility='onchange',
     )
+    locators = fields.Char(
+        string="Locators",
+        compute='_compute_locator',
+        search='_search_locator',
+        store=False,
+        readonly=True,
+    )
     supplier_reference = fields.Char(
         string="Supplier Reference",
         compute='_compute_supplier_reference',
@@ -693,6 +700,19 @@ class OfhSaleOrder(models.Model):
                     vendor_reference.append(line.vendor_confirmation_number)
             if vendor_reference:
                 rec.vendor_reference = ', '.join(set(vendor_reference))
+
+    @api.multi
+    @api.depends('vendor_reference')
+    def _compute_locator(self):
+        for rec in self:
+            rec.locators = rec.vendor_reference
+
+    @api.model
+    def _search_locator(self, operator, value):
+        if operator == 'ilike':
+            ids = value.replace(" ", "").split(",")
+            return ['|', ('vendor_reference', 'in', ids), ('supplier_reference', 'in', ids)]
+        return ['|', ('vendor_reference', operator, value), ('supplier_reference', operator, value)]
 
     @api.multi
     @api.depends(
