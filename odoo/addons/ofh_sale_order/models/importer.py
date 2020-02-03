@@ -46,7 +46,7 @@ class HubSaleOrderImportMapper(Component):
         ('file_reference', 'file_reference'),
         ('ticket_sub_type', 'ticket_sub_type'),
         ('booking_category', 'booking_category'),
-        ('order_id', 'initial_order_id'),
+        ('initial_order_id', 'initial_order_id'),
         ('initial_order_number', 'initial_order_number'),
         ('payment_request_reason', 'payment_request_reason'),
         ('payment_request_remarks', 'payment_request_remarks'),
