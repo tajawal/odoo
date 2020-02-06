@@ -34,7 +34,7 @@ class OfhSupplierInvoiceLine(models.Model):
             return
 
         # Matching with Initial Orders
-        self._match_gds_with_sale_order_line(initial_orders)
+        self._match_itl_with_sale_order_line(initial_orders)
         if self.order_id:
             return
 
