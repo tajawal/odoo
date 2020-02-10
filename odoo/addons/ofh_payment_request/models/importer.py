@@ -86,7 +86,7 @@ class HubPaymentRequestImportMapper(Component):
     @mapping
     def matching_status(self, record):
         order_reference = record.get('order_reference')
-        if order_reference.startswith('H'):
+        if not order_reference or order_reference.startswith('H'):
             return {'matching_status': 'not_applicable'}
         return {}
 
