@@ -29,7 +29,7 @@ class HubPayment(models.Model):
         """ Import a Hub record """
         with backend.work_on('hub.payment') as work:
             importer = work.component(usage='record.importer')
-            importer.run(external_id, payment_type=payment_type, force=False)
+            importer.run(external_id, payment_type=payment_type, force=force)
 
 
 class PaymentAdapter(Component):
