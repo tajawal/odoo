@@ -37,6 +37,32 @@ create and activate virtualenv, possibly with virtualenvwrapper's
 To save some time copy Odoo 11.0 sources in src/odoo,
 and do ``git clean -ffdx`` in src/odoo.
 
+Install XCode
+---------------
+.. code:: bash
+
+    xcode-select --install
+
+Install SSL
+---------------
+.. code:: bash
+
+    brew install openssl@1.1
+
+Set SSL PATH
+-------------
+.. code:: bash
+
+    export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
+
+Install psycopg2
+-----------------
+.. code:: bash
+
+    pip install psycopg2
+
+
+
 Install everything
 ------------------
 
