@@ -55,14 +55,6 @@ Set SSL PATH
 
     export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
-Install psycopg2
------------------
-.. code:: bash
-
-    pip install psycopg2
-
-
-
 Install everything
 ------------------
 
