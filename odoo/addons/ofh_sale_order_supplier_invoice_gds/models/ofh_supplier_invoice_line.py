@@ -211,7 +211,7 @@ class OfhSupplierInvoiceLine(models.Model):
             return
 
         tajawal_date = datetime.strptime(
-            f'201{self.order_reference[1:6]}', '%Y%m%d')
+            f'202{self.order_reference[1:6]}', '%Y%m%d')
 
         # A Ticket will be unusable after one year of the purchase.
         if (datetime.now() - tajawal_date).days > 363:
