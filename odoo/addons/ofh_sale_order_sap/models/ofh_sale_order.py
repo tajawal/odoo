@@ -249,12 +249,8 @@ class OfhSaleOrder(models.Model):
         if not ahs_group_name and self.line_ids:
             ahs_group_name = self.line_ids.mapped('ahs_group_name')[0]
 
-        order_number = \
-            self.name if self.booking_category == 'initial' else \
-            self.initial_order_number
-
         return {
-            "name": order_number,
+            "name": self._get_order_number(),
             "file_number": self._get_file_number(),
             "booking_id": self._get_order_name(),
             "order_type": self.order_type,
@@ -268,6 +264,15 @@ class OfhSaleOrder(models.Model):
             self.payment_ids[0].provider if self.payment_ids else '',
             'is_payment_request': self.booking_category == 'amendment',
         }
+
+    @api.multi
+    def _get_order_number(self):
+        self.ensure_one()
+        if self.booking_category == 'initial' or (
+                        self.booking_category == 'amendment' and self.is_unify):
+            return self.name
+        else:
+            return self.initial_order_number
 
     @api.multi
     def _get_file_number(self):
