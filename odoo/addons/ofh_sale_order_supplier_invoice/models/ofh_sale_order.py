@@ -59,7 +59,7 @@ class OfhSaleOrder(models.Model):
         if not self.supplier_reference:
             return {}
         domain = [
-            '!',
+            '|',
             ('locator', 'like', self.supplier_reference),
             ('locator', 'like', self.vendor_reference)]
         return {

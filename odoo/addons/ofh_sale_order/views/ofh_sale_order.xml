@@ -195,6 +195,7 @@
                 <separator/>
                 <filter name="gds_order" string="GDS Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '!=', 'TRAVEL FUSION')]"/>
                 <filter name="gds_order" string="Travel Fusion Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '=', 'TRAVEL FUSION')]"/>
+                <filter name="tf_order" string="Travelport Orders" domain="[('order_type', '=', 'flight'), ('vendor_name', '=', 'tpt')]"/>
                 <separator/>
                 <filter name="order_matched_status" string="Order Matched" domain="[('order_matching_status', '=', 'matched')]"/>
                 <filter name="order_unmatched_status" string="Order Unmatched" domain="[('order_matching_status', '=', 'unmatched')]"/>

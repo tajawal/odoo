@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Tajawal LCC
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="ofh_supplier_invoice_line_tp_1" model="ofh.supplier.invoice.line">
+        <field name="invoice_type">tp</field>
+        <field name="invoice_date">2018-10-09</field>
+        <field name="locator">KZQNEE</field>
+        <field name="invoice_status">TKTT</field>
+        <field name="passenger">THAKUR/R</field>
+        <field name="index">23232323</field>
+        <field name="office_id">8RR9</field>
+        <field name="agent_sign_in">8RJ6FP</field>
+        <field name="total">300</field>
+        <field name="currency_id" ref="base.AED"/>
+        <field name="fees">
+            {"BaseFare": 100, "Tax": 200, "Net": 300}
+        </field>
+        <field name="vendor_id">098</field>
+        <field name="ticket_number">2770018289</field>
+    </record>
+
+</odoo>

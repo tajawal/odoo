@@ -93,7 +93,12 @@ class OfhSaleOrderLine(models.Model):
                 sale_line_dict['cost_price'] = 0.00
 
             sale_line_dict['cost_currency'] = self.supplier_currency_id.name
-            sale_line_dict['ticket_number'] = self.line_reference
+
+            if self.vendor_name in ('tpt', 'amd'):
+                sale_line_dict['ticket_number'] = self.line_reference[-10:]
+            else:
+                sale_line_dict['ticket_number'] = self.line_reference
+
             return [sale_line_dict]
 
         invoice_type = self.invoice_line_ids.mapped('invoice_type')[0]

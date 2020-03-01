@@ -24,6 +24,10 @@ class SupplierInvoiceLineMapper(Component):
 
     @mapping
     def fees(self, record):
+        gds_backend = self.env.ref(
+            'ofh_supplier_invoice_gds.gds_import_backend')
+        if self.backend_record != gds_backend:
+            return super(SupplierInvoiceLineMapper, self).fees(record)
         fees = {
             'BaseFare': record.get("Base fare", 0.0),
             'Tax': record.get('Tax', 0.0),

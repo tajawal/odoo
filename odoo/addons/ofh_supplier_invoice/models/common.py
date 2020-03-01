@@ -57,6 +57,14 @@ class SupplierInvoiceLineMapper(Component):
     def index(self, record):
         return {}
 
+    @mapping
+    def agent_sign_in(self, record):
+        return {}
+
+    @mapping
+    def fees(self, record):
+        return {}
+
 
 class SupplierInvoiceLineRecordImporter(Component):
 

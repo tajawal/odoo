@@ -23,9 +23,19 @@
                         <field name="office_id"/>
                         <field name="passenger"/>
                         <field name="vendor_id"/>
-                        <field name="total"  widget="monetary"/>
+                        <field name="total" widget="monetary"/>
                     </group>
-                    <notebook>
+                    <notebook position="inside">
+                        <page name="gds_fees_details" string="GDS FEES DETAILS">
+                            <group name="fees_details" col="4">
+                                <field name="gds_base_fare_amount" widget="monetary"/>
+                                <field name="gds_tax_amount" widget="monetary"/>
+                                <field name="gds_net_amount" widget="monetary"/>
+                                <field name="gds_fee_amount" widget="monetary"/>
+                                <field name="gds_iata_commission_amount" widget="monetary"/>
+                                <field name="gds_alshamel_cost" widget="monetary"/>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
