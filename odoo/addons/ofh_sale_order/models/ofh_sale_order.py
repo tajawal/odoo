@@ -620,14 +620,6 @@ class OfhSaleOrder(models.Model):
         string="Payment Request Notes",
         readonly=True,
     )
-    vendor_name = fields.Char(
-        string="Vendor Name",
-        required=True,
-        readonly=True,
-        index=True,
-        compute='_compute_vendor_name',
-        store=True,
-    )
 
     @api.model
     def _search_name(self, operator, value):
@@ -754,14 +746,6 @@ class OfhSaleOrder(models.Model):
             rec.ticketing_office_id = ', '.join(
                 set([r.ticketing_office_id for r in rec.line_ids
                      if r.ticketing_office_id]))
-
-    @api.multi
-    @api.depends('line_ids.vendor_name')
-    def _compute_vendor_name(self):
-        for rec in self:
-            rec.vendor_name = ', '.join(
-                set([r.vendor_name for r in rec.line_ids
-                     if r.vendor_name]))
 
     @api.multi
     @api.depends('line_ids')
