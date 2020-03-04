@@ -173,6 +173,8 @@
                 <filter name="order_matched_status" string="Matched" domain="[('matching_status', '=', 'matched')]"/>
                 <filter name="order_unmatched_status" string="Unmatched" domain="[('matching_status', '=', 'unmatched')]"/>
                 <filter name="order_not_applicable_status" string="Not Applicable" domain="[('matching_status', '=', 'not_applicable')]"/>
+                <separator/>
+                <filter name="hotel_skipped_lines" string="Hotel Skipped Lines" domain="[('hotel_failed_reason', '=', True)]"/>
             </search>
         </field>
     </record>

@@ -516,6 +516,14 @@ class OfhSaleOrderLine(models.Model):
         related='order_id.payment_request_remarks',
     )
 
+    hotel_failed_reason = fields.Boolean(
+        string="Hotel Skipped Lines",
+        readonly=True,
+        store=False,
+        help="Technical field to serach hotel with has skipped as failing reason",
+        search='_search_hotel_failed_reason_skipped',
+    )
+
     @api.multi
     @api.depends('line_reference')
     def _compute_tickets(self):
@@ -549,3 +557,20 @@ class OfhSaleOrderLine(models.Model):
                             ('traveller', operator, name),
                             ('name', operator, name)] + args, limit=limit)
         return recs.name_get()
+
+    @api.model
+    def _search_hotel_failed_reason_skipped(self, operator, value):
+        if operator == '!=':
+            return [('id', '=', 0)]
+
+        self.env.cr.execute("""
+            SELECT sale_order_id
+            FROM ofh_sale_order_sap WHERE
+                failing_reason='skipped' AND
+                order_type='hotel';
+            """)
+        order_ids = [x[0] for x in self.env.cr.fetchall()]
+        if not order_ids:
+            return [('id', '=', 0)]
+
+        return [('order_id', 'in', order_ids)]

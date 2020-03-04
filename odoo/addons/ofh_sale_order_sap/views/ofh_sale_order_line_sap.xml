@@ -159,6 +159,41 @@ if records:
             </form>
         </field>
     </record>
+    <!-- Flight Skipped Lines-->
+    <record model="ir.ui.view" id="flight_skipped_sap_sale_order_lines_tree_view">
+        <field name="name">ofh.sale.order.line.sap.tree (in ofh_sale_order_line_sap)</field>
+        <field name="model">ofh.sale.order.line.sap</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" delete="0">
+                <field name="order_number"/>
+                <field name="track_id"/>
+                <field name="failing_text"/>
+                <field name="created_at"/>
+                <field name="supplier_name"/>
+                <field name="vendor_name"/>
+                <field name="send_date"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_flight_skipped_sap_sale_order_lines" model="ir.actions.act_window">
+        <field name="name">Flight Skipped Lines</field>
+        <field name="res_model">ofh.sale.order.line.sap</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('sale_order_line_id.line_type', '=', 'flight'), ('sap_sale_order_id.failing_reason', '=', 'skipped')]</field>
+        <field name="context">{'search_default_sent_this_week': 1}</field>
+    </record>
+     <record id="action_flight_skipped_sap_sale_order_lines" model="ir.actions.act_window">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="flight_skipped_sap_sale_order_lines_tree_view"/>
+        <field name="act_window_id" ref="action_flight_skipped_sap_sale_order_lines"/>
+    </record>
+    <record model="ir.ui.menu" id="action_flight_skipped_sap_sale_order_lines_line_menu">
+        <field name="name">Flight Skipped Lines</field>
+        <field name="parent_id" ref="ofh_sale_order_sap_menu"/>
+        <field name="action" ref="action_flight_skipped_sap_sale_order_lines"/>
+        <field name="sequence" eval="30"/>
+    </record>
 
 
 </odoo>
