@@ -265,7 +265,7 @@ class OfhPayment(models.Model):
 
         return self.hub_bind_ids.import_record(
             backend=self.hub_bind_ids.backend_id,
-            external_id=self.hub_bind_ids.track_id,
+            external_id=self.track_id,
             payment_type=payment_type,
             force=True)
 

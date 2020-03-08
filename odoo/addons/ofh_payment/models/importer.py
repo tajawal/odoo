@@ -118,6 +118,19 @@ class HubPaymentImporter(Component):
     _inherit = 'hub.importer'
     _apply_on = ['hub.payment']
 
+    def _get_binding(self):
+        """Override the binding method to take in consideration the constraint
+        based on the group_id and the product_id for case of unify.
+        """
+        binding = self.env[self._apply_on[0]].search([
+            ('backend_id', '=', self.backend_record.id),
+            ('external_id', '=', self.hub_record.get('id'))],
+            limit=1)
+        if not binding:
+            binding = self.binder.to_internal(self.external_id)
+
+        return binding
+
     def _is_uptodate(self, binding) -> bool:
         if not binding:
             return False  # The record has never been synchronised.
@@ -161,6 +174,10 @@ class HubPaymentImporter(Component):
 
         if not force and self._is_uptodate(binding):
             return _('Already up-to-date.')
+
+        # Important hack to make sure everytime the external
+        # ID is the ID of the payment and not the track ID.
+        self.external_id = self.hub_record.get('id')
 
         block = self._must_block(binding)
         if block:
