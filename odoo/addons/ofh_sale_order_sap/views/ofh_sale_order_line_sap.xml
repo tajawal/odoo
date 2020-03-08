@@ -169,6 +169,7 @@ if records:
                 <field name="track_id"/>
                 <field name="failing_text"/>
                 <field name="created_at"/>
+                <field name="office_id"/>
                 <field name="supplier_name"/>
                 <field name="vendor_name"/>
                 <field name="send_date"/>
