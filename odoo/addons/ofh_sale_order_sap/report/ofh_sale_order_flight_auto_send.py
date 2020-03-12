@@ -25,7 +25,7 @@ class OfhSaleOrderAutoSend(models.Model):
                     
                     -- Only applicable office ids.
                     upper(ticketing_office_id) not in
-                    ('CAI3T38EH', 'CAIEG21Q4', '87OF', '8RR9', 'GALILEO') AND
+                    ('CAI3T38EH', 'CAIEG21Q4', 'GALILEO') AND
                     is_voided = false
 
                 -- Not sent to SAP
