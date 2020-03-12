@@ -13,21 +13,33 @@ class OfhPaymentAutoSend(models.Model):
         tools.drop_view_if_exists(self._cr, 'ofh_payment_auto_send')
         self._cr.execute("""
             CREATE VIEW ofh_payment_auto_send AS (
-              SELECT
-                id
-              FROM
-                ofh_payment
-              WHERE
-                ((
-                  payment_method = 'online' AND
-                  payment_status IN ('11111', '10000', '83027')
+                SELECT
+                    id
+                FROM
+                    ofh_payment
+                WHERE
+                (
+                    (
+                      payment_method = 'online' AND
+                      payment_status IN ('11111', '10000', '83027')
+                    )
+                OR 
+                    (
+                      payment_method = 'loyalty' AND
+                      payment_status IN ('11111', '10000')
+                    )
+                OR 
+                    (
+                      payment_method NOT IN ('online', 'loyalty') AND store_id = '1000'
+                    )
                 )
-                OR (payment_method <> 'online' AND store_id = '1000')) AND
-                created_at >= '2020-01-01 00:00:00' AND
-                is_payment_applicable=true
-              EXCEPT
-                SELECT payment_id as id
-                FROM ofh_payment_sap
-                WHERE state = 'success' AND payment_id > 0
+                AND
+                    created_at >= (date(CURRENT_DATE::date - '4 day'::interval) || ' 00:00:00')::timestamp
+                AND
+                    is_payment_applicable = true
+                EXCEPT
+                    SELECT payment_id as id
+                    FROM ofh_payment_sap
+                    WHERE state = 'success' AND payment_id > 0
             )
         """)
