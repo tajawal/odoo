@@ -117,7 +117,8 @@ class SupplierInvoiceLineMapper(Component):
         if not office:
             return {}
         office = office.upper()
-        if office.startswith('R'):
+        office_starts_with = office[0]
+        if office_starts_with in ('R', 'J', 'A', 'H', 'T'):
             return {'currency_id': self.env.ref('base.SAR').id}
         elif office.startswith('K'):
             return {'currency_id': self.env.ref('base.KWD').id}
