@@ -366,6 +366,11 @@ class OfhSaleOrderLineSap(models.Model):
         readonly=True,
         compute="_compute_sap_line_fields",
     )
+    z_serialnumber = fields.Char(
+        string="Z_SERIALNUMBER",
+        readonly=True,
+        compute="_compute_sap_line_fields",
+    )
     # SAP Sale Order Line Item fields (Item Conditions)
     zsel = fields.Char(
         string="ZSEL",

@@ -203,6 +203,7 @@
                 <field name="supplier_currency_id" invisible="1"/>
                 <field name="vendor_currency_id" invisible="1"/>
                 <field name="line_type"/>
+                <field name="line_category" attrs="{'invisible':[('line_type', '!=', 'other')]}"/>
                 <field name="line_reference"/>
                 <field name="vendor_name"/>
                 <field name="supplier_name"/>

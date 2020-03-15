@@ -22,6 +22,7 @@ class OfhSaleOrderLine(models.Model):
             "entity": self.order_id.entity,
             "order_number": self.order_id.name,
             "item_type": self.line_type,
+            "item_category": self.line_category,
             "order_status": self.state,
             "office_id": self.ticketing_office_id,
             "billing_date": self.created_at,
@@ -61,7 +62,11 @@ class OfhSaleOrderLine(models.Model):
             "check_in_date": self.check_in_date,
             "number_of_nights": self.manual_nb_nights
             if self.manual_nb_nights else self.nb_nights,
-            "number_of_rooms": self.nb_rooms
+            "number_of_rooms": self.nb_rooms,
+            "vendor_code":self.vendor_code,
+            "company_code":self.company_code,
+            "vendor_confirmation_number":self.vendor_confirmation_number,
+            "start_issue_date":self.start_issue_date,
         }
 
     @api.multi
@@ -79,6 +84,8 @@ class OfhSaleOrderLine(models.Model):
                     sale_line_dict['pnr'] = self.vendor_confirmation_number
                 else:
                     sale_line_dict['pnr'] = self.supplier_confirmation_number
+            elif self.line_type == 'other':
+                sale_line_dict['pnr'] = self.supplier_confirmation_number
             else:
                 if hasattr(self, '_get_tv_sale_line_dict'):
                     return getattr(self, '_get_tv_sale_line_dict')()
@@ -89,6 +96,8 @@ class OfhSaleOrderLine(models.Model):
             if self.matching_status == 'unmatched':
                 sale_line_dict['cost_price'] = abs(round(
                     self.supplier_cost_amount, 2))
+            elif self.line_type == 'other':
+                sale_line_dict['cost_price'] = self.vendor_cost_amount
             else:
                 sale_line_dict['cost_price'] = 0.00
 

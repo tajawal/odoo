@@ -148,7 +148,7 @@ class OfhSaleOrderLine(models.Model):
         track_visibility='onchange',
     )
     line_type = fields.Selection(
-        selection=[('hotel', 'Hotel'), ('flight', 'Flight')],
+        selection=[('hotel', 'Hotel'), ('flight', 'Flight'),('other', 'Other')],
         string="Product Type",
         required=True,
         readonly=True,
@@ -522,6 +522,19 @@ class OfhSaleOrderLine(models.Model):
         store=False,
         help="Technical field to serach hotel with has skipped as failing reason",
         search='_search_hotel_failed_reason_skipped',
+    )
+    #For Other product.SAP plant
+    company_code = fields.Integer(
+        string="Company Code",
+        readonly=True,
+    )
+    vendor_code = fields.Char(
+        string="Vendor Code",
+        readonly=True,
+    )
+    start_issue_date = fields.Char(
+        string="Start/Issue Date",
+        readonly=True,
     )
 
     @api.multi

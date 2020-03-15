@@ -142,6 +142,7 @@ if records:
                                 <field name="z_seg8destination"/>
                                 <field name="z_seg9origin"/>
                                 <field name="z_seg9destination"/>
+                                <field name="z_serialnumber"/>
                             </group>
                         </page>
                          <page name="item_conditions" string="Item Conditions">

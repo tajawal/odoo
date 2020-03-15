@@ -192,6 +192,21 @@
         <field name="action" ref="ofh_sale_order_flight_act_window"/>
         <field name="sequence" eval="10"/>
     </record>
+    <!-- Other product tab-->
+    <record model="ir.actions.act_window" id="ofh_sale_order_other_act_window">
+        <field name="name">Sales Orders</field>
+        <field name="res_model">ofh.sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('order_type', '=', 'other')]</field>
+        <field name="context">{'search_default_updated_this_month': 1}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="ofh_sale_order_other_menu">
+        <field name="name">Other Sales</field>
+        <field name="parent_id" ref="ofh_sale_by_product_menu"/>
+        <field name="action" ref="ofh_sale_order_other_act_window"/>
+        <field name="sequence" eval="30"/>
+    </record>
 
     <!-- End Sales By Product -->
 

@@ -100,7 +100,8 @@ class OfhSaleOrder(models.Model):
         selection=[
             ('hotel', 'Hotel'),
             ('flight', 'Flight'),
-            ('package', 'Package')],
+            ('package', 'Package'),
+            ('other', 'Other')],
         required=True,
         readonly=True,
         index=True,
@@ -620,6 +621,11 @@ class OfhSaleOrder(models.Model):
         string="Payment Request Notes",
         readonly=True,
     )
+    line_category = fields.Char(
+        string="Sub Type",
+        readonly=True,
+        compute='_compute_line_category',
+    )
 
     @api.model
     def _search_name(self, operator, value):
@@ -935,3 +941,10 @@ class OfhSaleOrder(models.Model):
                 rec.tax_code = 'ss'
             else:
                 rec.tax_code = 'sz'
+
+    @api.multi
+    @api.depends('line_ids.line_category')
+    def _compute_line_category(self):
+        if self.order_type == 'other':
+            for rec in self:
+                rec.line_category = self.line_ids.line_category

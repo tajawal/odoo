@@ -8,6 +8,8 @@ import json
 
 UNIFY_STORE_ID = 1000
 UNIFY_GROUP_ID = 7
+IDL='IDL'
+Triptique='Triptique'
 
 
 class HubSaleOrderImportMapper(Component):
@@ -142,7 +144,6 @@ class HubSaleOrderLineImportMapper(Component):
 
     direct = [
         ('product_type', 'line_type'),
-        ('product_category', 'line_category'),
         ('sequence', 'sequence'),
         ('product_id', 'name'),
         ('is_domestic_ksa', 'is_domestic_ksa'),
@@ -151,7 +152,9 @@ class HubSaleOrderLineImportMapper(Component):
         ('validating_carrier', 'validating_carrier'),
         ('hotel_name', 'hotel_name'),
         ('line_id', 'external_id'),
-        ('total_supplier_price', 'total_supplier_price')
+        ('total_supplier_price', 'total_supplier_price'),
+        ('company_code', 'company_code'),
+        ('vendor_code', 'vendor_code'),
     ]
 
     @mapping
@@ -611,6 +614,27 @@ class HubSaleOrderLineImportMapper(Component):
             }
         return {}
 
+    @mapping
+    def matching_status(self, record):
+        if record.get('product_type').lower() == 'other':
+            return {'matching_status': 'not_applicable'}
+
+    @mapping
+    def line_category(self, record):
+        if record.get('product_category').casefold() == IDL.casefold():
+            return {'line_category': IDL}
+        elif record.get('product_category').casefold() == Triptique.casefold():
+            return {'line_category': Triptique}
+        else:
+            return {'line_category': record.get('product_category')}
+
+    @mapping
+    def start_issue_date(self, record):
+            return {
+                'start_issue_date': record.get(
+                    'departure_date', '')}
+
+
 
 class HubSaleOrderBatchImporter(Component):
     _name = 'hub.batch.sale.order.importer'
@@ -629,10 +653,6 @@ class HubSaleOrderImporter(Component):
     _name = 'hub.sale.order.importer'
     _inherit = 'hub.importer'
     _apply_on = ['hub.sale.order']
-
-    def _must_skip(self) -> bool:
-        # Skip orders that are different than flight and hotel.
-        return self.hub_record.get('order_type', "") in ('other', '')
 
     def _is_uptodate(self, binding) -> bool:
         if not binding:

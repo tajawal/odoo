@@ -36,6 +36,7 @@
                         <field name="file_reference"/>
                         <field name="booking_category"/>
                         <field name="order_type"/>
+                        <field name="line_category" attrs="{'invisible':[('order_type', '!=', 'other')]}"/>
                         <field name="created_at"/>
                         <field name="updated_at"/>
                         <field name="currency_id"/>
@@ -192,6 +193,7 @@
                 <separator/>
                 <filter name="hotel" string="Hotel" domain="[('order_type', '=', 'hotel')]"/>
                 <filter name="flight" string="Flight" domain="[('order_type', '=', 'flight')]"/>
+                <filter name="other" string="Other" domain="[('order_type', '=', 'other')]"/>
                 <separator/>
                 <filter name="gds_order" string="GDS Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '!=', 'TRAVEL FUSION')]"/>
                 <filter name="gds_order" string="Travel Fusion Orders" domain="[('order_type', '=', 'flight'), ('ticketing_office_id', '=', 'TRAVEL FUSION')]"/>
