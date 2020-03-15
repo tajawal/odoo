@@ -31,6 +31,14 @@ class SupplierInvoiceLineMapper(Component):
         return {'invoice_type': 'tf'}
 
     @mapping
+    def agent_sign_in(self, record):
+        tf_backend = self.env.ref(
+            'ofh_supplier_invoice_tf.tf_import_backend')
+        if self.backend_record != tf_backend:
+            return super(SupplierInvoiceLineMapper, self).agent_sign_in(record)
+        return {'agent_sign_in': record.get('User Name')}
+
+    @mapping
     def currency_id(self, record) -> dict:
         tf_backend = self.env.ref(
             'ofh_supplier_invoice_tf.tf_import_backend')

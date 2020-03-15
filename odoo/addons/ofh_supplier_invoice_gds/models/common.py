@@ -108,6 +108,14 @@ class SupplierInvoiceLineMapper(Component):
         return {'invoice_type': 'gds'}
 
     @mapping
+    def agent_sign_in(self, record):
+        gds_backend = self.env.ref(
+            'ofh_supplier_invoice_gds.gds_import_backend')
+        if self.backend_record != gds_backend:
+            return super(SupplierInvoiceLineMapper, self).agent_sign_in(record)
+        return {'agent_sign_in': record.get('User Name')}
+
+    @mapping
     def currency_id(self, record):
         gds_backend = self.env.ref(
             'ofh_supplier_invoice_gds.gds_import_backend')
