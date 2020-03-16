@@ -102,6 +102,34 @@ class HubAPI:
         except requests.exceptions.BaseHTTPError:
             raise MissingError("Could not get payment request details")
 
+    # TV Report Endpoints
+    def get_tv_daily_report(self, date_from: datetime, date_to: datetime) -> dict:
+        """[summary]
+
+        :param date_from: [description]
+        :type date_from: datetime
+        :param date_to: [description]
+        :type date_to: datetime
+        :raises MissingError: [description]
+        :return: [description]
+        :rtype: dict
+        """
+        if not date_from or not date_to:
+            return {}
+        url = f"{self.oms_finance_api_url}tv_reports/daily_report"
+        payload = {
+            'date_from': date_from,
+            'date_to': date_to,
+        }
+        try:
+            response = requests.post(url, json=payload, headers=self.headers)
+            response.raise_for_status()
+            return response.json().get('data')
+        except requests.exceptions.BaseHTTPError:
+            raise MissingError("Could not get payment request details")
+
+
+
     def gds_retrieve_pnr(self, office_id: str, locator: str) -> dict:
         """[summary]
 
