@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class OfhSupplierInvoiceLine(models.Model):
     _inherit = 'ofh.supplier.invoice.line'

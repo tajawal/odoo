@@ -7,7 +7,7 @@
     <record model="ir.cron" id="cron_ofh_supplier_invoice_tv_daily_report">
         <field name="name">TV - Daily Report</field>
         <field name="interval_number">1</field>
-        <field name="interval_type">hours</field>
+        <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
         <field name="model_id" ref="ofh_supplier_invoice.model_ofh_supplier_invoice_line"/>
