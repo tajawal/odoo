@@ -12,7 +12,7 @@
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">109052</field>
         <field name="last_four">7234</field>
         <field name="card_bin">455734</field>
@@ -29,7 +29,7 @@
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">109052</field>
         <field name="last_four">3434</field>
         <field name="card_bin">455734</field>
@@ -46,7 +46,7 @@
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">1092252</field>
         <field name="last_four">3434</field>
         <field name="card_bin">455234</field>
@@ -63,7 +63,7 @@
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">1025322</field>
         <field name="last_four">3467</field>
         <field name="card_bin">452344</field>
@@ -80,7 +80,7 @@
         <field name="total">796</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">1025872</field>
         <field name="last_four">3467</field>
         <field name="card_bin">45274</field>
@@ -97,7 +97,7 @@
         <field name="total">756</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">1025122</field>
         <field name="last_four">3067</field>
         <field name="card_bin">45124</field>
@@ -114,7 +114,7 @@
         <field name="total">156</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">102322</field>
         <field name="last_four">3099</field>
         <field name="card_bin">45344</field>
@@ -131,7 +131,7 @@
         <field name="total">156</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">102399</field>
         <field name="last_four">3011</field>
         <field name="card_bin">45333</field>
@@ -148,7 +148,7 @@
         <field name="total">7893</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">10229</field>
         <field name="last_four">3325</field>
         <field name="card_bin">45233</field>
@@ -165,7 +165,7 @@
         <field name="total">7866</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">10210</field>
         <field name="last_four">3322</field>
         <field name="card_bin">45277</field>
@@ -182,7 +182,7 @@
         <field name="total">856</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">1045610</field>
         <field name="last_four">3327</field>
         <field name="card_bin">45667</field>
@@ -199,7 +199,7 @@
         <field name="total">556</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">1675610</field>
         <field name="last_four">3427</field>
         <field name="card_bin">4867</field>
@@ -216,7 +216,7 @@
         <field name="total">586</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">1677810</field>
         <field name="last_four">3417</field>
         <field name="card_bin">486734</field>
@@ -233,7 +233,7 @@
         <field name="total">886</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">13447810</field>
         <field name="last_four">3007</field>
         <field name="card_bin">400734</field>
@@ -250,7 +250,7 @@
         <field name="total">546</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">13440</field>
         <field name="last_four">3017</field>
         <field name="card_bin">400733</field>
@@ -267,7 +267,7 @@
         <field name="total">846</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">134234</field>
         <field name="last_four">3019</field>
         <field name="card_bin">400223</field>
@@ -284,7 +284,7 @@
         <field name="total">310.34</field>
         <field name="provider">checkoutcom</field>
         <field name="payment_mode">Visa</field>
-        <field name="card_type">dummy</field>
+        <field name="card_type">visa</field>
         <field name="mid">109052</field>
         <field name="last_four">7234</field>
         <field name="card_bin">455734</field>
