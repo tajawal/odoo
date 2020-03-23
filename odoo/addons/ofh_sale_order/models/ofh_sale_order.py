@@ -15,6 +15,7 @@ class OfhSaleOrder(models.Model):
     _name = 'ofh.sale.order'
     _description = 'Ofh Sale Order'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = None
 
     @api.model
     def _get_order_status_selection(self):

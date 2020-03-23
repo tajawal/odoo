@@ -9,6 +9,7 @@ class OfhPayment(models.Model):
     _name = 'ofh.payment'
     _description = "Ofh Payment"
     _rec_name = 'track_id'
+    _order = None
 
     @api.model
     def _get_payment_status_selection(self):
