@@ -5,7 +5,7 @@
     'name': 'Ofh Sale Order Sap Itl',
     'description': """
         Generate SAP Order Lines for Orders matched with ITL invoice lines.""",
-    'version': '11.0.1.0.0',
+    'version': '13.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'http://tajawal.com',

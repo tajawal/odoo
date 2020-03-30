@@ -5,7 +5,7 @@
     'name': 'Ofh Sale Order Payment Request',
     'description': """
         Linking fields between payment request and sale order """,
-    'version': '11.0.1.1.1',
+    'version': '13.0.1.1.1',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',

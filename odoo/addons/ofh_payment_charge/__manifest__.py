@@ -5,7 +5,7 @@
     'name': 'Ofh Payment Charge',
     'description': """
         Synchronisation of payment charge from HUB""",
-    'version': '11.0.1.2.0',
+    'version': '13.0.1.2.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',

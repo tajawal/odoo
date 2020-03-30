@@ -1,14 +1,14 @@
 -r requirements-find-links.txt
 
 # odoo
--r https://raw.githubusercontent.com/odoo/odoo/11.0/requirements.txt
--e git+https://github.com/zakiuu/odoo.git@11.0-ofh_master#egg=odoo
+-r https://raw.githubusercontent.com/odoo/odoo/13.0/requirements.txt
+-e git+https://github.com/tajawal/odoo.git@13.0-ofh_master#egg=odoo
 
 # patched ACSONE addons
 # ...
 
 # patched OCA addons
--e git+https://github.com/zakiuu/connector-interfaces.git@11.0-connector_importer#egg=odoo11-addon-connector_importer&subdirectory=setup/connector_importer
-odoo11-addon-connector
+-e git+https://github.com/tajawal/connector-interfaces.git@13.0-connector_importer#egg=odoo13-addon-connector_importer&subdirectory=setup/connector_importer
+odoo13-addon-connector
 # local project
 -e .

@@ -5,7 +5,7 @@
     'name': 'Server configuration environment files',
     'description': """
         Server configuration environment files""",
-    'version': '11.0.1.0.0',
+    'version': '13.0.1.0.0',
     'depends': ['base'],
     'author': 'ACSONE SA/NV',
     'website': 'http://www.acsone.eu',

@@ -5,7 +5,7 @@
     'name': 'Ofh Sale Order Supplier Invoice GDS',
     'description': """
         Matching and reconciliation logic for GDS Supplier Invoice lines.""",
-    'version': '11.0.1.0.0',
+    'version': '13.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',

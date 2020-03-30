@@ -5,7 +5,7 @@
     'name': 'Ofh Payment Request',
     'description': """
         Synchronisation of payment request from HUB""",
-    'version': '11.0.1.3.0',
+    'version': '13.0.1.3.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',

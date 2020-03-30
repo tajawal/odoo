@@ -5,7 +5,7 @@
     'name': 'Ofh Mail Activity',
     'description': """
         Assign activity to list of users instead of only one user""",
-    'version': '11.0.1.0.0',
+    'version': '13.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',

@@ -4,7 +4,7 @@
 
 {
     "name": "Redis Session Store",
-    "version": "11.0.1.0.0",
+    "version": "13.0.1.0.0",
     "depends": ["base"],
     "author": "Smile",
     "license": 'AGPL-3',

@@ -18,8 +18,6 @@ setup(
     ],
     odoo_addons={
         'depends_override': {
-            'module_auto_update':
-                'odoo11-addon-module_auto_update>=11.0.2.0.0',
         },
         'external_dependencies_override': {
             'python': {

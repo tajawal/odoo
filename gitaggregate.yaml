@@ -3,29 +3,29 @@
         odoo: https://github.com/odoo/odoo.git
         oca: https://github.com/OCA/OCB.git
         acsone: https://github.com/acsone/odoo.git
-        origin: git@github.com:zakiuu/odoo.git
+        origin: git@github.com:tajawal/odoo.git
     merges:
-        - oca 11.0
-        - acsone 11.0-with-setup
-        - origin 11.0-backport_remove_arbitrary_file_upload_zak
-    target: origin 11.0-ofh_master
+        - oca 13.0
+        - acsone 13.0-with-setup
+        - origin 13.0 # todo 11.0-backport_remove_arbitrary_file_upload_zak
+    target: origin 13.0-ofh_master
 
 ./src/connector-interfaces:
     remotes:
         oca: https://github.com/OCA/connector-interfaces
-        origin: git@github.com:zakiuu/connector-interfaces.git
+        origin: git@github.com:tajawal/connector-interfaces.git
     merges:
-        - oca 11.0
-        - origin 11.0
-        - origin 11-add-connector_importer_fix_zak # Migrating to 11.0 with bug fixes
-    target: origin 11.0-connector_importer
+        - oca 13.0
+        - origin 13.0
+        # todo: - origin 11-add-connector_importer_fix_zak # Migrating to 11.0 with bug fixes
+    target: origin 13.0-connector_importer
 
 ./src/queue:
     remotes:
         oca: https://github.com/OCA/queue
-        origin: git@github.com:zakiuu/queue.git
+        origin: git@github.com:tajawal/queue.git
     merges:
-        - oca 11.0
-        - origin 11.0
-        - origin remove-job-runner-from-queue
-    target: origin 11.0-queue
+        - oca 13.0
+        - origin 13.0
+        # todo: - origin remove-job-runner-from-queue
+    target: origin 13.0-queue

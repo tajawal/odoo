@@ -5,7 +5,7 @@
     'name': 'Ofh Bank Settlement SABB',
     'description': """
         SABB Bank Settlement Report Import.""",
-    'version': '11.0.1.0.0',
+    'version': '13.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Seera Group',
     'website': 'https://seera.sa',

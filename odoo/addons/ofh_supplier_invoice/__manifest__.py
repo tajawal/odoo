@@ -6,7 +6,7 @@
     'name': 'Ofh Supplier Invoice',
     'description': """
         Allow users to upload Vendor incoices""",
-    'version': '11.0.1.2.1',
+    'version': '13.0.1.2.1',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',

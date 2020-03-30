@@ -4,7 +4,7 @@
 
 {
     'name': 'JSON Logging',
-    'version': '11.0.1.0.0',
+    'version': '13.0.1.0.0',
     'author': 'Camptocamp,Odoo Community Association (OCA)',
     'license': 'AGPL-3',
     'category': 'Extra Tools',

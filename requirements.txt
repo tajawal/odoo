@@ -27,20 +27,20 @@ MarkupSafe==0.23
 mock==2.0.0
 moto==1.3.7
 num2words==0.5.4
--e git+https://github.com/zakiuu/odoo.git@ced398bfccdc2d94d4e6141387f6fe5f150a3096#egg=odoo
+-e git+https://github.com/tajawal/odoo.git@9e41d92b80c0a666e66f782039287b69fb21db31#egg=odoo
 odoo11-addon-base-optional-quick-create==11.0.1.0.0.99.dev2
-odoo11-addon-component==11.0.1.1.0.99.dev10
-odoo11-addon-component-event==11.0.1.0.0.99.dev7
-odoo11-addon-connector==11.0.1.0.0.99.dev19
--e git+https://github.com/zakiuu/connector-interfaces.git@eb4eeca448336165c117357155bc041b0e79b69f#egg=odoo11_addon_connector_importer&subdirectory=setup/connector_importer
-odoo11-addon-mail-environment==11.0.1.1.0.99.dev2
+odoo13-addon-component==13.0.1.0.1
+odoo13-addon-component-event==13.0.1.0.1.dev6
+odoo13-addon-connector==13.0.1.0.1.dev7
+-e git+https://github.com/tajawal/connector-interfaces.git@9244e274240fe804717e597166a1be3d5636c0ad#egg=odoo13_addon_connector_importer&subdirectory=setup/connector_importer
+odoo13-addon-mail-environment==13.0.1.0.2
 odoo11-addon-module-auto-update==11.0.2.0.4.99.dev4
--e git+https://github.com/zakiuu/queue.git@260fc678063e53c3f3d712cabca99dad654e07e3#egg=odoo11_addon_queue_job&subdirectory=setup/queue_job
-odoo11-addon-server-environment==11.0.2.0.0.99.dev5
-odoo11-addon-server-environment-ir-config-parameter==11.0.1.0.0
-odoo11-addon-web-dialog-size==11.0.1.0.3.99.dev6
-odoo11-addon-web-environment-ribbon==11.0.1.0.2.99.dev2
-odoo11-addon-web-notify==11.0.1.0.0
+-e git+https://github.com/tajawal/queue.git@f0b0ea8f872ad5cc820c094b20d1fd832c9d823e#egg=odoo13_addon_queue_job&subdirectory=setup/queue_job
+odoo13-addon-server-environment==13.0.2.2.0
+odoo13-addon-server-environment-ir-config-parameter==13.0.1.0.1.dev6
+odoo13-addon-web-dialog-size==13.0.1.0.1.dev7
+odoo13-addon-web-environment-ribbon==13.0.1.0.1.dev9
+odoo13-addon-web-notify==13.0.1.0.1.dev4
 odoo11-addon-web-sheet-full-width==11.0.1.0.1.99.dev3
 ofxparse==0.16
 olefile==0.46

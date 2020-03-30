@@ -5,7 +5,7 @@
     'name': 'Ofh Sale Order Supplier Invoice Itl',
     'description': """
         Matching and reconciliation logic for ITL supplier invoice lines.""",
-    'version': '11.0.1.0.0',
+    'version': '13.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Tajawal LLC',
     'website': 'https://tajawal.com',
