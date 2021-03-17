@@ -673,8 +673,8 @@ class JsonRequest(WebRequest):
                 end_memory = 0
                 if psutil:
                     end_memory = memory_info(psutil.Process(os.getpid()))
-                logline = '%s: %s %s: time:%.3fs mem: %sk -> %sk (diff: %sk)' % (
-                    endpoint, model, method, end_time - start_time, start_memory / 1024, end_memory / 1024, (end_memory - start_memory)/1024)
+                logline = '%s: %s: time:%.3fs mem: %sk -> %sk (diff: %sk)' % (
+                    endpoint, self.params, end_time - start_time, start_memory / 1024, end_memory / 1024, (end_memory - start_memory)/1024)
                 if rpc_response_flag:
                     rpc_response.debug('%s, %s', logline, pprint.pformat(result))
                 else:
