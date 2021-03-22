@@ -172,6 +172,7 @@ var LongpollingBus = Bus.extend(ServicesMixin, {
      * @private
      */
     _poll: function () {
+        return;
         var self = this;
         if (!this._isActive) {
             return;
