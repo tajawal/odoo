@@ -2913,7 +2913,8 @@ Fields:
         :raise AccessError: if user has no read rights on some of the given
                 records
         """
-
+        fields = self.check_field_access_rights('read', fields)
+        
         # fetch stored fields from the database to the cache
         stored_fields = set()
         for name in fields:
