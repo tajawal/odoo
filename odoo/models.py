@@ -2913,7 +2913,16 @@ Fields:
         :raise AccessError: if user has no read rights on some of the given
                 records
         """
-
+        import os
+        import time
+        import psutil
+        from odoo.service.server import memory_info
+        start_time = time.time()
+        start_memory = 0
+        if psutil:
+            start_memory = memory_info(psutil.Process(os.getpid()))
+        fields = self.check_field_access_rights('read', fields)
+        
         # fetch stored fields from the database to the cache
         stored_fields = set()
         for name in fields:
@@ -2945,6 +2954,17 @@ Fields:
                 except MissingError:
                     vals.clear()
         result = [vals for record, vals in data if vals]
+
+        end_time = time.time()
+        end_memory = 0
+        if psutil:
+            end_memory = memory_info(psutil.Process(os.getpid()))
+
+        logline = 'Model Write: %s: time:%.3fs mem: %sk -> %sk (diff: %sk)' % (
+            self._name, end_time - start_time, start_memory / 1024, end_memory / 1024,
+            (end_memory - start_memory) / 1024)
+
+        _logger.info(logline)
 
         return result
 
