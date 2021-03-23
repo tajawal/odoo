@@ -60,6 +60,10 @@ from .tools.misc import CountingStream, clean_context, DEFAULT_SERVER_DATETIME_F
 from .tools.safe_eval import safe_eval
 from .tools.translate import _
 from .tools import date_utils
+import os
+import time
+import psutil
+from odoo.service.server import memory_info
 
 _logger = logging.getLogger(__name__)
 _schema = logging.getLogger(__name__ + '.schema')
@@ -2913,6 +2917,10 @@ Fields:
         :raise AccessError: if user has no read rights on some of the given
                 records
         """
+        start_time = time.time()
+        start_memory = 0
+        if psutil:
+            start_memory = memory_info(psutil.Process(os.getpid()))
         fields = self.check_field_access_rights('read', fields)
 
         # fetch stored fields from the database to the cache
@@ -2946,6 +2954,17 @@ Fields:
                 except MissingError:
                     vals.clear()
         result = [vals for record, vals in data if vals]
+
+        end_time = time.time()
+        end_memory = 0
+        if psutil:
+            end_memory = memory_info(psutil.Process(os.getpid()))
+
+        logline = 'Model Read: %s: time:%.3fs mem: %sk -> %sk (diff: %sk)' % (
+            self._name, end_time - start_time, start_memory / 1024, end_memory / 1024,
+            (end_memory - start_memory) / 1024)
+
+        _logger.info(logline)
 
         return result
 
@@ -3339,7 +3358,12 @@ Fields:
         """
         if not self:
             return True
-
+        
+        start_time = time.time()
+        start_memory = 0
+        if psutil:
+            start_memory = memory_info(psutil.Process(os.getpid()))
+            
         self.check_access_rights('unlink')
         self._check_concurrency()
 
@@ -3417,6 +3441,17 @@ Fields:
         # auditing: deletions are infrequent and leave no trace in the database
         _unlink.info('User #%s deleted %s records with IDs: %r', self._uid, self._name, self.ids)
 
+        end_time = time.time()
+        end_memory = 0
+        if psutil:
+            end_memory = memory_info(psutil.Process(os.getpid()))
+
+        logline = 'Model Unlink: %s: time:%.3fs mem: %sk -> %sk (diff: %sk)' % (
+            self._name, end_time - start_time, start_memory / 1024, end_memory / 1024,
+            (end_memory - start_memory) / 1024)
+
+        _logger.info(logline)
+
         return True
 
     def write(self, vals):
@@ -3493,7 +3528,12 @@ Fields:
         """
         if not self:
             return True
-
+        
+        start_time = time.time()
+        start_memory = 0
+        if psutil:
+            start_memory = memory_info(psutil.Process(os.getpid()))
+            
         self.check_access_rights('write')
         self.check_field_access_rights('write', vals.keys())
         self.check_access_rule('write')
@@ -3615,6 +3655,17 @@ Fields:
 
         if check_company and self._check_company_auto:
             self._check_company()
+            
+        end_time = time.time()
+        end_memory = 0
+        if psutil:
+            end_memory = memory_info(psutil.Process(os.getpid()))
+
+        logline = 'Model Write: %s: time:%.3fs mem: %sk -> %sk (diff: %sk)' % (
+            self._name, end_time - start_time, start_memory / 1024, end_memory / 1024,
+            (end_memory - start_memory) / 1024)
+
+        _logger.info(logline)
         return True
 
     def _write(self, vals):
@@ -3698,6 +3749,11 @@ Fields:
         """
         if not vals_list:
             return self.browse()
+
+        start_time = time.time()
+        start_memory = 0
+        if psutil:
+            start_memory = memory_info(psutil.Process(os.getpid()))
 
         self = self.browse()
         self.check_access_rights('create')
@@ -3811,6 +3867,17 @@ Fields:
 
         if self._check_company_auto:
             records._check_company()
+
+        end_time = time.time()
+        end_memory = 0
+        if psutil:
+            end_memory = memory_info(psutil.Process(os.getpid()))
+
+        logline = 'Model Create: %s: time:%.3fs mem: %sk -> %sk (diff: %sk)' % (
+            self._name, end_time - start_time, start_memory / 1024, end_memory / 1024,
+            (end_memory - start_memory) / 1024)
+
+        _logger.info(logline)
         return records
 
     @api.model
